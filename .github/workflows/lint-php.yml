@@ -1,0 +1,16 @@
+name: Style
+
+on: [push]
+
+jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install php-cs-fixer
+        run: cd tools/php-cs-fixer
+        run: composer install
+      - name: Run php-cs-fixer
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff .
