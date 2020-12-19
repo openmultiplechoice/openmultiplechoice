@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+
+jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-20.04
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+          tools: composer
+
+      - name: Install php-cs-fixer
+        run: cd tools/php-cs-fixer; composer install
+
+      - name: Run php-cs-fixer
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff .
