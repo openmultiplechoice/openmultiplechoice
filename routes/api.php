@@ -3,6 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\DeckController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\NewsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +19,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('api')->resource('decks', DeckController::class);
+Route::middleware('api')->resource('questions', QuestionController::class);
+Route::middleware('api')->resource('answers', AnswerController::class);
+Route::middleware('api')->resource('news', NewsController::class);
+Route::middleware('api')->resource('sessions', SessionController::class);
