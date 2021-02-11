@@ -1,4 +1,5 @@
 {
     "/js/bootstrap.bundle.min.js": "/js/bootstrap.bundle.min.js",
+    "/js/DeckForm.js": "/js/DeckForm.js",
     "/css/app.css": "/css/app.css"
 }

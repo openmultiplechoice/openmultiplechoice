@@ -55,8 +55,7 @@ class DeckController extends Controller
      */
     public function show(Deck $deck)
     {
-        // TODO(schu)
-        return response()->json($deck);
+        return view('deck', ['deck' => $deck]);
     }
 
     /**
