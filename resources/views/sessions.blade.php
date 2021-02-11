@@ -9,8 +9,8 @@
         <h4>New session</h4>
         <form method="post">
             @csrf
-            <div class="form-group">
-                <label for="deck-id">Choose deck</label>
+            <div class="mb-3">
+                <label for="deck-id" class="form-label">Choose deck</label>
                 <select class="form-control" id="deck-id" name="deck_id">
 @foreach ($decks as $deck)
                     <option value="{{ $deck->id }}">{{ $deck->name }}</option>
