@@ -36,11 +36,11 @@ height: 100%;
                         {{ __('omc.more') }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/sessions">Sessions</a>
-                        <a class="dropdown-item" href="/decks">Decks</a>
-                        <a class="dropdown-item" href="/questions">Questions</a>
-                        <a class="dropdown-item" href="/messages">Messages</a>
+                        <a class="dropdown-item" href="{{ url('sessions') }}">Sessions</a>
+                        <a class="dropdown-item" href="{{ url('decks') }}">Decks</a>
+
                         <div class="dropdown-divider"></div>
+
                         <a class="dropdown-item" href="#">Admin</a>
                     </div>
                 </li>

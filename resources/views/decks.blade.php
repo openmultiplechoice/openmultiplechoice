@@ -24,7 +24,7 @@
         <h4>Decks</h4>
         <ul>
 @foreach ($decks as $deck)
-            <li>{{ $deck->name }}</li>
+            <li><a href="{{ url('decks', $deck->id) }}">{{ $deck->name }}</a></li>
 @endforeach
         </ul>
     </div>

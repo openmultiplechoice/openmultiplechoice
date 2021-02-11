@@ -13,7 +13,7 @@
         <h4>Sessions</h4>
         <ul>
 @forelse ($sessions as $session)
-            <li><a href="/sessions/{{ $session->id }}">{{ $session->name }}</a> {{ $session->created_at }}</li>
+            <li><a href="{{ url('sessions', $session->id) }}">{{ $session->name }}</a> {{ $session->created_at }}</li>
 @empty
             <p>No sessions yet</p>
 @endforelse
