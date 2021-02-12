@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 
 use App\Models\Answer;
 use App\Models\Deck;
+use App\Models\Image;
 use App\Models\News;
 use App\Models\Question;
 
@@ -63,6 +64,13 @@ class DemoSeeder extends Seeder
         $question->correct_answer_id = $correct_answer->id;
         $question->save();
         $deck->questions()->attach($question);
+
+        $image = Image::create([
+            'path' => 'images/jF408jdMPdrgt1lNfC7Ubh6kYrE7X31dEHphUqWp.jpg',
+            'comment' => 'Image CC BY-SA 3.0 Wikimedia Author "Jsfouche" https://commons.wikimedia.org/wiki/File:2_toed_sloth.jpg',
+            'question_id' => $question->id,
+        ]);
+        $question->images()->save($image);
 
         $question = Question::create([
             'text' => 'What is the license of OpenMultipleChoice?',

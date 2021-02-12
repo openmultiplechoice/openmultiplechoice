@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 use App\Models\Answer;
+use App\Models\Question;
 
-class AnswerController extends Controller
+class QuestionAnswerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,13 +25,17 @@ class AnswerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Question $question)
     {
-        $answer = new Answer;
+        if ($request->id) {
+            $answer = Answer::findOrFail($request->id)->get();
+        } else {
+            $answer = new Answer;
+        }
 
         $answer->text = $request->text;
 
-        $answer->save();
+        $question->answers()->save($answer);
 
         return response()->json($answer);
     }
@@ -39,10 +43,10 @@ class AnswerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Question $question)
     {
         //
     }
@@ -51,26 +55,22 @@ class AnswerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Answer $answer)
+    public function update(Request $request, Question $question)
     {
-        $answer->text = $request->text;
-        $answer->save();
-
-        return response()->json($answer);
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Answer $answer)
+    public function destroy(Question $question)
     {
-        $answer->delete();
-        return response()->noContent();
+        //
     }
 }

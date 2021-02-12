@@ -13,9 +13,12 @@ class DeckController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $decks = Deck::with('questions')->get();
+        if ($request->wantsJson()) {
+            return response()->json($decks);
+        }
         return view('decks', ['decks' => $decks]);
     }
 
@@ -55,7 +58,7 @@ class DeckController extends Controller
      */
     public function show(Deck $deck)
     {
-        return view('deck', ['deck' => $deck]);
+        //
     }
 
     /**
@@ -64,9 +67,9 @@ class DeckController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Deck $deck)
     {
-        //
+        return view('deck', ['deck' => $deck]);
     }
 
     /**
@@ -76,7 +79,7 @@ class DeckController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Deck $deck)
     {
         //
     }

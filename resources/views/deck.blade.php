@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div id="DeckForm"></div>
+<div id="DeckForm" data-deck-id="{{ $deck->id }}" data-deck-name="{{ $deck->name }}"></div>
 <script src="{{ asset('js/DeckForm.js') }}"></script>
 
 @endsection

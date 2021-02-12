@@ -6,3 +6,9 @@ html, body { font-family: 'Inter', sans-serif !important; }
 @supports (font-variation-settings: normal) {
     html, body { font-family: 'Inter var', sans-serif !important; }
 }
+
+textarea {
+    overflow: hidden;
+    min-height: 5rem !important;
+    resize: vertical;
+}
