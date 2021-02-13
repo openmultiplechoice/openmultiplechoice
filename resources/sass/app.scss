@@ -1,0 +1,8 @@
+@import '~bootstrap/scss/bootstrap';
+
+@import url('https://rsms.me/inter/inter.css');
+
+html, body { font-family: 'Inter', sans-serif !important; }
+@supports (font-variation-settings: normal) {
+  html, body { font-family: 'Inter var', sans-serif !important; }
+}
