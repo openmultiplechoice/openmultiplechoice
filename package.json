@@ -12,6 +12,8 @@
     "devDependencies": {
         "axios": "^0.21.1",
         "bootstrap": "^5.0.0-beta2",
+        "browser-sync": "^2.26.14",
+        "browser-sync-webpack-plugin": "^2.2.2",
         "cross-env": "^7.0",
         "laravel-mix": "^6.0.13",
         "laravel-mix-svelte": "github:wewowweb/laravel-mix-svelte",
