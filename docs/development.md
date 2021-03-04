@@ -4,10 +4,7 @@
 
 * [Vagrant](https://www.vagrantup.com/) with VirtualBox or Parallels as provider
 * [Homestead](https://laravel.com/docs/8.x/homestead)
-
-It can be convient to have PHP and Node.js installed too, but it's not
-required: the Homestead virtual machine comes with all necessary tools
-pre-installed.
+* Node.js + nvm (https://github.com/nvm-sh/nvm is recommended for the installation)
 
 ## Development environment setup
 
@@ -102,6 +99,18 @@ OMC should now be running and reachable in your browser at http://omc.local
 
 OMC uses Laravel's [Mix](https://laravel.com/docs/8.x/mix) as a configuration
 layer on top of webpack. The most used commands are described below.
+
+### Requirements
+
+Since the Node.js and npm version coming with Homestead are not the latest
+versions, use the [Node Version Manager](https://github.com/nvm-sh/nvm) to
+install both on the host.
+
+Then install the Node.js dependencies:
+
+```
+npm install --also=dev
+```
 
 ### Production build
 
