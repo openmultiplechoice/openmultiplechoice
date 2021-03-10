@@ -11,8 +11,8 @@ class Answer extends Model
 
     protected $fillable = ['text'];
 
-    public function questions()
+    public function question()
     {
-        return $this->belongsToMany(Questions::class);
+        return $this->belongsTo(Question::class);
     }
 }
