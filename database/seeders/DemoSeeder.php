@@ -37,76 +37,85 @@ class DemoSeeder extends Seeder
             'official' => true,
         ]);
 
-        $answers = [
-            Answer::create([
-                'text' => 'A car model.',
-            ])->id,
-            Answer::create([
-                'text' => 'An open source web application for multiple choice exam exercises.',
-            ])->id,
-            Answer::create([
-                'text' => 'An ideology.',
-            ])->id,
-            Answer::create([
-                'text' => 'The title of the latest book by Siri Hustvedt.',
-            ])->id,
-            Answer::create([
-                'text' => 'A fruit.',
-            ])->id,
-        ];
         $question = Question::create([
             'text' => 'What is OpenMultipleChoice?',
-            'correct_answer_id' => $answers[1],
         ]);
-        $question->answers()->attach($answers);
+        Answer::create([
+            'text' => 'A car model.',
+            'question_id' => $question->id,
+        ]);
+        $correct_answer = Answer::create([
+            'question_id' => $question->id,
+            'text' => 'An open source web application for multiple choice exam exercises.',
+        ]);
+        Answer::create([
+            'text' => 'An ideology.',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'The title of the latest book by Siri Hustvedt.',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'A fruit.',
+            'question_id' => $question->id,
+        ]);
+        $question->correct_answer_id = $correct_answer->id;
+        $question->save();
         $deck->questions()->attach($question);
 
-        $answers = [
-            Answer::create([
-                'text' => 'Beerware',
-            ])->id,
-            Answer::create([
-                'text' => 'Apache 2.0',
-            ])->id,
-            Answer::create([
-                'text' => 'BSD',
-            ])->id,
-            Answer::create([
-                'text' => 'MIT',
-            ])->id,
-            Answer::create([
-                'text' => 'AGPL v2',
-            ])->id,
-        ];
         $question = Question::create([
             'text' => 'What is the license of OpenMultipleChoice?',
-            'correct_answer_id' => $answers[4],
         ]);
-        $question->answers()->attach($answers);
+        Answer::create([
+            'text' => 'Beerware',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'Apache 2.0',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'BSD',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'MIT',
+            'question_id' => $question->id,
+        ]);
+        $correct_answer = Answer::create([
+            'text' => 'AGPL v2',
+            'question_id' => $question->id,
+        ]);
+        $question->correct_answer_id = $correct_answer->id;
+        $question->save();
         $deck->questions()->attach($question);
 
-        $answers = [
-            Answer::create([
-                'text' => 'C',
-            ])->id,
-            Answer::create([
-                'text' => 'Swift',
-            ])->id,
-            Answer::create([
-                'text' => 'Go',
-            ])->id,
-            Answer::create([
-                'text' => 'Python',
-            ])->id,
-            Answer::create([
-                'text' => 'PHP',
-            ])->id,
-        ];
         $question = Question::create([
             'text' => 'What programming language is OpenMultipleChoice written in?',
-            'correct_answer_id' => $answers[4],
         ]);
-        $question->answers()->attach($answers);
+        Answer::create([
+            'text' => 'C',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'Swift',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'Go',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'Python',
+            'question_id' => $question->id,
+        ]);
+        $correct_answer = Answer::create([
+            'text' => 'PHP',
+            'question_id' => $question->id,
+        ]);
+        $question->correct_answer_id = $correct_answer->id;
+        $question->save();
         $deck->questions()->attach($question);
     }
 }
