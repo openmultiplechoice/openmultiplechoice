@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  php-cs-fixer:
+  linter:
     runs-on: ubuntu-20.04
 
     steps:
@@ -20,6 +20,18 @@ jobs:
 
       - name: Install php-cs-fixer
         run: cd tools/php-cs-fixer; composer install
+
+      - name: Install editorconfig-checker
+        run: |
+          mkdir -p /tmp/ec
+          pushd /tmp/ec
+          curl -fsSLO https://github.com/editorconfig-checker/editorconfig-checker/releases/download/2.3.4/ec-linux-amd64.tar.gz
+          tar xvf ec-linux-amd64.tar.gz
+          sudo install bin/ec-linux-amd64 /usr/local/bin/ec
+          popd
+
+      - name: Run editorconfig-checker
+        run: ec
 
       - name: Run php-cs-fixer
         run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff .
