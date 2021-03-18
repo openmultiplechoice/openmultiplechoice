@@ -55,22 +55,22 @@ height: 100%;
     <div class="col">
 @if (Session::has( 'msg-success' ))
         <div class="alert alert-success" role="alert">
-             {{ Session::get( 'msg-success' ) }}
+            {{ Session::get( 'msg-success' ) }}
         </div>
 @elseif (Session::has( 'msg-warning' ))
         <div class="alert alert-warning" role="alert">
-             {{ Session::get( 'msg-warning' ) }}
+            {{ Session::get( 'msg-warning' ) }}
         </div>
 @elseif (Session::has( 'msg-error' ))
         <div class="alert alert-danger" role="alert">
-             {{ Session::get( 'msg-error' ) }}
+            {{ Session::get( 'msg-error' ) }}
         </div>
 @elseif (Session::has( 'msg-info' ))
         <div class="alert alert-primary" role="alert">
-             {{ Session::get( 'msg-info' ) }}
+            {{ Session::get( 'msg-info' ) }}
         </div>
 @endif
-     </div>
+    </div>
 </div>
 
 @yield('content')
