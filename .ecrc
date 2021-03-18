@@ -1,6 +1,8 @@
 {
     "exclude": [
         "\\.txt$",
-        "\\.md$"
+        "\\.md$",
+        "public/js/DeckForm.js",
+        "public/js/app.js"
     ]
 }

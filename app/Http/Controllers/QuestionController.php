@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Answer;
 use App\Models\Question;
@@ -16,7 +18,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        return Question::all();
+        return Question::with('images')->get();
     }
 
     /**
@@ -38,15 +40,12 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $question = new Question;
-
         $question->text = $request->text;
 
-        // The question must exist in the DB to create the many-to-many
-        // relation
         $question->save();
 
         $answers = Answer::find($request->answers);
-        $question->answers()->attach($answers);
+        $question->answers()->saveMany($answers);
 
         return response()->json($question);
     }
@@ -80,9 +79,14 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Question $question)
     {
-        //
+        $question->text = $request->text;
+        $question->correct_answer_id = $request->correct_answer_id;
+
+        $question->save();
+
+        return response()->json($question);
     }
 
     /**

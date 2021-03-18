@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8">
@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <style>
 button.btn {
@@ -36,11 +37,11 @@ height: 100%;
                         {{ __('omc.more') }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/sessions">Sessions</a>
-                        <a class="dropdown-item" href="/decks">Decks</a>
-                        <a class="dropdown-item" href="/questions">Questions</a>
-                        <a class="dropdown-item" href="/messages">Messages</a>
+                        <a class="dropdown-item" href="{{ url('sessions') }}">Sessions</a>
+                        <a class="dropdown-item" href="{{ url('decks') }}">Decks</a>
+
                         <div class="dropdown-divider"></div>
+
                         <a class="dropdown-item" href="#">Admin</a>
                     </div>
                 </li>

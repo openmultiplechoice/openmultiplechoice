@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
-use App\Models\Answer;
+use App\Models\Image;
 
-class AnswerController extends Controller
+class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,22 +27,16 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        $answer = new Answer;
-
-        $answer->text = $request->text;
-
-        $answer->save();
-
-        return response()->json($answer);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Image $image)
     {
         //
     }
@@ -51,26 +45,24 @@ class AnswerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Answer $answer)
+    public function update(Request $request, Image $image)
     {
-        $answer->text = $request->text;
-        $answer->save();
-
-        return response()->json($answer);
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Answer $answer)
+    public function destroy(Image $image)
     {
-        $answer->delete();
+        Storage::delete($image->path);
+        $image->delete();
         return response()->noContent();
     }
 }
