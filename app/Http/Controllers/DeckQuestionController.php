@@ -74,8 +74,14 @@ class DeckQuestionController extends Controller
      * @param  \App\Models\Deck  $deck
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Deck $deck)
+    public function destroy(Deck $deck, Question $question)
     {
-        //
+        $deck->questions()->detach($question->id);
+
+        if ($question->decks->isEmpty()) {
+            $question->delete();
+        }
+
+        return response()->noContent();
     }
 }
