@@ -16,6 +16,11 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
+    public function decks()
+    {
+        return $this->belongsToMany(Deck::class);
+    }
+
     public function images()
     {
         return $this->hasMany(Image::class);
