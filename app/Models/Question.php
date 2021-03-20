@@ -16,8 +16,24 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
+    public function decks()
+    {
+        return $this->belongsToMany(Deck::class);
+    }
+
     public function images()
     {
         return $this->hasMany(Image::class);
+    }
+
+    // Images should be soft deleted, hence we can't just cascade
+    // on delete but need this custom handler.
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($question) {
+            $question->images()->delete();
+        });
     }
 }

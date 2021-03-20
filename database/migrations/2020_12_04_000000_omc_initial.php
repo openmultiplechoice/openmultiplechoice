@@ -34,21 +34,22 @@ class OmcInitial extends Migration
             $table->string('text', 1000)->nullable();
 
             $table->bigInteger('question_id')->unsigned();
-            $table->foreign('question_id')->references('id')->on('questions');
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
         });
 
         Schema::table('questions', function ($table) {
-            $table->foreign('correct_answer_id')->references('id')->on('answers');
+            $table->foreign('correct_answer_id')->references('id')->on('answers')->onDelete('set null');
         });
 
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
             $table->string('path', 250);
             $table->string('comment', 500)->nullable();
 
-            $table->bigInteger('question_id')->unsigned();
-            $table->foreign('question_id')->references('id')->on('questions');
+            $table->bigInteger('question_id')->unsigned()->nullable();
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('set null');
         });
 
         Schema::create('deck_question', function (Blueprint $table) {
@@ -69,10 +70,10 @@ class OmcInitial extends Migration
             $table->boolean('public')->default(false);
 
             $table->bigInteger('deck_id')->unsigned();
-            $table->foreign('deck_id')->references('id')->on('decks');
+            $table->foreign('deck_id')->references('id')->on('decks')->onDelete('cascade');
 
             $table->bigInteger('current_question_id')->unsigned()->nullable();
-            $table->foreign('current_question_id')->references('id')->on('questions');
+            $table->foreign('current_question_id')->references('id')->on('questions')->onDelete('set null');
         });
 
         Schema::create('news', function (Blueprint $table) {
@@ -89,13 +90,13 @@ class OmcInitial extends Migration
             $table->timestamps();
 
             $table->bigInteger('question_id')->unsigned();
-            $table->foreign('question_id')->references('id')->on('questions');
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
 
             $table->bigInteger('answer_id')->unsigned();
-            $table->foreign('answer_id')->references('id')->on('answers');
+            $table->foreign('answer_id')->references('id')->on('answers')->onDelete('cascade');
 
             $table->bigInteger('session_id')->unsigned();
-            $table->foreign('session_id')->references('id')->on('sessions');
+            $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade');
         });
     }
 
