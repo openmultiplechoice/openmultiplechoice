@@ -9,6 +9,10 @@ class Session extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'current_question_id',
+    ];
+
     public function deck()
     {
         return $this->belongsTo(Deck::class);

@@ -17,6 +17,7 @@ require('laravel-mix-svelte');
 mix.js('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js', 'public/js')
     .js('resources/js/app.js', 'public/js')
     .js('resources/js/DeckForm.js', 'public/js')
+    .js('resources/js/SessionView.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .svelte();
 
