@@ -22,7 +22,7 @@
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.32.8",
         "sass-loader": "^11.0.1",
-        "svelte": "^3.32.3",
+        "svelte": "^3.35.0",
         "svelte-loader": "^3.0.0",
         "vue-template-compiler": "^2.6.12"
     }
