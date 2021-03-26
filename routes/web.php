@@ -36,6 +36,3 @@ Route::resource('/decks', DeckController::class);
 
 Route::resource('/sessions', SessionController::class);
 Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('show.session');
-
-Route::get('/sessions/{session}/questions/{question}', [SessionQuestionController::class, 'show'])->name('show.session_question');
-Route::post('/sessions/{session}/questions/{question}', [SessionQuestionController::class, 'store']);
