@@ -10,12 +10,6 @@
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-
-    <style>
-button.btn {
-height: 100%;
-}
-    </style>
 </head>
 <body>
 

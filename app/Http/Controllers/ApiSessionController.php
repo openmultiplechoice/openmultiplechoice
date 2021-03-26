@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
 use App\Models\Session;
 
-class SessionController extends Controller
+class ApiSessionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,12 +17,7 @@ class SessionController extends Controller
      */
     public function index()
     {
-        $decks = Deck::all();
-        $sessions = Session::orderByDesc('id')->get();
-        return view('sessions', [
-            'decks' => $decks,
-            'sessions' => $sessions,
-        ]);
+        //
     }
 
     /**
@@ -42,18 +38,7 @@ class SessionController extends Controller
      */
     public function store(Request $request)
     {
-        $newSession = new Session;
-
-        $deck = Deck::findOrFail($request->deck_id);
-
-        $newSession->deck_id = $deck->id;
-        $newSession->name = $deck->name;
-        $newSession->current_question_id = $newSession->deck->questions->first()->id;
-        $newSession->save();
-
-        return redirect()->route('show.session', [
-            'session' => $newSession->id
-        ]);
+        //
     }
 
     /**
@@ -64,8 +49,10 @@ class SessionController extends Controller
      */
     public function show(Session $session)
     {
-        return view('session', [
-            'session' => $session,
+        $deck = Deck::with('questions', 'questions.images', 'questions.answers')->find($session->deck_id);
+        return response()->json([
+            'session' => $session->load('answerChoices'),
+            'deck' => $deck
         ]);
     }
 
@@ -89,7 +76,8 @@ class SessionController extends Controller
      */
     public function update(Request $request, Session $session)
     {
-        //
+        $session->update($request->all());
+        return response()->json($session);
     }
 
     /**

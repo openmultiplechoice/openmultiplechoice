@@ -13,7 +13,12 @@ use App\Http\Controllers\QuestionImageController;
 use App\Http\Controllers\ImageController;
 
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\ApiAnswerChoiceController;
+
 use App\Http\Controllers\NewsController;
+
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\ApiSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +48,5 @@ Route::middleware('api')->resource('answers', AnswerController::class);
 
 Route::middleware('api')->resource('news', NewsController::class);
 
-Route::middleware('api')->resource('sessions', SessionController::class);
+Route::middleware('api')->resource('sessions', ApiSessionController::class);
+Route::middleware('api')->resource('sessions.answerchoices', ApiAnswerChoiceController::class);

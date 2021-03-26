@@ -4,8 +4,7 @@
 
 @section('content')
 
-<pre><code>
-{{ $session }}
-</code></pre>
+<div id="SessionView" data-session-id="{{ $session->id }}" ></div>
+<script src="{{ asset('js/SessionView.js') }}"></script>
 
 @endsection
