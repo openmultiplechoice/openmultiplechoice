@@ -123,7 +123,7 @@
         <div class="col">
             <div class="card" style="width: 18rem">
                 <div class="card-header bg-transparent"><button on:click|preventDefault={() => { handleImageRemove(image.id) }} type="button" class="btn-close"></button></div>
-                <img src="http://omc.local/{image.path}" class="card-img-top" alt="">
+                <img src="/{image.path}" class="card-img-top" alt="">
                 {#if image.comment }
                     <div class="card-body">
                         <p class="card-text">
