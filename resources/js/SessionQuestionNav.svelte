@@ -38,7 +38,7 @@
     }
 </script>
 
-<div class="row mb-3">
+<div class="row mb-3 pt-1 pb-1 sticky-top bg-white">
     {#if data.session.current_question_id && data.session.current_question_id != data.deck.questions[0].id }
         <div class="col-6">
             <button on:click|preventDefault={handleBack} class="btn btn-sm btn-light w-100"><span class="fw-bold">&leftarrow;</span> Previous</button>
