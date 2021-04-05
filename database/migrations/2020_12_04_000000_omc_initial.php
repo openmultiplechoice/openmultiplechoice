@@ -92,7 +92,9 @@ class OmcInitial extends Migration
             $table->bigInteger('question_id')->unsigned();
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
 
-            $table->bigInteger('answer_id')->unsigned();
+            // nullable to allow us to signify when the user pressed
+            // the "show answer" button
+            $table->bigInteger('answer_id')->unsigned()->nullable();
             $table->foreign('answer_id')->references('id')->on('answers')->onDelete('cascade');
 
             $table->bigInteger('session_id')->unsigned();
