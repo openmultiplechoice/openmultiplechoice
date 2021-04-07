@@ -66,6 +66,12 @@
     }
 </script>
 
+<style>
+button.show-answer {
+    text-decoration: none;
+}
+</style>
+
 {#if data}
     <div class="row">
         <div class="col-lg-3 d-none d-lg-block">
@@ -75,6 +81,9 @@
             <SessionQuestionNav bind:data bind:currentQuestionId={data.session.current_question_id} bind:currentQuestionAnswered />
             {#if currentQuestion}
                 <SessionQuestionView bind:question={currentQuestion} bind:answerChoice bind:sessionId={id} submitAnswer={submitAnswer} />
+                <div class="mt-3">
+                    <button on:click|preventDefault={() => submitAnswer('')} type="button" class="btn btn-link text-muted show-answer">Show answer</button>
+                </div>
             {/if}
         </div>
     </div>
