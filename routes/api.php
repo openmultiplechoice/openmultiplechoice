@@ -27,19 +27,21 @@ use App\Http\Controllers\Api\SessionController;
 |
 */
 
-Route::middleware('api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::resource('decks.questions', DeckQuestionController::class);
+
+    Route::resource('questions', QuestionController::class);
+    Route::resource('questions.answers', QuestionAnswerController::class);
+    Route::resource('questions.images', QuestionImageController::class);
+
+    Route::resource('images', ImageController::class);
+
+    Route::resource('answers', AnswerController::class);
+
+    Route::resource('sessions', SessionController::class);
+    Route::resource('sessions.answerchoices', AnswerChoiceController::class);
 });
-
-Route::middleware('api')->resource('decks.questions', DeckQuestionController::class);
-
-Route::middleware('api')->resource('questions', QuestionController::class);
-Route::middleware('api')->resource('questions.answers', QuestionAnswerController::class);
-Route::middleware('api')->resource('questions.images', QuestionImageController::class);
-
-Route::middleware('api')->resource('images', ImageController::class);
-
-Route::middleware('api')->resource('answers', AnswerController::class);
-
-Route::middleware('api')->resource('sessions', SessionController::class);
-Route::middleware('api')->resource('sessions.answerchoices', AnswerChoiceController::class);

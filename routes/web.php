@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\DeckController;
@@ -21,18 +22,48 @@ use App\Models\Session;
 |
 */
 
-Route::get('/', function () {
-    $news = News::orderByDesc('id')->where('sticky', true)->take(2)->get()->concat(
-        News::orderByDesc('id')->where('sticky', false)->take(2)->get()
-    );
-    $sessions = Session::orderByDesc('id')->get();
-    return view('index', [
-        'news' => $news,
-        'sessions' => $sessions
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/', function () {
+        $news = News::orderByDesc('id')->where('sticky', true)->take(2)->get()->concat(
+            News::orderByDesc('id')->where('sticky', false)->take(2)->get()
+        );
+        $sessions = Session::orderByDesc('id')->get();
+        return view('index', [
+            'news' => $news,
+            'sessions' => $sessions
+        ]);
+    })->name('index');
+
+    Route::resource('/decks', DeckController::class);
+
+    Route::resource('/sessions', SessionController::class);
+    Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('show.session');
+
+    Route::get('/logout', function () {
+        Auth::guard('web')->logout();
+        return redirect('/');
+    });
+});
+
+Route::get('/login', function () {
+    if (Auth::guard('web')->check()) {
+        return redirect()->route('index');
+    }
+    return view('login');
+})->name('login');
+
+Route::post('/login', function (Request $request) {
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+        if ($request->session) {
+            $request->session->regenerate();
+        }
+
+        return redirect()->intended('/');
+    }
+
+    return back()->withErrors([
+        'email' => 'Invalid credentials.',
     ]);
-})->name('index');
-
-Route::resource('/decks', DeckController::class);
-
-Route::resource('/sessions', SessionController::class);
-Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('show.session');
+});

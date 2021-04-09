@@ -91,9 +91,15 @@ Laravel's [Artisan](https://laravel.com/docs/8.x/artisan) is used to
 ```
 php artisan migrate:fresh
 php artisan db:seed --class=DemoSeeder
+php artisan db:seed --class=DemoUserSeeder
 ```
 
 OMC should now be running and reachable in your browser at http://omc.local
+
+`DemoUserSeeder` created two demo users:
+
+* `demo@example.com` with password `demo` and
+* `demoadmin@example.com` with password `demoadmin`.
 
 ## Building JavaScript and CSS files
 
