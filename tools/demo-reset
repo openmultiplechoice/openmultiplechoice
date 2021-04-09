@@ -10,3 +10,4 @@ fi
 
 php artisan migrate:fresh
 php artisan db:seed --class=DemoSeeder
+php artisan db:seed --class=DemoUserSeeder
