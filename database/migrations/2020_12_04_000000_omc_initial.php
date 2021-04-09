@@ -100,6 +100,12 @@ class OmcInitial extends Migration
             $table->bigInteger('session_id')->unsigned();
             $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade');
         });
+
+        // Update the default users table
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('is_admin')->default(false);
+            $table->boolean('is_moderator')->default(false);
+        });
     }
 
     /**
