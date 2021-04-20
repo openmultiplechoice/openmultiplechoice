@@ -4,6 +4,7 @@
         "\\.md$",
         "public/js/DeckForm.js",
         "public/js/SessionView.js",
-        "public/js/app.js"
+        "public/js/app.js",
+        "public/js/trix.js"
     ]
 }
