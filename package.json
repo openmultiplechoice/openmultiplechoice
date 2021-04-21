@@ -16,7 +16,7 @@
         "browser-sync-webpack-plugin": "^2.3.0",
         "cross-env": "^7.0",
         "hotkeys-js": "^3.8.3",
-        "laravel-mix": "^6.0.16",
+        "laravel-mix": "^6.0.17",
         "laravel-mix-svelte": "github:wewowweb/laravel-mix-svelte",
         "lodash": "^4.17.21",
         "resolve-url-loader": "^3.1.0",
