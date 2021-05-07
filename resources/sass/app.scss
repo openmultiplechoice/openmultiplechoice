@@ -1,5 +1,7 @@
 @import '~bootstrap/scss/bootstrap';
 
+@import '~trix/dist/trix.css';
+
 @import url('https://rsms.me/inter/inter.css');
 
 html, body { font-family: 'Inter', sans-serif !important; }
@@ -11,4 +13,9 @@ textarea {
     overflow: hidden;
     min-height: 5rem !important;
     resize: vertical;
+}
+
+trix-toolbar .trix-button-group--file-tools,
+trix-toolbar .trix-button--icon-heading-1 {
+    display: none !important;
 }
