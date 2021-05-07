@@ -8,8 +8,11 @@ use App\Http\Controllers\Api\DeckQuestionController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\QuestionAnswerController;
 use App\Http\Controllers\Api\QuestionImageController;
+use App\Http\Controllers\Api\QuestionMessageController;
 
 use App\Http\Controllers\Api\ImageController;
+
+use App\Http\Controllers\Api\MessageController;
 
 use App\Http\Controllers\Api\AnswerController;
 use App\Http\Controllers\Api\AnswerChoiceController;
@@ -37,8 +40,11 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('questions', QuestionController::class);
     Route::resource('questions.answers', QuestionAnswerController::class);
     Route::resource('questions.images', QuestionImageController::class);
+    Route::resource('questions.messages', QuestionMessageController::class);
 
     Route::resource('images', ImageController::class);
+
+    Route::resource('messages', MessageController::class);
 
     Route::resource('answers', AnswerController::class);
 

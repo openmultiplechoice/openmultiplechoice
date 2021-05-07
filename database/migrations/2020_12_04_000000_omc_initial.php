@@ -101,6 +101,24 @@ class OmcInitial extends Migration
             $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade');
         });
 
+        Schema::create('messages', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->text('text')->nullable();
+
+            $table->bigInteger('question_id')->unsigned();
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
+
+            // TODO: consider what to do when author or parent messages
+            // are removed?
+
+            $table->bigInteger('author_id')->unsigned();
+            $table->foreign('author_id')->references('id')->on('users');
+
+            $table->bigInteger('parent_message_id')->unsigned()->nullable();
+            $table->foreign('parent_message_id')->references('id')->on('messages');
+        });
+
         // Update the default users table
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('is_admin')->default(false);
@@ -122,5 +140,6 @@ class OmcInitial extends Migration
         Schema::dropIfExists('questions');
         Schema::dropIfExists('answers');
         Schema::dropIfExists('decks');
+        Schema::dropIfExists('messages');
     }
 }

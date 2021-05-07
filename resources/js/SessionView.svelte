@@ -4,6 +4,7 @@
     import SessionQuestionIndexView from './SessionQuestionIndexView.svelte';
     import SessionQuestionView from './SessionQuestionView.svelte';
     import SessionQuestionNav from './SessionQuestionNav.svelte';
+    import Messages from './Messages.svelte';
 
     export let id;
 
@@ -81,9 +82,12 @@ button.show-answer {
             <SessionQuestionNav bind:data bind:currentQuestionId={data.session.current_question_id} bind:currentQuestionAnswered />
             {#if currentQuestion}
                 <SessionQuestionView bind:question={currentQuestion} bind:answerChoice bind:sessionId={id} submitAnswer={submitAnswer} />
-                <div class="mt-3">
-                    <button on:click|preventDefault={() => submitAnswer('')} type="button" class="btn btn-link text-muted show-answer">Show answer</button>
-                </div>
+                {#if !currentQuestionAnswered}
+                    <div class="mt-3">
+                        <button on:click|preventDefault={() => submitAnswer('')} type="button" class="btn btn-link text-muted show-answer">Show answer</button>
+                    </div>
+                {/if}
+                <Messages bind:questionId={currentQuestion.id} />
             {/if}
         </div>
     </div>
