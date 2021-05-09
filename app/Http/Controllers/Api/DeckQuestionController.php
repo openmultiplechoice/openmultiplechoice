@@ -21,7 +21,7 @@ class DeckQuestionController extends Controller
         if ($request->id) {
             $question = Question::findOrFail($request->id)->get();
         } else {
-            $question = new Question;
+            $question = new Question();
         }
 
         $question->text = $request->text;

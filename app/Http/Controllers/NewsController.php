@@ -20,7 +20,7 @@ class NewsController extends Controller
 
     public function store(Request $request)
     {
-        $newEntry = new News;
+        $newEntry = new News();
 
         $newEntry->title = $request->title;
         $newEntry->text = $request->text;

@@ -4,6 +4,5 @@
     "/js/app.js": "/js/app.js",
     "/js/DeckForm.js": "/js/DeckForm.js",
     "/js/SessionView.js": "/js/SessionView.js",
-    "/css/app.css": "/css/app.css",
-    "/css/trix.css": "/css/trix.css"
+    "/css/app.css": "/css/app.css"
 }

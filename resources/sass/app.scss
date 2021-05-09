@@ -19,3 +19,7 @@ trix-toolbar .trix-button-group--file-tools,
 trix-toolbar .trix-button--icon-heading-1 {
     display: none !important;
 }
+
+.dropdown-menu {
+    z-index: 1300;
+}

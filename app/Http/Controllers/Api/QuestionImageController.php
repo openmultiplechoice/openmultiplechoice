@@ -13,7 +13,7 @@ class QuestionImageController extends Controller
 {
     public function store(Request $request, Question $question)
     {
-        $image = new Image;
+        $image = new Image();
         $image->path = Storage::putFile('images', $request->file('image'));
         $question->images()->save($image);
 
