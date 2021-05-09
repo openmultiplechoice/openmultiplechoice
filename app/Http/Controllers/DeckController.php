@@ -24,7 +24,7 @@ class DeckController extends Controller
 
     public function store(Request $request)
     {
-        $deck = new Deck;
+        $deck = new Deck();
 
         $deck->name = $request->name;
         $deck->official = $request->has('official');

@@ -26,7 +26,7 @@ class SessionController extends Controller
 
     public function store(Request $request)
     {
-        $newSession = new Session;
+        $newSession = new Session();
 
         $deck = Deck::findOrFail($request->deck_id);
 

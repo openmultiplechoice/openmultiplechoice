@@ -11,7 +11,7 @@ class AnswerChoiceController extends Controller
 {
     public function store(Request $request, Session $session)
     {
-        $answerChoice = new AnswerChoice;
+        $answerChoice = new AnswerChoice();
         $answerChoice->question_id = $request->question_id;
         $answerChoice->answer_id = $request->answer_id;
         $answerChoice->session_id = $session->id;

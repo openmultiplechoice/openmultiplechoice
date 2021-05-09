@@ -18,7 +18,7 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
-        $question = new Question;
+        $question = new Question();
         $question->text = $request->text;
 
         $question->save();

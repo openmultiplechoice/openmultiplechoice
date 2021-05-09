@@ -14,7 +14,7 @@ class QuestionAnswerController extends Controller
         if ($request->id) {
             $answer = Answer::findOrFail($request->id)->get();
         } else {
-            $answer = new Answer;
+            $answer = new Answer();
         }
 
         $answer->text = $request->text;
