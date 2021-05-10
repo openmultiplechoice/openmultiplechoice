@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\DeckController;
+use App\Http\Controllers\TokenController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SessionQuestionController;
 use App\Models\News;
@@ -38,6 +39,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::resource('/sessions', SessionController::class);
     Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('show.session');
+
+    Route::resource('/tokens', TokenController::class);
+    Route::get('/tokens', [TokenController::class, 'index'])->name('index.tokens');
 
     Route::get('/logout', function () {
         Auth::guard('web')->logout();
