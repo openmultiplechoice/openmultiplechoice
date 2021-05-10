@@ -12,7 +12,7 @@
         <div class="col-lg">
             <p>{question.text}</p>
         </div>
-        {#if question.images}
+        {#if question.images && question.images.length > 0}
             <SessionImageView bind:images={question.images} />
         {/if}
     </div>
