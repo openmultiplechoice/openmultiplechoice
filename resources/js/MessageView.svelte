@@ -1,4 +1,6 @@
 <script>
+    import DOMPurify from 'dompurify';
+
     export let message;
 
     var showEditor = false;
@@ -38,7 +40,7 @@
 {#if !showEditor}
     <div class="mt-3">
         {#if message.text && message.text != ""}
-            {@html message.text}
+            {@html DOMPurify.sanitize(message.text)}
         {:else}
             <i>Deleted</i>
         {/if}

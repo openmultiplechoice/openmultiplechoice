@@ -1,4 +1,6 @@
 <script>
+    import DOMPurify from 'dompurify';
+
     import SessionAnswerView from './SessionAnswerView.svelte';
     import SessionImageView from './SessionImageView.svelte';
 
@@ -10,7 +12,7 @@
 <div id="question{question.id}">
     <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
         <div class="col-lg">
-            <p>{question.text}</p>
+            <p>{@html DOMPurify.sanitize(question.text)}</p>
         </div>
         {#if question.images && question.images.length > 0}
             <SessionImageView bind:images={question.images} />
