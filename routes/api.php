@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\DeckController;
 use App\Http\Controllers\Api\DeckQuestionController;
 
 use App\Http\Controllers\Api\QuestionController;
@@ -35,6 +36,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
         return $request->user();
     });
 
+    Route::resource('decks', DeckController::class);
     Route::resource('decks.questions', DeckQuestionController::class);
 
     Route::resource('questions', QuestionController::class);
