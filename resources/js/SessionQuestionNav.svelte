@@ -7,12 +7,13 @@
     export let currentQuestionAnswered;
 
     onMount(() => {
-        hotkeys('left', function (event, handler) {
+        hotkeys('left', 'questions', function (event, handler) {
             handleBack();
         });
-        hotkeys('right', function (event, handler) {
+        hotkeys('right', 'questions', function (event, handler) {
             handleNext();
         });
+        hotkeys.setScope('questions');
     });
 
     function questionIndex(id) {
