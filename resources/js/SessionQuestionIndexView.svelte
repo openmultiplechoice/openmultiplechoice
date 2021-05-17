@@ -1,4 +1,6 @@
 <script>
+    import DOMPurify from 'dompurify';
+
     export let data;
 
     $: numberQuestions = data.deck.questions.length;
@@ -30,7 +32,7 @@ li:hover {
     {#each data.deck.questions as question}
         <li on:click={() => data.session.current_question_id = question.id} class="list-group-item list-group-item-action {question.id === data.session.current_question_id ? 'list-group-item-dark' : 'list-group-item-light'}">
             <small>
-                {@html answerChoiceIndicator(question)} {question.text.substr(0, 25)} ...
+                {@html answerChoiceIndicator(question)} {DOMPurify.sanitize(question.text).substr(0, 25).replace(/<\/?[^>]+(>|$)/g, "")} ...
             </small>
         </li>
     {:else}

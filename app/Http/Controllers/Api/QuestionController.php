@@ -36,11 +36,7 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        $question->text = $request->text;
-        $question->correct_answer_id = $request->correct_answer_id;
-
-        $question->save();
-
+        $question->update($request->all());
         return response()->json($question);
     }
 }

@@ -8,8 +8,14 @@
     var fullscreen = false;
     var fullscreenImage;
 
+    $: if (fullscreen) {
+        hotkeys.setScope('images');
+    } else {
+        hotkeys.setScope('questions');
+    };
+
     onMount(() => {
-        hotkeys('esc', function (event, handler) {
+        hotkeys('esc', 'images', function (event, handler) {
             if (fullscreen) {
                 fullscreen = false;
             }
@@ -40,17 +46,14 @@
     width: 100%;
     height: 100%;
     z-index: 2000;
-    background-color: rgba(255, 255, 255, 0.8);
-}
-.img-fullscreen img {
-    display: block;
+    background-color: rgba(255, 255, 255, 0.95);
 }
 </style>
 
 {#if !fullscreen}
     <div class="col-lg">
         <div class="row row-cols-1 row-cols-sm-3 g-4">
-            {#each images as image}
+            {#each images as image (image.id)}
                 <div class="col">
                     <div class="card" style="max-width: 18rem">
                         <img on:click={() => fullscreenToggle(image.id)} src="/{image.path}" class="card-img-top" alt="">
@@ -61,17 +64,11 @@
     </div>
 {:else}
     <div on:click={fullscreenToggle} class="img-fullscreen">
-        <div class="card mt-3 mx-auto">
-            <img class="card-img-top img-fluid" src="/{fullscreenImage.path}" alt="">
-            {#if fullscreenImage.comment }
-                <div class="card-body">
-                    <p class="card-text">
-                        <small>
-                            {fullscreenImage.comment}
-                        </small>
-                    </p>
-                </div>
-            {/if}
+        <p class="bg-white text-end">
+            <button on:click|preventDefault={() => fullscreen = !fullscreen} type="button" class="btn-close"></button>
+        </p>
+        <div class="text-center">
+            <img class="img-fluid border border-5 border-white" src="/{fullscreenImage.path}" alt="">
         </div>
     </div>
 {/if}

@@ -1,4 +1,6 @@
 <script>
+    import DOMPurify from 'dompurify';
+
     export let answer;
     export let badgeText;
     export let hasAnswer;
@@ -48,11 +50,11 @@
 
     {#if !hasAnswer}
         <div on:click={() => submitAnswer(answer.id)} class="col-10 cursor-pointer">
-            <p class="p-1" class:text-decoration-line-through={cancelled} class:text-muted={cancelled}>{answer.text}</p>
+            <p class="p-1" class:text-decoration-line-through={cancelled} class:text-muted={cancelled}>{@html DOMPurify.sanitize(answer.text)}</p>
         </div>
     {:else}
         <div class="col-10">
-            <p class="p-1" class:text-decoration-line-through={cancelled} class:text-muted={cancelled}>{answer.text}</p>
+            <p class="p-1" class:text-decoration-line-through={cancelled} class:text-muted={cancelled}>{@html DOMPurify.sanitize(answer.text)}</p>
         </div>
     {/if}
 
