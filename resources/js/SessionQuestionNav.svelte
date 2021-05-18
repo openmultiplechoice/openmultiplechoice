@@ -50,7 +50,7 @@
     {/if}
     {#if data.session.current_question_id != data.deck.questions[data.deck.questions.length-1].id }
         <div class="col-6">
-            <button on:click|preventDefault={handleNext} class="btn btn-sm {currentQuestionAnswered ? 'btn-success' : 'btn-light'} w-100">Next <span class="fw-bold">&rightarrow;</span></button>
+            <button on:click|preventDefault={handleNext} class="btn btn-sm {currentQuestionAnswered ? 'btn-warning' : 'btn-light'} w-100">Next <span class="fw-bold">&rightarrow;</span></button>
         </div>
     {:else}
         <div class="col-6">
