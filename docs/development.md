@@ -4,9 +4,9 @@
 
 * [Vagrant](https://www.vagrantup.com/) with VirtualBox or Parallels as provider
 * [Homestead](https://laravel.com/docs/8.x/homestead)
-* Node.js + nvm (https://github.com/nvm-sh/nvm is recommended for the installation)
+* Node.js + nvm (https://brew.sh or https://github.com/nvm-sh/nvm is recommended for the installation)
 
-## Development environment setup
+## Setting up the environment
 
 The easiest way to set up a local development environment for OMC is
 Laravel's [Homestead](https://laravel.com/docs/8.x/homestead) Vagrant
