@@ -78,4 +78,13 @@
             <span class="text-danger fw-bold fs-3">&cross;</span>
         {/if}
     </div>
+
+</div>
+
+<div class="row ms-1 mb-2 me-1">
+    {#if hasAnswer && answer.hint}
+        <div class="col-10 offset-sm-1 border-3 border-start border-info">
+            <p class="p-1">{@html DOMPurify.sanitize(answer.hint)}</p>
+        </div>
+    {/if}
 </div>

@@ -24,6 +24,7 @@ class OmcInitial extends Migration
             $table->id();
             $table->timestamps();
             $table->string('text', 2000)->nullable();
+            $table->string('hint', 1000)->nullable();
 
             $table->bigInteger('correct_answer_id')->unsigned()->nullable();
         });
@@ -32,6 +33,7 @@ class OmcInitial extends Migration
             $table->id();
             $table->timestamps();
             $table->string('text', 2000)->nullable();
+            $table->string('hint', 1000)->nullable();
 
             $table->bigInteger('question_id')->unsigned();
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
