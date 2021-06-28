@@ -8,6 +8,7 @@
     export let isCorrectAnswer;
     export let submitAnswer;
 
+    var answerCancelledIndicator;
     var answerStatusIndicator;
     var cancelled;
 
@@ -23,6 +24,12 @@
             }
         }
     };
+
+    $: if (cancelled) {
+        answerCancelledIndicator = 'bg-cancelled-answer';
+    } else {
+        answerCancelledIndicator = '';
+    }
 </script>
 
 <style>
@@ -35,9 +42,13 @@
 .bg-light-hover:hover {
     background: #f8f9fa;
 }
+.bg-cancelled-answer {
+    color: #495057 !important;
+    background: #f8d7da !important;
+}
 </style>
 
-<div id="answer{answer.id}" class="row border-start border-3 {answerStatusIndicator} m-1 pt-2 { hasAnswer ? '' : 'bg-light-hover'}">
+<div id="answer{answer.id}" class="row border-start border-3 {answerStatusIndicator} {answerCancelledIndicator} m-1 pt-2 { hasAnswer ? '' : 'bg-light-hover'}">
     {#if !hasAnswer}
         <div on:click={() => submitAnswer(answer.id)} class="col-1 border-start-3 cursor-pointer">
             <p class="badge text-dark">{badgeText}</p>
@@ -50,11 +61,11 @@
 
     {#if !hasAnswer}
         <div on:click={() => submitAnswer(answer.id)} class="col-10 cursor-pointer">
-            <p class="p-1" class:text-decoration-line-through={cancelled} class:text-muted={cancelled}>{@html DOMPurify.sanitize(answer.text)}</p>
+            <p class="p-1">{@html DOMPurify.sanitize(answer.text)}</p>
         </div>
     {:else}
         <div class="col-10">
-            <p class="p-1" class:text-decoration-line-through={cancelled} class:text-muted={cancelled}>{@html DOMPurify.sanitize(answer.text)}</p>
+            <p class="p-1">{@html DOMPurify.sanitize(answer.text)}</p>
         </div>
     {/if}
 
@@ -67,4 +78,13 @@
             <span class="text-danger fw-bold fs-3">&cross;</span>
         {/if}
     </div>
+
+</div>
+
+<div class="row ms-1 mb-2 me-1">
+    {#if hasAnswer && answer.hint}
+        <div class="col-10 offset-sm-1 border-3 border-start border-info">
+            <p class="p-1">{@html DOMPurify.sanitize(answer.hint)}</p>
+        </div>
+    {/if}
 </div>

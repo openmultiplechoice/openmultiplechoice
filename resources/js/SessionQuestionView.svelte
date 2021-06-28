@@ -18,6 +18,11 @@
             <SessionImageView bind:images={question.images} />
         {/if}
     </div>
+    {#if question.hint}
+        <div class="row border-start border-3 border-info m-1 mt-3 mb-3">
+            <p>{@html DOMPurify.sanitize(question.hint)}</p>
+        </div>
+    {/if}
     {#each question.answers as answer, index}
         <SessionAnswerView bind:answer bind:answerChoice submitAnswer={submitAnswer} badgeText={'ABCDEFGHIJKLMN'.charAt(index)} isCorrectAnswer={question.correct_answer_id === answer.id} hasAnswer={!!answerChoice} isChosenAnswer={answerChoice && answerChoice.answer_id === answer.id} />
     {/each}

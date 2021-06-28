@@ -23,7 +23,8 @@ class OmcInitial extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('text', 1000)->nullable();
+            $table->string('text', 2000)->nullable();
+            $table->string('hint', 1000)->nullable();
 
             $table->bigInteger('correct_answer_id')->unsigned()->nullable();
         });
@@ -31,7 +32,8 @@ class OmcInitial extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('text', 1000)->nullable();
+            $table->string('text', 2000)->nullable();
+            $table->string('hint', 1000)->nullable();
 
             $table->bigInteger('question_id')->unsigned();
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');

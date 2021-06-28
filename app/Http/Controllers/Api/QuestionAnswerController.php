@@ -18,6 +18,7 @@ class QuestionAnswerController extends Controller
         }
 
         $answer->text = $request->text;
+        $answer->hint = $request->hint;
 
         $question->answers()->save($answer);
 
