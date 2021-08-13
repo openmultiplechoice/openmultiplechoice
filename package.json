@@ -15,7 +15,7 @@
         "browser-sync": "^2.27.3",
         "browser-sync-webpack-plugin": "^2.3.0",
         "cross-env": "^7.0",
-        "dompurify": "^2.2.9",
+        "dompurify": "^2.3.1",
         "hotkeys-js": "^3.8.7",
         "laravel-mix": "^6.0.25",
         "laravel-mix-svelte": "github:wewowweb/laravel-mix-svelte",
