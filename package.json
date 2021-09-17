@@ -10,14 +10,14 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.21.1",
+        "axios": "^0.21.4",
         "bootstrap": "^5.0.2",
         "browser-sync": "^2.27.5",
         "browser-sync-webpack-plugin": "^2.3.0",
         "cross-env": "^7.0",
         "dompurify": "^2.2.9",
         "hotkeys-js": "^3.8.7",
-        "laravel-mix": "^6.0.25",
+        "laravel-mix": "^6.0.31",
         "laravel-mix-svelte": "github:wewowweb/laravel-mix-svelte",
         "lodash": "^4.17.21",
         "resolve-url-loader": "^4.0.0",
