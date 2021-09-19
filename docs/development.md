@@ -56,6 +56,9 @@ vagrant ssh
 cd code/openmultiplechoice/
 ```
 
+Note: don't forget to update the base image from time to time, e.g. after
+a Homestead update: `vagrant box update`.
+
 ### OMC configuration
 
 First install the requirements:

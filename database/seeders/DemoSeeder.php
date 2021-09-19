@@ -92,7 +92,7 @@ class DemoSeeder extends Seeder
             'question_id' => $question->id,
         ]);
         $correct_answer = Answer::create([
-            'text' => 'AGPL v2',
+            'text' => 'AGPL v3',
             'question_id' => $question->id,
         ]);
         $question->correct_answer_id = $correct_answer->id;
