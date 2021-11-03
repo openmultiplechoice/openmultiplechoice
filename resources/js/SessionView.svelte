@@ -9,8 +9,6 @@
     export let id;
 
     var data;
-    var currentQuestion;
-    var currentQuestionId;
 
     $: answerChoice = data ? data.session.answer_choices.find(e => e.question_id === currentQuestionId) : null;
     $: currentQuestion = data ? data.deck.questions.find(q => q.id === data.session.current_question_id) : null;
