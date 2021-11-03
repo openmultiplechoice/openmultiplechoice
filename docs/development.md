@@ -84,6 +84,12 @@ use `php artisan key:generate` to create an app key.
 APP_KEY=base64:xKQESFCyonhA6fjZVzW+DDho7s17W2SdJCxa7u+teuw=
 ```
 
+Finally, create the storage links:
+
+```
+php artisan storage:link
+```
+
 That's it! All other values can remain set to their defaults.
 
 Laravel's [Artisan](https://laravel.com/docs/8.x/artisan) is used to
