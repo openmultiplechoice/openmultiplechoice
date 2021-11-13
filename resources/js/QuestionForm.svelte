@@ -26,8 +26,6 @@
         label.textContent = 'Question text - saving ...';
 
         if (debounced) {
-            // We want to save only once and not fire requests,
-            // cancel the previous event
             debounced.cancel();
         }
 
@@ -119,7 +117,7 @@
 </form>
 
 <div class="row row-cols-1 row-cols-lg-3 g4">
-    {#each question.images as image}
+    {#each question.images as image (image.id)}
         <div class="col">
             <div class="card" style="width: 18rem">
                 <div class="card-header bg-transparent"><button on:click|preventDefault={() => { handleImageRemove(image.id) }} type="button" class="btn-close"></button></div>
@@ -136,7 +134,7 @@
     {/each}
 </div>
 
-{#each question.answers as answer}
+{#each question.answers as answer (answer.id)}
     <AnswerForm bind:answer={answer} />
     <div class="text-end">
         <input type="radio" class="btn-check" name="questionAnswer{question.id}" bind:group={correctAnswerId} value={answer.id} id="questionAnswerOption{answer.id}" autocomplete="off">

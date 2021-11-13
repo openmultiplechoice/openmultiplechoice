@@ -13,7 +13,13 @@
     $: answerChoice = data ? data.session.answer_choices.find(e => e.question_id === currentQuestionId) : null;
     $: currentQuestion = data ? data.deck.questions.find(q => q.id === data.session.current_question_id) : null;
     $: currentQuestionId = data ? data.session.current_question_id : -1;
+
+    // Whenever the current question gets changed, update the question
+    // data (it could have been updated on the server side meanwhile)
+    // and we want to update the session to remember the current question.
+    $: currentQuestionId, updateCurrentQuestionData();
     $: currentQuestionId, updateSession();
+
     $: currentQuestionAnswered = data ? !!answerChoice : false;
 
     onMount(() => {
@@ -23,8 +29,30 @@
             })
             .catch(function (error) {
                 alert(error);
+                console.log(error);
             });
     });
+
+    var debouncedUpdateCurrentQuestionData;
+
+    function updateCurrentQuestionData() {
+        if (debouncedUpdateCurrentQuestionData) {
+            debouncedUpdateCurrentQuestionData.cancel();
+        }
+
+        debouncedUpdateCurrentQuestionData = debounce(() => {
+            axios.get('/api/questions/' + currentQuestion.id)
+                .then(function (response) {
+                    var currentQuestionIndex = data.deck.questions.findIndex(q => q.id === currentQuestionId);
+                    data.deck.questions[currentQuestionIndex] = response.data;
+                })
+                .catch(function (error) {
+                    alert(error);
+                });
+        }, 500, { 'maxWait': 1000 });
+
+        debouncedUpdateCurrentQuestionData();
+    };
 
     var debounced;
 
@@ -46,7 +74,6 @@
 
     function submitAnswer(answerId) {
         if (currentQuestionAnswered) {
-            // A question must not be answered multiple times..
             return;
         }
 
@@ -78,8 +105,8 @@ button.show-answer {
         </div>
         <div class="col-lg-9 col-md-12">
             <SessionQuestionNav bind:data bind:currentQuestionId={data.session.current_question_id} bind:currentQuestionAnswered />
-            {#if currentQuestion}
-                <SessionQuestionView bind:question={currentQuestion} bind:answerChoice bind:sessionId={id} submitAnswer={submitAnswer} />
+            {#if currentQuestion }
+                <SessionQuestionView bind:question={currentQuestion} bind:answerChoice submitAnswer={submitAnswer} />
                 {#if !currentQuestionAnswered}
                     <div class="mt-3">
                         <button on:click|preventDefault={() => submitAnswer('')} type="button" class="btn btn-link text-muted show-answer">Show answer</button>
