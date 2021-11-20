@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 use App\Models\Answer;
+use App\Models\Module;
 use App\Models\Deck;
 use App\Models\Image;
 use App\Models\News;
@@ -33,8 +34,13 @@ class DemoSeeder extends Seeder
             'sticky' => true,
         ]);
 
+        $module = Module::create([
+            'name' => 'Demo',
+        ]);
+
         $deck = Deck::create([
             'name' => 'OpenMultipleChoice Demo Deck',
+            'module_id' => $module->id,
             'official' => true,
         ]);
 

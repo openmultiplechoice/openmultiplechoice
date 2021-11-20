@@ -13,11 +13,20 @@ class OmcInitial extends Migration
      */
     public function up()
     {
+        Schema::create('modules', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('name', 500)->unique();
+        });
+
         Schema::create('decks', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('name', 500);
             $table->boolean('official')->default(false);
+
+            $table->bigInteger('module_id')->unsigned()->nullable();
+            $table->foreign('module_id')->references('id')->on('modules');
         });
 
         Schema::create('questions', function (Blueprint $table) {
@@ -141,6 +150,7 @@ class OmcInitial extends Migration
         Schema::dropIfExists('deck_question');
         Schema::dropIfExists('questions');
         Schema::dropIfExists('answers');
+        Schema::dropIfExists('modules');
         Schema::dropIfExists('decks');
         Schema::dropIfExists('messages');
     }

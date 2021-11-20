@@ -3,6 +3,7 @@
     "/js/trix.js": "/js/trix.js",
     "/js/app.js": "/js/app.js",
     "/js/DeckForm.js": "/js/DeckForm.js",
+    "/js/NewSessionView.js": "/js/NewSessionView.js",
     "/js/SessionView.js": "/js/SessionView.js",
     "/css/app.css": "/css/app.css"
 }
