@@ -14,6 +14,7 @@ class AnswerChoiceController extends Controller
         $answerChoice = new AnswerChoice();
         $answerChoice->question_id = $request->question_id;
         $answerChoice->answer_id = $request->answer_id;
+        $answerChoice->is_correct = $request->is_correct;
         $answerChoice->session_id = $session->id;
         $answerChoice->save();
 

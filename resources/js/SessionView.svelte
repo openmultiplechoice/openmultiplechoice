@@ -77,9 +77,24 @@
             return;
         }
 
+        var is_correct = false;
+        if (currentQuestion.type === 'card') {
+            // This is a bit of a hack..
+            // If we don't get an answerId, count it as "wrong"
+            // If we do get an answerId, count it as "correct"
+            //
+            // This way we can store results for 'card' questions
+            // without special code and without the need for a more
+            // complex data model.
+            is_correct = !!answerId;
+        } else {
+            is_correct = currentQuestion.correct_answer_id === answerId;
+        }
+
         var answerChoice = {
             question_id: currentQuestionId,
-            answer_id: answerId
+            answer_id: answerId,
+            is_correct: is_correct
         };
 
         axios.post('/api/sessions/' + id + '/answerchoices', answerChoice)

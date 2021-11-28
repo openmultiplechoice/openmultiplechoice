@@ -131,5 +131,60 @@ class DemoSeeder extends Seeder
         $question->correct_answer_id = $correct_answer->id;
         $question->save();
         $deck->questions()->attach($question);
+
+        $module = Module::create([
+            'name' => 'Biochemistry',
+        ]);
+
+        $deck = Deck::create([
+            'name' => 'Sugars',
+            'module_id' => $module->id,
+            'official' => true,
+        ]);
+
+        $question = Question::create([
+            'type' => 'card',
+        ]);
+        Answer::create([
+            'text' => 'Glucose',
+            'question_id' => $question->id,
+        ]);
+        $question->save();
+        $deck->questions()->attach($question);
+        $image = Image::create([
+            'path' => 'images/RFS3lDzW8ta1Ndm5NGSICy2BbmNbYDkkjXRCJNlf.png',
+            'question_id' => $question->id,
+        ]);
+        $question->images()->save($image);
+
+        $question = Question::create([
+            'type' => 'card',
+        ]);
+        Answer::create([
+            'text' => 'Galactose',
+            'question_id' => $question->id,
+        ]);
+        $question->save();
+        $deck->questions()->attach($question);
+        $image = Image::create([
+            'path' => 'images/keIHhJWnbRyli3Kgq0c8pXQMhJmKmsb5MbySWR5P.png',
+            'question_id' => $question->id,
+        ]);
+        $question->images()->save($image);
+
+        $question = Question::create([
+            'type' => 'card',
+        ]);
+        Answer::create([
+            'text' => 'Mannose',
+            'question_id' => $question->id,
+        ]);
+        $question->save();
+        $deck->questions()->attach($question);
+        $image = Image::create([
+            'path' => 'images/yiOgHY9jH2duPa5C0hxV1WDA1tWjP43u24Yr4Rbp.png',
+            'question_id' => $question->id,
+        ]);
+        $question->images()->save($image);
     }
 }

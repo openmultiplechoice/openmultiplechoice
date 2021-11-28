@@ -24,6 +24,7 @@ class DeckQuestionController extends Controller
             $question = new Question();
         }
 
+        $question->type = $request->type;
         $question->text = $request->text;
         $question->hint = $request->hint;
         $question->correct_answer_id = $request->correct_answer_id;

@@ -34,6 +34,7 @@ class OmcInitial extends Migration
             $table->timestamps();
             $table->string('text', 2000)->nullable();
             $table->string('hint', 1000)->nullable();
+            $table->string('type')->default('mc')->nullable();
 
             $table->bigInteger('correct_answer_id')->unsigned()->nullable();
         });
@@ -107,6 +108,10 @@ class OmcInitial extends Migration
             // the "show answer" button
             $table->bigInteger('answer_id')->unsigned()->nullable();
             $table->foreign('answer_id')->references('id')->on('answers')->onDelete('cascade');
+
+            // TODO: having this field means we have to update
+            // answer_choices whenever questions get updated
+            $table->boolean('is_correct')->default(false);
 
             $table->bigInteger('session_id')->unsigned();
             $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade');
