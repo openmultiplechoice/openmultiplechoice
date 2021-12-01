@@ -40,10 +40,22 @@
             debouncedUpdateCurrentQuestionData.cancel();
         }
 
+        // Avoid race condition by checking if currentQuestion
+        // is set right now (user could be switching questions
+        // simultaneously)
+        if (!currentQuestion) {
+            return;
+        }
+
+        // Avoid race condition in the debounced function
+        // by storing the currentQuestion.id in a private
+        // variable
+        var cqid = currentQuestion.id;
+
         debouncedUpdateCurrentQuestionData = debounce(() => {
-            axios.get('/api/questions/' + currentQuestion.id)
+            axios.get('/api/questions/' + cqid)
                 .then(function (response) {
-                    var currentQuestionIndex = data.deck.questions.findIndex(q => q.id === currentQuestionId);
+                    var currentQuestionIndex = data.deck.questions.findIndex(q => q.id === cqid);
                     data.deck.questions[currentQuestionIndex] = response.data;
                 })
                 .catch(function (error) {
