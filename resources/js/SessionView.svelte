@@ -139,7 +139,9 @@ button.show-answer {
                         <button on:click|preventDefault={() => submitAnswer('')} type="button" class="btn btn-link text-muted show-answer">Show answer</button>
                     </div>
                 {/if}
-                <Messages bind:questionId={currentQuestion.id} />
+                {#if currentQuestionAnswered}
+                    <Messages bind:questionId={currentQuestion.id} />
+                {/if}
             {/if}
         </div>
     </div>
