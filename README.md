@@ -1,3 +1,5 @@
+![OpenMultipleChoice logo](logo/omc.png)
+
 # OpenMultipleChoice
 
 ![](https://github.com/openmultiplechoice/openmultiplechoice/workflows/CI/badge.svg)
@@ -31,3 +33,7 @@ Demo: https://demo.openmultiplechoice.de (coming soon)
 ## License
 
 [AGPL v3](https://www.gnu.org/licenses/agpl-3.0.en.html)
+
+## Credits
+
+* Logo font: [Luckiest Guy](https://fonts.google.com/specimen/Luckiest+Guy)
