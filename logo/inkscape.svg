@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="89.588234mm"
+   height="66.394737mm"
+   viewBox="0 0 89.588234 66.394737"
+   version="1.1"
+   id="svg5"
+   inkscape:export-filename="/home/schu/code/openmultiplechoice/logo/omc.png"
+   inkscape:export-xdpi="57.270912"
+   inkscape:export-ydpi="57.270912"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="inkscape.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     fit-margin-top="5"
+     fit-margin-left="5"
+     fit-margin-right="5"
+     fit-margin-bottom="5"
+     inkscape:zoom="0.77771465"
+     inkscape:cx="-234.6619"
+     inkscape:cy="178.72879"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-59.552937,-101.01738)">
+    <text
+       xml:space="preserve"
+       style="font-size:56.6662px;line-height:1.25;font-family:'Luckiest Guy';-inkscape-font-specification:'Luckiest Guy';stroke-width:1.41666"
+       x="87.95105"
+       y="117.7405"
+       id="text1551"
+       transform="scale(0.73005991,1.3697506)"><tspan
+         sodipodi:role="line"
+         id="tspan1549"
+         style="stroke-width:1.41666"
+         x="87.95105"
+         y="117.7405">OMC</tspan></text>
+  </g>
+</svg>
