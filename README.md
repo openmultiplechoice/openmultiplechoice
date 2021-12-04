@@ -22,7 +22,7 @@ repository here on GitHub.
 You can also send an email (German or English) to `feedback@openmultiplechoice.de`
 to express your interest and to be notified for the first release.
 
-Discord: https://discord.gg/YVaSBBWY (currently read-only)
+Discord: https://discord.gg/NdvVNBN5Dh
 
 Demo: https://demo.openmultiplechoice.de (coming soon)
 
