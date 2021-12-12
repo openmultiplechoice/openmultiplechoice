@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\Answer;
+use App\Models\AnswerChoice;
 use App\Models\Question;
 
 class QuestionController extends Controller
@@ -38,7 +39,23 @@ class QuestionController extends Controller
     public function update(Request $request, Question $question)
     {
         $question->fill($request->all());
+
+        $answerIds = array_map(function ($a) {
+            return $a['id'];
+        }, $request->answers);
+
+        $answers = Answer::findMany($answerIds);
+
+        $question->answers()->saveMany($answers);
         $question->save();
+
+        // Update all answer choices for this question as the correct
+        // answer could have been changed
+        $answerChoices = AnswerChoice::where('question_id', '=', $question->id)->get();
+        foreach ($answerChoices as $answerChoice) {
+            $answerChoice->is_correct = $answerChoice->answer_id == $question->correct_answer_id;
+            $answerChoice->save();
+        }
 
         return response()->json($question);
     }

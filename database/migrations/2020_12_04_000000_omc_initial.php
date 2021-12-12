@@ -109,8 +109,6 @@ class OmcInitial extends Migration
             $table->bigInteger('answer_id')->unsigned()->nullable();
             $table->foreign('answer_id')->references('id')->on('answers')->onDelete('cascade');
 
-            // TODO: having this field means we have to update
-            // answer_choices whenever questions get updated
             $table->boolean('is_correct')->default(false);
 
             $table->bigInteger('session_id')->unsigned();
