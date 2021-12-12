@@ -28,10 +28,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         $news = News::orderByDesc('id')->where('sticky', true)->take(2)->get()->concat(
             News::orderByDesc('id')->where('sticky', false)->take(2)->get()
         );
-        $sessions = Session::orderByDesc('id')->get();
         return view('index', [
             'news' => $news,
-            'sessions' => $sessions
         ]);
     })->name('index');
 

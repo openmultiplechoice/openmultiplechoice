@@ -10,6 +10,23 @@ use App\Models\Session;
 
 class SessionController extends Controller
 {
+    public function index(Request $request)
+    {
+        $sessions = Session::orderBy('id', 'desc')
+            ->with('answerchoices')
+            ->with('deck.questions:id,correct_answer_id');
+
+        if ($request->has('take')) {
+            // TODO: is this safe?
+            $take = $request->take;
+            $sessions = $sessions->take($take);
+        }
+
+        $sessions = $sessions->get();
+
+        return response()->json($sessions);
+    }
+
     public function store(Request $request)
     {
         $newSession = new Session();

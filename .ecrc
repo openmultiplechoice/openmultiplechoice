@@ -3,6 +3,7 @@
         "\\.txt$",
         "\\.md$",
         "public/js/DeckForm.js",
+        "public/js/IndexSessionView.js",
         "public/js/NewSessionView.js",
         "public/js/SessionView.js",
         "public/js/app.js",
