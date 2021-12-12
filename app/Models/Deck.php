@@ -20,4 +20,9 @@ class Deck extends Model
     {
         return $this->hasMany(Session::class);
     }
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class);
+    }
 }

@@ -31,12 +31,15 @@ class QuestionController extends Controller
 
     public function show($id)
     {
-        return Question::with('answers')->find($id);
+        $question = Question::with('answers', 'images')->find($id);
+        return response()->json($question);
     }
 
     public function update(Request $request, Question $question)
     {
-        $question->update($request->all());
+        $question->fill($request->all());
+        $question->save();
+
         return response()->json($question);
     }
 }

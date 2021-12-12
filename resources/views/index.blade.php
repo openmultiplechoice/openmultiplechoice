@@ -5,21 +5,12 @@
 @section('content')
 
 <div class="row">
-    <div class="col-lg">
-        <a href="/sessions" class="btn btn-primary">{{ __('omc.newsession') }}</a>
-        <!-- <a href="#" type="button" class="btn btn-secondary">{{ __('omc.continuesession') }}</a> -->
+    <div class="col-lg-8">
+        <a href="/sessions" class="btn btn-primary mb-2">{{ __('omc.newsession') }}</a>
+        <div id="IndexSessionView" data-user-id="{{ Auth::user()->id }}" ></div>
+        <script src="{{ asset('js/IndexSessionView.js') }}"></script>
     </div>
-    <div class="col-lg">
-        <h4>Sessions</h4>
-        <ul>
-@forelse ($sessions as $session)
-            <li><a href="{{ url('sessions', $session->id) }}">{{ $session->name }}</a> {{ $session->created_at }}</li>
-@empty
-            <p>No sessions yet</p>
-@endforelse
-        </ul>
-    </div>
-    <div class="col-lg">
+    <div class="col-lg-4">
         <h4>News</h4>
 @forelse ($news as $entry)
     @if ($entry->level == 'danger')

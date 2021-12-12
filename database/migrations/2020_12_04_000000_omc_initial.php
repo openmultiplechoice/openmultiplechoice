@@ -13,11 +13,20 @@ class OmcInitial extends Migration
      */
     public function up()
     {
+        Schema::create('modules', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('name', 500)->unique();
+        });
+
         Schema::create('decks', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('name', 500);
             $table->boolean('official')->default(false);
+
+            $table->bigInteger('module_id')->unsigned()->nullable();
+            $table->foreign('module_id')->references('id')->on('modules');
         });
 
         Schema::create('questions', function (Blueprint $table) {
@@ -25,6 +34,7 @@ class OmcInitial extends Migration
             $table->timestamps();
             $table->string('text', 2000)->nullable();
             $table->string('hint', 1000)->nullable();
+            $table->string('type')->default('mc')->nullable();
 
             $table->bigInteger('correct_answer_id')->unsigned()->nullable();
         });
@@ -99,6 +109,10 @@ class OmcInitial extends Migration
             $table->bigInteger('answer_id')->unsigned()->nullable();
             $table->foreign('answer_id')->references('id')->on('answers')->onDelete('cascade');
 
+            // TODO: having this field means we have to update
+            // answer_choices whenever questions get updated
+            $table->boolean('is_correct')->default(false);
+
             $table->bigInteger('session_id')->unsigned();
             $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade');
         });
@@ -141,6 +155,7 @@ class OmcInitial extends Migration
         Schema::dropIfExists('deck_question');
         Schema::dropIfExists('questions');
         Schema::dropIfExists('answers');
+        Schema::dropIfExists('modules');
         Schema::dropIfExists('decks');
         Schema::dropIfExists('messages');
     }
