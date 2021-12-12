@@ -37,10 +37,7 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        // TODO(schu): an answers update is missing here
-        $question->text = $request->text;
-        $question->hint = $request->hint;
-        $question->correct_answer_id = $request->correct_answer_id;
+        $question->fill($request->all());
         $question->save();
 
         return response()->json($question);
