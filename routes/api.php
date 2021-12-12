@@ -38,6 +38,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
         return $request->user();
     });
 
+    Route::get('modules/byname/{name}', [ModuleController::class, 'showByName']);
     Route::resource('modules', ModuleController::class);
 
     Route::resource('decks', DeckController::class);
