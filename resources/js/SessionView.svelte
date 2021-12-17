@@ -56,7 +56,9 @@
             axios.get('/api/questions/' + cqid)
                 .then(function (response) {
                     var currentQuestionIndex = data.deck.questions.findIndex(q => q.id === cqid);
-                    data.deck.questions[currentQuestionIndex] = response.data;
+                    var questionData = response.data;
+                    data.deck.questions[currentQuestionIndex] = questionData;
+                    updateQuestionAnswerChoice(questionData);
                 })
                 .catch(function (error) {
                     alert(error);
@@ -64,6 +66,15 @@
         }, 500, { 'maxWait': 1000 });
 
         debouncedUpdateCurrentQuestionData();
+    };
+
+    function updateQuestionAnswerChoice(question) {
+        var answerChoiceIndex = data.session.answer_choices.findIndex(a => a.question_id === question.id);
+        if (answerChoiceIndex === -1) {
+            return;
+        }
+        data.session.answer_choices[answerChoiceIndex].is_correct =
+            data.session.answer_choices[answerChoiceIndex].answer_id === question.correct_answer_id;
     };
 
     var debounced;
