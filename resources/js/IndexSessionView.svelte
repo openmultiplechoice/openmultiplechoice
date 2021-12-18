@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { format, parseISO } from 'date-fns';
     import SessionProgressBar from './SessionProgressBar.svelte';
 
     export let userId;
@@ -21,7 +22,7 @@
     <div class="mb-2">
         <SessionProgressBar bind:sessionData={session} />
         <p><strong>{session.name}</strong> <a href="/sessions/{ session.id }">Continue</a><br>
-        <small>{session.created_at}</small></p>
+        <small>{format(parseISO(session.created_at), 'dd/MM/yyyy hh:mm')}</small></p>
     </div>
 {:else}
     <p>No sessions yet</p>
