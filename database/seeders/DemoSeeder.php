@@ -10,6 +10,7 @@ use App\Models\Deck;
 use App\Models\Image;
 use App\Models\News;
 use App\Models\Question;
+use App\Models\Subject;
 
 class DemoSeeder extends Seeder
 {
@@ -34,8 +35,13 @@ class DemoSeeder extends Seeder
             'sticky' => true,
         ]);
 
+        $subject = Subject::create([
+            'name' => 'Demo',
+        ]);
+
         $module = Module::create([
             'name' => 'Demo',
+            'subject_id' => $subject->id,
         ]);
 
         $deck = Deck::create([
@@ -132,8 +138,13 @@ class DemoSeeder extends Seeder
         $question->save();
         $deck->questions()->attach($question);
 
+        $subject = Subject::create([
+            'name' => 'Biochemistry',
+        ]);
+
         $module = Module::create([
             'name' => 'Biochemistry',
+            'subject_id' => $subject->id,
         ]);
 
         $deck = Deck::create([

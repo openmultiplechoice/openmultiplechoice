@@ -4,7 +4,7 @@
     var data;
 
     onMount(() => {
-        axios.get('/api/modules')
+        axios.get('/api/subjects')
             .then(function (response) {
                 data = response.data;
             })
@@ -29,24 +29,25 @@
 </script>
 
 {#if data}
-    <div class="accordion accordion-flush" id="accordion-modules">
-        {#each data.modules as module, index}
-            <div class="accordian-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}">
-                        {module.name}
-                    </button>
-                </h2>
-                <div id="collapse{index}" class="accordion-collapse collapse show" data-bs-parent="accordion-modules">
-                    <ul>
-                        {#each module.decks as deck}
-                            <li><button on:click|preventDefault={() => createSession(deck.id)} type="button" class="btn btn-link">{deck.name}</button></li>
-                        {/each}
-                    </ul>
-                </div>
-            </div>
+    <ul>
+        {#each data.subjects as subject}
+            <li>
+                {subject.name}
+                <ul>
+                    {#each subject.modules as module}
+                        <li>
+                            {module.name}
+                            <ul>
+                                {#each module.decks as deck}
+                                    <li><button on:click|preventDefault={() => createSession(deck.id)} type="button" class="btn btn-link">{deck.name}</button></li>
+                                {/each}
+                            </ul>
+                        </li>
+                    {/each}
+                </ul>
+            </li>
         {/each}
-    </div>
+    </ul>
 {:else}
     <p>Loading ...</p>
 {/if}

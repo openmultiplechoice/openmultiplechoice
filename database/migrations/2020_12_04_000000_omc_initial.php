@@ -13,10 +13,19 @@ class OmcInitial extends Migration
      */
     public function up()
     {
+        Schema::create('subjects', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('name', 500)->unique();
+        });
+
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('name', 500)->unique();
+
+            $table->bigInteger('subject_id')->unsigned()->nullable();
+            $table->foreign('subject_id')->references('id')->on('subjects');
         });
 
         Schema::create('decks', function (Blueprint $table) {
