@@ -40,13 +40,15 @@ class QuestionController extends Controller
     {
         $question->fill($request->all());
 
-        $answerIds = array_map(function ($a) {
-            return $a['id'];
-        }, $request->answers);
+        if ($request->answers) {
+            $answerIds = array_map(function ($a) {
+                return $a['id'];
+            }, $request->answers);
 
-        $answers = Answer::findMany($answerIds);
+            $answers = Answer::findMany($answerIds);
+            $question->answers()->saveMany($answers);
+        }
 
-        $question->answers()->saveMany($answers);
         $question->save();
 
         // Update all answer choices for this question as the correct
