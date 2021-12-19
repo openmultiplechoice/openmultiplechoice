@@ -1,23 +1,26 @@
 <script>
     import debounce from 'lodash/debounce';
+    import { onMount } from 'svelte';
 
     export let answer;
+
+    onMount(() => {
+        document.getElementById('editor-answer' + answer.id).addEventListener('trix-change', function() {
+            answer.text = document.getElementById('answer' + answer.id).value;
+            handleChange();
+        });
+    });
 
     var debounced;
 
     function handleChange() {
-        var label = document.querySelector('label[for="answerText' + answer.id + '"]');
-        label.textContent = 'Answer text - saving ...';
-
         if (debounced) {
-            // We want to save only once, cancel the previous event
             debounced.cancel();
         }
 
         debounced = debounce(() => {
             axios.put('/api/answers/' + answer.id, answer)
                 .then(function (response) {
-                    label.textContent = 'Answer text - saved!';
                 })
                 .catch(function (error) {
                     alert(error);
@@ -26,13 +29,14 @@
 
         debounced();
     }
+
 </script>
 
-<form action="#" on:submit|preventDefault={handleChange} class="mt-3 mb-3">
+<form action="#" class="mt-3 mb-3">
 
-    <div class="mb-3 form-floating">
-        <textarea bind:value={answer.text} on:input={handleChange} class="form-control" id="answerText{answer.id}" placeholder="Answer text"></textarea>
-        <label for="answerText{answer.id}">Answer text</label>
+    <div class="mb-3">
+        <input id="answer{answer.id}" type="hidden" bind:value={answer.text}>
+        <trix-editor id="editor-answer{answer.id}" input="answer{answer.id}"></trix-editor>
     </div>
 
 </form>
