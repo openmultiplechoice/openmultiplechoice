@@ -11,7 +11,6 @@ class ImageController extends Controller
 {
     public function destroy(Image $image)
     {
-        Storage::delete($image->path);
         $image->delete();
         return response()->noContent();
     }
