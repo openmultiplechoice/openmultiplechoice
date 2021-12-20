@@ -19,12 +19,7 @@
 
 {#if question}
     {#if showEditor}
-        <div class="row m-1 pt-2">
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-secondary btn-sm" on:click|preventDefault={toggleEditor}>Close editor</button>
-            </div>
-        </div>
-        <QuestionForm bind:question={question} />
+        <QuestionForm bind:question={question} toggleEditor={toggleEditor} />
     {:else}
         <div id="question{question.id}">
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">

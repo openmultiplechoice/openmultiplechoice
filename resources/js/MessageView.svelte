@@ -1,5 +1,6 @@
 <script>
     import DOMPurify from 'dompurify';
+    import { format, parseISO } from 'date-fns';
 
     export let message;
 
@@ -50,7 +51,7 @@
             <small>
                 <button class="btn btn-sm btn-link" on:click|preventDefault={toggleEditor}>Edit</button>
                 <button class="btn btn-sm btn-link" on:click|preventDefault={handleDelete}>Delete</button>
-                {message.created_at}
+                {format(parseISO(message.created_at), 'dd/MM/yyyy hh:mm')}
                 {message.author.name}
             </small>
         </p>

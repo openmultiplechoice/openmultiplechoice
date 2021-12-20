@@ -9,6 +9,11 @@ class AnswerChoice extends Model
 {
     use HasFactory;
 
+    public function questions()
+    {
+        return $this->belongsTo(Question::class);
+    }
+
     public function session()
     {
         return $this->belongsTo(Session::class);

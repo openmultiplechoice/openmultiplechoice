@@ -13,4 +13,9 @@ class Module extends Model
     {
         return $this->hasMany(Deck::class);
     }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
 }

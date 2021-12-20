@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\SubjectController;
+
 use App\Http\Controllers\Api\ModuleController;
 
 use App\Http\Controllers\Api\DeckController;
@@ -37,6 +39,9 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::get('subjects/byname/{name}', [SubjectController::class, 'showByName']);
+    Route::resource('subjects', SubjectController::class);
 
     Route::get('modules/byname/{name}', [ModuleController::class, 'showByName']);
     Route::resource('modules', ModuleController::class);

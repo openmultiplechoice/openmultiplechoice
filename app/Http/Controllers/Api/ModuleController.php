@@ -22,6 +22,7 @@ class ModuleController extends Controller
         $module = new Module();
 
         $module->name = $request->name;
+        $module->subject_id = $request->subject_id;
 
         $module->save();
 
