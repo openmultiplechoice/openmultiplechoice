@@ -7,6 +7,7 @@
     import QuestionForm from './QuestionForm.svelte';
 
     export let question;
+    export let questionAnswered;
     export let answerChoice;
     export let submitAnswer;
 
@@ -49,6 +50,12 @@
                     <button type="button" class="btn btn-outline-secondary btn-sm" on:click|preventDefault={toggleEditor}>Edit question</button>
                 </div>
             </div>
+        </div>
+    {/if}
+
+    {#if !questionAnswered}
+        <div class="mt-3">
+            <button on:click|preventDefault={() => submitAnswer('')} type="button" class="btn btn-outline-secondary btn-sm">Show answer</button>
         </div>
     {/if}
 {:else}
