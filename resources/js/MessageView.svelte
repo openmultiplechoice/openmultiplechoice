@@ -51,7 +51,7 @@
             <small>
                 <button class="btn btn-sm btn-link" on:click|preventDefault={toggleEditor}>Edit</button>
                 <button class="btn btn-sm btn-link" on:click|preventDefault={handleDelete}>Delete</button>
-                {format(parseISO(message.created_at), 'dd/MM/yyyy hh:mm')}
+                {format(parseISO(message.created_at), 'dd/MM/yyyy HH:mm')}
                 {message.author.name}
             </small>
         </p>
