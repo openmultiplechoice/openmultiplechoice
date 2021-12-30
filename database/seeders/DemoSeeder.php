@@ -52,6 +52,7 @@ class DemoSeeder extends Seeder
 
         $question = Question::create([
             'text' => 'What is OpenMultipleChoice?',
+            'hint' => 'It\'s software ...',
         ]);
         Answer::create([
             'text' => 'A car model.',
@@ -86,6 +87,7 @@ class DemoSeeder extends Seeder
 
         $question = Question::create([
             'text' => 'What is the license of OpenMultipleChoice?',
+            'hint' => 'GNU Affero General Public License',
         ]);
         Answer::create([
             'text' => 'Beerware',
