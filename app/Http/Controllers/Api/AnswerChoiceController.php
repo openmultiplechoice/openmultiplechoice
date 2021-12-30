@@ -12,9 +12,7 @@ class AnswerChoiceController extends Controller
     public function store(Request $request, Session $session)
     {
         $answerChoice = new AnswerChoice();
-        $answerChoice->question_id = $request->question_id;
-        $answerChoice->answer_id = $request->answer_id;
-        $answerChoice->is_correct = $request->is_correct;
+        $answerChoice->fill($request->all());
         $answerChoice->session_id = $session->id;
         $answerChoice->save();
 
