@@ -110,6 +110,10 @@ class OmcInitial extends Migration
             $table->id();
             $table->timestamps();
 
+            // Set to true for answers where the user decided to click
+            // "Show hint" before answering
+            $table->boolean('help_used')->default(false);
+
             $table->bigInteger('question_id')->unsigned();
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
 
