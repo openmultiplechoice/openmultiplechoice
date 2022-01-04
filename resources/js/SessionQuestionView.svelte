@@ -7,10 +7,18 @@
     import QuestionForm from './QuestionForm.svelte';
 
     export let question;
+    export let questionAnswered;
+    export let helpUsed;
     export let answerChoice;
     export let submitAnswer;
 
     var showEditor = false;
+    var showHint = questionAnswered;
+
+    $: question, (() => {
+        showHint = questionAnswered;
+        helpUsed = questionAnswered;
+    })();
 
     function toggleEditor() {
         showEditor = !showEditor;
@@ -33,9 +41,13 @@
                 {/if}
             </div>
             {#if question.hint}
-                <div class="row border-start border-3 border-info m-1 mt-3 mb-3">
-                    <p>{@html DOMPurify.sanitize(question.hint)}</p>
-                </div>
+                {#if showHint }
+                    <div class="row border-start border-3 border-info m-1 mt-3 mb-3">
+                        <p>{@html DOMPurify.sanitize(question.hint)}</p>
+                    </div>
+                {:else}
+                    <button on:click|preventDefault={() => { showHint = true; helpUsed = true;  }} type="button" class="btn btn-outline-secondary btn-sm">Show hint</button>
+                {/if}
             {/if}
             {#if question.type === 'mc'}
                 {#each question.answers as answer, index}
@@ -49,6 +61,12 @@
                     <button type="button" class="btn btn-outline-secondary btn-sm" on:click|preventDefault={toggleEditor}>Edit question</button>
                 </div>
             </div>
+        </div>
+    {/if}
+
+    {#if !questionAnswered}
+        <div class="mt-3">
+            <button on:click|preventDefault={() => submitAnswer('')} type="button" class="btn btn-outline-secondary btn-sm">Show answer</button>
         </div>
     {/if}
 {:else}

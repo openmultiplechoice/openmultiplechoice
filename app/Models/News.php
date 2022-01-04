@@ -9,5 +9,5 @@ class News extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'text', 'level'];
+    protected $fillable = ['title', 'text'];
 }

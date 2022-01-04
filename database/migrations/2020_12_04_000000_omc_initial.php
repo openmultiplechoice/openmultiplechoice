@@ -102,13 +102,15 @@ class OmcInitial extends Migration
             $table->timestamps();
             $table->string('title', 200);
             $table->text('text');
-            $table->string('level', 100)->default('');
-            $table->boolean('sticky')->default(false);
         });
 
         Schema::create('answer_choices', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+
+            // Set to true for answers where the user decided to click
+            // "Show hint" before answering
+            $table->boolean('help_used')->default(false);
 
             $table->bigInteger('question_id')->unsigned();
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
@@ -135,7 +137,10 @@ class OmcInitial extends Migration
             // TODO: consider what to do when author or parent messages
             // are removed?
 
-            $table->bigInteger('author_id')->unsigned();
+            // nullable in order to be able to import messages / comments
+            // from previous systems where author identity can't be
+            // retained
+            $table->bigInteger('author_id')->unsigned()->nullable();
             $table->foreign('author_id')->references('id')->on('users');
 
             $table->bigInteger('parent_message_id')->unsigned()->nullable();

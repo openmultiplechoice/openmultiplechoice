@@ -87,7 +87,9 @@
 
 @yield('content')
 
-<p class="text-center text-muted mt-5"><small>Powered by <a target="_blank" class="text-muted" href="https://github.com/openmultiplechoice/openmultiplechoice">OpenMultipleChoice</a></small></p>
+@if (config('app.poweredby'))
+    <p class="text-center text-muted mt-5"><small>Powered by <a target="_blank" class="text-muted" href="https://github.com/openmultiplechoice/openmultiplechoice">OpenMultipleChoice</a></small></p>
+@endif
 
 </div>
 

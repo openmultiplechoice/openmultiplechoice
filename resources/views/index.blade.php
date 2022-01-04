@@ -13,15 +13,7 @@
     <div class="col-lg-4">
         <h4>News</h4>
 @forelse ($news as $entry)
-    @if ($entry->level == 'danger')
-        <div class="alert alert-danger" role="alert">
-    @elseif ($entry->level == 'warning')
-        <div class="alert alert-warning" role="alert">
-    @elseif ($entry->level == 'light')
-        <div class="alert alert-light" role="alert">
-    @else
         <div class="alert alert-secondary" role="alert">
-    @endif
             <h6 class="alert-heading">{{ $entry->title }}</h6>
             <p>{{ $entry->text }}</p>
         </div>

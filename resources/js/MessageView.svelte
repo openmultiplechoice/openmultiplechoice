@@ -51,8 +51,8 @@
             <small>
                 <button class="btn btn-sm btn-link" on:click|preventDefault={toggleEditor}>Edit</button>
                 <button class="btn btn-sm btn-link" on:click|preventDefault={handleDelete}>Delete</button>
-                {format(parseISO(message.created_at), 'dd/MM/yyyy hh:mm')}
-                {message.author.name}
+                {format(parseISO(message.created_at), 'dd/MM/yyyy HH:mm')}
+                {#if message.author }{message.author.name}{:else}anonymous{/if}
             </small>
         </p>
     </div>

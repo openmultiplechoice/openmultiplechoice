@@ -12,7 +12,11 @@
             return '<span class="text-dark fw-bold">&rightarrow;</span>';
         }
         if (answerChoice.is_correct) {
-            return '<span class="text-success fw-bold">&check;</span>';
+            if (answerChoice.help_used) {
+                return '<span class="text-warning fw-bold">&check;</span>';
+            } else {
+                return '<span class="text-success fw-bold">&check;</span>';
+            }
         } else {
             return '<span class="text-danger fw-bold">&cross;</span>';
         }

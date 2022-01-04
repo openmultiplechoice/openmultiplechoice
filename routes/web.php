@@ -25,9 +25,7 @@ use App\Models\Session;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/', function () {
-        $news = News::orderByDesc('id')->where('sticky', true)->take(2)->get()->concat(
-            News::orderByDesc('id')->where('sticky', false)->take(2)->get()
-        );
+        $news = News::orderByDesc('id')->take(4)->get();
         return view('index', [
             'news' => $news,
         ]);

@@ -9,6 +9,7 @@
     export let id;
 
     var data;
+    var helpUsed = false;
 
     $: answerChoice = data ? data.session.answer_choices.find(e => e.question_id === currentQuestionId) : null;
     $: currentQuestion = data ? data.deck.questions.find(q => q.id === data.session.current_question_id) : null;
@@ -117,7 +118,8 @@
         var answerChoice = {
             question_id: currentQuestionId,
             answer_id: answerId,
-            is_correct: is_correct
+            is_correct: is_correct,
+            help_used: helpUsed
         };
 
         axios.post('/api/sessions/' + id + '/answerchoices', answerChoice)
@@ -130,12 +132,6 @@
     }
 </script>
 
-<style>
-button.show-answer {
-    text-decoration: none;
-}
-</style>
-
 {#if data}
     <div class="row">
         <div class="col-lg-3 d-none d-lg-block">
@@ -144,12 +140,7 @@ button.show-answer {
         <div class="col-lg-9 col-md-12">
             <SessionQuestionNav bind:data bind:currentQuestionId={data.session.current_question_id} bind:currentQuestionAnswered />
             {#if currentQuestion }
-                <SessionQuestionView bind:question={currentQuestion} bind:answerChoice submitAnswer={submitAnswer} />
-                {#if !currentQuestionAnswered}
-                    <div class="mt-3">
-                        <button on:click|preventDefault={() => submitAnswer('')} type="button" class="btn btn-link text-muted show-answer">Show answer</button>
-                    </div>
-                {/if}
+                <SessionQuestionView bind:question={currentQuestion} bind:questionAnswered={currentQuestionAnswered} bind:helpUsed bind:answerChoice submitAnswer={submitAnswer} />
                 {#if currentQuestionAnswered}
                     <Messages bind:questionId={currentQuestion.id} />
                 {/if}

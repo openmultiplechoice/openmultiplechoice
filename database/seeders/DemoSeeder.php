@@ -24,15 +24,12 @@ class DemoSeeder extends Seeder
         News::create([
             'title' => 'Please note: demo resets happen without notice',
             'text' => 'All test data will be destroyed.',
-            'level' => 'warning',
-            'sticky' => true,
         ]);
         News::create([
             'title' => 'Welcome!',
             'text' => 'This is the OpenMultipleChoice demo instance.
             OpenMultipleChoice is a work in progress (and comes with
             stubs and bugs).',
-            'sticky' => true,
         ]);
 
         $subject = Subject::create([
@@ -52,6 +49,7 @@ class DemoSeeder extends Seeder
 
         $question = Question::create([
             'text' => 'What is OpenMultipleChoice?',
+            'hint' => 'It\'s software ...',
         ]);
         Answer::create([
             'text' => 'A car model.',
@@ -86,6 +84,7 @@ class DemoSeeder extends Seeder
 
         $question = Question::create([
             'text' => 'What is the license of OpenMultipleChoice?',
+            'hint' => 'GNU Affero General Public License',
         ]);
         Answer::create([
             'text' => 'Beerware',

@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'poweredby' => env('APP_POWEREDBY', true),
+
     'asset_url' => env('ASSET_URL', null),
 
     /*
