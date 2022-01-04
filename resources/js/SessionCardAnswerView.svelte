@@ -23,7 +23,7 @@
         <p class="p-1">{@html DOMPurify.sanitize(answer.text)}</p>
     </div>
     <div class="text-center">
-        <button type="button" class="btn btn-danger btn-sm" on:click|preventDefault={() => submitAnswer()} >Not sure yet</button>
+        <button type="button" class="btn btn-danger btn-sm" on:click|preventDefault={() => submitAnswer()} >Ask me again</button>
         <button type="button" class="btn btn-success btn-sm" on:click|preventDefault={() => submitAnswer(answer.id)} >I got it!</button>
     </div>
 {:else}
