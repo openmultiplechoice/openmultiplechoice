@@ -28,7 +28,14 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $message = new Message();
+
+        // TODO: set author info
+
+        $message->fill($request->all());
+        $message->save();
+
+        return response()->json($message);
     }
 
     /**
