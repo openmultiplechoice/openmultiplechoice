@@ -24,9 +24,6 @@ class NewsController extends Controller
 
         $newEntry->title = $request->title;
         $newEntry->text = $request->text;
-        if ($request->has('level')) {
-            $newEntry->level = $request->level;
-        }
 
         $newEntry->save();
 

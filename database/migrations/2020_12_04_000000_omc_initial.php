@@ -102,8 +102,6 @@ class OmcInitial extends Migration
             $table->timestamps();
             $table->string('title', 200);
             $table->text('text');
-            $table->string('level', 100)->default('');
-            $table->boolean('sticky')->default(false);
         });
 
         Schema::create('answer_choices', function (Blueprint $table) {
