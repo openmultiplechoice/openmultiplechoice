@@ -70,8 +70,17 @@
     };
 
     function updateQuestionAnswerChoice(question) {
+        if (question.type === 'card') {
+            // Questions of type 'card' don't need to be updated, since
+            // there is no right or wrong answer. The "answer choice"
+            // merely is a flag to know if the user wishes to see the
+            // question again or if they learned the card already.
+            return;
+        }
         var answerChoiceIndex = data.session.answer_choices.findIndex(a => a.question_id === question.id);
         if (answerChoiceIndex === -1) {
+            // This question has no answer yet - no need to check if the
+            // answer is still correct
             return;
         }
         data.session.answer_choices[answerChoiceIndex].is_correct =
