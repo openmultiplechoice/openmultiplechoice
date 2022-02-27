@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
@@ -13,6 +14,7 @@ class SessionController extends Controller
     public function index(Request $request)
     {
         $sessions = Session::orderBy('id', 'desc')
+            ->where('user_id', '=', Auth::id())
             ->with('answerchoices')
             ->with('deck.questions:id,correct_answer_id');
 
@@ -36,6 +38,7 @@ class SessionController extends Controller
         $newSession->deck_id = $deck->id;
         $newSession->name = $deck->name;
         $newSession->current_question_id = $newSession->deck->questions->first()->id;
+        $newSession->user_id = Auth::id();
         $newSession->save();
 
         return response()->json($newSession);
@@ -43,6 +46,10 @@ class SessionController extends Controller
 
     public function show(Session $session)
     {
+        if (Auth::id() != $session->user_id) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
         $deck = Deck::with('questions', 'questions.images', 'questions.answers')->find($session->deck_id);
         return response()->json([
             'session' => $session->load('answerChoices'),
@@ -52,6 +59,10 @@ class SessionController extends Controller
 
     public function update(Request $request, Session $session)
     {
+        if (Auth::id() != $session->user_id) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
         $session->update($request->all());
         return response()->json($session);
     }

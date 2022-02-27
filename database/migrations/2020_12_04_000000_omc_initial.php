@@ -95,6 +95,9 @@ class OmcInitial extends Migration
 
             $table->bigInteger('current_question_id')->unsigned()->nullable();
             $table->foreign('current_question_id')->references('id')->on('questions')->onDelete('set null');
+
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
         });
 
         Schema::create('news', function (Blueprint $table) {
