@@ -148,6 +148,13 @@ class OmcInitial extends Migration
 
             $table->bigInteger('parent_message_id')->unsigned()->nullable();
             $table->foreign('parent_message_id')->references('id')->on('messages');
+
+            // Allow to preserve legacy message info for installations
+            // where data is imported from a previous application.
+            // Fields shouldn't be used for other use cases.
+            $table->bigInteger('legacy_message_id')->unsigned()->nullable();
+            $table->bigInteger('legacy_parent_message_id')->unsigned()->nullable();
+            $table->string('legacy_author_name', 500)->nullable();
         });
 
         // Update the default users table
