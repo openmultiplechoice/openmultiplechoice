@@ -6,9 +6,11 @@
 
 <div class="row">
     <div class="col-md-4 offset-md-4">
-        @error('email')
+        @error('login')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
+
+@if (config('app.login.form'))
         <form method="post">
             @csrf
             <div class="mb-3">
@@ -21,6 +23,11 @@
             </div>
             <button type="submit" class="btn btn-primary">Log in</button>
         </form>
+@endif
+
+@if (config('app.login.keycloak'))
+        <a href="{{ route('keycloak-login') }}" class="btn btn-dark mt-2">Log in with Keycloak</a>
+@endif
     </div>
 </div>
 

@@ -5,12 +5,15 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
+use Laravel\Socialite\Facades\Socialite;
+
 use App\Http\Controllers\DeckController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SessionQuestionController;
 use App\Models\News;
 use App\Models\Session;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +67,43 @@ Route::post('/login', function (Request $request) {
     }
 
     return back()->withErrors([
-        'email' => 'Invalid credentials.',
+        'login' => 'Invalid credentials.',
     ]);
+});
+
+Route::get('/auth/keycloak/redirect', function () {
+    return Socialite::driver('keycloak')->redirect();
+})->name('keycloak-login');
+
+Route::get('/auth/keycloak/callback', function () {
+    if (Auth::guard('web')->check()) {
+        return redirect()->route('index');
+    }
+
+    try {
+        $keycloakUser = Socialite::driver('keycloak')->user();
+    } catch (Exception $e) {
+        report($e);
+        return redirect('login')->withErrors([
+            'login' => 'Something went wrong, please try again or contact support.',
+        ]);
+    }
+
+    $keycloakUserDetails = Socialite::driver('keycloak')->userFromToken($keycloakUser->token);
+
+    $user = User::updateOrCreate([
+        'email' => $keycloakUserDetails->getEmail(),
+    ], [
+        'name' => $keycloakUserDetails->getNickname(),
+        'email' => $keycloakUserDetails->getEmail(),
+    ]);
+
+    Auth::login($user);
+
+    return redirect()->intended('/');
+});
+
+Route::get('/auth/keycloak/backchannel-logout', function () {
+    // TODO(schu): support backchannel logout
+    return response()->noContent();
 });
