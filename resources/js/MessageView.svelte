@@ -2,6 +2,7 @@
     import DOMPurify from 'dompurify';
     import { format, parseISO } from 'date-fns';
     import MessageView from './MessageView.svelte';
+    import { UserSettings } from './UserSettingsStore.js';
 
     export let message;
     export let indent;
@@ -53,8 +54,10 @@
                 </p>
                 <p class="text-muted text-end">
                     <small>
-                        <button class="btn btn-sm btn-link" on:click|preventDefault={toggleEditor}>Edit</button>
-                        <button class="btn btn-sm btn-link" on:click|preventDefault={handleDelete}>Delete</button>
+                        {#if ($UserSettings.id === message.author_id)}
+                            <button class="btn btn-sm btn-link" on:click|preventDefault={toggleEditor}>Edit</button>
+                            <button class="btn btn-sm btn-link" on:click|preventDefault={handleDelete}>Delete</button>
+                        {/if}
                         {format(parseISO(message.created_at), 'dd/MM/yyyy HH:mm')}
                         {#if message.author }{message.author.name}{:else}anonymous{/if}
                     </small>
