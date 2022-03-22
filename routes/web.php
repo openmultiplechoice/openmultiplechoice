@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 use App\Http\Controllers\DeckController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SessionQuestionController;
@@ -35,6 +36,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     })->name('index');
 
     Route::resource('/decks', DeckController::class);
+
+    Route::resource('/news', NewsController::class);
+    Route::get('/news/{news}', [NewsController::class, 'show'])->name('show.news');
 
     Route::resource('/sessions', SessionController::class);
     Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('show.session');
