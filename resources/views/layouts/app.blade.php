@@ -61,7 +61,7 @@
     </div>
 </nav>
 
-<div class="container-fluid">
+<div class="{{ $container_class ?? 'container-fluid'}}">
 
 <div class="row">
     <div class="col">
