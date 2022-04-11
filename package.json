@@ -17,7 +17,7 @@
         "cross-env": "^7.0.3",
         "date-fns": "^2.28.0",
         "dompurify": "^2.3.6",
-        "hotkeys-js": "^3.8.7",
+        "hotkeys-js": "^3.8.9",
         "laravel-mix": "^6.0.43",
         "laravel-mix-svelte": "github:wewowweb/laravel-mix-svelte",
         "lodash": "^4.17.21",
