@@ -25,4 +25,9 @@ class Deck extends Model
     {
         return $this->belongsTo(Module::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

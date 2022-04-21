@@ -36,6 +36,9 @@ class OmcInitial extends Migration
 
             $table->bigInteger('module_id')->unsigned()->nullable();
             $table->foreign('module_id')->references('id')->on('modules');
+
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
         });
 
         Schema::create('questions', function (Blueprint $table) {
