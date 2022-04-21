@@ -1,18 +1,27 @@
 <script>
-    import debounce from 'lodash/debounce';
-    import { onMount } from 'svelte';
-    import SessionQuestionIndexView from './SessionQuestionIndexView.svelte';
-    import SessionQuestionView from './SessionQuestionView.svelte';
-    import SessionQuestionNav from './SessionQuestionNav.svelte';
-    import Messages from './Messages.svelte';
+    import debounce from "lodash/debounce";
+    import { onMount } from "svelte";
+    import SessionQuestionIndexView from "./SessionQuestionIndexView.svelte";
+    import SessionQuestionView from "./SessionQuestionView.svelte";
+    import SessionQuestionNav from "./SessionQuestionNav.svelte";
+    import Messages from "./Messages.svelte";
+    import AddToDeckDialog from "./AddToDeckDialog.svelte";
 
     export let id;
 
     var data;
     var helpUsed = false;
 
-    $: answerChoice = data ? data.session.answer_choices.find(e => e.question_id === currentQuestionId) : null;
-    $: currentQuestion = data ? data.deck.questions.find(q => q.id === data.session.current_question_id) : null;
+    $: answerChoice = data
+        ? data.session.answer_choices.find(
+              (e) => e.question_id === currentQuestionId
+          )
+        : null;
+    $: currentQuestion = data
+        ? data.deck.questions.find(
+              (q) => q.id === data.session.current_question_id
+          )
+        : null;
     $: currentQuestionId = data ? data.session.current_question_id : -1;
 
     // Whenever the current question gets changed, update the question
@@ -24,7 +33,8 @@
     $: currentQuestionAnswered = data ? !!answerChoice : false;
 
     onMount(() => {
-        axios.get('/api/sessions/' + id)
+        axios
+            .get("/api/sessions/" + id)
             .then(function (response) {
                 data = response.data;
             })
@@ -53,39 +63,49 @@
         // variable
         var cqid = currentQuestion.id;
 
-        debouncedUpdateCurrentQuestionData = debounce(() => {
-            axios.get('/api/questions/' + cqid)
-                .then(function (response) {
-                    var currentQuestionIndex = data.deck.questions.findIndex(q => q.id === cqid);
-                    var questionData = response.data;
-                    data.deck.questions[currentQuestionIndex] = questionData;
-                    updateQuestionAnswerChoice(questionData);
-                })
-                .catch(function (error) {
-                    alert(error);
-                });
-        }, 500, { 'maxWait': 1000 });
+        debouncedUpdateCurrentQuestionData = debounce(
+            () => {
+                axios
+                    .get("/api/questions/" + cqid)
+                    .then(function (response) {
+                        var currentQuestionIndex =
+                            data.deck.questions.findIndex((q) => q.id === cqid);
+                        var questionData = response.data;
+                        data.deck.questions[currentQuestionIndex] =
+                            questionData;
+                        updateQuestionAnswerChoice(questionData);
+                    })
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            },
+            500,
+            { maxWait: 1000 }
+        );
 
         debouncedUpdateCurrentQuestionData();
-    };
+    }
 
     function updateQuestionAnswerChoice(question) {
-        if (question.type === 'card') {
+        if (question.type === "card") {
             // Questions of type 'card' don't need to be updated, since
             // there is no right or wrong answer. The "answer choice"
             // merely is a flag to know if the user wishes to see the
             // question again or if they learned the card already.
             return;
         }
-        var answerChoiceIndex = data.session.answer_choices.findIndex(a => a.question_id === question.id);
+        var answerChoiceIndex = data.session.answer_choices.findIndex(
+            (a) => a.question_id === question.id
+        );
         if (answerChoiceIndex === -1) {
             // This question has no answer yet - no need to check if the
             // answer is still correct
             return;
         }
         data.session.answer_choices[answerChoiceIndex].is_correct =
-            data.session.answer_choices[answerChoiceIndex].answer_id === question.correct_answer_id;
-    };
+            data.session.answer_choices[answerChoiceIndex].answer_id ===
+            question.correct_answer_id;
+    }
 
     var debounced;
 
@@ -94,13 +114,18 @@
             debounced.cancel();
         }
 
-        debounced = debounce(() => {
-            axios.put('/api/sessions/' + data.session.id, data.session)
-                .then(function (response) {})
-                .catch(function (error) {
-                    alert(error);
-                });
-        }, 1000, { 'maxWait': 2000 });
+        debounced = debounce(
+            () => {
+                axios
+                    .put("/api/sessions/" + data.session.id, data.session)
+                    .then(function (response) {})
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            },
+            1000,
+            { maxWait: 2000 }
+        );
 
         debounced();
     }
@@ -111,7 +136,7 @@
         }
 
         var is_correct = false;
-        if (currentQuestion.type === 'card') {
+        if (currentQuestion.type === "card") {
             // This is a bit of a hack..
             // If we don't get an answerId, count it as "wrong"
             // If we do get an answerId, count it as "correct"
@@ -128,12 +153,16 @@
             question_id: currentQuestionId,
             answer_id: answerId,
             is_correct: is_correct,
-            help_used: helpUsed
+            help_used: helpUsed,
         };
 
-        axios.post('/api/sessions/' + id + '/answerchoices', answerChoice)
+        axios
+            .post("/api/sessions/" + id + "/answerchoices", answerChoice)
             .then(function (response) {
-                data.session.answer_choices = [...data.session.answer_choices, response.data];
+                data.session.answer_choices = [
+                    ...data.session.answer_choices,
+                    response.data,
+                ];
             })
             .catch(function (error) {
                 alert(error);
@@ -147,9 +176,22 @@
             <SessionQuestionIndexView bind:data />
         </div>
         <div class="col-lg-9 col-md-12">
-            <SessionQuestionNav bind:data bind:currentQuestionId={data.session.current_question_id} bind:currentQuestionAnswered />
-            {#if currentQuestion }
-                <SessionQuestionView bind:question={currentQuestion} bind:questionAnswered={currentQuestionAnswered} bind:helpUsed bind:answerChoice submitAnswer={submitAnswer} />
+            <SessionQuestionNav
+                bind:data
+                bind:currentQuestionId={data.session.current_question_id}
+                bind:currentQuestionAnswered />
+            {#if currentQuestionAnswered}
+                {#key currentQuestionId}
+                    <AddToDeckDialog questionId={currentQuestionId} />
+                {/key}
+            {/if}
+            {#if currentQuestion}
+                <SessionQuestionView
+                    bind:question={currentQuestion}
+                    bind:questionAnswered={currentQuestionAnswered}
+                    bind:helpUsed
+                    bind:answerChoice
+                    {submitAnswer} />
                 {#if currentQuestionAnswered}
                     <Messages bind:questionId={currentQuestion.id} />
                 {/if}
