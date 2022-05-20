@@ -13,13 +13,10 @@ OpenMultipleChoice is an open source web application for multiple choice
 
 **Please note**: OpenMultiplceChoice is **not usable yet**, currently under active
 development and does not yet accept issues or pull requests. The first alpha release
-is planned for Q1 2022.
+is planned for Q2 2022.
 
-For news and updates (or to signal your interest in the project), feel free to
-join the Discord server or to star & watch the repository here on GitHub.
-
-You can also send an email (German or English) to `feedback@openmultiplechoice.de`
-to express your interest and to be notified for the first release.
+For news and updates, join the Discord server or star and watch the repository
+here on GitHub.
 
 Discord: https://discord.gg/NdvVNBN5Dh
 
