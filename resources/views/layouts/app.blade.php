@@ -35,6 +35,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url('sessions') }}">Sessions</a>
                             <a class="dropdown-item" href="{{ url('decks') }}">Decks</a>
+                            <a class="dropdown-item" href="{{ url('news') }}">News</a>
                         </div>
                     </li>
                     @if (Auth::user()->is_admin || Auth::user()->is_moderator)
@@ -61,7 +62,7 @@
     </div>
 </nav>
 
-<div class="container-fluid">
+<div class="{{ $container_class ?? 'container-fluid'}}">
 
 <div class="row">
     <div class="col">

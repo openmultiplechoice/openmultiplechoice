@@ -27,10 +27,12 @@
         debounced = debounce(() => {
             axios.get('/api/questions/' + questionId + '/messages')
                 .then(function (response) {
-                    messages = response.data;
-                    if (messages.length === 0) {
+                    var flatMessages = response.data;
+                    if (flatMessages.length === 0) {
                         messageInfo = 'No comments yet';
+                        return;
                     }
+                    messages = generateMessageTree(flatMessages);
                 })
                 .catch(function (error) {
                     alert(error);
@@ -38,6 +40,45 @@
         }, 1000, { 'maxWait': 2000 });
 
         debounced();
+    }
+
+    // generateMessageTree takes a flat list of messages and builds a
+    // message object tree according to the parent relationship of the
+    // messages
+    function generateMessageTree(messages) {
+        var childs = {};
+        var root = [];
+
+        // Assemble a list of childs for each message
+        messages.forEach(m => {
+            if (!m.parent_message_id && !m.legacy_parent_message_id) {
+                // A top-level message, add to tree and continue
+                root.push(m);
+                return;
+            }
+
+            var parentID = m.parent_message_id ? m.parent_message_id : m.legacy_parent_message_id;
+            if (!childs[parentID]) {
+                childs[parentID] = [];
+            }
+            childs[parentID].push(m);
+        })
+
+        function addChilds(m) {
+            var parentID = m.legacy_message_id ? m.legacy_message_id : m.id;
+            if (childs[parentID]) {
+                m.childs = childs[parentID];
+                m.childs.forEach(m => {
+                    addChilds(m);
+                });
+            }
+        }
+
+        root.forEach(m => {
+            addChilds(m);
+        });
+
+        return root;
     }
 
     function handleSubmit() {
@@ -61,7 +102,7 @@
 
 <div class="mt-3 mb-3">
     {#each messages as message (message.id)}
-        <MessageView bind:message />
+        <MessageView bind:message indent={0} />
     {:else}
         <p>{messageInfo}</p>
     {/each}

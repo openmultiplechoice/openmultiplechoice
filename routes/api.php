@@ -24,6 +24,8 @@ use App\Http\Controllers\Api\AnswerChoiceController;
 
 use App\Http\Controllers\Api\SessionController;
 
+use App\Http\Controllers\Api\UserSettingsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -62,4 +64,6 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
 
     Route::resource('sessions', SessionController::class);
     Route::resource('sessions.answerchoices', AnswerChoiceController::class);
+
+    Route::resource('users/me/settings', UserSettingsController::class);
 });

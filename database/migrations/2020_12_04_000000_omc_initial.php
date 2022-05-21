@@ -36,6 +36,9 @@ class OmcInitial extends Migration
 
             $table->bigInteger('module_id')->unsigned()->nullable();
             $table->foreign('module_id')->references('id')->on('modules');
+
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
         });
 
         Schema::create('questions', function (Blueprint $table) {
@@ -95,6 +98,9 @@ class OmcInitial extends Migration
 
             $table->bigInteger('current_question_id')->unsigned()->nullable();
             $table->foreign('current_question_id')->references('id')->on('questions')->onDelete('set null');
+
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
         });
 
         Schema::create('news', function (Blueprint $table) {
@@ -145,6 +151,13 @@ class OmcInitial extends Migration
 
             $table->bigInteger('parent_message_id')->unsigned()->nullable();
             $table->foreign('parent_message_id')->references('id')->on('messages');
+
+            // Allow to preserve legacy message info for installations
+            // where data is imported from a previous application.
+            // Fields shouldn't be used for other use cases.
+            $table->bigInteger('legacy_message_id')->unsigned()->nullable();
+            $table->bigInteger('legacy_parent_message_id')->unsigned()->nullable();
+            $table->string('legacy_author_name', 500)->nullable();
         });
 
         // Update the default users table

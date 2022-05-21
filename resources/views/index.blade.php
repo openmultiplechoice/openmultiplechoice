@@ -11,11 +11,12 @@
         <script src="{{ asset('js/IndexSessionView.js') }}"></script>
     </div>
     <div class="col-lg-4">
-        <h4>News</h4>
+        <h4><a class="text-reset text-decoration-none" href="{{ url('news') }}">News</a></h4>
 @forelse ($news as $entry)
-        <div class="alert alert-secondary" role="alert">
-            <h6 class="alert-heading">{{ $entry->title }}</h6>
-            <p>{{ $entry->text }}</p>
+        <div class="alert alert-light" role="alert">
+            <h6 class="alert-heading"><a class="link-dark" href="{{ url('news', $entry->id) }}">{{ $entry->title }}</a></h6>
+            <p class="font-monospace"><small>{{ $entry->created_at }}</small></p>
+            <p>{!! $entry->text !!}</p>
         </div>
 @empty
         <p>No news yet</p>

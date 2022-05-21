@@ -60,6 +60,11 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'login' => [
+        'form' => env('APP_LOGIN_FORM', true),
+        'keycloak' => env('APP_LOGIN_KEYCLOAK', false),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -179,6 +184,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        \SocialiteProviders\Manager\ServiceProvider::class,
     ],
 
     /*
