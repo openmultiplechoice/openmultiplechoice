@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md">
-        <form action="/news/{{ $news ? $news->id : '' }}" method="post" class="mt-3 mb-3">
+        <form action="/news/{{ isset($news) ? $news->id : '' }}" method="post" class="mt-3 mb-3">
             @isset($news)
                 @method('PUT')
             @endisset
