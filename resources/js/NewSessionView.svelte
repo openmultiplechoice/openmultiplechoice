@@ -1,12 +1,53 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount } from "svelte";
+    import { format, parseISO } from "date-fns";
 
-    var data;
+    let decks = [];
+    let modules = [];
+    let subjects = [];
+
+    let selectedModules = [];
+    let selectedModule;
+    let selectedSubject;
+
+    // $: selectedDecks, console.log("selectedDecks", selectedDecks);
+    // $: selectedSubject, console.log("selectedSubject", selectedSubject);
+
+    $: selectedDecks = (() => {
+        return decks.filter((d) =>
+            selectedModule
+                ? d.module
+                    ? d.module.id === selectedModule.id
+                    : false
+                : true
+        );
+    })();
+
+    $: selectedSubject,
+        (() => {
+            selectedModules = modules.filter((m) =>
+                selectedSubject
+                    ? m.subject
+                        ? m.subject.id === selectedSubject.id
+                        : false
+                    : true
+            );
+            // If a subject was selected and if there are modules
+            // for the subject, default select the first module.
+            if (selectedSubject && selectedModules.length > 0) {
+                selectedModule = selectedModules[0];
+            } else {
+                selectedModule = undefined;
+            }
+        })();
 
     onMount(() => {
-        axios.get('/api/subjects')
+        axios
+            .get("/api/decks")
             .then(function (response) {
-                data = response.data;
+                decks = response.data;
+                modules = decks.map((d) => d.module).filter((v) => !!v);
+                subjects = modules.map((m) => m.subject).filter((v) => !!v);
             })
             .catch(function (error) {
                 alert(error);
@@ -16,11 +57,12 @@
 
     function createSession(deckId) {
         var data = {
-            'deck_id': deckId,
+            deck_id: deckId,
         };
-        axios.post('/api/sessions', data)
+        axios
+            .post("/api/sessions", data)
             .then(function (response) {
-                window.location.href = '/sessions/' + response.data.id;
+                window.location.href = "/sessions/" + response.data.id;
             })
             .catch(function (error) {
                 alert(error);
@@ -28,26 +70,51 @@
     }
 </script>
 
-{#if data}
-    <ul>
-        {#each data.subjects as subject}
-            <li>
-                {subject.name}
-                <ul>
-                    {#each subject.modules as module}
-                        <li>
-                            {module.name}
-                            <ul>
-                                {#each module.decks as deck}
-                                    <li><button on:click|preventDefault={() => createSession(deck.id)} type="button" class="btn btn-link">{deck.name}</button></li>
-                                {/each}
-                            </ul>
-                        </li>
+{#if decks}
+    <div class="row">
+        <div class="col-md-4">
+            <select
+                bind:value={selectedSubject}
+                class="form-select form-select-lg mb-3"
+                aria-label=".form-select-lg example">
+                <option selected value={undefined}>All subjects</option>
+                {#each subjects as subject}
+                    <option value={subject}>{subject.name}</option>
+                {/each}
+            </select>
+            {#if selectedSubject}
+                <select
+                    bind:value={selectedModule}
+                    class="form-select form-select-lg mb-3"
+                    aria-label=".form-select-lg example">
+                    {#each selectedModules as module, index (module.id)}
+                        <option
+                            selected={selectedModule === module.id}
+                            value={module}>{module.name}</option>
                     {/each}
-                </ul>
-            </li>
-        {/each}
-    </ul>
+                </select>
+            {/if}
+        </div>
+        <div class="col-md-8">
+            <ul>
+                {#each selectedDecks as deck}
+                    <li>
+                        <button
+                            on:click|preventDefault={() =>
+                                createSession(deck.id)}
+                            type="button"
+                            class="btn btn-link"
+                            >{format(
+                                parseISO(deck.created_at),
+                                "dd/MM/yyyy HH:mm"
+                            )}
+                            {deck.name}</button>
+                        <a href="/decks/{deck.id}/edit">Edit deck</a>
+                    </li>
+                {/each}
+            </ul>
+        </div>
+    </div>
 {:else}
     <p>Loading ...</p>
 {/if}

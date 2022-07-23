@@ -10,6 +10,11 @@ use App\Models\Deck;
 
 class DeckController extends Controller
 {
+    public function index()
+    {
+        return Deck::with('module', 'module.subject')->get();
+    }
+
     public function indexWithQuestionIds(Request $request)
     {
         $user_id = Auth::id();
