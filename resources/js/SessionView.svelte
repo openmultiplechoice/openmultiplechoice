@@ -5,7 +5,6 @@
     import SessionQuestionView from "./SessionQuestionView.svelte";
     import SessionQuestionNav from "./SessionQuestionNav.svelte";
     import Messages from "./Messages.svelte";
-    import AddToDeckDialog from "./AddToDeckDialog.svelte";
 
     export let id;
 
@@ -180,11 +179,6 @@
                 bind:data
                 bind:currentQuestionId={data.session.current_question_id}
                 bind:currentQuestionAnswered />
-            {#if currentQuestionAnswered}
-                {#key currentQuestionId}
-                    <AddToDeckDialog questionId={currentQuestionId} />
-                {/key}
-            {/if}
             {#if currentQuestion}
                 <SessionQuestionView
                     bind:question={currentQuestion}

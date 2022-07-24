@@ -1,10 +1,11 @@
 <script>
-    import DOMPurify from 'dompurify';
+    import DOMPurify from "dompurify";
 
-    import SessionAnswerView from './SessionAnswerView.svelte';
-    import SessionCardAnswerView from './SessionCardAnswerView.svelte';
-    import SessionImageView from './SessionImageView.svelte';
-    import QuestionForm from './QuestionForm.svelte';
+    import SessionAnswerView from "./SessionAnswerView.svelte";
+    import SessionCardAnswerView from "./SessionCardAnswerView.svelte";
+    import SessionImageView from "./SessionImageView.svelte";
+    import QuestionForm from "./QuestionForm.svelte";
+    import AddToDeckDialog from "./AddToDeckDialog.svelte";
 
     export let question;
     export let questionAnswered;
@@ -15,10 +16,11 @@
     var showEditor = false;
     var showHint = questionAnswered;
 
-    $: question, (() => {
-        showHint = questionAnswered;
-        helpUsed = questionAnswered;
-    })();
+    $: question,
+        (() => {
+            showHint = questionAnswered;
+            helpUsed = questionAnswered;
+        })();
 
     function toggleEditor() {
         showEditor = !showEditor;
@@ -27,7 +29,7 @@
 
 {#if question}
     {#if showEditor}
-        <QuestionForm bind:question={question} toggleEditor={toggleEditor} />
+        <QuestionForm bind:question {toggleEditor} />
     {:else}
         <div id="question{question.id}">
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
@@ -41,24 +43,51 @@
                 {/if}
             </div>
             {#if question.hint}
-                {#if showHint }
-                    <div class="row border-start border-3 border-info m-1 mt-3 mb-3">
+                {#if showHint}
+                    <div
+                        class="row border-start border-3 border-info m-1 mt-3 mb-3">
                         <p>{@html DOMPurify.sanitize(question.hint)}</p>
                     </div>
                 {:else}
-                    <button on:click|preventDefault={() => { showHint = true; helpUsed = true;  }} type="button" class="btn btn-outline-secondary btn-sm">Show hint</button>
+                    <button
+                        on:click|preventDefault={() => {
+                            showHint = true;
+                            helpUsed = true;
+                        }}
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm"
+                        >Show hint</button>
                 {/if}
             {/if}
-            {#if question.type === 'mc'}
+            {#if question.type === "mc"}
                 {#each question.answers as answer, index}
-                    <SessionAnswerView bind:answer bind:answerChoice submitAnswer={submitAnswer} badgeText={'ABCDEFGHIJKLMN'.charAt(index)} isCorrectAnswer={question.correct_answer_id === answer.id} hasAnswer={!!answerChoice} isChosenAnswer={answerChoice && answerChoice.answer_id === answer.id} />
+                    <SessionAnswerView
+                        bind:answer
+                        bind:answerChoice
+                        {submitAnswer}
+                        badgeText={"ABCDEFGHIJKLMN".charAt(index)}
+                        isCorrectAnswer={question.correct_answer_id ===
+                            answer.id}
+                        hasAnswer={!!answerChoice}
+                        isChosenAnswer={answerChoice &&
+                            answerChoice.answer_id === answer.id} />
                 {/each}
             {:else}
-                <SessionCardAnswerView bind:answer={question.answers[0]} submitAnswer={submitAnswer} hasAnswer={!!answerChoice} />
+                <SessionCardAnswerView
+                    bind:answer={question.answers[0]}
+                    {submitAnswer}
+                    hasAnswer={!!answerChoice} />
             {/if}
-            <div class="row m-1 pt-2">
+            <div class="row mt-1 mb-1 pt-2">
                 <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" on:click|preventDefault={toggleEditor}>Edit question</button>
+                    {#key question.id}
+                        <AddToDeckDialog questionId={question.id} />
+                    {/key}
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm ms-1"
+                        on:click|preventDefault={toggleEditor}
+                        >Edit question</button>
                 </div>
             </div>
         </div>
@@ -66,7 +95,10 @@
 
     {#if !questionAnswered}
         <div class="mt-3">
-            <button on:click|preventDefault={() => submitAnswer('')} type="button" class="btn btn-outline-secondary btn-sm">Show answer</button>
+            <button
+                on:click|preventDefault={() => submitAnswer("")}
+                type="button"
+                class="btn btn-outline-secondary btn-sm">Show answer</button>
         </div>
     {/if}
 {:else}
