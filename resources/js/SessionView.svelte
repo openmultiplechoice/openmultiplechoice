@@ -11,6 +11,7 @@
     var data;
     var helpUsed = false;
 
+    // editorconfig-checker-disable
     $: answerChoice = data
         ? data.session.answer_choices.find(
               (e) => e.question_id === currentQuestionId
@@ -21,6 +22,7 @@
               (q) => q.id === data.session.current_question_id
           )
         : null;
+    // editorconfig-checker-enable
     $: currentQuestionId = data ? data.session.current_question_id : -1;
 
     // Whenever the current question gets changed, update the question
