@@ -1,11 +1,10 @@
-/*!
- * hotkeys-js v3.8.7
- * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies.
- * 
- * Copyright (c) 2021 kenny wong <wowohoo@qq.com>
- * http://jaywcjlove.github.io/hotkeys
- * 
- * Licensed under the MIT license.
- */
+/*! @license DOMPurify 2.3.10 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/2.3.10/LICENSE */
 
-/*! @license DOMPurify 2.3.6 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/2.3.6/LICENSE */
+/**! 
+ * hotkeys-js v3.9.4 
+ * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies. 
+ * 
+ * Copyright (c) 2022 kenny wong <wowohoo@qq.com> 
+ * http://jaywcjlove.github.io/hotkeys 
+ * Licensed under the MIT license 
+ */
