@@ -155,7 +155,7 @@
         </div>
     </form>
 
-    {#if !correctAnswerId}
+    {#if !correctAnswerId && question.type === "mc"}
         <div class="col">
             <div class="alert alert-secondary" role="alert">
                 Don't forget to set the correct answer!
@@ -191,16 +191,19 @@
     {#each question.answers as answer (answer.id)}
         <AnswerForm bind:answer />
         <div class="text-end mb-2">
-            <button
-                on:click|preventDefault={() => {
-                    updateCorrectAnswer(answer.id);
-                }}
-                type="button"
-                class="btn btn-outline-success {correctAnswerId === answer.id
-                    ? 'active'
-                    : ''}"
-                title="Set as correct answer"
-                ><i class="bi bi-check-lg" /></button>
+            {#if question.type === "mc"}
+                <button
+                    on:click|preventDefault={() => {
+                        updateCorrectAnswer(answer.id);
+                    }}
+                    type="button"
+                    class="btn btn-outline-success {correctAnswerId ===
+                    answer.id
+                        ? 'active'
+                        : ''}"
+                    title="Set as correct answer"
+                    ><i class="bi bi-check-lg" /></button>
+            {/if}
             <button
                 on:click|preventDefault={() => {
                     handleAnswerRemove(answer.id);
@@ -211,6 +214,8 @@
         </div>
     {/each}
 
-    <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary"
-        >Add answer</button>
+    {#if question.answers.length === 0}
+        <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary"
+            >Add answer</button>
+    {/if}
 </div>
