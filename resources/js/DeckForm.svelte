@@ -31,7 +31,7 @@
         var newQuestion = {
             id: null,
             text: "",
-            type: "mc",
+            type: type ? type : "mc",
             correct_answer_id: null,
             images: [],
             answers: [],
@@ -71,8 +71,39 @@
     <div class="col">
         <h4>{name}</h4>
 
-        <button on:click={addNewQuestion} class="btn btn-primary"
-            >Add question</button>
+        <div class="btn-group">
+            <button
+                type="button"
+                class="btn btn-primary"
+                on:click={() => {
+                    addNewQuestion("mc");
+                }}>Add question</button>
+            <button
+                type="button"
+                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a
+                        class="dropdown-item"
+                        href="#"
+                        on:click={() => {
+                            addNewQuestion("mc");
+                        }}>Add multiple choice question</a>
+                </li>
+                <li>
+                    <a
+                        class="dropdown-item"
+                        href="#"
+                        on:click={() => {
+                            addNewQuestion("card");
+                        }}>Add card question</a>
+                </li>
+            </ul>
+        </div>
 
         <hr />
     </div>
