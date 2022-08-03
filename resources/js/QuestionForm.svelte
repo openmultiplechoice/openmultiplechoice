@@ -1,23 +1,19 @@
 <script>
     import debounce from "lodash/debounce";
-    import { onMount } from "svelte";
     import AnswerForm from "./AnswerForm.svelte";
 
     export let question;
     export let toggleEditor;
 
-    $: correctAnswerId = question.correct_answer_id;
+    let editor;
 
-    onMount(() => {
-        document
-            .getElementById("editor-question" + question.id)
-            .addEventListener("trix-change", function () {
-                question.text = document.getElementById(
-                    "question" + question.id
-                ).value;
-                handleChange();
-            });
-    });
+    $: correctAnswerId = question.correct_answer_id;
+    $: if (editor) {
+        editor.addEventListener("trix-change", function () {
+            question.text = document.getElementById("questionText").value;
+            handleChange();
+        });
+    }
 
     function updateCorrectAnswer(newCorrectAnswerId) {
         if (newCorrectAnswerId === question.correct_answer_id) {
@@ -138,12 +134,13 @@
         {#key question.id}
             <div class="mt-3 mb-3">
                 <input
-                    id="question{question.id}"
+                    id="questionText"
                     type="hidden"
                     bind:value={question.text} />
                 <trix-editor
-                    id="editor-question{question.id}"
-                    input="question{question.id}" />
+                    id="editor-questionText"
+                    bind:this={editor}
+                    input="questionText" />
             </div>
         {/key}
 

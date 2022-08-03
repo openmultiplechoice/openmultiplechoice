@@ -23,24 +23,22 @@
             });
     });
 
-    function newQuestionObj() {
-        return {
+    function addNewQuestion(type) {
+        var newQuestion = {
             id: null,
             text: "",
+            type: "mc",
             correct_answer_id: null,
             images: [],
             answers: [],
         };
-    }
-
-    function addNewQuestion() {
-        var newQuestion = newQuestionObj();
 
         axios
             .post("/api/decks/" + id + "/questions", newQuestion)
             .then(function (response) {
                 newQuestion.id = response.data.id;
                 questions = [...questions, newQuestion];
+                currentQuestion = newQuestion;
             })
             .catch(function (error) {
                 alert(error);
@@ -77,7 +75,7 @@
             style="width: 100%;"
             role="group"
             aria-label="Vertical button group">
-            {#each [...questions].reverse() as question, i}
+            {#each [...questions].reverse() as question}
                 <div class="btn-group" role="group">
                     <span class="btn-index">
                         <button
@@ -116,15 +114,6 @@
     <div class="col-md-8">
         {#if currentQuestion}
             <div class="mt-2 p-3">
-                <div class="text-end">
-                    <!-- <button
-                        on:click|preventDefault={() => {
-                            handleQuestionRemove(question.id);
-                        }}
-                        type="button"
-                        class="btn btn-outline-danger btn-sm"
-                        >Remove question</button> -->
-                </div>
                 <QuestionForm bind:question={currentQuestion} />
             </div>
         {/if}
