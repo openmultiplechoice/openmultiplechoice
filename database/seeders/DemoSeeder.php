@@ -32,6 +32,8 @@ class DemoSeeder extends Seeder
             stubs and bugs).',
         ]);
 
+        // Demo deck 1
+
         $subject = Subject::create([
             'name' => 'Demo',
         ]);
@@ -46,6 +48,8 @@ class DemoSeeder extends Seeder
             'module_id' => $module->id,
             'official' => true,
         ]);
+
+        // Question 1
 
         $question = Question::create([
             'text' => 'What is OpenMultipleChoice?',
@@ -82,6 +86,8 @@ class DemoSeeder extends Seeder
         ]);
         $question->images()->save($image);
 
+        // Question 2
+
         $question = Question::create([
             'text' => 'What is the license of OpenMultipleChoice?',
             'hint' => 'GNU Affero General Public License',
@@ -110,6 +116,8 @@ class DemoSeeder extends Seeder
         $question->save();
         $deck->questions()->attach($question);
 
+        // Question 3
+
         $question = Question::create([
             'text' => 'What programming language is OpenMultipleChoice written in?',
         ]);
@@ -137,6 +145,66 @@ class DemoSeeder extends Seeder
         $question->save();
         $deck->questions()->attach($question);
 
+        // Question 4
+
+        $question = Question::create([
+            'text' => 'Which PHP framework is used in OpenMultipleChoice?',
+        ]);
+        Answer::create([
+            'text' => 'No framework.',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'CakePHP',
+            'question_id' => $question->id,
+        ]);
+        $correct_answer = Answer::create([
+            'text' => 'Laravel',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'Symfony',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'Laminas',
+            'question_id' => $question->id,
+        ]);
+        $question->correct_answer_id = $correct_answer->id;
+        $question->save();
+        $deck->questions()->attach($question);
+
+        // Question 5
+
+        $question = Question::create([
+            'text' => 'Which frontend framework is used in OpenMultipleChoice?',
+        ]);
+        Answer::create([
+            'text' => 'No framework.',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'React',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'Vue',
+            'question_id' => $question->id,
+        ]);
+        $correct_answer = Answer::create([
+            'text' => 'Svelte',
+            'question_id' => $question->id,
+        ]);
+        Answer::create([
+            'text' => 'Preact',
+            'question_id' => $question->id,
+        ]);
+        $question->correct_answer_id = $correct_answer->id;
+        $question->save();
+        $deck->questions()->attach($question);
+
+        // Demo deck 2
+
         $subject = Subject::create([
             'name' => 'Biochemistry',
         ]);
@@ -151,6 +219,8 @@ class DemoSeeder extends Seeder
             'module_id' => $module->id,
             'official' => true,
         ]);
+
+        // Question 1
 
         $question = Question::create([
             'type' => 'card',
@@ -167,6 +237,8 @@ class DemoSeeder extends Seeder
         ]);
         $question->images()->save($image);
 
+        // Question 2
+
         $question = Question::create([
             'type' => 'card',
         ]);
@@ -182,6 +254,8 @@ class DemoSeeder extends Seeder
         ]);
         $question->images()->save($image);
 
+        // Question 3
+
         $question = Question::create([
             'type' => 'card',
         ]);
@@ -193,6 +267,40 @@ class DemoSeeder extends Seeder
         $deck->questions()->attach($question);
         $image = Image::create([
             'path' => 'images/yiOgHY9jH2duPa5C0hxV1WDA1tWjP43u24Yr4Rbp.png',
+            'question_id' => $question->id,
+        ]);
+        $question->images()->save($image);
+
+        // Question 4
+
+        $question = Question::create([
+            'type' => 'card',
+        ]);
+        Answer::create([
+            'text' => 'Isomaltose',
+            'question_id' => $question->id,
+        ]);
+        $question->save();
+        $deck->questions()->attach($question);
+        $image = Image::create([
+            'path' => 'images/HpkN0HppaRSkqIXlNCKa1Mv7jMUI66i4qktZz01n.png',
+            'question_id' => $question->id,
+        ]);
+        $question->images()->save($image);
+
+        // Question 5
+
+        $question = Question::create([
+            'type' => 'card',
+        ]);
+        Answer::create([
+            'text' => 'Lactose',
+            'question_id' => $question->id,
+        ]);
+        $question->save();
+        $deck->questions()->attach($question);
+        $image = Image::create([
+            'path' => 'images/WbZxVnP9fbmHdWZJGRtzinGExI90zqO3ygS469ft.png',
             'question_id' => $question->id,
         ]);
         $question->images()->save($image);
