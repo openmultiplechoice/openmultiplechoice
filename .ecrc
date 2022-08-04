@@ -7,6 +7,7 @@
         "public/js/NewSessionView.js",
         "public/js/SessionView.js",
         "public/js/app.js",
-        "public/js/trix.js"
+        "public/js/trix.js",
+        "public/css/app.css"
     ]
 }

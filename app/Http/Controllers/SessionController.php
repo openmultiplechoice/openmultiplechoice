@@ -11,17 +11,12 @@ class SessionController extends Controller
 {
     public function index()
     {
-        $decks = Deck::all();
-        $sessions = Session::orderByDesc('id')->get();
-        return view('sessions', [
-            'decks' => $decks,
-            'sessions' => $sessions,
-        ]);
+        //
     }
 
     public function create()
     {
-        //
+        return view('sessions');
     }
 
     public function store(Request $request)

@@ -14,3 +14,4 @@ yarn-error.log
 .php_cs.cache
 .*.sw[po]
 .php-cs-fixer.cache
+.DS_Store

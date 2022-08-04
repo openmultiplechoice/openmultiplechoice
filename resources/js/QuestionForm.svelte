@@ -1,27 +1,27 @@
 <script>
-    import debounce from 'lodash/debounce';
-    import { onMount } from 'svelte';
-    import AnswerForm from './AnswerForm.svelte';
+    import debounce from "lodash/debounce";
+    import AnswerForm from "./AnswerForm.svelte";
 
     export let question;
     export let toggleEditor;
 
-    var correctAnswerId = question.correct_answer_id;
-    $: correctAnswerId, updateCorrectAnswer();
+    let editor;
 
-    onMount(() => {
-        document.getElementById('editor-question' + question.id).addEventListener('trix-change', function() {
-            question.text = document.getElementById('question' + question.id).value;
+    $: correctAnswerId = question.correct_answer_id;
+    $: if (editor) {
+        editor.addEventListener("trix-change", function () {
+            question.text = document.getElementById("questionText").value;
             handleChange();
         });
-    });
+    }
 
-    function updateCorrectAnswer() {
-        if (correctAnswerId === question.correct_answer_id) {
+    function updateCorrectAnswer(newCorrectAnswerId) {
+        if (newCorrectAnswerId === question.correct_answer_id) {
             return;
         }
-        question.correct_answer_id = correctAnswerId;
-        axios.put('/api/questions/' + question.id, question)
+        question.correct_answer_id = newCorrectAnswerId;
+        axios
+            .put("/api/questions/" + question.id, question)
             .then(function (response) {})
             .catch(function (error) {
                 alert(error);
@@ -35,40 +35,50 @@
             debounced.cancel();
         }
 
-        debounced = debounce(() => {
-            axios.put('/api/questions/' + question.id, question)
-                .then(function (response) {})
-                .catch(function (error) {
-                    alert(error);
-                });
-        }, 500, { 'maxWait': 2000 });
+        debounced = debounce(
+            () => {
+                axios
+                    .put("/api/questions/" + question.id, question)
+                    .then(function (response) {})
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            },
+            500,
+            { maxWait: 2000 }
+        );
 
         debounced();
     }
 
     function handleImageAdd() {
         var formData = new FormData();
-        var imageFile = document.getElementById('imageInput' + question.id);
-        formData.set('image', imageFile.files[0]);
-        axios.post('/api/questions/' + question.id + '/images', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }})
+        var imageFile = document.getElementById("imageInput" + question.id);
+        formData.set("image", imageFile.files[0]);
+        axios
+            .post("/api/questions/" + question.id + "/images", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
             .then(function (response) {
-                imageFile.value = '';
+                imageFile.value = "";
                 var image = response.data;
                 question.images = [...question.images, image];
             })
             .catch(function (error) {
-                imageFile.value = '';
+                imageFile.value = "";
                 alert(error);
             });
     }
 
     function handleImageRemove(imageId) {
-        axios.delete('/api/images/' + imageId)
+        axios
+            .delete("/api/images/" + imageId)
             .then(function (response) {
-                question.images = question.images.filter(i => i.id !== imageId);
+                question.images = question.images.filter(
+                    (i) => i.id !== imageId
+                );
             })
             .catch(function (error) {
                 alert(error);
@@ -85,7 +95,8 @@
     function handleAnswerAdd() {
         var newAnswer = newAnswerObj();
 
-        axios.post('/api/questions/' + question.id + '/answers', newAnswer)
+        axios
+            .post("/api/questions/" + question.id + "/answers", newAnswer)
             .then(function (response) {
                 newAnswer.id = response.data.id;
                 question.answers = [...question.answers, newAnswer];
@@ -96,9 +107,12 @@
     }
 
     function handleAnswerRemove(answerId) {
-        axios.delete('/api/answers/' + answerId)
+        axios
+            .delete("/api/answers/" + answerId)
             .then(function (response) {
-                question.answers = question.answers.filter(a => a.id !== answerId);
+                question.answers = question.answers.filter(
+                    (a) => a.id !== answerId
+                );
             })
             .catch(function (error) {
                 alert(error);
@@ -106,33 +120,63 @@
     }
 </script>
 
-<div class="border rounded bg-light p-2">
-
+<div class="mt-1 mb-1">
     <form action="#" on:submit|preventDefault={handleChange} class="mt-3">
+        {#if toggleEditor}
+            <button
+                type="button"
+                on:click|preventDefault={toggleEditor}
+                class="btn btn-outline-secondary btn-sm">Close</button>
 
-        <button type="button" on:click|preventDefault={toggleEditor} class="btn btn-outline-secondary btn-small">Close</button>
+            <hr />
+        {/if}
 
-        <hr>
-
-        <div class="mt-3 mb-3">
-            <input id="question{question.id}" type="hidden" bind:value={question.text}>
-            <trix-editor id="editor-question{question.id}" input="question{question.id}"></trix-editor>
-        </div>
+        {#key question.id}
+            <div class="mt-3 mb-3">
+                <input
+                    id="questionText"
+                    type="hidden"
+                    bind:value={question.text} />
+                <trix-editor
+                    id="editor-questionText"
+                    bind:this={editor}
+                    input="questionText" />
+            </div>
+        {/key}
 
         <div class="mb-3">
             <label for="image" class="form-label">Add image</label>
-            <input on:input={handleImageAdd} class="form-control" type="file" id="imageInput{question.id}" name="image">
+            <input
+                on:input={handleImageAdd}
+                class="form-control"
+                type="file"
+                id="imageInput{question.id}"
+                name="image" />
         </div>
-
     </form>
+
+    {#if !correctAnswerId && question.type === "mc"}
+        <div class="col">
+            <div class="alert alert-secondary" role="alert">
+                Don't forget to set the correct answer!
+            </div>
+        </div>
+    {/if}
 
     <div class="row row-cols-1 row-cols-lg-3 g4">
         {#each question.images as image (image.id)}
             <div class="col">
                 <div class="card" style="width: 18rem">
-                    <div class="card-header bg-transparent"><button on:click|preventDefault={() => { handleImageRemove(image.id) }} type="button" class="btn-close"></button></div>
-                    <img src="/{image.path}" class="card-img-top" alt="">
-                    {#if image.comment }
+                    <div class="card-header bg-transparent">
+                        <button
+                            on:click|preventDefault={() => {
+                                handleImageRemove(image.id);
+                            }}
+                            type="button"
+                            class="btn"><i class="bi bi-trash" /></button>
+                    </div>
+                    <img src="/{image.path}" class="card-img-top" alt="" />
+                    {#if image.comment}
                         <div class="card-body">
                             <p class="card-text">
                                 {image.comment}
@@ -145,16 +189,33 @@
     </div>
 
     {#each question.answers as answer (answer.id)}
-        <AnswerForm bind:answer={answer} />
+        <AnswerForm bind:answer />
         <div class="text-end mb-2">
-            <input type="radio" class="btn-check" name="questionAnswer{question.id}" bind:group={correctAnswerId} value={answer.id} id="questionAnswerOption{answer.id}" autocomplete="off">
-            <label class="btn btn-outline-success btn-sm" for="questionAnswerOption{answer.id}">Correct answer</label>
-            <button on:click|preventDefault={() => { handleAnswerRemove(answer.id) }} type="button" class="btn-close" title="Remove answer"></button>
+            {#if question.type === "mc"}
+                <button
+                    on:click|preventDefault={() => {
+                        updateCorrectAnswer(answer.id);
+                    }}
+                    type="button"
+                    class="btn btn-outline-success {correctAnswerId ===
+                    answer.id
+                        ? 'active'
+                        : ''}"
+                    title="Set as correct answer"
+                    ><i class="bi bi-check-lg" /></button>
+            {/if}
+            <button
+                on:click|preventDefault={() => {
+                    handleAnswerRemove(answer.id);
+                }}
+                type="button"
+                class="btn btn-outline-secondary"
+                title="Remove answer"><i class="bi bi-trash" /></button>
         </div>
     {/each}
 
-    <hr>
-
-    <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary">Add answer</button>
-
+    {#if question.answers.length === 0}
+        <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary"
+            >Add answer</button>
+    {/if}
 </div>
