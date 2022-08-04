@@ -7,20 +7,19 @@
 Status: experimental, work in progress
 
 OpenMultipleChoice is an open source web application for multiple choice
-([MCQ](https://en.wikipedia.org/wiki/Multiple_choice)) exam exercises.
+question ([MCQ](https://en.wikipedia.org/wiki/Multiple_choice)) and flashcard
+decks.
 
 ![](docs/images/omc-screenshot.png)
 
-**Please note**: OpenMultiplceChoice is **not usable yet**, currently under active
-development and does not yet accept issues or pull requests. The first alpha release
-is planned for Q2 2022.
+**Please note**: OpenMultiplceChoice is currently under active development and
+does not yet accept pull requests.
 
-For news and updates, join the Discord server or star and watch the repository
-here on GitHub.
+For news and updates, join the Discord server or watch the repository here on
+GitHub.
 
-Discord: https://discord.gg/NdvVNBN5Dh
-
-Demo: https://demo.openmultiplechoice.de (coming soon)
+* Discord: https://discord.gg/NdvVNBN5Dh
+* Demo: https://demo.openmultiplechoice.de (coming soon)
 
 ## Documentation
 
