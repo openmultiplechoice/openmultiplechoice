@@ -9,6 +9,8 @@ class Module extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name'];
+
     public function decks()
     {
         return $this->hasMany(Deck::class);
