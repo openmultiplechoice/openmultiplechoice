@@ -46,8 +46,21 @@
             .get("/api/decks")
             .then(function (response) {
                 decks = response.data;
-                modules = decks.map((d) => d.module).filter((v) => !!v);
-                subjects = modules.map((m) => m.subject).filter((v) => !!v);
+                var modulesArr = decks.map((d) => d.module).filter((v) => !!v);
+                // Make `subjects` and `modules` sets (each subject/module
+                // should be in the list only once). We don't use a `Set()`
+                // to have arrays and be able to `.filter()`
+                modules = modulesArr.filter(
+                    (value, index, self) =>
+                        index === self.findIndex((o) => o.id === value.id)
+                );
+                var subjectsArr = modules
+                    .map((m) => m.subject)
+                    .filter((v) => !!v);
+                subjects = subjectsArr.filter(
+                    (value, index, self) =>
+                        index === self.findIndex((o) => o.id === value.id)
+                );
             })
             .catch(function (error) {
                 alert(error);
