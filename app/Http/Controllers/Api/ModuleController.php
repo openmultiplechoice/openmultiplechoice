@@ -12,13 +12,12 @@ class ModuleController extends Controller
     public function index()
     {
         $modules = Module::with('decks')->get();
-        return response()->json([
-            'modules' => $modules,
-        ]);
+        return response()->json($modules);
     }
 
     public function store(Request $request)
     {
+        // TODO(schu): check if user is moderator or admin
         $module = new Module();
 
         $module->name = $request->name;

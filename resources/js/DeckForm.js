@@ -6,6 +6,7 @@ const f = new DeckForm({
     target: deckFormEl,
     props: {
         id: deckFormEl.dataset.deckId,
-        name: deckFormEl.dataset.deckName
+        name: deckFormEl.dataset.deckName,
+        moduleId: deckFormEl.dataset.moduleId
     }
 });
