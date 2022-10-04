@@ -35,6 +35,14 @@ class DeckController extends Controller
         return response()->json($deck);
     }
 
+    public function update(Request $request, Deck $deck)
+    {
+        // TODO(schu): check if user owner
+
+        $deck->update($request->all());
+        return response()->json($deck);
+    }
+
     public function addQuestionById(Request $request, Deck $deck)
     {
         // TODO(schu): check if user owner
