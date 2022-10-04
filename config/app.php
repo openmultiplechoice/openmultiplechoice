@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Facade;
 
 return [
 
+    'version' => shell_exec('git describe --tags --always --dirty'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
