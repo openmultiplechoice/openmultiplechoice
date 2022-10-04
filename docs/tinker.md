@@ -1,4 +1,6 @@
-# Tinker Cheatsheet
+# Tinker
+
+## Cheatsheet
 
 Various helpful [Tinker](https://laravel.com/docs/8.x/artisan#tinker)
 example commands.
@@ -26,5 +28,6 @@ Put a file (e.g. an image) from disk into storage (below the storage
 path is `<PROJECT_ROOT>/storage/app/images'`):
 
 ```
-Storage::putFile('images', new File('some.jpg'))
+use Illuminate\Http\File;
+Storage::putFile('images', new File('some.jpg'));
 ```

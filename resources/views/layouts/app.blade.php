@@ -35,6 +35,10 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url('sessions') }}">Sessions</a>
                             <a class="dropdown-item" href="{{ url('decks') }}">Decks</a>
+                            @if (Auth::user()->is_admin || Auth::user()->is_moderator)
+                                <a class="dropdown-item" href="{{ url('subjects') }}">Subjects</a>
+                                <a class="dropdown-item" href="{{ url('modules') }}">Modules</a>
+                            @endif
                             <a class="dropdown-item" href="{{ url('news') }}">News</a>
                         </div>
                     </li>

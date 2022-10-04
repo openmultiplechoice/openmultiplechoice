@@ -214,7 +214,7 @@
         </div>
     {/each}
 
-    {#if question.answers.length === 0}
+    {#if question.type === "mc" || question.answers.length === 0}
         <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary"
             >Add answer</button>
     {/if}

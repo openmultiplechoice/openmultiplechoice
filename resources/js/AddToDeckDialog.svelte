@@ -84,25 +84,31 @@
     </div>
     <div class="offcanvas-body">
         {#each decksOther as deck}
-            <p>
-                {deck.name}
-                <button
-                    on:click|preventDefault={() => addQuestionToDeck(deck.id)}
-                    class="btn btn-sm btn-success">Add</button>
-            </p>
+            <div class="row mb-1">
+                <div class="col-8">
+                    {deck.name}
+                </div>
+                <div class="col-4">
+                    <button
+                        on:click|preventDefault={() =>
+                            addQuestionToDeck(deck.id)}
+                        class="btn btn-sm btn-success">Add</button>
+                </div>
+            </div>
         {/each}
+        <hr />
         {#each decksAdded as deck}
-            <p>
-                {deck.name}
-                <button
-                    on:click|preventDefault={() =>
-                        removeQuestionFromDeck(deck.id)}
-                    class="btn btn-sm btn-outline-dark">Remove</button>
-            </p>
+            <div class="row mb-1">
+                <div class="col-8">
+                    {deck.name}
+                </div>
+                <div class="col-4">
+                    <button
+                        on:click|preventDefault={() =>
+                            removeQuestionFromDeck(deck.id)}
+                        class="btn btn-sm btn-outline-dark">Remove</button>
+                </div>
+            </div>
         {/each}
-        <hr />
-        <pre><code>{JSON.stringify({ decksAdded }, null, "  ")}</code></pre>
-        <hr />
-        <pre><code>{JSON.stringify({ decksOther }, null, "  ")}</code></pre>
     </div>
 </div>
