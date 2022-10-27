@@ -20,7 +20,7 @@ class QuestionMessageController extends Controller
     public function store(Request $request, Question $question)
     {
         $message = new Message();
-        $message->text = $request->text;
+        $message->fill($request->all());
         $message->question_id = $question->id;
         $message->author_id = Auth::id();
 
