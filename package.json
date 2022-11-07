@@ -23,7 +23,7 @@
         "laravel-mix-svelte": "github:wewowweb/laravel-mix-svelte",
         "lodash": "^4.17.21",
         "resolve-url-loader": "^5.0.0",
-        "sass": "^1.55.0",
+        "sass": "^1.56.0",
         "sass-loader": "^13.0.2",
         "svelte": "^3.50.1",
         "svelte-loader": "^3.1.3",
