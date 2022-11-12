@@ -1,4 +1,4 @@
-![OpenMultipleChoice logo](logo/omc.png)
+![OpenMultipleChoice logo](logo/omc-white-bg.png)
 
 # OpenMultipleChoice
 
