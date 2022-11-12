@@ -92,9 +92,18 @@
 
 @yield('content')
 
-@if (config('app.poweredby'))
-    <p class="text-center text-muted mt-5"><small>Powered by <a target="_blank" class="text-muted" href="https://github.com/openmultiplechoice/openmultiplechoice">OpenMultipleChoice</a></small></p>
-@endif
+<div class="row mt-5">
+    <div class="col">
+        @if (config('app.poweredby'))
+            <p class="text-center text-muted"><small>Powered by <a target="_blank" class="text-muted" href="https://github.com/openmultiplechoice/openmultiplechoice">OpenMultipleChoice</a></small></p>
+        @endif
+
+        @if (config('app.version'))
+            <p class="text-center text-muted"><small>Version: <span class="font-monospace">{{ config('app.version') }}</span></small></p>
+        @endif
+    </div>
+</div>
+
 
 </div>
 
