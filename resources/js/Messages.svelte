@@ -92,7 +92,8 @@
     }
 
     function addMessage(message) {
-        nestedMessages = generateMessageTree([...messages, message]);
+        messages.push(message)
+        nestedMessages = generateMessageTree(messages);
     }
 
     function handleSubmit() {
@@ -103,7 +104,8 @@
             .post("/api/questions/" + questionId + "/messages", newMessage)
             .then(function (response) {
                 toggleEditor();
-                messages = generateMessageTree([...messages, response.data]);
+                messages.push(response.data)
+                nestedMessages = generateMessageTree(messages);
             })
             .catch(function (error) {
                 alert(error);
