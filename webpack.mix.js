@@ -14,8 +14,19 @@ require('laravel-mix-svelte');
  */
 // editorconfig-checker-enable
 
+mix.webpackConfig({
+    resolve: {
+        fallback: {
+            http: require.resolve("stream-http"),
+            https: require.resolve("https-browserify"),
+            stream: require.resolve("stream-browserify"),
+            zlib: require.resolve("browserify-zlib"),
+        }
+    }
+})
+
 mix.js('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js', 'public/js')
-    .js('node_modules/trix/dist/trix.js', 'public/js')
+    .js('node_modules/trix/dist/trix.esm.js', 'public/js/trix.min.js')
     .js('resources/js/app.js', 'public/js')
     .js('resources/js/DeckForm.js', 'public/js')
     .js('resources/js/IndexSessionView.js', 'public/js')
