@@ -1,6 +1,6 @@
 {
     "/js/bootstrap.bundle.min.js": "/js/bootstrap.bundle.min.js",
-    "/js/trix.js": "/js/trix.js",
+    "/js/trix.min.js": "/js/trix.min.js",
     "/js/app.js": "/js/app.js",
     "/js/DeckForm.js": "/js/DeckForm.js",
     "/js/IndexSessionView.js": "/js/IndexSessionView.js",

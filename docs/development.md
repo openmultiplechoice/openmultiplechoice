@@ -138,3 +138,45 @@ During development, `npm run watch` can be used to make webpack watch the
 sources and trigger a rebuild whenever you made a change. This way you can
 jump back and forth between your editor and the browser and instantly see
 the result of your changes.
+
+## Updating dependencies
+
+### PHP / Composer
+
+To update packages to the newest version within the set range in `composer.json`,
+run
+
+```
+composer update
+```
+
+To upgrade packages to the latest version, find all outdated packages, update
+the version in `composer.json` and then update.
+
+```
+composer outdated -D
+...
+```
+
+### JavaScript
+
+To update packages to the newest version within the set range in `package.json`,
+run
+
+```
+npm update --save
+```
+
+To upgrade packages to the latest version, use `npm-check-updates`:
+
+```
+npm install --no-save npm-check-updates
+npx ncu -u
+npm install
+```
+
+In both cases, you have to rebuild the bundle files after:
+
+```
+npm run prod
+```
