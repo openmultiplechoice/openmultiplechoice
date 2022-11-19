@@ -37,7 +37,7 @@ class DeckController extends Controller
 
     public function show(Deck $deck)
     {
-        //
+        return view('deck', ['deck' => $deck]);
     }
 
     public function edit(Deck $deck)
