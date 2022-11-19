@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Deck;
 
@@ -27,6 +28,7 @@ class DeckController extends Controller
         $deck = new Deck();
 
         $deck->name = $request->name;
+        $deck->user_id = Auth::id();
 
         $deck->save();
 
