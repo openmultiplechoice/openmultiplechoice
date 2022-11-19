@@ -46,7 +46,6 @@ class DemoSeeder extends Seeder
         $deck = Deck::create([
             'name' => 'OpenMultipleChoice Demo Deck',
             'module_id' => $module->id,
-            'official' => true,
         ]);
 
         // Question 1
@@ -217,7 +216,6 @@ class DemoSeeder extends Seeder
         $deck = Deck::create([
             'name' => 'Sugars',
             'module_id' => $module->id,
-            'official' => true,
         ]);
 
         // Question 1

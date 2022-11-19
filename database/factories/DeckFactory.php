@@ -23,7 +23,6 @@ class DeckFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'official' => true,
         ];
     }
 }
