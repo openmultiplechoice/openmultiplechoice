@@ -41,7 +41,7 @@ class DeckController extends Controller
 
     public function edit(Deck $deck)
     {
-        return view('deck', ['deck' => $deck]);
+        return view('deck-editor', ['deck' => $deck]);
     }
 
     public function update(Request $request, Deck $deck)
