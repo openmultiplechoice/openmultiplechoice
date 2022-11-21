@@ -12,6 +12,7 @@
 
     $: questionId,
         (() => {
+            nestedMessages = [];
             showEditor = false;
             loadMessages();
         })();
