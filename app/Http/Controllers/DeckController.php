@@ -37,7 +37,19 @@ class DeckController extends Controller
 
     public function show(Deck $deck)
     {
-        return view('deck', ['deck' => $deck]);
+        $nextQuestion = $deck->questions()->first();
+
+        $urlPrev = null;
+        $urlNext = null;
+        if ($nextQuestion) {
+            $urlNext = '/decks/'. $deck->id .'/questions/'. $nextQuestion->id;
+        }
+        return view('deck', [
+            'deck' => $deck,
+            'questions' => $deck->questions()->get(),
+            'urlPrev' => $urlPrev,
+            'urlNext' => $urlNext,
+        ]);
     }
 
     public function edit(Deck $deck)

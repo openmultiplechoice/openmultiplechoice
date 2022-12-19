@@ -6,5 +6,7 @@
     "/js/IndexSessionView.js": "/js/IndexSessionView.js",
     "/js/NewSessionView.js": "/js/NewSessionView.js",
     "/js/SessionView.js": "/js/SessionView.js",
+    "/js/QuestionView.js": "/js/QuestionView.js",
+    "/js/Messages.js": "/js/Messages.js",
     "/css/app.css": "/css/app.css"
 }

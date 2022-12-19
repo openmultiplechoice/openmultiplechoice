@@ -8,11 +8,11 @@
     <div class="col-lg-3 d-none d-lg-block">
         <div class="list-group text-small">
             <a href="{{ url('decks', $deck->id) }}"
-                class="list-group-item list-group-item-action list-group-item-dark"
+                class="list-group-item list-group-item-action"
                 style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>Overview</small></a>
             @foreach ($questions as $q)
                 <a href="{{ url('decks/'. $deck->id .'/questions/'. $q->id) }}"
-                    class="list-group-item list-group-item-action list-group-item-light"
+                    class="list-group-item list-group-item-action @if ($q->id == $question->id) list-group-item-dark @else list-group-item-light @endif"
                     style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>{{ htmlspecialchars(strip_tags($q->text)) }}</small></a>
             @endforeach
         </div>
@@ -38,8 +38,12 @@
                 </div>
             @endif
         </div>
-        <h1 class="h4">{{ $deck->name }}</h1>
-        <a href="/decks/{{ $deck->id }}/edit" class="btn btn-outline-secondary mb-3">Edit deck</a>
+
+        <div id="QuestionView" data-question="{{ $question }}" ></div>
+        <script src="{{ asset('js/QuestionView.js') }}"></script>
+
+        <div id="MessagesView" data-question-id="{{ $question->id }}" ></div>
+        <script src="{{ asset('js/Messages.js') }}"></script>
     </div>
 </div>
 

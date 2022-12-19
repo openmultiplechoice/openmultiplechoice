@@ -6,6 +6,8 @@
         "public/js/IndexSessionView.js",
         "public/js/NewSessionView.js",
         "public/js/SessionView.js",
+        "public/js/QuestionView.js",
+        "public/js/Messages.js",
         "public/js/app.js",
         "public/js/trix.js",
         "public/css/app.css"
