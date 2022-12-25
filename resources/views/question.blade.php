@@ -13,7 +13,7 @@
             @foreach ($questions as $q)
                 <a href="{{ url('decks/'. $deck->id .'/questions/'. $q->id) }}"
                     class="list-group-item list-group-item-action @if ($q->id == $question->id) list-group-item-dark @else list-group-item-light @endif"
-                    style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>{{ htmlspecialchars(strip_tags($q->text)) }}</small></a>
+                    style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>@if ($q->text) {{ htmlspecialchars(strip_tags($q->text)) }} @else Question Nr. {{ $loop->index + 1 }} @endif</small></a>
             @endforeach
         </div>
     </div>
