@@ -147,7 +147,7 @@ class DemoSeeder extends Seeder
         // Question 4
 
         $question = Question::create([
-            'text' => 'Which PHP framework is used in OpenMultipleChoice?',
+            'text' => 'Which backend framework is used in OpenMultipleChoice?',
         ]);
         Answer::create([
             'text' => 'No framework.',
