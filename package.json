@@ -13,7 +13,7 @@
         "axios": "^1.2.1",
         "bootstrap": "^5.2.3",
         "bootstrap-icons": "^1.10.2",
-        "browser-sync": "^2.27.10",
+        "browser-sync": "^2.27.11",
         "browser-sync-webpack-plugin": "^2.3.0",
         "browserify-zlib": "^0.2.0",
         "cross-env": "^7.0.3",
@@ -25,13 +25,13 @@
         "laravel-mix-svelte": "github:wewowweb/laravel-mix-svelte",
         "lodash": "^4.17.21",
         "resolve-url-loader": "^5.0.0",
-        "sass": "^1.56.2",
+        "sass": "^1.57.1",
         "sass-loader": "^13.2.0",
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
-        "svelte": "^3.54.0",
+        "svelte": "^3.55.0",
         "svelte-loader": "^3.1.4",
-        "trix": "^2.0.3",
+        "trix": "^2.0.4",
         "vue-template-compiler": "^2.7.14"
     }
 }
