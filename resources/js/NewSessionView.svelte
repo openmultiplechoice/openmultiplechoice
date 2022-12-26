@@ -6,6 +6,7 @@
     let modules = [];
     let subjects = [];
 
+    let selectedDecksStats;
     let selectedModules = [];
     let selectedModule;
     let selectedSubject;
@@ -21,6 +22,55 @@
                     : false
                 : true
         );
+    })();
+
+    $: selectedDecks,
+        (() => {
+            if (selectedDecks.length === 0) {
+                return;
+            }
+            const requestParameters = selectedDecks.map(
+                (d) => "decks[]=" + d.id
+            );
+            axios
+                .get("/api/stats?" + requestParameters.join("&"))
+                .then(function (response) {
+                    selectedDecksStats = response.data;
+                })
+                .catch(function (error) {
+                    alert(error);
+                });
+        })();
+
+    $: deckStatsIndicator = (() => {
+        var indicator = {};
+        if (!selectedDecksStats) {
+            return indicator;
+        }
+        for (const deck of selectedDecks) {
+            if (!selectedDecksStats[deck.id]) {
+                indicator[deck.id] =
+                    '<span class="badge text-bg-light">?</span>';
+                continue;
+            }
+            const deckStats = selectedDecksStats[deck.id];
+            const percentage = sessionProgressPercentage(
+                deckStats.deck.questions.length,
+                deckStats.answer_choices
+            );
+            if (percentage.correct >= 60) {
+                indicator[deck.id] =
+                    '<span class="badge text-bg-success" title="Correct answers in percent">' +
+                    percentage.correct +
+                    " %</span>";
+            } else {
+                indicator[deck.id] =
+                    '<span class="badge text-bg-danger" title="Correct answers in percent">' +
+                    percentage.correct +
+                    " %</span>";
+            }
+        }
+        return indicator;
     })();
 
     $: selectedSubject,
@@ -64,7 +114,6 @@
             })
             .catch(function (error) {
                 alert(error);
-                console.log(error);
             });
     });
 
@@ -80,6 +129,55 @@
             .catch(function (error) {
                 alert(error);
             });
+    }
+
+    function sessionProgressPercentage(numQuestions, answerChoices) {
+        const numCorrectAnswers = answerChoices.filter(
+            (c) => c.is_correct && !c.help_used
+        ).length;
+        const numCorrectAnswersWithHelp = answerChoices.filter(
+            (c) => c.is_correct && c.help_used
+        ).length;
+        const numIncorrectAnswers = answerChoices.filter(
+            (c) => !c.is_correct
+        ).length;
+
+        const percentage = {
+            correct: Math.round(100 * (numCorrectAnswers / numQuestions)),
+            correctWithHelp: Math.round(
+                100 * (numCorrectAnswersWithHelp / numQuestions)
+            ),
+            incorrect: Math.round(100 * (numIncorrectAnswers / numQuestions)),
+            unanswered: Math.round(
+                100 *
+                    ((numQuestions -
+                        numCorrectAnswers -
+                        numCorrectAnswersWithHelp -
+                        numIncorrectAnswers) /
+                        numQuestions)
+            ),
+        };
+
+        // Make sure to have 100% in total
+        if (
+            percentage.correct +
+                percentage.correctWithHelp +
+                percentage.incorrect +
+                percentage.unanswered !=
+            100
+        ) {
+            if (percentage.unanswered > 0) {
+                percentage.unanswered = percentage.unanswered + 1;
+            } else if (percentage.incorrect > 0) {
+                percentage.incorrect = percentage.incorrect + 1;
+            } else if (percentage.correctWithHelp > 0) {
+                percentage.incorrectWithHelp = percentage.correctWithHelp + 1;
+            } else if (percentage.correct > 0) {
+                percentage.correct = percentage.correct + 1;
+            }
+        }
+
+        return percentage;
     }
 </script>
 
@@ -109,23 +207,36 @@
             {/if}
         </div>
         <div class="col-md-8">
-            <ul>
+            <div class="row">
                 {#each selectedDecks as deck}
-                    <li>
-                        <button
-                            on:click|preventDefault={() =>
-                                createSession(deck.id)}
-                            type="button"
-                            class="btn btn-link"
-                            >{format(
-                                parseISO(deck.created_at),
-                                "dd/MM/yyyy HH:mm"
-                            )}
-                            {deck.name}</button>
-                        <a href="/decks/{deck.id}/edit">Edit deck</a>
-                    </li>
+                    <div class="col-lg-6 mb-1">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    {deck.name}
+                                    {#if deckStatsIndicator[deck.id]}
+                                        {@html deckStatsIndicator[deck.id]}
+                                    {/if}
+                                </h6>
+                                <p class="card-subtitle mb-2 text-muted">
+                                    {format(
+                                        parseISO(deck.created_at),
+                                        "dd/MM/yyyy HH:mm"
+                                    )}
+                                </p>
+
+                                <button
+                                    on:click|preventDefault={() =>
+                                        createSession(deck.id)}
+                                    type="button"
+                                    class="btn btn-primary">New session</button>
+                                <a href="/decks/{deck.id}" class="card-link"
+                                    >Browse deck</a>
+                            </div>
+                        </div>
+                    </div>
                 {/each}
-            </ul>
+            </div>
         </div>
     </div>
 {:else}
