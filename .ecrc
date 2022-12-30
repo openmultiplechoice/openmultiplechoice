@@ -10,6 +10,7 @@
         "public/js/Messages.js",
         "public/js/app.js",
         "public/js/trix.js",
+        "public/js/popper.js",
         "public/css/app.css"
     ]
 }
