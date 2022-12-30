@@ -4,7 +4,7 @@
 
 ![](https://github.com/openmultiplechoice/openmultiplechoice/workflows/CI/badge.svg)
 
-Status: experimental, work in progress
+Status: early access alpha
 
 OpenMultipleChoice is an open source web application for multiple choice
 question ([MCQ](https://en.wikipedia.org/wiki/Multiple_choice)) and flashcard
@@ -25,10 +25,19 @@ GitHub.
 
 * [Development](docs/development.md)
 
+## Security
+
+For security issues, please send a private mail to `security@openmultiplechoice.de`
+and do not open an issue.
+
 ## License
 
-[AGPL v3](https://www.gnu.org/licenses/agpl-3.0.en.html)
+Copyright (C) 2020 Michael Schubert and contributors.
 
-## Credits
+OpenMultipleChoice is free to use **under the terms of AGPL v3**:
+
+[GNU Affero General Public License v3](https://www.gnu.org/licenses/agpl-3.0.en.html)
+
+## Acknowledgments
 
 * Logo font: [Luckiest Guy](https://fonts.google.com/specimen/Luckiest+Guy)
