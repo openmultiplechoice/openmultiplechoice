@@ -58,17 +58,16 @@
                 deckStats.deck.questions.length,
                 deckStats.answer_choices
             );
+            var indicatorColorClass = "text-bg-danger";
             if (percentage.correct >= 60) {
-                indicator[deck.id] =
-                    '<span class="badge text-bg-success" title="Correct answers in percent">' +
-                    percentage.correct +
-                    " %</span>";
-            } else {
-                indicator[deck.id] =
-                    '<span class="badge text-bg-danger" title="Correct answers in percent">' +
-                    percentage.correct +
-                    " %</span>";
+                indicatorColorClass = "text-bg-success";
             }
+            indicator[deck.id] =
+                '<span class="badge ' +
+                indicatorColorClass +
+                '" data-bs-toggle="popover" data-bs-title="Popover title" data-bs-content="And here\'s some..." title="Correct answers in percent">' +
+                percentage.correct +
+                " %</span>";
         }
         return indicator;
     })();
