@@ -27,7 +27,6 @@ class DeckController extends Controller
         $deck = new Deck();
 
         $deck->name = $request->name;
-        $deck->official = $request->has('official');
         $deck->module_id = $request->module_id;
 
         $deck->save();

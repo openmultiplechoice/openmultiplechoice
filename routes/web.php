@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 use App\Http\Controllers\DeckController;
+use App\Http\Controllers\DeckQuestionController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\NewsController;
@@ -38,6 +39,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     })->name('index');
 
     Route::resource('/decks', DeckController::class);
+
+    Route::resource('decks.questions', DeckQuestionController::class);
 
     Route::resource('/subjects', SubjectController::class);
     Route::get('/subjects/{subject}', [SubjectController::class, 'show'])->name('show.subject');

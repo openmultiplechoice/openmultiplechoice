@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Deck;
 
@@ -27,7 +28,7 @@ class DeckController extends Controller
         $deck = new Deck();
 
         $deck->name = $request->name;
-        $deck->official = $request->has('official');
+        $deck->user_id = Auth::id();
 
         $deck->save();
 
@@ -36,12 +37,24 @@ class DeckController extends Controller
 
     public function show(Deck $deck)
     {
-        //
+        $nextQuestion = $deck->questions()->first();
+
+        $urlPrev = null;
+        $urlNext = null;
+        if ($nextQuestion) {
+            $urlNext = '/decks/'. $deck->id .'/questions/'. $nextQuestion->id;
+        }
+        return view('deck', [
+            'deck' => $deck,
+            'questions' => $deck->questions()->get(),
+            'urlPrev' => $urlPrev,
+            'urlNext' => $urlNext,
+        ]);
     }
 
     public function edit(Deck $deck)
     {
-        return view('deck', ['deck' => $deck]);
+        return view('deck-editor', ['deck' => $deck]);
     }
 
     public function update(Request $request, Deck $deck)

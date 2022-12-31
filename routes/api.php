@@ -26,6 +26,8 @@ use App\Http\Controllers\Api\SessionController;
 
 use App\Http\Controllers\Api\UserSettingsController;
 
+use App\Http\Controllers\Api\StatsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -69,4 +71,6 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('sessions.answerchoices', AnswerChoiceController::class);
 
     Route::resource('users/me/settings', UserSettingsController::class);
+
+    Route::resource('stats', StatsController::class);
 });

@@ -32,7 +32,6 @@ class OmcInitial extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name', 500);
-            $table->boolean('official')->default(false);
 
             $table->bigInteger('module_id')->unsigned()->nullable();
             $table->foreign('module_id')->references('id')->on('modules');

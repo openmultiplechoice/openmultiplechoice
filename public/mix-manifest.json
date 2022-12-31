@@ -1,10 +1,13 @@
 {
     "/js/bootstrap.bundle.min.js": "/js/bootstrap.bundle.min.js",
     "/js/trix.min.js": "/js/trix.min.js",
+    "/js/popper.min.js": "/js/popper.min.js",
     "/js/app.js": "/js/app.js",
     "/js/DeckForm.js": "/js/DeckForm.js",
     "/js/IndexSessionView.js": "/js/IndexSessionView.js",
     "/js/NewSessionView.js": "/js/NewSessionView.js",
     "/js/SessionView.js": "/js/SessionView.js",
+    "/js/QuestionView.js": "/js/QuestionView.js",
+    "/js/Messages.js": "/js/Messages.js",
     "/css/app.css": "/css/app.css"
 }

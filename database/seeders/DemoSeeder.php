@@ -46,7 +46,6 @@ class DemoSeeder extends Seeder
         $deck = Deck::create([
             'name' => 'OpenMultipleChoice Demo Deck',
             'module_id' => $module->id,
-            'official' => true,
         ]);
 
         // Question 1
@@ -148,7 +147,7 @@ class DemoSeeder extends Seeder
         // Question 4
 
         $question = Question::create([
-            'text' => 'Which PHP framework is used in OpenMultipleChoice?',
+            'text' => 'Which backend framework is used in OpenMultipleChoice?',
         ]);
         Answer::create([
             'text' => 'No framework.',
@@ -217,7 +216,6 @@ class DemoSeeder extends Seeder
         $deck = Deck::create([
             'name' => 'Sugars',
             'module_id' => $module->id,
-            'official' => true,
         ]);
 
         // Question 1
