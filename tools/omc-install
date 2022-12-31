@@ -1,0 +1,48 @@
+#!/bin/bash
+
+[[ -n "${DEBUG}" ]] && set -x
+set -euo pipefail
+
+readonly install_dir="/var/www/openmultiplechoice"
+
+if [[ -d /var/www/openmultiplechoice ]]; then
+    echo "Directory '${install_dir}' exists, looks like OMC is installed already ..." >&2
+    echo "Aborting" >&2
+    exit 1
+fi
+
+sudo id -u omc &>/dev/null || sudo adduser \
+    --disabled-password \
+    --system \
+    --home "${install_dir}" \
+    --shell "/bin/bash" \
+    --gecos '' \
+        omc
+
+sudo mkdir -p "${install_dir}"
+sudo chown -R omc:www-data "${install_dir}"
+
+sudo -u omc git clone https://github.com/openmultiplechoice/openmultiplechoice "${install_dir}"
+
+sudo chown -R www-data:www-data "${install_dir}/storage"
+
+sudo apt-get update
+
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    composer \
+    nginx \
+    mariadb-server \
+    php-curl \
+    php-fpm \
+    php-mysql \
+    php-xml
+
+sudo cp -v "${install_dir}/contrib/nginx/omc.conf" "/etc/nginx/sites-available/"
+
+pushd "/etc/nginx/sites-enabled"
+sudo ln -sf "/etc/nginx/sites-available/omc.conf"
+popd
+
+pushd "${install_dir}"
+sudo -u omc composer install
+popd
