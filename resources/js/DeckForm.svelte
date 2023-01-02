@@ -118,6 +118,7 @@
             </button>
             <ul class="dropdown-menu">
                 <li>
+                    <!-- svelte-ignore a11y-invalid-attribute -->
                     <a
                         class="dropdown-item"
                         href="#"
@@ -126,6 +127,7 @@
                         }}>Add multiple choice question</a>
                 </li>
                 <li>
+                    <!-- svelte-ignore a11y-invalid-attribute -->
                     <a
                         class="dropdown-item"
                         href="#"
