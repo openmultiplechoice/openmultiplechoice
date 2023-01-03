@@ -37,7 +37,8 @@ class DeckController extends Controller
 
     public function show(Deck $deck)
     {
-        $nextQuestion = $deck->questions()->first();
+        $questions = $deck->questions()->orderBy('id', 'asc')->get();
+        $nextQuestion = $questions->first();
 
         $urlPrev = null;
         $urlNext = null;
@@ -46,7 +47,7 @@ class DeckController extends Controller
         }
         return view('deck', [
             'deck' => $deck,
-            'questions' => $deck->questions()->get(),
+            'questions' => $questions,
             'urlPrev' => $urlPrev,
             'urlNext' => $urlNext,
         ]);
