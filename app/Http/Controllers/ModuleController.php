@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Module;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\Module;
+use App\Models\Subject;
 
 class ModuleController extends Controller
 {
@@ -29,7 +32,9 @@ class ModuleController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return view('module-editor');
+        $subjects = Subject::all();
+
+        return view('module-editor', ['subjects' => $subjects]);
     }
 
     /**
@@ -44,9 +49,18 @@ class ModuleController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        Log::debug($request->all());
+
+        abort_if(!$request->subject_id, 400);
+
+        $subject = Subject::find($request->subject_id);
+        abort_if(!$subject, 400);
+
         $module = new Module();
         $module->fill($request->all());
         $module->save();
+
+        $subject->modules()->save($module);
 
         return redirect()->route('show.module', [
             'module' => $module->id,
