@@ -87,7 +87,7 @@
                         type="button"
                         class="btn btn-outline-secondary btn-sm ms-1"
                         on:click|preventDefault={toggleEditor}
-                        >Edit question</button>
+                        ><i class="bi bi-pencil" /> Edit question</button>
                 </div>
             </div>
         </div>
