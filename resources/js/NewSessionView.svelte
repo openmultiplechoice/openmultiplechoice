@@ -10,19 +10,20 @@
 
     let selectedDecksStats;
     let selectedModules = [];
-    let selectedModule;
-    let selectedSubject;
+
+    let selectedSubjectId = 0;
+    let selectedModuleId = undefined;
 
     // $: selectedDecks, console.log("selectedDecks", selectedDecks);
     // $: selectedSubject, console.log("selectedSubject", selectedSubject);
 
     $: selectedDecks = (() => {
         return decks.filter((d) =>
-            selectedModule
+            selectedModuleId
                 ? d.module
-                    ? d.module.id === selectedModule.id
+                    ? d.module.id === selectedModuleId
                     : false
-                : true
+                : false
         );
     })();
 
@@ -74,22 +75,15 @@
         return indicator;
     })();
 
-    $: selectedSubject,
+    $: selectedSubjectId,
         (() => {
             selectedModules = modules.filter((m) =>
-                selectedSubject
+                selectedSubjectId
                     ? m.subject
-                        ? m.subject.id === selectedSubject.id
+                        ? m.subject.id === selectedSubjectId
                         : false
                     : true
             );
-            // If a subject was selected and if there are modules
-            // for the subject, default select the first module.
-            if (selectedSubject && selectedModules.length > 0) {
-                selectedModule = selectedModules[0];
-            } else {
-                selectedModule = undefined;
-            }
         })();
 
     onMount(() => {
@@ -131,32 +125,45 @@
                 alert(error);
             });
     }
+
+    function selectSubject(subjectId) {
+        selectedSubjectId = subjectId;
+        selectedModuleId = undefined;
+    }
+
+    function selectModule(moduleId) {
+        selectedModuleId = moduleId;
+    }
 </script>
 
 {#if decks}
     <div class="row">
         <div class="col-md-4">
-            <select
-                bind:value={selectedSubject}
-                class="form-select form-select-lg mb-3"
-                aria-label=".form-select-lg example">
-                <option selected value={undefined}>All subjects</option>
+            <ul class="list-group">
                 {#each subjects as subject}
-                    <option value={subject}>{subject.name}</option>
+                    <button
+                        on:click|preventDefault={() =>
+                            selectSubject(subject.id)}
+                        class="list-group-item list-group-item-action {selectedSubjectId ===
+                        subject.id
+                            ? 'list-group-item-dark'
+                            : 'list-group-item-light'}">{subject.name}</button>
+                    {#if selectedSubjectId === subject.id}
+                        <ul class="list-group m-2 me-0">
+                            {#each selectedModules as module}
+                                <button
+                                    on:click|preventDefault={() =>
+                                        selectModule(module.id)}
+                                    class="list-group-item list-group-item-action {selectedModuleId ===
+                                    module.id
+                                        ? 'list-group-item-secondary'
+                                        : 'list-group-item-light'}"
+                                    >{module.name}</button>
+                            {/each}
+                        </ul>
+                    {/if}
                 {/each}
-            </select>
-            {#if selectedSubject}
-                <select
-                    bind:value={selectedModule}
-                    class="form-select form-select-lg mb-3"
-                    aria-label=".form-select-lg example">
-                    {#each selectedModules as module, index (module.id)}
-                        <option
-                            selected={selectedModule === module.id}
-                            value={module}>{module.name}</option>
-                    {/each}
-                </select>
-            {/if}
+            </ul>
         </div>
         <div class="col-md-8">
             <div class="row">
