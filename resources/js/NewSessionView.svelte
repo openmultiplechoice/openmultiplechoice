@@ -188,7 +188,8 @@
                                     on:click|preventDefault={() =>
                                         createSession(deck.id)}
                                     type="button"
-                                    class="btn btn-primary">New session</button>
+                                    class="btn btn-primary"
+                                    ><i class="bi bi-ui-checks-grid" /> New session</button>
                                 <a href="/decks/{deck.id}" class="card-link"
                                     >Browse deck</a>
                             </div>

@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <a href="/sessions/create" class="btn btn-primary mb-3"><i class="bi bi-arrow-right-square-fill"></i> {{ __('omc.newsession') }}</a>
+        <a href="/sessions/create" class="btn btn-primary mb-3"><i class="bi bi-ui-checks-grid"></i> {{ __('omc.newsession') }}</a>
         <a href="{{ url('decks') }}" class="btn btn-primary mb-3"><i class="bi bi-collection-fill"></i> New deck</a>
         <div id="IndexSessionView" data-user-id="{{ Auth::user()->id }}" ></div>
         <script src="{{ asset('js/IndexSessionView.js') }}"></script>
