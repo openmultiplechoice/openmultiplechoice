@@ -3,7 +3,7 @@
 ## Requirements
 
 * [Vagrant](https://www.vagrantup.com/) with VirtualBox or Parallels as provider
-* [Homestead](https://laravel.com/docs/8.x/homestead)
+* [Homestead](https://laravel.com/docs/homestead)
 * Node.js + nvm (https://brew.sh or https://github.com/nvm-sh/nvm is recommended for the installation)
 
 ## Setting up the environment
