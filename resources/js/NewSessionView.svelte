@@ -14,6 +14,8 @@
     let selectedSubjectId = 0;
     let selectedModuleId = undefined;
 
+    let userSelectedDecks = new Set();
+
     // $: selectedDecks, console.log("selectedDecks", selectedDecks);
     // $: selectedSubject, console.log("selectedSubject", selectedSubject);
 
@@ -134,6 +136,29 @@
     function selectModule(moduleId) {
         selectedModuleId = moduleId;
     }
+
+    function selectedDeck(deckId) {
+        if (userSelectedDecks.has(deckId)) {
+            userSelectedDecks.delete(deckId);
+        } else {
+            userSelectedDecks.add(deckId);
+        }
+        userSelectedDecks = new Set([...userSelectedDecks]);
+    }
+
+    function createSuperDeck() {
+        var data = {
+            deck_ids: Array.from(userSelectedDecks),
+        };
+        axios
+            .post("/api/decks", data)
+            .then(function (response) {
+                window.location.href = "/decks/" + response.data.id;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    }
 </script>
 
 {#if decks}
@@ -166,6 +191,26 @@
             </ul>
         </div>
         <div class="col-md-8">
+            {#if userSelectedDecks.size > 0}
+                <div class="row">
+                    <div class="col-md">
+                        <div class="alert alert-secondary" role="alert">
+                            <p>
+                                You have <strong
+                                    >selected {userSelectedDecks.size} deck{userSelectedDecks.size >
+                                    1
+                                        ? "s"
+                                        : ""}</strong
+                                >.
+                            </p>
+                            <button
+                                class="btn btn-primary"
+                                on:click|preventDefault={createSuperDeck}
+                                >Create new super deck</button>
+                        </div>
+                    </div>
+                </div>
+            {/if}
             <div class="row">
                 {#each selectedDecks as deck}
                     <div class="col-lg-6 mb-1">
@@ -176,6 +221,15 @@
                                     {#if deckStatsIndicator[deck.id]}
                                         {@html deckStatsIndicator[deck.id]}
                                     {/if}
+                                    <input
+                                        on:click={() => selectedDeck(deck.id)}
+                                        class="form-check-input float-end"
+                                        type="checkbox"
+                                        value=""
+                                        id="selected{deck.id}"
+                                        checked={userSelectedDecks.has(
+                                            deck.id
+                                        )} />
                                 </h6>
                                 <p class="card-subtitle mb-2 text-muted">
                                     {format(
