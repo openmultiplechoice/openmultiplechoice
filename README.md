@@ -23,6 +23,7 @@ GitHub.
 
 ## Documentation
 
+* [Installation](docs/installation.md)
 * [Development](docs/development.md)
 
 ## Security
