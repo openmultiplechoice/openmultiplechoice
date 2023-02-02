@@ -78,6 +78,15 @@
                     {submitAnswer}
                     hasAnswer={!!answerChoice} />
             {/if}
+            {#if questionAnswered && question.comment}
+                <div class="row">
+                    <div class="col">
+                        <div class="alert alert-secondary" role="alert">
+                            {question.comment}
+                        </div>
+                    </div>
+                </div>
+            {/if}
             <div class="row mt-1 mb-1 pt-2">
                 <div class="d-flex justify-content-end">
                     {#key question.id}
