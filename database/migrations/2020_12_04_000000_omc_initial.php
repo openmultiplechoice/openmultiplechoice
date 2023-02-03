@@ -46,7 +46,7 @@ class OmcInitial extends Migration
             $table->id();
             $table->timestamps();
             $table->string('text', 2000)->nullable();
-            $table->string('hint', 1000)->nullable();
+            $table->string('hint', 2000)->nullable();
             // Sometimes it's helpful to have a comment that
             // explains something specific to the question
             // (for example the reasoning behind the given
@@ -61,7 +61,7 @@ class OmcInitial extends Migration
             $table->id();
             $table->timestamps();
             $table->string('text', 2000)->nullable();
-            $table->string('hint', 1000)->nullable();
+            $table->string('hint', 2000)->nullable();
 
             $table->bigInteger('question_id')->unsigned();
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
