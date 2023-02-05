@@ -48,7 +48,7 @@ class OmcInitial extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('text', 2000)->nullable();
+            $table->string('text', 6000)->nullable();
             $table->string('hint', 2000)->nullable();
             // Sometimes it's helpful to have a comment that
             // explains something specific to the question
