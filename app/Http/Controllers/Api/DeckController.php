@@ -35,6 +35,7 @@ class DeckController extends Controller
             $deck->name = 'New deck created at '. $now;
         }
 
+        $deck->exam_at = $request->exam_at;
         $deck->module_id = $request->module_id;
         $deck->user_id = $user->id;
 

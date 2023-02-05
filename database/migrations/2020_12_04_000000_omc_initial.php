@@ -32,6 +32,9 @@ class OmcInitial extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name', 500);
+            // If the deck is a collection of questions of an exam, this
+            // field can be used to reflect when the exam happened
+            $table->date('exam_at')->nullable();
             // Make it possible to add a short description to a deck
             $table->string('description', 1000)->nullable();
 
