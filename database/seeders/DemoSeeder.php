@@ -45,6 +45,7 @@ class DemoSeeder extends Seeder
 
         $deck = Deck::create([
             'name' => 'OpenMultipleChoice Demo Deck',
+            'description' => 'You can use the demo deck to get an idea about how OMC works and looks like.',
             'module_id' => $module->id,
         ]);
 
@@ -53,6 +54,7 @@ class DemoSeeder extends Seeder
         $question = Question::create([
             'text' => 'What is OpenMultipleChoice?',
             'hint' => 'It\'s software ...',
+            'comment' => 'This is a comment that has no purpose other than showing you that questions can have a comment for relevant administrative information.'
         ]);
         Answer::create([
             'text' => 'A car model.',

@@ -6,6 +6,8 @@
 
     <title>{{ config('app.name') }} @yield('title')</title>
 
+    <meta name="generator" content="OpenMultipleChoice - https://github.com/openmultiplechoice/openmultiplechoice" />
+
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <script src="{{ asset('js/popper.min.js') }}"></script>

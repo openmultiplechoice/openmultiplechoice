@@ -32,6 +32,11 @@ class OmcInitial extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name', 500);
+            // If the deck is a collection of questions of an exam, this
+            // field can be used to reflect when the exam happened
+            $table->date('exam_at')->nullable();
+            // Make it possible to add a short description to a deck
+            $table->string('description', 1000)->nullable();
 
             $table->bigInteger('module_id')->unsigned()->nullable();
             $table->foreign('module_id')->references('id')->on('modules');
@@ -43,8 +48,13 @@ class OmcInitial extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('text', 2000)->nullable();
-            $table->string('hint', 1000)->nullable();
+            $table->string('text', 6000)->nullable();
+            $table->string('hint', 2000)->nullable();
+            // Sometimes it's helpful to have a comment that
+            // explains something specific to the question
+            // (for example the reasoning behind the given
+            // answer options)
+            $table->string('comment', 2000)->nullable();
             $table->string('type')->default('mc')->nullable();
 
             $table->bigInteger('correct_answer_id')->unsigned()->nullable();
@@ -54,7 +64,7 @@ class OmcInitial extends Migration
             $table->id();
             $table->timestamps();
             $table->string('text', 2000)->nullable();
-            $table->string('hint', 1000)->nullable();
+            $table->string('hint', 2000)->nullable();
 
             $table->bigInteger('question_id')->unsigned();
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');

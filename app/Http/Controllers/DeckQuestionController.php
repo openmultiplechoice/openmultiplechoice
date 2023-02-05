@@ -28,6 +28,8 @@ class DeckQuestionController extends Controller
 
     public function show(Deck $deck, Question $question)
     {
+        $questions = $deck->questions()->orderBy('id', 'asc')->get();
+
         $question->load('answers', 'images');
 
         $prevQuestionId = $deck->questions()->where('questions.id', '<', $question->id)->max('questions.id');
@@ -45,7 +47,7 @@ class DeckQuestionController extends Controller
         return view('question', [
             'deck' => $deck,
             'question' => $question,
-            'questions' => $deck->questions()->get(),
+            'questions' => $questions,
             'urlPrev' => $urlPrev,
             'urlNext' => $urlNext,
         ]);

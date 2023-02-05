@@ -93,7 +93,7 @@
     }
 
     function addMessage(message) {
-        messages.push(message)
+        messages.push(message);
         nestedMessages = generateMessageTree(messages);
     }
 
@@ -105,7 +105,7 @@
             .post("/api/questions/" + questionId + "/messages", newMessage)
             .then(function (response) {
                 toggleEditor();
-                messages.push(response.data)
+                messages.push(response.data);
                 nestedMessages = generateMessageTree(messages);
             })
             .catch(function (error) {
@@ -120,11 +120,7 @@
 
 <div class="mt-3 mb-3">
     {#each nestedMessages as message (message.id)}
-        <MessageView
-            bind:message
-            bind:questionId
-            indent={0}
-            {addMessage} />
+        <MessageView bind:message bind:questionId indent={0} {addMessage} />
     {:else}
         <p>{messageInfo}</p>
     {/each}
@@ -148,6 +144,7 @@
     {:else}
         <button
             on:click|preventDefault={toggleEditor}
-            class="btn btn-sm btn-primary">Add comment</button>
+            class="btn btn-sm btn-primary"
+            ><i class="bi bi-chat-square-dots-fill" /> Add comment</button>
     {/if}
 </div>

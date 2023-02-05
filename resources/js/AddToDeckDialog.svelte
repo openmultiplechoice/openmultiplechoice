@@ -67,7 +67,8 @@
     type="button"
     data-bs-toggle="offcanvas"
     data-bs-target="#offcanvasAddToDeck"
-    aria-controls="offcanvasAddToDeck">Add question to deck</button>
+    aria-controls="offcanvasAddToDeck"
+    ><i class="bi bi-collection" /> Add question to deck</button>
 
 <div
     class="offcanvas offcanvas-start"

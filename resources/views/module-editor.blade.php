@@ -12,6 +12,15 @@
             @endisset
             @csrf
             <div class="mb-3">
+                <label for="subject_id" class="form-label">Subject</label>
+                <select id="subject_id" name="subject_id" class="form-select">
+                    <option selected>Select a subject ...</option>
+                    @foreach ($subjects as $subject)
+                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input id="name" type="text" name="name" class="form-control" value="{{ $module->name ?? '' }}">
             </div>

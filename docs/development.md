@@ -3,7 +3,7 @@
 ## Requirements
 
 * [Vagrant](https://www.vagrantup.com/) with VirtualBox or Parallels as provider
-* [Homestead](https://laravel.com/docs/8.x/homestead)
+* [Homestead](https://laravel.com/docs/homestead)
 * Node.js + nvm (https://brew.sh or https://github.com/nvm-sh/nvm is recommended for the installation)
 
 ## Setting up the environment
@@ -30,13 +30,13 @@ folders:
       to: /home/vagrant/code
 
 sites:
-    - map: omc.local
+    - map: omc.test
       to: /home/vagrant/code/openmultiplechoice/public
 
 [...]
 ```
 
-Above `omc.local` is used as the domain. The domain needs to be configured
+Above `omc.test` is used as the domain. The domain needs to be configured
 in the `hosts` file of the host system. On Linux / macOS the file is located
 at `/etc/hosts`, on Windows at `C:\Windows\System32\drivers\etc\hosts`.
 
@@ -103,7 +103,7 @@ php artisan db:seed --class=DemoSeeder
 php artisan db:seed --class=DemoUserSeeder
 ```
 
-OMC should now be running and reachable in your browser at http://omc.local
+OMC should now be running and reachable in your browser at http://omc.test
 
 `DemoUserSeeder` created two demo users:
 

@@ -2,25 +2,30 @@
     import { onMount } from "svelte";
     import { format, parseISO } from "date-fns";
 
+    import { sessionProgressPercentage } from "./StatsHelper.js";
+
     let decks = [];
     let modules = [];
     let subjects = [];
 
     let selectedDecksStats;
     let selectedModules = [];
-    let selectedModule;
-    let selectedSubject;
+
+    let selectedSubjectId = 0;
+    let selectedModuleId = undefined;
+
+    let userSelectedDecks = new Set();
 
     // $: selectedDecks, console.log("selectedDecks", selectedDecks);
     // $: selectedSubject, console.log("selectedSubject", selectedSubject);
 
     $: selectedDecks = (() => {
         return decks.filter((d) =>
-            selectedModule
+            selectedModuleId
                 ? d.module
-                    ? d.module.id === selectedModule.id
+                    ? d.module.id === selectedModuleId
                     : false
-                : true
+                : false
         );
     })();
 
@@ -72,22 +77,15 @@
         return indicator;
     })();
 
-    $: selectedSubject,
+    $: selectedSubjectId,
         (() => {
             selectedModules = modules.filter((m) =>
-                selectedSubject
+                selectedSubjectId
                     ? m.subject
-                        ? m.subject.id === selectedSubject.id
+                        ? m.subject.id === selectedSubjectId
                         : false
                     : true
             );
-            // If a subject was selected and if there are modules
-            // for the subject, default select the first module.
-            if (selectedSubject && selectedModules.length > 0) {
-                selectedModule = selectedModules[0];
-            } else {
-                selectedModule = undefined;
-            }
         })();
 
     onMount(() => {
@@ -130,82 +128,89 @@
             });
     }
 
-    function sessionProgressPercentage(numQuestions, answerChoices) {
-        const numCorrectAnswers = answerChoices.filter(
-            (c) => c.is_correct && !c.help_used
-        ).length;
-        const numCorrectAnswersWithHelp = answerChoices.filter(
-            (c) => c.is_correct && c.help_used
-        ).length;
-        const numIncorrectAnswers = answerChoices.filter(
-            (c) => !c.is_correct
-        ).length;
+    function selectSubject(subjectId) {
+        selectedSubjectId = subjectId;
+        selectedModuleId = undefined;
+    }
 
-        const percentage = {
-            correct: Math.round(100 * (numCorrectAnswers / numQuestions)),
-            correctWithHelp: Math.round(
-                100 * (numCorrectAnswersWithHelp / numQuestions)
-            ),
-            incorrect: Math.round(100 * (numIncorrectAnswers / numQuestions)),
-            unanswered: Math.round(
-                100 *
-                    ((numQuestions -
-                        numCorrectAnswers -
-                        numCorrectAnswersWithHelp -
-                        numIncorrectAnswers) /
-                        numQuestions)
-            ),
-        };
+    function selectModule(moduleId) {
+        selectedModuleId = moduleId;
+    }
 
-        // Make sure to have 100% in total
-        if (
-            percentage.correct +
-                percentage.correctWithHelp +
-                percentage.incorrect +
-                percentage.unanswered !=
-            100
-        ) {
-            if (percentage.unanswered > 0) {
-                percentage.unanswered = percentage.unanswered + 1;
-            } else if (percentage.incorrect > 0) {
-                percentage.incorrect = percentage.incorrect + 1;
-            } else if (percentage.correctWithHelp > 0) {
-                percentage.incorrectWithHelp = percentage.correctWithHelp + 1;
-            } else if (percentage.correct > 0) {
-                percentage.correct = percentage.correct + 1;
-            }
+    function selectedDeck(deckId) {
+        if (userSelectedDecks.has(deckId)) {
+            userSelectedDecks.delete(deckId);
+        } else {
+            userSelectedDecks.add(deckId);
         }
+        userSelectedDecks = new Set([...userSelectedDecks]);
+    }
 
-        return percentage;
+    function createSuperDeck() {
+        var data = {
+            deck_ids: Array.from(userSelectedDecks),
+        };
+        axios
+            .post("/api/decks", data)
+            .then(function (response) {
+                window.location.href = "/decks/" + response.data.id;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
     }
 </script>
 
 {#if decks}
     <div class="row">
-        <div class="col-md-4">
-            <select
-                bind:value={selectedSubject}
-                class="form-select form-select-lg mb-3"
-                aria-label=".form-select-lg example">
-                <option selected value={undefined}>All subjects</option>
+        <div class="col-md-4 mb-2">
+            <ul class="list-group">
                 {#each subjects as subject}
-                    <option value={subject}>{subject.name}</option>
+                    <button
+                        on:click|preventDefault={() =>
+                            selectSubject(subject.id)}
+                        class="list-group-item list-group-item-action {selectedSubjectId ===
+                        subject.id
+                            ? 'list-group-item-dark'
+                            : 'list-group-item-light'}">{subject.name}</button>
+                    {#if selectedSubjectId === subject.id}
+                        <ul class="list-group m-2 me-0">
+                            {#each selectedModules as module}
+                                <button
+                                    on:click|preventDefault={() =>
+                                        selectModule(module.id)}
+                                    class="list-group-item list-group-item-action {selectedModuleId ===
+                                    module.id
+                                        ? 'list-group-item-secondary'
+                                        : 'list-group-item-light'}"
+                                    >{module.name}</button>
+                            {/each}
+                        </ul>
+                    {/if}
                 {/each}
-            </select>
-            {#if selectedSubject}
-                <select
-                    bind:value={selectedModule}
-                    class="form-select form-select-lg mb-3"
-                    aria-label=".form-select-lg example">
-                    {#each selectedModules as module, index (module.id)}
-                        <option
-                            selected={selectedModule === module.id}
-                            value={module}>{module.name}</option>
-                    {/each}
-                </select>
-            {/if}
+            </ul>
         </div>
         <div class="col-md-8">
+            {#if userSelectedDecks.size > 0}
+                <div class="row">
+                    <div class="col-md">
+                        <div class="alert alert-secondary" role="alert">
+                            <p>
+                                You have <strong
+                                    >selected {userSelectedDecks.size} deck{userSelectedDecks.size >
+                                    1
+                                        ? "s"
+                                        : ""}</strong
+                                >.
+                            </p>
+                            <button
+                                class="btn btn-primary"
+                                on:click|preventDefault={createSuperDeck}
+                                >Create new super deck</button>
+                        </div>
+                    </div>
+                </div>
+            {/if}
             <div class="row">
                 {#each selectedDecks as deck}
                     <div class="col-lg-6 mb-1">
@@ -216,6 +221,15 @@
                                     {#if deckStatsIndicator[deck.id]}
                                         {@html deckStatsIndicator[deck.id]}
                                     {/if}
+                                    <input
+                                        on:click={() => selectedDeck(deck.id)}
+                                        class="form-check-input float-end"
+                                        type="checkbox"
+                                        value=""
+                                        id="selected{deck.id}"
+                                        checked={userSelectedDecks.has(
+                                            deck.id
+                                        )} />
                                 </h6>
                                 <p class="card-subtitle mb-2 text-muted">
                                     {format(
@@ -228,7 +242,8 @@
                                     on:click|preventDefault={() =>
                                         createSession(deck.id)}
                                     type="button"
-                                    class="btn btn-primary">New session</button>
+                                    class="btn btn-primary"
+                                    ><i class="bi bi-ui-checks-grid" /> New session</button>
                                 <a href="/decks/{deck.id}" class="card-link"
                                     >Browse deck</a>
                             </div>

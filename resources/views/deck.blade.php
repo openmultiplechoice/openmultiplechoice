@@ -40,6 +40,11 @@
         </div>
         <h1 class="h4">{{ $deck->name }}</h1>
         <a href="/decks/{{ $deck->id }}/edit" class="btn btn-outline-secondary mb-3">Edit deck</a>
+
+        @if ($deck->description)
+            <h2 class="h5">Description</h2>
+            <p>{{ $deck->description }}</p>
+        @endif
     </div>
 </div>
 
