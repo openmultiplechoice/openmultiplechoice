@@ -42,7 +42,7 @@
     };
 </script>
 
-<p>
+<p class="text-overflow">
     <strong>{data.deck.name}</strong><br />
     {indexCurrentQuestion}/{numberQuestions}
 </p>
@@ -54,7 +54,7 @@
             <li
                 on:click={() =>
                     (data.session.current_question_id = question.id)}
-                class="list-group-item list-group-item-action {question.id ===
+                class="list-group-item list-group-item-action text-overflow {question.id ===
                 data.session.current_question_id
                     ? 'list-group-item-dark'
                     : 'list-group-item-light'}"
@@ -78,7 +78,7 @@
 </div>
 
 <style>
-    li {
+    .text-overflow {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
