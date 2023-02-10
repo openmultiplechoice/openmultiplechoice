@@ -70,7 +70,8 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('sessions', SessionController::class);
     Route::resource('sessions.answerchoices', AnswerChoiceController::class);
 
-    Route::resource('users/me/settings', UserSettingsController::class);
+    Route::get('users/me/settings', [UserSettingsController::class, 'index']);
+    Route::put('users/me/settings', [UserSettingsController::class, 'update']);
 
     Route::resource('stats', StatsController::class);
 });

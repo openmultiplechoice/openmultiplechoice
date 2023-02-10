@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Deck::class);
     }
+
+    public function settings()
+    {
+        return $this->hasOne(UserSettings::class);
+    }
 }

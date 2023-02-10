@@ -4,15 +4,14 @@
 
     import { sessionProgressPercentage } from "./StatsHelper.js";
 
+    import { UserSettings } from "./UserSettingsStore.js";
+
     let decks = [];
     let modules = [];
     let subjects = [];
 
     let selectedDecksStats;
     let selectedModules = [];
-
-    let selectedSubjectId = 0;
-    let selectedModuleId = undefined;
 
     let userSelectedDecks = new Set();
 
@@ -21,9 +20,9 @@
 
     $: selectedDecks = (() => {
         return decks.filter((d) =>
-            selectedModuleId
+            $UserSettings.last_module_id
                 ? d.module
-                    ? d.module.id === selectedModuleId
+                    ? d.module.id === $UserSettings.last_module_id
                     : false
                 : false
         );
@@ -77,12 +76,12 @@
         return indicator;
     })();
 
-    $: selectedSubjectId,
+    $: $UserSettings.last_subject_id,
         (() => {
             selectedModules = modules.filter((m) =>
-                selectedSubjectId
+                $UserSettings.last_subject_id
                     ? m.subject
-                        ? m.subject.id === selectedSubjectId
+                        ? m.subject.id === $UserSettings.last_subject_id
                         : false
                     : true
             );
@@ -129,12 +128,33 @@
     }
 
     function selectSubject(subjectId) {
-        selectedSubjectId = subjectId;
-        selectedModuleId = undefined;
+        var data = {
+            last_subject_id: subjectId,
+            last_module_id: 0,
+        };
+        axios
+            .put("/api/users/me/settings", data)
+            .then(function (response) {
+                $UserSettings.last_subject_id = subjectId;
+                $UserSettings.last_module_id = 0;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
     }
 
     function selectModule(moduleId) {
-        selectedModuleId = moduleId;
+        var data = {
+            last_module_id: moduleId,
+        };
+        axios
+            .put("/api/users/me/settings", data)
+            .then(function (response) {
+                $UserSettings.last_module_id = moduleId;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
     }
 
     function selectedDeck(deckId) {
@@ -169,17 +189,17 @@
                     <button
                         on:click|preventDefault={() =>
                             selectSubject(subject.id)}
-                        class="list-group-item list-group-item-action {selectedSubjectId ===
+                        class="list-group-item list-group-item-action {$UserSettings.last_subject_id ===
                         subject.id
                             ? 'list-group-item-dark'
                             : 'list-group-item-light'}">{subject.name}</button>
-                    {#if selectedSubjectId === subject.id}
+                    {#if $UserSettings.last_subject_id === subject.id}
                         <ul class="list-group m-2 me-0">
                             {#each selectedModules as module}
                                 <button
                                     on:click|preventDefault={() =>
                                         selectModule(module.id)}
-                                    class="list-group-item list-group-item-action {selectedModuleId ===
+                                    class="list-group-item list-group-item-action {$UserSettings.last_module_id ===
                                     module.id
                                         ? 'list-group-item-secondary'
                                         : 'list-group-item-light'}"
