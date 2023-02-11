@@ -40,10 +40,6 @@ use App\Http\Controllers\Api\StatsController;
 */
 
 Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
     Route::get('subjects/byname/{name}', [SubjectController::class, 'showByName']);
     Route::resource('subjects', SubjectController::class);
 
