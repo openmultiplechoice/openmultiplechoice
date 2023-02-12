@@ -1,18 +1,17 @@
 <script>
-    import { onMount } from "svelte";
-
     import { sessionProgressPercentage } from "./StatsHelper.js";
 
     export let sessionData;
 
-    var percentage = {};
-
-    onMount(() => {
-        percentage = sessionProgressPercentage(
+    $: percentage = (() => {
+        if (!sessionData) {
+            return {};
+        }
+        return sessionProgressPercentage(
             sessionData.deck.questions.length,
             sessionData.answerchoices
         );
-    });
+    })();
 </script>
 
 <div class="progress" style="height: 20px;">
