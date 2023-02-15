@@ -122,3 +122,13 @@ Route::get('/auth/keycloak/backchannel-logout', function () {
     // TODO(schu): support backchannel logout
     return response()->noContent();
 });
+
+// A fallback route for all requests that are not handled by the routes
+// above and are not found in the `public/` directory.
+Route::fallback(function (Request $request) {
+    if (!Storage::exists($request->path())) {
+        abort(404);
+    } else {
+        return response()->file(Storage::path($request->path()));
+    }
+})->middleware('auth:sanctum');
