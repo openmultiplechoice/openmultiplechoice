@@ -53,8 +53,7 @@
         }
         for (const deck of selectedDecks) {
             if (!selectedDecksStats[deck.id]) {
-                indicator[deck.id] =
-                    '<span class="badge text-bg-light">?</span>';
+                indicator[deck.id] = "";
                 continue;
             }
             const deckStats = selectedDecksStats[deck.id];
@@ -235,21 +234,21 @@
                 {#each selectedDecks as deck}
                     <div class="col-lg-6 mb-1">
                         <div class="card">
+                            <div class="card-header">
+                                {#if deckStatsIndicator[deck.id]}
+                                    {@html deckStatsIndicator[deck.id]}
+                                {/if}
+                                <input
+                                    on:click={() => selectedDeck(deck.id)}
+                                    class="form-check-input float-end"
+                                    type="checkbox"
+                                    value=""
+                                    id="selected{deck.id}"
+                                    checked={userSelectedDecks.has(deck.id)} />
+                            </div>
                             <div class="card-body">
                                 <h6 class="card-title">
                                     {deck.name}
-                                    {#if deckStatsIndicator[deck.id]}
-                                        {@html deckStatsIndicator[deck.id]}
-                                    {/if}
-                                    <input
-                                        on:click={() => selectedDeck(deck.id)}
-                                        class="form-check-input float-end"
-                                        type="checkbox"
-                                        value=""
-                                        id="selected{deck.id}"
-                                        checked={userSelectedDecks.has(
-                                            deck.id
-                                        )} />
                                 </h6>
                                 <p class="card-subtitle mb-2 text-muted">
                                     {format(
