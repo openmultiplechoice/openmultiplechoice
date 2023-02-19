@@ -19,13 +19,22 @@
     // $: selectedSubject, console.log("selectedSubject", selectedSubject);
 
     $: selectedDecks = (() => {
-        return decks.filter((d) =>
+        var d = decks.filter((d) =>
             $UserSettings.last_module_id
                 ? d.module
                     ? d.module.id === $UserSettings.last_module_id
                     : false
                 : false
         );
+        return d.sort(function (a, b) {
+            if (a.exam_at === null) {
+                return 1;
+            }
+            if (b.exam_at === null) {
+                return -1;
+            }
+            return a.exam_at < b.exam_at;
+        });
     })();
 
     $: selectedDecks,
