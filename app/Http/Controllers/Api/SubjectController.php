@@ -28,9 +28,10 @@ class SubjectController extends Controller
         return response()->json($subject);
     }
 
-    public function showByName(Request $request, $name)
+    public function showByName(Request $request)
     {
-        $subject = Subject::where('name', '=', $name)->firstOrFail();
+        abort_if(!$request->name, 400);
+        $subject = Subject::where('name', '=', $request->name)->firstOrFail();
         return response()->json($subject);
     }
 }
