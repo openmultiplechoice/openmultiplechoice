@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\UserSettings;
 
 class UserSettingsController extends Controller
 {
@@ -16,10 +19,17 @@ class UserSettingsController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user->settings) {
+            $user->settings()->save(new UserSettings());
+            $user->refresh();
+        }
+
         $userSettings = [
             'id' => $user->id,
             'name' => $user->name,
             'is_admin' => $user->is_admin,
+            'last_subject_id' => $user->settings->last_subject_id,
+            'last_module_id' => $user->settings->last_module_id,
         ];
 
         return response()->json($userSettings);
@@ -75,9 +85,13 @@ class UserSettingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $user = Auth::user();
+
+        $userSettings = UserSettings::updateOrCreate(['user_id' => $user->id], $request->all());
+
+        return response()->json($userSettings);
     }
 
     /**

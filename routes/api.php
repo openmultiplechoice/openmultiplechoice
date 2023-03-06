@@ -40,14 +40,10 @@ use App\Http\Controllers\Api\StatsController;
 */
 
 Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-    Route::get('subjects/byname/{name}', [SubjectController::class, 'showByName']);
+    Route::get('subjects/byname', [SubjectController::class, 'showByName']);
     Route::resource('subjects', SubjectController::class);
 
-    Route::get('modules/byname/{name}', [ModuleController::class, 'showByName']);
+    Route::get('modules/byname', [ModuleController::class, 'showByName']);
     Route::resource('modules', ModuleController::class);
 
     Route::get('decks/withquestionids', [DeckController::class, 'indexWithQuestionIds']);
@@ -70,7 +66,8 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('sessions', SessionController::class);
     Route::resource('sessions.answerchoices', AnswerChoiceController::class);
 
-    Route::resource('users/me/settings', UserSettingsController::class);
+    Route::get('users/me/settings', [UserSettingsController::class, 'index']);
+    Route::put('users/me/settings', [UserSettingsController::class, 'update']);
 
     Route::resource('stats', StatsController::class);
 });

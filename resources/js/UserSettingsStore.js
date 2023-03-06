@@ -1,19 +1,18 @@
 import { writable } from 'svelte/store';
 
 function createUserSettings() {
-    const { subscribe, set, update } = writable({})
+    const store = writable({});
 
     axios.get('/api/users/me/settings')
         .then(function (response) {
-            set(response.data);
+            store.set(response.data);
         })
         .catch(function (error) {
+            alert(error);
             console.log(error);
         });
 
-    return {
-        subscribe
-    };
-}
+    return store;
+};
 
 export const UserSettings = createUserSettings();

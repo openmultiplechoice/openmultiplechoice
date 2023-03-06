@@ -66,7 +66,7 @@
     }
 </script>
 
-<div class="mt-3 mb-3">
+<div class="mt-1 mb-1">
     <div class="row">
         {#if !showEditor}
             <div class="col-md offset-md-{indent}">
@@ -77,7 +77,7 @@
                         <i>Deleted</i>
                     {/if}
                 </p>
-                <p class="text-muted text-end">
+                <p class="text-muted text-end mb-0">
                     <small>
                         {#if $UserSettings.id === message.author_id}
                             <button

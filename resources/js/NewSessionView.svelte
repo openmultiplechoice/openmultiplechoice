@@ -4,6 +4,8 @@
 
     import { sessionProgressPercentage } from "./StatsHelper.js";
 
+    import { UserSettings } from "./UserSettingsStore.js";
+
     let decks = [];
     let modules = [];
     let subjects = [];
@@ -11,22 +13,28 @@
     let selectedDecksStats;
     let selectedModules = [];
 
-    let selectedSubjectId = 0;
-    let selectedModuleId = undefined;
-
     let userSelectedDecks = new Set();
 
     // $: selectedDecks, console.log("selectedDecks", selectedDecks);
     // $: selectedSubject, console.log("selectedSubject", selectedSubject);
 
     $: selectedDecks = (() => {
-        return decks.filter((d) =>
-            selectedModuleId
+        var d = decks.filter((d) =>
+            $UserSettings.last_module_id
                 ? d.module
-                    ? d.module.id === selectedModuleId
+                    ? d.module.id === $UserSettings.last_module_id
                     : false
                 : false
         );
+        return d.sort(function (a, b) {
+            if (a.exam_at === null) {
+                return 1;
+            }
+            if (b.exam_at === null) {
+                return -1;
+            }
+            return a.exam_at < b.exam_at;
+        });
     })();
 
     $: selectedDecks,
@@ -54,8 +62,7 @@
         }
         for (const deck of selectedDecks) {
             if (!selectedDecksStats[deck.id]) {
-                indicator[deck.id] =
-                    '<span class="badge text-bg-light">?</span>';
+                indicator[deck.id] = "";
                 continue;
             }
             const deckStats = selectedDecksStats[deck.id];
@@ -77,12 +84,12 @@
         return indicator;
     })();
 
-    $: selectedSubjectId,
+    $: $UserSettings.last_subject_id,
         (() => {
             selectedModules = modules.filter((m) =>
-                selectedSubjectId
+                $UserSettings.last_subject_id
                     ? m.subject
-                        ? m.subject.id === selectedSubjectId
+                        ? m.subject.id === $UserSettings.last_subject_id
                         : false
                     : true
             );
@@ -129,12 +136,33 @@
     }
 
     function selectSubject(subjectId) {
-        selectedSubjectId = subjectId;
-        selectedModuleId = undefined;
+        var data = {
+            last_subject_id: subjectId,
+            last_module_id: 0,
+        };
+        axios
+            .put("/api/users/me/settings", data)
+            .then(function (response) {
+                $UserSettings.last_subject_id = subjectId;
+                $UserSettings.last_module_id = 0;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
     }
 
     function selectModule(moduleId) {
-        selectedModuleId = moduleId;
+        var data = {
+            last_module_id: moduleId,
+        };
+        axios
+            .put("/api/users/me/settings", data)
+            .then(function (response) {
+                $UserSettings.last_module_id = moduleId;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
     }
 
     function selectedDeck(deckId) {
@@ -169,17 +197,17 @@
                     <button
                         on:click|preventDefault={() =>
                             selectSubject(subject.id)}
-                        class="list-group-item list-group-item-action {selectedSubjectId ===
+                        class="list-group-item list-group-item-action {$UserSettings.last_subject_id ===
                         subject.id
                             ? 'list-group-item-dark'
                             : 'list-group-item-light'}">{subject.name}</button>
-                    {#if selectedSubjectId === subject.id}
+                    {#if $UserSettings.last_subject_id === subject.id}
                         <ul class="list-group m-2 me-0">
                             {#each selectedModules as module}
                                 <button
                                     on:click|preventDefault={() =>
                                         selectModule(module.id)}
-                                    class="list-group-item list-group-item-action {selectedModuleId ===
+                                    class="list-group-item list-group-item-action {$UserSettings.last_module_id ===
                                     module.id
                                         ? 'list-group-item-secondary'
                                         : 'list-group-item-light'}"
@@ -215,21 +243,21 @@
                 {#each selectedDecks as deck}
                     <div class="col-lg-6 mb-1">
                         <div class="card">
+                            <div class="card-header">
+                                {#if deckStatsIndicator[deck.id]}
+                                    {@html deckStatsIndicator[deck.id]}
+                                {/if}
+                                <input
+                                    on:click={() => selectedDeck(deck.id)}
+                                    class="form-check-input float-end"
+                                    type="checkbox"
+                                    value=""
+                                    id="selected{deck.id}"
+                                    checked={userSelectedDecks.has(deck.id)} />
+                            </div>
                             <div class="card-body">
                                 <h6 class="card-title">
                                     {deck.name}
-                                    {#if deckStatsIndicator[deck.id]}
-                                        {@html deckStatsIndicator[deck.id]}
-                                    {/if}
-                                    <input
-                                        on:click={() => selectedDeck(deck.id)}
-                                        class="form-check-input float-end"
-                                        type="checkbox"
-                                        value=""
-                                        id="selected{deck.id}"
-                                        checked={userSelectedDecks.has(
-                                            deck.id
-                                        )} />
                                 </h6>
                                 <p class="card-subtitle mb-2 text-muted">
                                     {format(

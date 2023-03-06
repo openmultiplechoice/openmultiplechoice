@@ -28,9 +28,10 @@ class ModuleController extends Controller
         return response()->json($module);
     }
 
-    public function showByName(Request $request, $name)
+    public function showByName(Request $request)
     {
-        $module = Module::where('name', '=', $name)->firstOrFail();
+        abort_if(!$request->name, 400);
+        $module = Module::where('name', '=', $request->name)->firstOrFail();
         return response()->json($module);
     }
 }
