@@ -18,7 +18,9 @@ class DeckController extends Controller
     public function indexWithQuestionIds(Request $request)
     {
         $user_id = Auth::id();
-        $decks = Deck::where('user_id', '=', $user_id)->with('questions:id')->get();
+        $decks = Deck::where('user_id', '=', $user_id)
+            ->where('access', '!=', 'public-rw-listed')
+            ->with('questions:id')->get();
         return response()->json($decks);
     }
 
