@@ -4,6 +4,7 @@
     import SessionQuestionIndexView from "./SessionQuestionIndexView.svelte";
     import SessionQuestionView from "./SessionQuestionView.svelte";
     import SessionQuestionNav from "./SessionQuestionNav.svelte";
+    import SessionProgressBar from "./SessionProgressBar.svelte";
     import Messages from "./Messages.svelte";
 
     export let id;
@@ -172,6 +173,13 @@
 </script>
 
 {#if data}
+    <div class="row">
+        <div class="col mb-1">
+            <SessionProgressBar
+                bind:answerChoices={data.session.answer_choices}
+                bind:numQuestions={data.deck.questions.length} />
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-3 d-none d-lg-block">
             <SessionQuestionIndexView bind:data />

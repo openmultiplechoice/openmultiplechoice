@@ -1,16 +1,14 @@
 <script>
     import { sessionProgressPercentage } from "./StatsHelper.js";
 
-    export let sessionData;
+    export let answerChoices;
+    export let numQuestions;
 
     $: percentage = (() => {
-        if (!sessionData) {
+        if (!answerChoices) {
             return {};
         }
-        return sessionProgressPercentage(
-            sessionData.deck.questions.length,
-            sessionData.answerchoices
-        );
+        return sessionProgressPercentage(numQuestions, answerChoices);
     })();
 </script>
 
