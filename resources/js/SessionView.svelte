@@ -6,6 +6,7 @@
     import SessionQuestionNav from "./SessionQuestionNav.svelte";
     import SessionProgressBar from "./SessionProgressBar.svelte";
     import Messages from "./Messages.svelte";
+    import { sessionProgressPercentage } from "./StatsHelper.js";
 
     export let id;
 
@@ -33,6 +34,44 @@
     $: currentQuestionId, updateSession();
 
     $: currentQuestionAnswered = data ? !!answerChoice : false;
+
+    // Whenever the number of questions or the given answers change,
+    // recalculate the progress of the user in percent
+    // editorconfig-checker-disable
+    $: progressPercentage = data
+        ? sessionProgressPercentage(
+              data.deck.questions.length,
+              data.session.answer_choices
+          )
+        : null;
+    // editorconfig-checker-enable
+
+    var previousProgressPercentageCorrect = -1;
+
+    // When the user reaches 60%, we want to show a success message
+    // (TODO), but it should be shown only once per session, hence
+    // we have to also track the previous value
+    $: progressPercentage,
+        (() => {
+            if (!progressPercentage) {
+                return;
+            }
+            var progressPercentageCorrect = progressPercentage.correct;
+            if (progressPercentageCorrect < 60) {
+                previousProgressPercentageCorrect = progressPercentageCorrect;
+                return;
+            }
+            if (previousProgressPercentageCorrect === -1) {
+                previousProgressPercentageCorrect = progressPercentageCorrect;
+                return;
+            }
+            if (previousProgressPercentageCorrect < 60) {
+                previousProgressPercentageCorrect = progressPercentageCorrect;
+
+                console.debug("TODO: >= 60%");
+                console.debug("progressPercentag", progressPercentage);
+            }
+        })();
 
     onMount(() => {
         axios
