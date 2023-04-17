@@ -18,7 +18,7 @@
         "browserify-zlib": "^0.2.0",
         "cross-env": "^7.0.3",
         "date-fns": "^2.29.3",
-        "dompurify": "^3.0.1",
+        "dompurify": "^3.0.2",
         "hotkeys-js": "^3.10.2",
         "https-browserify": "^1.0.0",
         "laravel-mix": "^6.0.49",
