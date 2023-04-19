@@ -32,6 +32,10 @@ class DeckQuestionController extends Controller
 
         $question->load('answers', 'images');
 
+        if (!$questions->contains('id', $question->id)) {
+            abort(404);
+        }
+
         $prevQuestionId = $deck->questions()->where('questions.id', '<', $question->id)->max('questions.id');
         $nextQuestionId = $deck->questions()->where('questions.id', '>', $question->id)->min('questions.id');
 
