@@ -12,7 +12,9 @@ class DeckController extends Controller
 {
     public function index(Request $request)
     {
-        $decks = Deck::with('questions')->get();
+        $decks = Deck::with('questions')
+            ->where('user_id', '=', Auth::id())
+            ->get();
         if ($request->wantsJson()) {
             return response()->json($decks);
         }

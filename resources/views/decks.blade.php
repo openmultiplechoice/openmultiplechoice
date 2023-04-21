@@ -21,7 +21,7 @@
         </form>
     </div>
     <div class="col-md">
-        <h4>Decks</h4>
+        <h4>Your decks</h4>
         <ul>
 @foreach ($decks as $deck)
             <li><a href="{{ url('decks', $deck->id) }}">{{ $deck->name }}</a></li>
