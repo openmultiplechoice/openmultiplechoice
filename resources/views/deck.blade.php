@@ -39,6 +39,11 @@
             @endif
         </div>
         <h1 class="h4">{{ $deck->name }}</h1>
+        <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
+            @csrf
+            <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
+            <button type="submit" class="btn btn-primary">New session</button>
+        </form>
         <a href="/decks/{{ $deck->id }}/edit" class="btn btn-outline-secondary mb-3">Edit deck</a>
 
         @if ($deck->description)
