@@ -71,7 +71,7 @@
     ><i class="bi bi-collection" /> Add question to deck</button>
 
 <div
-    class="offcanvas offcanvas-start"
+    class="offcanvas offcanvas-end"
     tabindex="-1"
     id="offcanvasAddToDeck"
     aria-labelledby="offcanvasAddToDeckLabel">
