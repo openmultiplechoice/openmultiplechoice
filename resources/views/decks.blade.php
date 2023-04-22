@@ -22,11 +22,15 @@
     </div>
     <div class="col-md">
         <h4>Your decks</h4>
-        <ul>
-@foreach ($decks as $deck)
-            <li><a href="{{ url('decks', $deck->id) }}">{{ $deck->name }}</a></li>
-@endforeach
-        </ul>
+        @if ($decks->count() > 0)
+            <ul>
+                @foreach ($decks as $deck)
+                    <li><a href="{{ url('decks', $deck->id) }}">{{ $deck->name }}</a></li>
+                @endforeach
+            </ul>
+        @else
+            <p>No decks yet</p>
+        @endif
     </div>
 </div>
 
