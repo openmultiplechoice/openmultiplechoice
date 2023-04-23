@@ -3,12 +3,6 @@
 
     export let data;
 
-    $: numberQuestions = data.deck.questions.length;
-    $: indexCurrentQuestion =
-        data.deck.questions.findIndex(
-            (q) => q.id == data.session.current_question_id
-        ) + 1;
-
     $: data.session.current_question_id,
         (() => {
             var e = document.getElementById(
@@ -42,11 +36,6 @@
     };
 </script>
 
-<p class="text-overflow">
-    <strong>{data.deck.name}</strong><br />
-    {indexCurrentQuestion}/{numberQuestions}
-</p>
-
 <div class="overflow-scroll" style="max-height: 85vh;">
     <ul class="list-group">
         {#each data.deck.questions as question, index}
@@ -78,11 +67,6 @@
 </div>
 
 <style>
-    .text-overflow {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
     li:hover {
         cursor: pointer;
     }

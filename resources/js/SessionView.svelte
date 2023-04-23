@@ -13,6 +13,9 @@
     var data;
     var helpUsed = false;
 
+    // TODO(schu): take default value from user config
+    var showSidebar = true;
+
     // editorconfig-checker-disable
     $: answerChoice = data
         ? data.session.answer_choices.find(
@@ -43,6 +46,13 @@
               data.deck.questions.length,
               data.session.answer_choices
           )
+        : null;
+
+    $: numberQuestions = data ? data.deck.questions.length : 0;
+    $: indexCurrentQuestion = data
+        ? data.deck.questions.findIndex(
+              (q) => q.id == data.session.current_question_id
+          ) + 1
         : null;
     // editorconfig-checker-enable
 
@@ -214,16 +224,42 @@
 {#if data}
     <div class="row">
         <div class="col mb-1">
+            {#if !showSidebar}
+                <p class="text-overflow mb-1">
+                    <button
+                        class="btn btn-small btn-light"
+                        on:click|preventDefault={() => {
+                            showSidebar = !showSidebar;
+                        }}><i class="bi bi-layout-sidebar" /></button>
+                    <strong>{data.deck.name}</strong>
+                    {indexCurrentQuestion}/{numberQuestions}
+                </p>
+            {/if}
             <SessionProgressBar
                 bind:answerChoices={data.session.answer_choices}
                 bind:numQuestions={data.deck.questions.length} />
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3 d-none d-lg-block">
-            <SessionQuestionIndexView bind:data />
-        </div>
-        <div class="col-lg-9 col-md-12">
+        {#if showSidebar}
+            <div class="col-lg-3 d-none d-lg-block">
+                <button
+                    class="btn btn-small btn-light float-end"
+                    on:click|preventDefault={() => {
+                        showSidebar = !showSidebar;
+                    }}><i class="bi bi-arrow-left-square" /></button>
+                <p class="text-overflow">
+                    <strong>{data.deck.name}</strong><br />
+                    {indexCurrentQuestion}/{numberQuestions}
+                </p>
+                <SessionQuestionIndexView bind:data />
+            </div>
+        {/if}
+        <div
+            class:col-lg-9={showSidebar}
+            class:col-lg-10={!showSidebar}
+            class:offset-lg-1={!showSidebar}
+            class="col-md-12">
             <SessionQuestionNav
                 bind:data
                 bind:currentQuestionId={data.session.current_question_id}
@@ -244,3 +280,11 @@
 {:else}
     <p>Loading ...</p>
 {/if}
+
+<style>
+    .text-overflow {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
