@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Deck;
 use App\Models\Session;
@@ -28,6 +29,7 @@ class SessionController extends Controller
         $newSession->deck_id = $deck->id;
         $newSession->name = $deck->name;
         $newSession->current_question_id = $newSession->deck->questions->first()->id;
+        $newSession->user_id = Auth::id();
         $newSession->save();
 
         return redirect()->route('show.session', [

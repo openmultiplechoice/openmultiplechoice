@@ -90,7 +90,7 @@ class OmcInitial extends Migration
             $table->timestamps();
 
             $table->bigInteger('deck_id')->unsigned();
-            $table->foreign('deck_id')->references('id')->on('decks');
+            $table->foreign('deck_id')->references('id')->on('decks')->onDelete('cascade');
 
             $table->bigInteger('question_id')->unsigned();
             $table->foreign('question_id')->references('id')->on('questions');

@@ -34,6 +34,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
     mariadb-server \
     php-curl \
     php-fpm \
+    php-memcached \
     php-mysql \
     php-xml
 

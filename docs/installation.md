@@ -1,7 +1,16 @@
 # Installation
 
-**Please note**: it is recommended that you run the instructions below on
-a separate virtual machine or LXD system container exclusively for OMC.
+**Please note**: it is recommended to install OMC on a separate virtual machine
+or LXD system container.
+
+A guided install guide for Ubuntu LTS can be found below.
+
+## Requirements
+
+* PHP with php-fpm
+* A webserver, for example Nginx with FastCGI
+* A supported database, for example MariaDB
+* (optional) Memcached
 
 ## Ubuntu LTS (virtual machine or LXD container)
 

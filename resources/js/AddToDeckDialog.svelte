@@ -71,7 +71,7 @@
     ><i class="bi bi-collection" /> Add question to deck</button>
 
 <div
-    class="offcanvas offcanvas-start"
+    class="offcanvas offcanvas-end"
     tabindex="-1"
     id="offcanvasAddToDeck"
     aria-labelledby="offcanvasAddToDeckLabel">
@@ -97,7 +97,9 @@
                 </div>
             </div>
         {/each}
-        <hr />
+        {#if decksOther.length > 0 && decksAdded.length > 0}
+            <hr />
+        {/if}
         {#each decksAdded as deck}
             <div class="row mb-1">
                 <div class="col-8">
@@ -111,5 +113,10 @@
                 </div>
             </div>
         {/each}
+        {#if decksOther.length === 0 && decksAdded.length === 0}
+            <p>You don't have any decks yet.</p>
+            <a href="/decks" class="btn btn-primary mb-3"
+                ><i class="bi bi-collection-fill" /> New deck</a>
+        {/if}
     </div>
 </div>
