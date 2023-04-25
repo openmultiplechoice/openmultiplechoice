@@ -96,7 +96,8 @@
                         type="button"
                         class="btn btn-outline-secondary btn-sm ms-1"
                         on:click|preventDefault={toggleEditor}
-                        ><i class="bi bi-pencil" /> Edit question</button>
+                        ><i class="bi bi-pencil" /> Edit</button>
+                    <a class="btn btn-sm btn-outline-secondary ms-1" href="/questions/{question.id}" target="_blank" role="button">Link <i class="bi bi-box-arrow-up-right"/></a>
                 </div>
             </div>
         </div>
