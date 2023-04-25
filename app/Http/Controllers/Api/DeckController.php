@@ -12,7 +12,7 @@ class DeckController extends Controller
 {
     public function index()
     {
-        return Deck::with('module', 'module.subject')->get();
+        return Deck::with('module', 'module.subject', 'questions:id')->get();
     }
 
     public function indexWithQuestionIds(Request $request)

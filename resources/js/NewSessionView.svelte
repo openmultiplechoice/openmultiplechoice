@@ -244,6 +244,7 @@
                     <div class="col-lg-6 mb-1">
                         <div class="card">
                             <div class="card-header">
+                                <span class="badge text-bg-secondary" title="Number of questions">{deck.questions.length}</span>
                                 {#if deckStatsIndicator[deck.id]}
                                     {@html deckStatsIndicator[deck.id]}
                                 {/if}
