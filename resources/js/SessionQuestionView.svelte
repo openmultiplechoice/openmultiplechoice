@@ -81,7 +81,7 @@
             {#if questionAnswered && question.comment}
                 <div class="row">
                     <div class="col">
-                        <div class="alert alert-secondary" role="alert">
+                        <div class="alert alert-light" role="alert">
                             {question.comment}
                         </div>
                     </div>
