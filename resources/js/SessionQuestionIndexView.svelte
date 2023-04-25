@@ -70,4 +70,9 @@
     li:hover {
         cursor: pointer;
     }
+    .text-overflow {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 </style>
