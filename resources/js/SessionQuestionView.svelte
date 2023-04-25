@@ -22,6 +22,36 @@
             helpUsed = questionAnswered;
         })();
 
+    // For all list elements in the question text, add an event handler
+    // to toggle the background color. This is helpful for multiple
+    // choice questions where users have to choose under a variety of
+    // answer options.
+    $: question, (() => {
+        var listItems = document.querySelectorAll("#questionText li");
+        [].map.call(listItems, function(item) {
+            item.addEventListener('click', toggleListItemColor, false);
+        });
+    })();
+
+    // Toogle none -> red -> yellow -> green -> none
+    function toggleListItemColor(event) {
+        const li = event.target;
+        if (!li.classList.contains('bg-danger-subtle') &&
+            !li.classList.contains('bg-warning-subtle') &&
+            !li.classList.contains('bg-success-subtle')) {
+
+            li.classList.add('bg-success-subtle');
+        } else if (li.classList.contains('bg-success-subtle')) {
+            li.classList.remove('bg-success-subtle');
+            li.classList.add('bg-danger-subtle');
+        } else if (li.classList.contains('bg-danger-subtle')) {
+            li.classList.remove('bg-danger-subtle');
+            li.classList.add('bg-warning-subtle');
+        } else if (li.classList.contains('bg-warning-subtle')) {
+            li.classList.remove('bg-warning-subtle');
+        }
+    }
+
     function toggleEditor() {
         showEditor = !showEditor;
     }
@@ -35,7 +65,7 @@
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
                 {#if question.text}
                     <div class="col-lg">
-                        <p>{@html DOMPurify.sanitize(question.text)}</p>
+                        <p id="questionText">{@html DOMPurify.sanitize(question.text)}</p>
                     </div>
                 {/if}
                 {#if question.images && question.images.length > 0}
