@@ -28,7 +28,10 @@
 <div
     id="answer{answer.id}"
     class="row border-start border-3 m-1 pt-2 {answerStatusIndicator}"
-    class:bg-light={!cancelled} class:bg-secondary-subtle={!cancelled && hasAnswer && isCorrectAnswer} class:bg-cancelled={cancelled}>
+    class:bg-light={!cancelled}
+    class:bg-correct={!cancelled && hasAnswer && isCorrectAnswer}
+    class:bg-incorrect={!cancelled && hasAnswer && !isCorrectAnswer && isChosenAnswer}
+    class:bg-cancelled={cancelled}>
     {#if !hasAnswer}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
@@ -87,5 +90,11 @@
     .bg-cancelled {
         color: #495057 !important;
         background: #f8d7da !important;
+    }
+    .bg-correct {
+        background-color: #d4edda !important;
+    }
+    .bg-incorrect {
+        background-color: #f8d7da !important;
     }
 </style>
