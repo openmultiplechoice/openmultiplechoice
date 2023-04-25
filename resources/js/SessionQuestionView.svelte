@@ -45,7 +45,7 @@
             {#if question.hint}
                 {#if showHint}
                     <div
-                        class="row border-start border-3 border-info m-1 mt-3 mb-3">
+                        class="row border-start border-3 border-secondary-subtle m-1 mt-3 mb-3">
                         <p>{@html DOMPurify.sanitize(question.hint)}</p>
                     </div>
                 {:else}

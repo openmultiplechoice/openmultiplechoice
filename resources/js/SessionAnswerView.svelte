@@ -73,7 +73,7 @@
 
 <div class="row ms-1 mb-2 me-1">
     {#if hasAnswer && answer.hint}
-        <div class="col-1 border-3 border-start border-info" />
+        <div class="col-1 border-3 border-start border-secondary-subtle" />
         <div class="col-11">
             <p class="p-1">{@html DOMPurify.sanitize(answer.hint)}</p>
         </div>
