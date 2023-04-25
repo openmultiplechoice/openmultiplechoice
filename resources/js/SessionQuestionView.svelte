@@ -55,7 +55,7 @@
                             helpUsed = true;
                         }}
                         type="button"
-                        class="btn btn-outline-secondary btn-sm"
+                        class="btn btn-outline-secondary btn-sm mb-3"
                         >Show hint</button>
                 {/if}
             {/if}
