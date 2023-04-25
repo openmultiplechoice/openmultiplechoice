@@ -63,6 +63,7 @@ class DemoSeeder extends Seeder
         $correct_answer = Answer::create([
             'question_id' => $question->id,
             'text' => 'An open source web application for multiple choice exam exercises.',
+            'hint' => 'That is correct!',
         ]);
         Answer::create([
             'text' => 'An ideology.',
