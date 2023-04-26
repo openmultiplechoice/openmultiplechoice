@@ -35,6 +35,7 @@ mix.js('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js', 'public/js')
     .js('resources/js/SessionView.js', 'public/js')
     .js('resources/js/QuestionView.js', 'public/js')
     .js('resources/js/Messages.js', 'public/js')
+    .js('resources/js/UserSettingsView.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .svelte();
 

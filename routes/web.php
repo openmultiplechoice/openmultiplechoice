@@ -16,6 +16,8 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SessionQuestionController;
+use App\Http\Controllers\UserSettingsController;
+
 use App\Models\News;
 use App\Models\Session;
 use App\Models\User;
@@ -59,6 +61,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::resource('/tokens', TokenController::class);
     Route::get('/tokens', [TokenController::class, 'index'])->name('index.tokens');
+
+    Route::get('me/settings', [UserSettingsController::class, 'show']);
 
     Route::get('/logout', function () {
         Auth::guard('web')->logout();

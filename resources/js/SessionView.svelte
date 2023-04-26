@@ -1,20 +1,34 @@
 <script>
     import debounce from "lodash/debounce";
+
     import { onMount } from "svelte";
+
     import SessionQuestionIndexView from "./SessionQuestionIndexView.svelte";
     import SessionQuestionView from "./SessionQuestionView.svelte";
     import SessionQuestionNav from "./SessionQuestionNav.svelte";
     import SessionProgressBar from "./SessionProgressBar.svelte";
     import Messages from "./Messages.svelte";
     import { sessionProgressPercentage } from "./StatsHelper.js";
+    import { UserSettings } from "./UserSettingsStore.js";
 
     export let id;
 
     var data;
     var helpUsed = false;
 
-    // TODO(schu): take default value from user config
-    var showSidebar = true;
+    $: showSidebar = $UserSettings.session_show_sidebar;
+
+    $: showSidebar,
+        (()=> {
+            axios
+                .put("/api/users/me/settings", {
+                    session_show_sidebar: showSidebar
+                })
+                .then(function (response) {})
+                .catch(function (error) {
+                    alert(error);
+                });
+        })();
 
     // editorconfig-checker-disable
     $: answerChoice = data

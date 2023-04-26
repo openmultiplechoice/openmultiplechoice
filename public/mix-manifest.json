@@ -9,5 +9,6 @@
     "/js/SessionView.js": "/js/SessionView.js",
     "/js/QuestionView.js": "/js/QuestionView.js",
     "/js/Messages.js": "/js/Messages.js",
+    "/js/UserSettingsView.js": "/js/UserSettingsView.js",
     "/css/app.css": "/css/app.css"
 }

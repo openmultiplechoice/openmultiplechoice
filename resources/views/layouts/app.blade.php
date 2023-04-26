@@ -59,6 +59,7 @@
                             {{ Auth::user()->name }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+                            <a class="dropdown-item" href="/me/settings">Settings</a>
                             <a class="dropdown-item" href="/logout">Log out</a>
                         </div>
                     </li>
