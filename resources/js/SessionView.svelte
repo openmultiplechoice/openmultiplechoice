@@ -16,6 +16,7 @@
     var data;
     var helpUsed = false;
 
+    $: examMode = !sessionComplete ? $UserSettings.session_exam_mode : false;
     $: showSidebar = $UserSettings.session_show_sidebar;
 
     $: showSidebar,
@@ -41,6 +42,12 @@
               (q) => q.id === data.session.current_question_id
           )
         : null;
+    $: sessionComplete = data
+        ? data.deck.questions.length === data.session.answer_choices.length
+        : false;
+    $: if (sessionComplete) {
+        examMode = false;
+    }
     // editorconfig-checker-enable
     $: currentQuestionId = data ? data.session.current_question_id : -1;
 
@@ -249,9 +256,11 @@
                     {indexCurrentQuestion}/{numberQuestions}
                 </p>
             {/if}
-            <SessionProgressBar
-                bind:answerChoices={data.session.answer_choices}
-                bind:numQuestions={data.deck.questions.length} />
+            {#if !examMode}
+                <SessionProgressBar
+                    bind:answerChoices={data.session.answer_choices}
+                    bind:numQuestions={data.deck.questions.length} />
+            {/if}
         </div>
     </div>
     <div class="row">
@@ -266,7 +275,7 @@
                     <strong>{data.deck.name}</strong><br />
                     {indexCurrentQuestion}/{numberQuestions}
                 </p>
-                <SessionQuestionIndexView bind:data />
+                <SessionQuestionIndexView bind:data bind:examMode={examMode} />
             </div>
         {/if}
         <div
@@ -284,8 +293,9 @@
                     bind:questionAnswered={currentQuestionAnswered}
                     bind:helpUsed
                     bind:answerChoice
+                    bind:examMode={examMode}
                     {submitAnswer} />
-                {#if currentQuestionAnswered}
+                {#if !examMode && currentQuestionAnswered}
                     <Messages bind:questionId={currentQuestion.id} />
                 {/if}
             {/if}

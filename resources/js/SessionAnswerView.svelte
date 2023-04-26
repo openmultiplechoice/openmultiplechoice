@@ -7,6 +7,7 @@
     export let isChosenAnswer;
     export let isCorrectAnswer;
     export let submitAnswer;
+    export let examMode;
 
     var answerStatusIndicator;
     var cancelled;
@@ -15,7 +16,7 @@
         cancelled = false;
         answerStatusIndicator = "border-secondary";
 
-        if (hasAnswer) {
+        if (!examMode && hasAnswer) {
             if (isCorrectAnswer) {
                 answerStatusIndicator = "border-success";
             } else if (isChosenAnswer) {
@@ -29,8 +30,8 @@
     id="answer{answer.id}"
     class="row border-start border-3 m-1 pt-2 {answerStatusIndicator}"
     class:bg-light={!cancelled}
-    class:bg-correct={!cancelled && hasAnswer && isCorrectAnswer}
-    class:bg-incorrect={!cancelled && hasAnswer && !isCorrectAnswer && isChosenAnswer}
+    class:bg-correct={!cancelled && !examMode && hasAnswer && isCorrectAnswer}
+    class:bg-incorrect={!cancelled && !examMode && hasAnswer && !isCorrectAnswer && isChosenAnswer}
     class:bg-cancelled={cancelled}>
     {#if !hasAnswer}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -64,18 +65,20 @@
                 on:click|preventDefault={() => (cancelled = !cancelled)}
                 type="button"
                 class="btn-close" />
-        {:else if isCorrectAnswer && isChosenAnswer}
+        {:else if !examMode && isCorrectAnswer && isChosenAnswer}
             <span class="text-success fw-bold fs-3">&check;</span>
-        {:else if isCorrectAnswer && !isChosenAnswer}
+        {:else if !examMode && isCorrectAnswer && !isChosenAnswer}
             <span class="text-success fw-bold fs-3">&#8672;</span>
-        {:else if isChosenAnswer}
+        {:else if !examMode && isChosenAnswer}
             <span class="text-danger fw-bold fs-3">&cross;</span>
+        {:else if examMode && isChosenAnswer}
+            <span class="text-secondary fw-bold fs-3">&cross;</span>
         {/if}
     </div>
 </div>
 
 <div class="row ms-1 mb-2 me-1">
-    {#if hasAnswer && answer.hint}
+    {#if !examMode && hasAnswer && answer.hint}
         <div class="col-1 border-3 border-start border-secondary-subtle" />
         <div class="col-11">
             <p class="p-1">{@html DOMPurify.sanitize(answer.hint)}</p>

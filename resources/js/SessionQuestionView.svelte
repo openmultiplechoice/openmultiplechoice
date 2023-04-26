@@ -12,6 +12,7 @@
     export let helpUsed;
     export let answerChoice;
     export let submitAnswer;
+    export let examMode;
 
     var showEditor = false;
     var showHint = questionAnswered;
@@ -72,7 +73,7 @@
                     <SessionImageView bind:images={question.images} />
                 {/if}
             </div>
-            {#if question.hint}
+            {#if !examMode && question.hint}
                 {#if showHint}
                     <div
                         class="row border-start border-3 border-secondary-subtle m-1 mt-3 mb-3">
@@ -94,6 +95,7 @@
                     <SessionAnswerView
                         bind:answer
                         bind:answerChoice
+                        bind:examMode={examMode}
                         {submitAnswer}
                         badgeText={"ABCDEFGHIJKLMN".charAt(index)}
                         isCorrectAnswer={question.correct_answer_id ===
@@ -108,7 +110,7 @@
                     {submitAnswer}
                     hasAnswer={!!answerChoice} />
             {/if}
-            {#if questionAnswered && question.comment}
+            {#if !examMode && questionAnswered && question.comment}
                 <div class="row">
                     <div class="col">
                         <div class="alert alert-light" role="alert">
@@ -133,7 +135,7 @@
         </div>
     {/if}
 
-    {#if !questionAnswered}
+    {#if !questionAnswered && !examMode}
         <div class="mt-3">
             <button
                 on:click|preventDefault={() => submitAnswer("")}

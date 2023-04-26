@@ -2,6 +2,7 @@
     import DOMPurify from "dompurify";
 
     export let data;
+    export let examMode;
 
     $: data.session.current_question_id,
         (() => {
@@ -23,6 +24,9 @@
         );
         if (!answerChoice) {
             return '<span class="text-dark fw-bold">&rightarrow;</span>';
+        }
+        if (examMode) {
+            return '<span class="text-dark fw-bold">&cross;</span>';
         }
         if (answerChoice.is_correct) {
             if (answerChoice.help_used) {
