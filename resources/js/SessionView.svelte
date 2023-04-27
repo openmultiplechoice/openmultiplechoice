@@ -112,7 +112,6 @@
             })
             .catch(function (error) {
                 alert(error);
-                console.log(error);
             });
     });
 
@@ -250,7 +249,7 @@
                     <button
                         class="btn btn-small btn-light"
                         on:click|preventDefault={() => {
-                            showSidebar = !showSidebar;
+                            $UserSettings.session_show_sidebar = true;
                         }}><i class="bi bi-layout-sidebar" /></button>
                     <strong>{data.deck.name}</strong>
                     {indexCurrentQuestion}/{numberQuestions}
@@ -269,7 +268,7 @@
                 <button
                     class="btn btn-small btn-light float-end"
                     on:click|preventDefault={() => {
-                        showSidebar = !showSidebar;
+                        $UserSettings.session_show_sidebar = false;
                     }}><i class="bi bi-arrow-left-square" /></button>
                 <p class="text-overflow">
                     <strong>{data.deck.name}</strong><br />
