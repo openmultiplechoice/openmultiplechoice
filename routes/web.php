@@ -64,8 +64,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('me/settings', [UserSettingsController::class, 'show']);
 
-    Route::get('/logout', function () {
+    Route::get('/logout', function (Request $request) {
+        # https://laravel.com/docs/10.x/authentication#logging-out
+
         Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/');
     });
 });
