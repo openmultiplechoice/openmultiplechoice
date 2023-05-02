@@ -14,6 +14,13 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
 
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->settings()->create();
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *

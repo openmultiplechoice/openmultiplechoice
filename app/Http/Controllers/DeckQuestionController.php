@@ -48,7 +48,7 @@ class DeckQuestionController extends Controller
             $urlNext = '/decks/'. $deck->id .'/questions/'. $nextQuestionId;
         }
 
-        return view('question', [
+        return view('deck-question', [
             'deck' => $deck,
             'question' => $question,
             'questions' => $questions,

@@ -1,17 +1,35 @@
 <script>
     import debounce from "lodash/debounce";
+
     import { onMount } from "svelte";
+
     import SessionQuestionIndexView from "./SessionQuestionIndexView.svelte";
     import SessionQuestionView from "./SessionQuestionView.svelte";
     import SessionQuestionNav from "./SessionQuestionNav.svelte";
     import SessionProgressBar from "./SessionProgressBar.svelte";
     import Messages from "./Messages.svelte";
     import { sessionProgressPercentage } from "./StatsHelper.js";
+    import { UserSettings } from "./UserSettingsStore.js";
 
     export let id;
 
     var data;
     var helpUsed = false;
+
+    $: examMode = !sessionComplete ? $UserSettings.session_exam_mode : false;
+    $: showSidebar = $UserSettings.session_show_sidebar;
+
+    $: showSidebar,
+        (()=> {
+            axios
+                .put("/api/users/me/settings", {
+                    session_show_sidebar: showSidebar
+                })
+                .then(function (response) {})
+                .catch(function (error) {
+                    alert(error);
+                });
+        })();
 
     // editorconfig-checker-disable
     $: answerChoice = data
@@ -24,6 +42,12 @@
               (q) => q.id === data.session.current_question_id
           )
         : null;
+    $: sessionComplete = data
+        ? data.deck.questions.length === data.session.answer_choices.length
+        : false;
+    $: if (sessionComplete) {
+        examMode = false;
+    }
     // editorconfig-checker-enable
     $: currentQuestionId = data ? data.session.current_question_id : -1;
 
@@ -43,6 +67,13 @@
               data.deck.questions.length,
               data.session.answer_choices
           )
+        : null;
+
+    $: numberQuestions = data ? data.deck.questions.length : 0;
+    $: indexCurrentQuestion = data
+        ? data.deck.questions.findIndex(
+              (q) => q.id == data.session.current_question_id
+          ) + 1
         : null;
     // editorconfig-checker-enable
 
@@ -81,7 +112,6 @@
             })
             .catch(function (error) {
                 alert(error);
-                console.log(error);
             });
     });
 
@@ -214,16 +244,44 @@
 {#if data}
     <div class="row">
         <div class="col mb-1">
-            <SessionProgressBar
-                bind:answerChoices={data.session.answer_choices}
-                bind:numQuestions={data.deck.questions.length} />
+            {#if !showSidebar}
+                <p class="text-overflow mb-1">
+                    <button
+                        class="btn btn-small btn-light"
+                        on:click|preventDefault={() => {
+                            $UserSettings.session_show_sidebar = true;
+                        }}><i class="bi bi-layout-sidebar" /></button>
+                    <strong>{data.deck.name}</strong>
+                    {indexCurrentQuestion}/{numberQuestions}
+                </p>
+            {/if}
+            {#if !examMode}
+                <SessionProgressBar
+                    bind:answerChoices={data.session.answer_choices}
+                    bind:numQuestions={data.deck.questions.length} />
+            {/if}
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3 d-none d-lg-block">
-            <SessionQuestionIndexView bind:data />
-        </div>
-        <div class="col-lg-9 col-md-12">
+        {#if showSidebar}
+            <div class="col-lg-3 d-none d-lg-block">
+                <button
+                    class="btn btn-small btn-light float-end"
+                    on:click|preventDefault={() => {
+                        $UserSettings.session_show_sidebar = false;
+                    }}><i class="bi bi-arrow-left-square" /></button>
+                <p class="text-overflow">
+                    <strong>{data.deck.name}</strong><br />
+                    {indexCurrentQuestion}/{numberQuestions}
+                </p>
+                <SessionQuestionIndexView bind:data bind:examMode={examMode} />
+            </div>
+        {/if}
+        <div
+            class:col-lg-9={showSidebar}
+            class:col-lg-10={!showSidebar}
+            class:offset-lg-1={!showSidebar}
+            class="col-md-12">
             <SessionQuestionNav
                 bind:data
                 bind:currentQuestionId={data.session.current_question_id}
@@ -234,8 +292,9 @@
                     bind:questionAnswered={currentQuestionAnswered}
                     bind:helpUsed
                     bind:answerChoice
+                    bind:examMode={examMode}
                     {submitAnswer} />
-                {#if currentQuestionAnswered}
+                {#if !examMode && currentQuestionAnswered}
                     <Messages bind:questionId={currentQuestion.id} />
                 {/if}
             {/if}
@@ -244,3 +303,11 @@
 {:else}
     <p>Loading ...</p>
 {/if}
+
+<style>
+    .text-overflow {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>

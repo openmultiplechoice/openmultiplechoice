@@ -110,6 +110,19 @@ OMC should now be running and reachable in your browser at http://omc.test
 * `demo@example.com` with password `demo` and
 * `demoadmin@example.com` with password `demoadmin`.
 
+## Environment without Homestead
+
+If you don't want to or can't use Homestead, `php artisan serve` is an alternative.
+For this to work, both `APP_URL` and `ASSET_URL` have to be set to the right
+IP address and port:
+
+```
+...
+APP_URL=http://127.0.0.1:8000
+ASSET_URL=http://127.0.0.1:8000
+...
+```
+
 ## Building JavaScript and CSS files
 
 OMC uses Laravel's [Mix](https://laravel.com/docs/8.x/mix) as a configuration

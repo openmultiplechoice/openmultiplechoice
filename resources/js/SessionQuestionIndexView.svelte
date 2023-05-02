@@ -2,12 +2,7 @@
     import DOMPurify from "dompurify";
 
     export let data;
-
-    $: numberQuestions = data.deck.questions.length;
-    $: indexCurrentQuestion =
-        data.deck.questions.findIndex(
-            (q) => q.id == data.session.current_question_id
-        ) + 1;
+    export let examMode;
 
     $: data.session.current_question_id,
         (() => {
@@ -30,6 +25,9 @@
         if (!answerChoice) {
             return '<span class="text-dark fw-bold">&rightarrow;</span>';
         }
+        if (examMode) {
+            return '<span class="text-dark fw-bold">&cross;</span>';
+        }
         if (answerChoice.is_correct) {
             if (answerChoice.help_used) {
                 return '<span class="text-warning fw-bold">&check;</span>';
@@ -41,11 +39,6 @@
         }
     };
 </script>
-
-<p class="text-overflow">
-    <strong>{data.deck.name}</strong><br />
-    {indexCurrentQuestion}/{numberQuestions}
-</p>
 
 <div class="overflow-scroll" style="max-height: 85vh;">
     <ul class="list-group">
@@ -78,12 +71,12 @@
 </div>
 
 <style>
+    li:hover {
+        cursor: pointer;
+    }
     .text-overflow {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-    }
-    li:hover {
-        cursor: pointer;
     }
 </style>

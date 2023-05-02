@@ -244,6 +244,7 @@
                     <div class="col-lg-6 mb-1">
                         <div class="card">
                             <div class="card-header">
+                                <span class="badge text-bg-secondary" title="Number of questions">{deck.questions.length}</span>
                                 {#if deckStatsIndicator[deck.id]}
                                     {@html deckStatsIndicator[deck.id]}
                                 {/if}
@@ -270,7 +271,7 @@
                                     on:click|preventDefault={() =>
                                         createSession(deck.id)}
                                     type="button"
-                                    class="btn btn-primary"
+                                    class="btn btn-sm btn-primary"
                                     ><i class="bi bi-ui-checks-grid" /> New session</button>
                                 <a href="/decks/{deck.id}" class="card-link"
                                     >Browse deck</a>

@@ -17,7 +17,7 @@
                 <label for="description" class="form-label">Description (optional)</label>
                 <textarea class="form-control" id="description" name="description" rows="4"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Create new deck</button>
+            <button type="submit" class="btn btn-sm btn-primary">Create new deck</button>
         </form>
     </div>
     <div class="col-md">

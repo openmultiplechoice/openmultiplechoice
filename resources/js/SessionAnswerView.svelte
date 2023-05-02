@@ -7,36 +7,32 @@
     export let isChosenAnswer;
     export let isCorrectAnswer;
     export let submitAnswer;
+    export let examMode;
 
-    var answerCancelledIndicator;
     var answerStatusIndicator;
     var cancelled;
 
     $: if (answer) {
         cancelled = false;
-        answerStatusIndicator = "border-light";
+        answerStatusIndicator = "border-secondary";
 
-        if (hasAnswer) {
+        if (!examMode && hasAnswer) {
             if (isCorrectAnswer) {
-                answerStatusIndicator = "border-success bg-answer";
+                answerStatusIndicator = "border-success";
             } else if (isChosenAnswer) {
-                answerStatusIndicator = "border-danger bg-answer";
+                answerStatusIndicator = "border-danger";
             }
         }
-    }
-
-    $: if (cancelled) {
-        answerCancelledIndicator = "bg-cancelled-answer";
-    } else {
-        answerCancelledIndicator = "";
     }
 </script>
 
 <div
     id="answer{answer.id}"
-    class="row border-start border-3 {answerStatusIndicator} {answerCancelledIndicator} m-1 pt-2 {hasAnswer
-        ? ''
-        : 'bg-light-hover'}">
+    class="row border-start border-3 m-1 pt-2 {answerStatusIndicator}"
+    class:bg-light={!cancelled}
+    class:bg-correct={!cancelled && !examMode && hasAnswer && isCorrectAnswer}
+    class:bg-incorrect={!cancelled && !examMode && hasAnswer && !isCorrectAnswer && isChosenAnswer}
+    class:bg-cancelled={cancelled}>
     {#if !hasAnswer}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
@@ -69,17 +65,21 @@
                 on:click|preventDefault={() => (cancelled = !cancelled)}
                 type="button"
                 class="btn-close" />
-        {:else if isCorrectAnswer && isChosenAnswer}
+        {:else if !examMode && isCorrectAnswer && isChosenAnswer}
             <span class="text-success fw-bold fs-3">&check;</span>
-        {:else if isChosenAnswer}
+        {:else if !examMode && isCorrectAnswer && !isChosenAnswer}
+            <span class="text-success fw-bold fs-3">&#8672;</span>
+        {:else if !examMode && isChosenAnswer}
             <span class="text-danger fw-bold fs-3">&cross;</span>
+        {:else if examMode && isChosenAnswer}
+            <span class="text-secondary fw-bold fs-3">&cross;</span>
         {/if}
     </div>
 </div>
 
 <div class="row ms-1 mb-2 me-1">
-    {#if hasAnswer && answer.hint}
-        <div class="col-1 border-3 border-start border-info" />
+    {#if !examMode && hasAnswer && answer.hint}
+        <div class="col-1 border-3 border-start border-secondary-subtle" />
         <div class="col-11">
             <p class="p-1">{@html DOMPurify.sanitize(answer.hint)}</p>
         </div>
@@ -87,17 +87,17 @@
 </div>
 
 <style>
-    .bg-answer {
-        background: #f8f9fa;
-    }
     .cursor-pointer:hover {
         cursor: pointer;
     }
-    .bg-light-hover:hover {
-        background: #f8f9fa;
-    }
-    .bg-cancelled-answer {
+    .bg-cancelled {
         color: #495057 !important;
         background: #f8d7da !important;
+    }
+    .bg-correct {
+        background-color: #d4edda !important;
+    }
+    .bg-incorrect {
+        background-color: #f8d7da !important;
     }
 </style>

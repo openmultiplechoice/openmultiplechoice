@@ -9,7 +9,12 @@ class UserSettings extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['last_subject_id', 'last_module_id'];
+    protected $fillable = [
+        'last_subject_id',
+        'last_module_id',
+        'session_show_sidebar',
+        'session_exam_mode',
+    ];
 
     public function user()
     {

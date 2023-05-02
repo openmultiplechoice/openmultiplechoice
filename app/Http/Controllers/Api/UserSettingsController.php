@@ -17,22 +17,7 @@ class UserSettingsController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if (!$user->settings) {
-            $user->settings()->save(new UserSettings());
-            $user->refresh();
-        }
-
-        $userSettings = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'is_admin' => $user->is_admin,
-            'last_subject_id' => $user->settings->last_subject_id,
-            'last_module_id' => $user->settings->last_module_id,
-        ];
-
-        return response()->json($userSettings);
+        //
     }
 
     /**
@@ -62,9 +47,24 @@ class UserSettingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $user = Auth::user();
+
+        $userSettings = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'is_admin' => $user->is_admin,
+            'is_moderator' => $user->is_moderator,
+
+            'last_subject_id' => $user->settings->last_subject_id,
+            'last_module_id' => $user->settings->last_module_id,
+
+            'session_show_sidebar' => $user->settings->session_show_sidebar,
+            'session_exam_mode' => $user->settings->session_exam_mode,
+        ];
+
+        return response()->json($userSettings);
     }
 
     /**

@@ -68,7 +68,7 @@
     data-bs-toggle="offcanvas"
     data-bs-target="#offcanvasAddToDeck"
     aria-controls="offcanvasAddToDeck"
-    ><i class="bi bi-collection" /> Add question to deck</button>
+    ><i class="bi bi-collection" /> Add to deck</button>
 
 <div
     class="offcanvas offcanvas-end"
@@ -115,7 +115,7 @@
         {/each}
         {#if decksOther.length === 0 && decksAdded.length === 0}
             <p>You don't have any decks yet.</p>
-            <a href="/decks" class="btn btn-primary mb-3"
+            <a href="/decks" class="btn btn-sm btn-primary mb-3"
                 ><i class="bi bi-collection-fill" /> New deck</a>
         {/if}
     </div>

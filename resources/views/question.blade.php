@@ -1,44 +1,34 @@
-@extends('layouts.app')
+@extends('layouts.app', [ 'container_class' => 'container'])
 
-@section('title', 'Decks')
+@section('title', 'Question')
 
 @section('content')
 
-<div class="row">
-    <div class="col-lg-3 d-none d-lg-block">
-        <div class="list-group text-small">
-            <a href="{{ url('decks', $deck->id) }}"
-                class="list-group-item list-group-item-action"
-                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>Overview</small></a>
-            @foreach ($questions as $q)
-                <a href="{{ url('decks/'. $deck->id .'/questions/'. $q->id) }}"
-                    class="list-group-item list-group-item-action @if ($q->id == $question->id) list-group-item-dark @else list-group-item-light @endif"
-                    style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>@if ($q->text) {{ htmlspecialchars(strip_tags($q->text)) }} @else Question Nr. {{ $loop->index + 1 }} @endif</small></a>
-            @endforeach
+<div class="row mb-3">
+    <div class="col">
+        <div class="accordion" id="accordionDecks">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeckList">
+                        Decks with this question
+                    </button>
+                </h2>
+                <div id="collapseDeckList" class="accordion-collapse collapse" data-bs-parent="#accordionDecks">
+                    <div class="accordion-body">
+                        <ul>
+                            @foreach ($decks as $deck)
+                                <li><a href="/decks/{{ $deck->id }}/questions/{{ $question->id }}">{{ $deck->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-lg-9 col-md-12">
-        <div class="row mb-3 pt-1 pb-1 bg-white">
-            @if ($urlPrev)
-                <div class="col-6">
-                    <a href="{{ url($urlPrev) }}" class="btn btn-sm btn-light w-100"><span class="fw-bold">&leftarrow;</span> Previous</a>
-                </div>
-            @else
-                <div class="col-6">
-                    <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-light w-100">Overview</a>
-                </div>
-            @endif
-            @if ($urlNext)
-                <div class="col-6">
-                    <a href="{{ url($urlNext) }}" class="btn btn-sm btn-light w-100">Next <span class="fw-bold">&rightarrow;</span></a>
-                </div>
-            @else
-                <div class="col-6">
-                    <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-light w-100">Overview</a>
-                </div>
-            @endif
-        </div>
+</div>
 
+<div class="row">
+    <div class="col">
         <div id="QuestionView" data-question="{{ $question }}" ></div>
         <script src="{{ asset('js/QuestionView.js') }}"></script>
 
