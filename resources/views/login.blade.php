@@ -11,7 +11,7 @@
         @enderror
 
 @if (config('app.login.form'))
-        <form method="post">
+        <form method="post" class="mt-5">
             @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
@@ -21,12 +21,23 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password">
             </div>
+            <div class="mb-2">
+                <input type="checkbox" class="form-check-input" id="remain_logged_in" name="remain_logged_in">
+                <label for="remain_logged_in" class="form-label">Remain logged in on this device</label>
+            </div>
             <button type="submit" class="btn btn-primary">Log in</button>
         </form>
 @endif
 
 @if (config('app.login.keycloak'))
-        <a href="{{ route('keycloak-login') }}" class="btn btn-dark mt-2">Log in with Keycloak</a>
+        <form action="{{ route('keycloak-login') }}" method="get"  class="mt-5">
+            @csrf
+            <div class="mb-2">
+                <input type="checkbox" class="form-check-input" id="remain_logged_in" name="remain_logged_in">
+                <label for="remain_logged_in" class="form-label">Remain logged in on this device</label>
+            </div>
+            <button type="submit" class="btn btn-dark">Log in with Keycloak</button>
+        <form>
 @endif
     </div>
 </div>
