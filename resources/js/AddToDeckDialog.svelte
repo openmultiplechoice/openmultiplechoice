@@ -7,6 +7,17 @@
     let decksOther = [];
 
     onMount(() => {
+        const c = document.getElementById('offcanvasAddToDeck');
+        c.addEventListener('show.bs.offcanvas', event => {
+            fetchDecks();
+        })
+        c.addEventListener('hidden.bs.offcanvas', event => {
+            decksAdded = [];
+            decksOther = [];
+        })
+    });
+
+    function fetchDecks() {
         axios
             .get("/api/decks/withquestionids")
             .then(function (response) {
@@ -29,7 +40,7 @@
                 console.log(error);
                 alert(error);
             });
-    });
+    }
 
     function addQuestionToDeck(deckId) {
         axios
