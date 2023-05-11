@@ -23,7 +23,7 @@
     <div class="mb-2">
         <SessionProgressBar
             bind:answerChoices={session.answerchoices}
-            bind:numQuestions={session.deck.questions.length} />
+            bind:questions={session.deck.questions} />
         <p>
             <strong>{session.name}</strong>
             <a href="/sessions/{session.id}">Continue</a><br />
