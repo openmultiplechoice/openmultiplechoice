@@ -22,8 +22,8 @@
                 <input type="password" class="form-control" id="password" name="password">
             </div>
             <div class="mb-2">
-                <input type="checkbox" class="form-check-input" id="remain_logged_in" name="remain_logged_in">
-                <label for="remain_logged_in" class="form-label">Remain logged in on this device</label>
+                <input type="checkbox" class="form-check-input" id="form_remain_logged_in" name="remain_logged_in">
+                <label for="form_remain_logged_in" class="form-label">Remain logged in on this device</label>
             </div>
             <button type="submit" class="btn btn-primary">Log in</button>
         </form>
@@ -33,8 +33,8 @@
         <form action="{{ route('keycloak-login') }}" method="get"  class="mt-5">
             @csrf
             <div class="mb-2">
-                <input type="checkbox" class="form-check-input" id="remain_logged_in" name="remain_logged_in">
-                <label for="remain_logged_in" class="form-label">Remain logged in on this device</label>
+                <input type="checkbox" class="form-check-input" id="keycloak_remain_logged_in" name="remain_logged_in">
+                <label for="keycloak_remain_logged_in" class="form-label">Remain logged in on this device</label>
             </div>
             <button type="submit" class="btn btn-dark">Log in with Keycloak</button>
         <form>

@@ -5,8 +5,20 @@
 
     let decksAdded = [];
     let decksOther = [];
+    let deckName = '';
 
     onMount(() => {
+        const c = document.getElementById('offcanvasAddToDeck');
+        c.addEventListener('show.bs.offcanvas', event => {
+            fetchDecks();
+        })
+        c.addEventListener('hidden.bs.offcanvas', event => {
+            decksAdded = [];
+            decksOther = [];
+        })
+    });
+
+    function fetchDecks() {
         axios
             .get("/api/decks/withquestionids")
             .then(function (response) {
@@ -29,7 +41,7 @@
                 console.log(error);
                 alert(error);
             });
-    });
+    }
 
     function addQuestionToDeck(deckId) {
         axios
@@ -55,6 +67,26 @@
                 const deck = decksAdded.find((d) => d.id === deckId);
                 decksOther = [...decksOther, deck];
                 decksAdded = decksAdded.filter((d) => d.id !== deckId);
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    }
+
+    function createDeck() {
+        if (!deckName) {
+            return;
+        }
+
+        axios
+            .post("/api/decks", {
+                name: deckName,
+            })
+            .then(function (response) {
+                const deck = response.data;
+                decksOther = [...decksOther, deck];
+                addQuestionToDeck(deck.id);
+                deckName = '';
             })
             .catch(function (error) {
                 alert(error);
@@ -86,14 +118,14 @@
     <div class="offcanvas-body">
         {#each decksOther as deck}
             <div class="row mb-1">
-                <div class="col-8">
+                <div class="col-9 text-overflow">
                     {deck.name}
                 </div>
-                <div class="col-4">
+                <div class="col-3 d-grid gap-4">
                     <button
                         on:click|preventDefault={() =>
                             addQuestionToDeck(deck.id)}
-                        class="btn btn-sm btn-success">Add</button>
+                        class="btn btn-sm btn-primary float-end">Add</button>
                 </div>
             </div>
         {/each}
@@ -102,21 +134,38 @@
         {/if}
         {#each decksAdded as deck}
             <div class="row mb-1">
-                <div class="col-8">
+                <div class="col-9 text-overflow">
                     {deck.name}
                 </div>
-                <div class="col-4">
+                <div class="col-3 d-grid gap-4">
                     <button
                         on:click|preventDefault={() =>
                             removeQuestionFromDeck(deck.id)}
-                        class="btn btn-sm btn-outline-dark">Remove</button>
+                        class="btn btn-sm btn-outline-dark float-end">Remove</button>
                 </div>
             </div>
         {/each}
         {#if decksOther.length === 0 && decksAdded.length === 0}
             <p>You don't have any decks yet.</p>
-            <a href="/decks" class="btn btn-sm btn-primary mb-3"
-                ><i class="bi bi-collection-fill" /> New deck</a>
         {/if}
+        <hr />
+        <div class="row">
+            <div class="col">
+                <p>Create a new deck:</p>
+                <div class="mb-3">
+                    <input bind:value={deckName} type="text" class="form-control" id="name" name="name" placeholder="My new deck ...">
+                </div>
+                <button on:click|preventDefault={() => createDeck()}
+                        class="btn btn-sm btn-primary">Create deck and add question</button>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    .text-overflow {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>

@@ -2,13 +2,23 @@
     import { sessionProgressPercentage } from "./StatsHelper.js";
 
     export let answerChoices;
-    export let numQuestions;
+    export let questions;
+
+    $: numQuestions = questions.length;
+
+    // `answerChoices` can contain answers to questions that are
+    // not in `questions`, for example because a question was removed
+    // from the deck. Pick the answer choices for the given questions
+    // and ignore the rest
+    $: relevantAnswerChoices = answerChoices.filter(
+        ac => questions.some(q => q.id === ac.question_id)
+    );
 
     $: percentage = (() => {
         if (!answerChoices) {
             return {};
         }
-        return sessionProgressPercentage(numQuestions, answerChoices);
+        return sessionProgressPercentage(numQuestions, relevantAnswerChoices);
     })();
 </script>
 

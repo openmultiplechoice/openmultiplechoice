@@ -39,6 +39,9 @@ class SessionController extends Controller
 
     public function show(Session $session)
     {
+        if (Auth::id() != $session->user_id) {
+            abort(404);
+        }
         return view('session', [
             'session' => $session,
         ]);

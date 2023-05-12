@@ -258,7 +258,7 @@
             {#if !examMode}
                 <SessionProgressBar
                     bind:answerChoices={data.session.answer_choices}
-                    bind:numQuestions={data.deck.questions.length} />
+                    bind:questions={data.deck.questions} />
             {/if}
         </div>
     </div>
