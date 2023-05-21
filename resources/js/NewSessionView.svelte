@@ -107,14 +107,18 @@
                 modules = modulesArr.filter(
                     (value, index, self) =>
                         index === self.findIndex((o) => o.id === value.id)
-                );
+                ).sort(function (a, b) {
+                    return a.name > b.name;
+                });
                 var subjectsArr = modules
                     .map((m) => m.subject)
                     .filter((v) => !!v);
                 subjects = subjectsArr.filter(
                     (value, index, self) =>
                         index === self.findIndex((o) => o.id === value.id)
-                );
+                ).sort(function (a, b) {
+                    return a.name > b.name;
+                });
             })
             .catch(function (error) {
                 alert(error);
