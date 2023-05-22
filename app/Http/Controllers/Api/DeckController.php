@@ -41,6 +41,13 @@ class DeckController extends Controller
         $deck->module_id = $request->module_id;
         $deck->user_id = $user->id;
 
+        if ($request->access) {
+            if ($request->access == 'public-rw-listed' && !$user->is_admin) {
+                abort(403, 'Unauthorized');
+            }
+            $deck->access = $request->access;
+        }
+
         $deck->save();
 
         // If `$request->deck_ids` is set, we create
