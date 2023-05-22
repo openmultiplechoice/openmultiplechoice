@@ -236,7 +236,7 @@
                                 >.
                             </p>
                             <button
-                                class="btn btn-primary"
+                                class="btn btn-sm btn-primary"
                                 on:click|preventDefault={createSuperDeck}
                                 >Create new super deck</button>
                         </div>
