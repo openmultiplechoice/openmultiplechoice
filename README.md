@@ -33,9 +33,9 @@ and do not open an issue.
 
 ## License
 
-Copyright (C) 2020 Michael Schubert and contributors.
+Copyright (C) 2020 Michael Schubert and [contributors](https://github.com/openmultiplechoice/openmultiplechoice/graphs/contributors).
 
-OpenMultipleChoice is free to use **under the terms of AGPL v3**:
+OpenMultipleChoice is free to use under the terms of AGPL v3:
 
 [GNU Affero General Public License v3](https://www.gnu.org/licenses/agpl-3.0.en.html)
 
