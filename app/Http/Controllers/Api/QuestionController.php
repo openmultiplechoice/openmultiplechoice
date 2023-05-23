@@ -36,6 +36,16 @@ class QuestionController extends Controller
         return response()->json($question);
     }
 
+    public function showByLegacyId(Request $request)
+    {
+        $legacy_question_id = $request->get('id');
+        $question = Question::where('legacy_question_id', '=', $legacy_question_id)->first();
+        if ($question == null) {
+            abort(404);
+        }
+        return response()->json($question);
+    }
+
     public function update(Request $request, Question $question)
     {
         $question->fill($request->all());

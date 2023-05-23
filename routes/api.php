@@ -52,6 +52,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('decks', DeckController::class);
     Route::resource('decks.questions', DeckQuestionController::class);
 
+    Route::get('questions/showbylegacyid', [QuestionController::class, 'showByLegacyId']);
     Route::resource('questions', QuestionController::class);
     Route::resource('questions.answers', QuestionAnswerController::class);
     Route::resource('questions.images', QuestionImageController::class);
