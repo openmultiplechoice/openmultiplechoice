@@ -59,7 +59,7 @@
         </div>
     {/if}
 
-    <div class="col-1">
+    <div class="col-1 ps-1">
         {#if !hasAnswer}
             <button
                 on:click|preventDefault={() => (cancelled = !cancelled)}
