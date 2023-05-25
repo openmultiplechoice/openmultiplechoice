@@ -105,10 +105,16 @@
                             answerChoice.answer_id === answer.id} />
                 {/each}
             {:else}
-                <SessionCardAnswerView
-                    bind:answer={question.answers[0]}
-                    {submitAnswer}
-                    hasAnswer={!!answerChoice} />
+                {#if question.answers.length === 0}
+                    <div class="alert alert-light" role="alert">
+                        This questions doesn't have any answer.
+                    </div>
+                {:else}
+                    <SessionCardAnswerView
+                        bind:answer={question.answers[0]}
+                        {submitAnswer}
+                        hasAnswer={!!answerChoice} />
+                {/if}
             {/if}
             {#if !examMode && questionAnswered && question.comment}
                 <div class="row">
