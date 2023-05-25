@@ -90,6 +90,21 @@
     <div class="col-lg-6 mb-1">
         <div class="card">
             <div class="card-header">
+                {#if deck.exam_at}
+                    <span class="badge text-bg-light">
+                        {format(
+                            parseISO(deck.exam_at),
+                            "dd/MM/yyyy"
+                        )}
+                    </span>
+                {:else}
+                    <span class="badge text-bg-light">
+                        {format(
+                            parseISO(deck.created_at),
+                            "dd/MM/yyyy"
+                        )}
+                    </span>
+                {/if}
                 <span class="badge text-bg-secondary" title="Number of questions">{deck.questions.length}</span>
                 {#if deckStatsIndicator[deck.id]}
                     {@html deckStatsIndicator[deck.id]}
@@ -106,12 +121,6 @@
                 <h6 class="card-title">
                     {deck.name}
                 </h6>
-                <p class="card-subtitle mb-2 text-muted">
-                    {format(
-                        parseISO(deck.created_at),
-                        "dd/MM/yyyy HH:mm"
-                    )}
-                </p>
 
                 <button
                     on:click|preventDefault={() =>
