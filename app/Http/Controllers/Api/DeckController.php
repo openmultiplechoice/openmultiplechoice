@@ -10,9 +10,22 @@ use App\Models\Deck;
 
 class DeckController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Deck::with('module', 'module.subject', 'questions:id')->get();
+        // TODO(schu): decide about the request params and what
+        // data and how much of it actually should be returned.
+        // Should module and subject info be included?
+        // Do we need pagination?
+        // etc.
+
+        if ($request->module) {
+            return response()->json(
+                Deck::where('module_id', '=', $request->module)->with('module', 'module.subject', 'questions:id')->get()
+            );
+        }
+        return response()->json(
+            Deck::with('module', 'module.subject', 'questions:id')->get()
+        );
     }
 
     public function indexWithQuestionIds(Request $request)

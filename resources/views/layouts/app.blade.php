@@ -10,7 +10,6 @@
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-    <script src="{{ asset('js/popper.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/trix.min.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>

@@ -11,7 +11,7 @@ class ModuleController extends Controller
 {
     public function index()
     {
-        $modules = Module::with('decks')->get();
+        $modules = Module::with('subject')->get();
         return response()->json($modules);
     }
 
