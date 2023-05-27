@@ -4,6 +4,7 @@
 
 @section('content')
 
+@if (count($decks) > 0)
 <div class="row mb-3">
     <div class="col">
         <div class="accordion" id="accordionDecks">
@@ -26,6 +27,7 @@
         </div>
     </div>
 </div>
+@endif
 
 <div class="row">
     <div class="col">
