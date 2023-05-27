@@ -12,6 +12,7 @@ use App\Http\Controllers\DeckQuestionController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\MagicGIFController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\SessionController;
@@ -74,6 +75,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         return redirect('/');
     });
+
+    if (config('app.magic')) {
+        Route::resource('/magic-gifs', MagicGIFController::class);
+    }
 });
 
 Route::get('/login', function () {

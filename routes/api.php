@@ -28,6 +28,8 @@ use App\Http\Controllers\Api\UserSettingsController;
 
 use App\Http\Controllers\Api\StatsController;
 
+use App\Http\Controllers\Api\MagicGIFController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -71,4 +73,8 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::put('users/me/settings', [UserSettingsController::class, 'update']);
 
     Route::resource('stats', StatsController::class);
+
+    if (config('app.magic')) {
+        Route::get('magic-gif', [MagicGIFController::class, 'show']);
+    }
 });

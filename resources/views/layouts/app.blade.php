@@ -36,7 +36,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url('decks') }}">Decks</a>
-                            @if (Auth::user()->is_admin || Auth::user()->is_moderator)
+                            @if (Auth::user()->is_admin)
                                 <a class="dropdown-item" href="{{ url('subjects') }}">Subjects</a>
                                 <a class="dropdown-item" href="{{ url('modules') }}">Modules</a>
                             @endif
@@ -49,7 +49,12 @@
                                 Admin
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ url('tokens') }}">API Token</a>
+                                @if (config('app.magic') && (Auth::user()->is_admin || Auth::user()->is_moderator))
+                                    <a class="dropdown-item" href="{{ url('magic-gifs') }}">Magic GIFs</a>
+                                @endif
+                                @if (Auth::user()->is_admin)
+                                    <a class="dropdown-item" href="{{ url('tokens') }}">API Token</a>
+                                @endif
                             </div>
                         </li>
                     @endif

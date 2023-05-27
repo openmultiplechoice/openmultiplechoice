@@ -10,11 +10,13 @@
     import Messages from "./Messages.svelte";
     import { sessionProgressPercentage } from "./StatsHelper.js";
     import { UserSettings } from "./UserSettingsStore.js";
+    import MagicGifView from "./MagicGIFView.svelte";
 
     export let id;
 
     var data;
     var helpUsed = false;
+    var magicGIFPath = '';
 
     $: examMode = !sessionComplete ? $UserSettings.session_exam_mode : false;
     $: showSidebar = $UserSettings.session_show_sidebar;
@@ -99,8 +101,16 @@
             if (previousProgressPercentageCorrect < 60) {
                 previousProgressPercentageCorrect = progressPercentageCorrect;
 
-                console.debug("TODO: >= 60%");
                 console.debug("progressPercentag", progressPercentage);
+
+                axios
+                    .get('/api/magic-gif')
+                    .then(function (response) {
+                        magicGIFPath = 'magic-gifs/' + response.data.id;
+                    })
+                    .catch(function (error) {
+                        // Ignore errors
+                    });
             }
         })();
 
@@ -303,6 +313,8 @@
 {:else}
     <p>Loading ...</p>
 {/if}
+
+<MagicGifView bind:magicGIFPath />
 
 <style>
     .text-overflow {
