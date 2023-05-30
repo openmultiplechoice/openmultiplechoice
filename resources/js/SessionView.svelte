@@ -314,7 +314,9 @@
     <p>Loading ...</p>
 {/if}
 
-<MagicGifView bind:magicGIFPath />
+{#if !examMode}
+    <MagicGifView bind:magicGIFPath />
+{/if}
 
 <style>
     .text-overflow {
