@@ -12,12 +12,10 @@ class DeckController extends Controller
 {
     public function index(Request $request)
     {
-        $decks = Deck::with('questions')
-            ->where('user_id', '=', Auth::id())
-            ->get();
-        if ($request->wantsJson()) {
-            return response()->json($decks);
-        }
+        $decks = Deck::where([
+                ['user_id', '=', Auth::id()],
+                ['access', '!=', 'public-rw-listed'],
+            ])->get();
         return view('decks', ['decks' => $decks]);
     }
 
