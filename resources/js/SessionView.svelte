@@ -261,17 +261,28 @@
 {#if data}
     <div class="row">
         <div class="col mb-1">
-            {#if !showSidebar}
-                <p class="text-overflow mb-1">
-                    <button
-                        class="btn btn-small btn-light"
-                        on:click|preventDefault={() => {
-                            $UserSettings.session_show_sidebar = true;
-                        }}><i class="bi bi-layout-sidebar" /></button>
-                    <strong>{data.deck.name}</strong>
-                    {indexCurrentQuestion}/{numberQuestions}
-                </p>
-            {/if}
+            <p class="text-overflow">
+                <button
+                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline"
+                    class:bg-light={showSidebar}
+                    class:bg-secondary-subtle={!showSidebar}
+                    on:click|preventDefault={() => {
+                        $UserSettings.session_show_sidebar = !$UserSettings.session_show_sidebar;
+                    }}>
+                    {#if showSidebar}
+                        <i class="bi bi-layout-sidebar" />
+                    {:else}
+                        <i class="bi bi-layout-sidebar" />
+                    {/if}
+                </button>
+
+                <strong>{data.deck.name}</strong>
+                <span class="float-end fw-bold">{indexCurrentQuestion}/{numberQuestions}</span>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-1">
             {#if !examMode && !sessionComplete}
                 <SessionProgressBar
                     bind:progressPercentage />
@@ -281,18 +292,9 @@
             {/if}
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-3">
         {#if showSidebar}
             <div class="col-lg-3 d-none d-lg-block">
-                <button
-                    class="btn btn-small btn-light float-end"
-                    on:click|preventDefault={() => {
-                        $UserSettings.session_show_sidebar = false;
-                    }}><i class="bi bi-arrow-left-square" /></button>
-                <p class="text-overflow">
-                    <strong>{data.deck.name}</strong><br />
-                    {indexCurrentQuestion}/{numberQuestions}
-                </p>
                 <SessionQuestionIndexView bind:data bind:examMode={examMode} />
             </div>
         {/if}
