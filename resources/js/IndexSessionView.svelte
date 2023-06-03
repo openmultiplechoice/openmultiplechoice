@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { format, parseISO } from "date-fns";
     import SessionProgressBar from "./SessionProgressBar.svelte";
+    import { sessionProgressPercentage } from "./StatsHelper.js";
 
     export let userId;
 
@@ -22,8 +23,9 @@
 {#each sessions as session}
     <div class="mb-2">
         <SessionProgressBar
-            bind:answerChoices={session.answerchoices}
-            bind:questions={session.deck.questions} />
+            progressPercentage={sessionProgressPercentage(session.deck.questions.length, session.answerchoices.filter(
+                e => session.deck.questions.some(({ id }) => id === e.question_id)
+            ))} />
         <p>
             <strong>{session.name}</strong>
             <a href="/sessions/{session.id}">Continue</a><br />

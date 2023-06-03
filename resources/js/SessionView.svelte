@@ -3,14 +3,16 @@
 
     import { onMount } from "svelte";
 
-    import SessionQuestionIndexView from "./SessionQuestionIndexView.svelte";
-    import SessionQuestionView from "./SessionQuestionView.svelte";
-    import SessionQuestionNav from "./SessionQuestionNav.svelte";
-    import SessionProgressBar from "./SessionProgressBar.svelte";
+    import MagicGifView from "./MagicGIFView.svelte";
     import Messages from "./Messages.svelte";
+    import SessionOutro from "./SessionOutro.svelte";
+    import SessionProgressBar from "./SessionProgressBar.svelte";
+    import SessionQuestionIndexView from "./SessionQuestionIndexView.svelte";
+    import SessionQuestionNav from "./SessionQuestionNav.svelte";
+    import SessionQuestionView from "./SessionQuestionView.svelte";
+
     import { sessionProgressPercentage } from "./StatsHelper.js";
     import { UserSettings } from "./UserSettingsStore.js";
-    import MagicGifView from "./MagicGIFView.svelte";
 
     export let id;
 
@@ -270,10 +272,12 @@
                     {indexCurrentQuestion}/{numberQuestions}
                 </p>
             {/if}
-            {#if !examMode}
+            {#if !examMode && !sessionComplete}
                 <SessionProgressBar
-                    bind:answerChoices={data.session.answer_choices}
-                    bind:questions={data.deck.questions} />
+                    bind:progressPercentage />
+            {/if}
+            {#if sessionComplete}
+                <SessionOutro bind:progressPercentage />
             {/if}
         </div>
     </div>
