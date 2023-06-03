@@ -39,13 +39,18 @@
               (e) => e.question_id === currentQuestionId
           )
         : null;
+    $: answerChoices = data
+        ? data.session.answer_choices.filter(
+            e => data.deck.questions.some(({ id }) => id === e.question_id)
+          )
+        : null;
     $: currentQuestion = data
         ? data.deck.questions.find(
               (q) => q.id === data.session.current_question_id
           )
         : null;
     $: sessionComplete = data
-        ? data.deck.questions.length === data.session.answer_choices.length
+        ? data.deck.questions.length === answerChoices.length
         : false;
     $: if (sessionComplete) {
         examMode = false;
@@ -67,7 +72,7 @@
     $: progressPercentage = data
         ? sessionProgressPercentage(
               data.deck.questions.length,
-              data.session.answer_choices
+              answerChoices
           )
         : null;
 
