@@ -276,8 +276,8 @@
                     {/if}
                 </button>
 
+                <span class="ms-1 float-end fw-bold font-monospace badge text-bg-light">{indexCurrentQuestion}/{numberQuestions}</span>
                 <strong>{data.deck.name}</strong>
-                <span class="float-end fw-bold">{indexCurrentQuestion}/{numberQuestions}</span>
             </p>
         </div>
     </div>
