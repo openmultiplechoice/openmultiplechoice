@@ -68,6 +68,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
 
     Route::resource('sessions', SessionController::class);
     Route::resource('sessions.answerchoices', AnswerChoiceController::class);
+    Route::post('sessions/{session}/newfromincorrect', [SessionController::class, 'newFromIncorrect']);
 
     Route::get('users/me/settings', [UserSettingsController::class, 'show']);
     Route::put('users/me/settings', [UserSettingsController::class, 'update']);

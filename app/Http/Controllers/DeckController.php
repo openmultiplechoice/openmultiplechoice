@@ -15,6 +15,7 @@ class DeckController extends Controller
         $decks = Deck::where([
                 ['user_id', '=', Auth::id()],
                 ['access', '!=', 'public-rw-listed'],
+                ['is_ephemeral', '=', false],
             ])->get();
         return view('decks', ['decks' => $decks]);
     }

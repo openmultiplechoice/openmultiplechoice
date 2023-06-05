@@ -44,6 +44,35 @@ class SessionController extends Controller
         return response()->json($newSession);
     }
 
+    public function newFromIncorrect(Request $request, Session $session)
+    {
+        $answerChoices = $session->answerChoices()->where('is_correct', false)->get();
+        if (!$answerChoices) {
+            abort(400, 'No incorrect answers in this session');
+        }
+
+        $question_ids = $answerChoices->map(function ($ac) { return $ac->question_id; });
+
+        $deck = new Deck();
+        $deck->is_ephemeral = true;
+        $deck->name = 'Repeat incorrect questions of session '. $session->id;
+        $deck->user_id = Auth::id();
+
+        $deck->save();
+
+        $deck->questions()->attach($question_ids);
+
+        $newSession = new Session();
+
+        $newSession->deck_id = $deck->id;
+        $newSession->name = $deck->name;
+        $newSession->current_question_id = $deck->questions()->first()->id;
+        $newSession->user_id = Auth::id();
+        $newSession->save();
+
+        return response()->json($newSession);
+    }
+
     public function show(Session $session)
     {
         if (Auth::id() != $session->user_id) {

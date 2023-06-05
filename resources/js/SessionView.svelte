@@ -288,7 +288,7 @@
                     bind:progressPercentage />
             {/if}
             {#if sessionComplete}
-                <SessionOutro bind:progressPercentage />
+                <SessionOutro bind:progressPercentage sessionId={data.session.id} />
             {/if}
         </div>
     </div>

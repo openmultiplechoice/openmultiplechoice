@@ -2,6 +2,7 @@
     import Chart from 'chart.js/auto';
 
     export let progressPercentage;
+    export let sessionId;
 
     let canvas;
     let chart;
@@ -51,6 +52,17 @@
             chart = new Chart(ctx, config);
         })();
     };
+
+    function createSession(sessionId) {
+        axios
+            .post('/api/sessions/' + sessionId + '/newfromincorrect')
+            .then(function (response) {
+                window.location.href = "/sessions/" + response.data.id;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    }
 </script>
 
 <div class="row mb-5">
@@ -76,6 +88,12 @@
         <div class="d-grid gap-2">
             <a href="/sessions/create" class="btn btn-sm btn-primary">
                 <i class="bi bi-ui-checks-grid"></i> New session</a>
+            {#if progressPercentage.incorrect > 0}
+                <button on:click|preventDefault={() => createSession(sessionId)}
+                    class="btn btn-sm btn-outline-secondary" type="button">
+                        <i class="bi bi-arrow-repeat" /> Repeat incorrect
+                </button>
+            {/if}
             <a href="/" class="btn btn-sm btn-outline-secondary">Home</a>
         </div>
     </div>
