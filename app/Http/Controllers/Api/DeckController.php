@@ -69,21 +69,28 @@ class DeckController extends Controller
         // a "super deck" that contains all questions
         // of all decks
         if ($request->deck_ids) {
+            // The question IDs to attach to the new super deck
+            $question_ids = [];
+
             foreach ($request->deck_ids as $deck_id) {
                 $d = Deck::findOrFail((int)$deck_id);
 
                 // Create an array of question ids
                 $questions = $d->questions()->get()->toArray();
-                $question_ids = array_map(
+                $ids = array_map(
                     function ($q) {
                         return $q['id'];
                     },
                     $questions
                 );
 
-                // Attach the questions to the new super deck
-                $deck->questions()->attach($question_ids);
+                $question_ids = array_merge($question_ids, $ids);
             }
+
+            $question_ids = array_unique($question_ids);
+
+            // Attach the questions to the new super deck
+            $deck->questions()->attach($question_ids);
         }
 
         return response()->json($deck);
