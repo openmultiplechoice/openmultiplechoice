@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
-    import { format, parseISO } from "date-fns";
-    import SessionProgressBar from "./SessionProgressBar.svelte";
+
+    import IndexSessionSingleView from "./IndexSessionSingleView.svelte";
 
     export let userId;
 
@@ -20,20 +20,7 @@
 </script>
 
 {#each sessions as session}
-    <div class="mb-2">
-        <SessionProgressBar
-            bind:answerChoices={session.answerchoices}
-            bind:questions={session.deck.questions} />
-        <p>
-            <strong>{session.name}</strong>
-            <a href="/sessions/{session.id}">Continue</a><br />
-            <small
-                >{format(
-                    parseISO(session.created_at),
-                    "dd/MM/yyyy HH:mm"
-                )}</small>
-        </p>
-    </div>
+    <IndexSessionSingleView bind:session />
 {:else}
     <p>No sessions yet</p>
 {/each}

@@ -3,11 +3,14 @@
 
     import { onMount } from "svelte";
 
-    import SessionQuestionIndexView from "./SessionQuestionIndexView.svelte";
-    import SessionQuestionView from "./SessionQuestionView.svelte";
-    import SessionQuestionNav from "./SessionQuestionNav.svelte";
-    import SessionProgressBar from "./SessionProgressBar.svelte";
+    import MagicGifView from "./MagicGIFView.svelte";
     import Messages from "./Messages.svelte";
+    import SessionOutro from "./SessionOutro.svelte";
+    import SessionProgressBar from "./SessionProgressBar.svelte";
+    import SessionQuestionIndexView from "./SessionQuestionIndexView.svelte";
+    import SessionQuestionNav from "./SessionQuestionNav.svelte";
+    import SessionQuestionView from "./SessionQuestionView.svelte";
+
     import { sessionProgressPercentage } from "./StatsHelper.js";
     import { UserSettings } from "./UserSettingsStore.js";
 
@@ -15,6 +18,7 @@
 
     var data;
     var helpUsed = false;
+    var magicGIFPath = '';
 
     $: examMode = !sessionComplete ? $UserSettings.session_exam_mode : false;
     $: showSidebar = $UserSettings.session_show_sidebar;
@@ -37,13 +41,18 @@
               (e) => e.question_id === currentQuestionId
           )
         : null;
+    $: answerChoices = data
+        ? data.session.answer_choices.filter(
+            e => data.deck.questions.some(({ id }) => id === e.question_id)
+          )
+        : null;
     $: currentQuestion = data
         ? data.deck.questions.find(
               (q) => q.id === data.session.current_question_id
           )
         : null;
     $: sessionComplete = data
-        ? data.deck.questions.length === data.session.answer_choices.length
+        ? data.deck.questions.length === answerChoices.length
         : false;
     $: if (sessionComplete) {
         examMode = false;
@@ -65,7 +74,7 @@
     $: progressPercentage = data
         ? sessionProgressPercentage(
               data.deck.questions.length,
-              data.session.answer_choices
+              answerChoices
           )
         : null;
 
@@ -99,8 +108,16 @@
             if (previousProgressPercentageCorrect < 60) {
                 previousProgressPercentageCorrect = progressPercentageCorrect;
 
-                console.debug("TODO: >= 60%");
                 console.debug("progressPercentag", progressPercentage);
+
+                axios
+                    .get('/api/magic-gif')
+                    .then(function (response) {
+                        magicGIFPath = 'magic-gifs/' + response.data.id;
+                    })
+                    .catch(function (error) {
+                        // Ignore errors
+                    });
             }
         })();
 
@@ -244,36 +261,40 @@
 {#if data}
     <div class="row">
         <div class="col mb-1">
-            {#if !showSidebar}
-                <p class="text-overflow mb-1">
-                    <button
-                        class="btn btn-small btn-light"
-                        on:click|preventDefault={() => {
-                            $UserSettings.session_show_sidebar = true;
-                        }}><i class="bi bi-layout-sidebar" /></button>
-                    <strong>{data.deck.name}</strong>
-                    {indexCurrentQuestion}/{numberQuestions}
-                </p>
-            {/if}
-            {#if !examMode}
-                <SessionProgressBar
-                    bind:answerChoices={data.session.answer_choices}
-                    bind:questions={data.deck.questions} />
-            {/if}
+            <p class="text-overflow">
+                <button
+                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline"
+                    class:bg-light={showSidebar}
+                    class:bg-secondary-subtle={!showSidebar}
+                    on:click|preventDefault={() => {
+                        $UserSettings.session_show_sidebar = !$UserSettings.session_show_sidebar;
+                    }}>
+                    {#if showSidebar}
+                        <i class="bi bi-layout-sidebar" />
+                    {:else}
+                        <i class="bi bi-layout-sidebar" />
+                    {/if}
+                </button>
+
+                <span class="ms-1 float-end fw-bold font-monospace badge text-bg-light">{indexCurrentQuestion}/{numberQuestions}</span>
+                <strong>{data.deck.name}</strong>
+            </p>
         </div>
     </div>
     <div class="row">
+        <div class="col mb-1">
+            {#if !examMode && !sessionComplete}
+                <SessionProgressBar
+                    bind:progressPercentage />
+            {/if}
+            {#if sessionComplete}
+                <SessionOutro bind:progressPercentage sessionId={data.session.id} />
+            {/if}
+        </div>
+    </div>
+    <div class="row mt-3">
         {#if showSidebar}
             <div class="col-lg-3 d-none d-lg-block">
-                <button
-                    class="btn btn-small btn-light float-end"
-                    on:click|preventDefault={() => {
-                        $UserSettings.session_show_sidebar = false;
-                    }}><i class="bi bi-arrow-left-square" /></button>
-                <p class="text-overflow">
-                    <strong>{data.deck.name}</strong><br />
-                    {indexCurrentQuestion}/{numberQuestions}
-                </p>
                 <SessionQuestionIndexView bind:data bind:examMode={examMode} />
             </div>
         {/if}
@@ -302,6 +323,10 @@
     </div>
 {:else}
     <p>Loading ...</p>
+{/if}
+
+{#if !examMode}
+    <MagicGifView bind:magicGIFPath />
 {/if}
 
 <style>
