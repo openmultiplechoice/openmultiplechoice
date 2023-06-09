@@ -1,0 +1,136 @@
+<script>
+    import Chart from 'chart.js/auto';
+
+    export let questionsInModule;
+    export let answerChoices;
+    export let moduleId;
+
+    let chartAnsweredQuestions;
+    let canvasAnsweredQuestions;
+
+    $: numQuestionsInModule = questionsInModule.length;
+    $: numAnsweredQuestions = answerChoices.length;
+    $: numUnansweredQuestions = numQuestionsInModule - numAnsweredQuestions;
+    $: numCorrectAnsweredQuestions = answerChoices.filter(a => a.is_correct === 1 && a.help_used === 0).length;
+    $: numCorrectWithHelpAnsweredQuestions = answerChoices.filter(a => a.is_correct === 1 && a.help_used === 1).length;
+    $: numIncorrectAnsweredQuestions = answerChoices.filter(a => a.is_correct === 0).length
+
+    $: incorrectAnsweredQuestionsIds = answerChoices.filter(a => a.is_correct === 0).map(ac => ac.question_id);
+
+    $: if (canvasAnsweredQuestions) {
+        (() => {
+            const config = {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Correct',
+                        'Correct with help',
+                        'Incorrect',
+                        'Unanswered'
+                    ],
+                    datasets: [
+                        {
+                            label: 'n',
+                            data: [
+                                numCorrectAnsweredQuestions,
+                                numCorrectWithHelpAnsweredQuestions,
+                                numIncorrectAnsweredQuestions,
+                                numUnansweredQuestions
+                            ],
+                            backgroundColor: [
+                                '#d4edda',
+                                '#fff3cd',
+                                '#f8d7da',
+                                '#bbbbbb'
+                            ],
+                            hoverOffet: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            };
+
+            if (chartAnsweredQuestions) {
+                chartAnsweredQuestions.destroy();
+            }
+            var ctx = canvasAnsweredQuestions.getContext('2d');
+            chartAnsweredQuestions = new Chart(ctx, config);
+        })();
+    };
+
+    function createSession(questionIds) {
+        const data = {
+            module_id: moduleId,
+            question_ids: questionIds,
+        };
+        axios
+            .post('/api/sessions/newfromquestionids', data)
+            .then(function (response) {
+                window.location.href = "/sessions/" + response.data.id;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    }
+</script>
+
+<div class="row mb-5">
+    <div class="col-md">
+        <canvas bind:this={canvasAnsweredQuestions}></canvas>
+    </div>
+    <div class="col-md mt-3">
+        <table class="table">
+            <thead></thead>
+            <tbody>
+                <tr>
+                    <td>Questions</td>
+                    <td class="font-monospace text-end">{numQuestionsInModule}</td>
+                </tr>
+                <tr>
+                    <td>Answered questions</td>
+                    <td class="font-monospace text-end">{numAnsweredQuestions}</td>
+                </tr>
+                <tr>
+                    <td>Unanswered questions</td>
+                    <td class="font-monospace text-end">{numUnansweredQuestions}</td>
+                </tr>
+                <tr>
+                    <td>Correct answers</td>
+                    <td class="font-monospace text-end">{numCorrectAnsweredQuestions}</td>
+                </tr>
+                <tr>
+                    <td>Correct answers with help</td>
+                    <td class="font-monospace text-end">{numCorrectWithHelpAnsweredQuestions}</td>
+                </tr>
+                <tr>
+                    <td>Incorrect answers</td>
+                    <td class="font-monospace text-end">{numIncorrectAnsweredQuestions}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        {#if numIncorrectAnsweredQuestions > 0}
+            <div class="d-grid gap-2">
+                {#if numIncorrectAnsweredQuestions >= 40}
+                    <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 30))}
+                        class="btn btn-sm btn-outline-secondary" type="button">
+                            <i class="bi bi-arrow-repeat" /> Repeat 30 incorrect
+                    </button>
+                {/if}
+                {#if numIncorrectAnsweredQuestions >= 70}
+                    <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 60))}
+                        class="btn btn-sm btn-outline-secondary" type="button">
+                            <i class="bi bi-arrow-repeat" /> Repeat 60 incorrect
+                    </button>
+                {/if}
+                <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds)}
+                    class="btn btn-sm btn-outline-secondary" type="button">
+                        <i class="bi bi-arrow-repeat" /> Repeat {numIncorrectAnsweredQuestions} incorrect
+                </button>
+            </div>
+        {/if}
+    </div>
+</div>

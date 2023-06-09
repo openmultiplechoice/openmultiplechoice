@@ -2,6 +2,7 @@
     import { format, parseISO } from "date-fns";
 
     import { sessionProgressPercentage } from "./StatsHelper.js";
+    import NewSessionDeckStats from "./NewSessionDeckStats.svelte";
 
     export let moduleId;
     export let createSession;
@@ -9,7 +10,26 @@
     export let userSelectedDecks;
 
     let decks = [];
-    let decksStats;
+    let decksStats = {};
+
+    $: questionsInModule =
+        (() => {
+            var questions = [];
+            decks.forEach((d) => questions.push(...d.questions));
+            return questions;
+        })();
+
+    $: answerChoices =
+        (() => {
+            var choices = [];
+            for (const deckId in decksStats) {
+                choices.push(...decksStats[deckId].answer_choices);
+            }
+            choices.sort(function (a, b) {
+                return a.created_at < b.created_at;
+            });
+            return choices;
+        })();
 
     $: fetchDecks(moduleId);
 
@@ -85,6 +105,8 @@
         return indicator;
     })();
 </script>
+
+<NewSessionDeckStats bind:moduleId bind:questionsInModule bind:answerChoices />
 
 {#each decks as deck}
     <div class="col-lg-6 mb-1">

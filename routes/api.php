@@ -67,6 +67,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('answers', AnswerController::class);
 
     Route::resource('sessions', SessionController::class);
+    Route::post('sessions/newfromquestionids', [SessionController::class, 'newFromQuestionIds']);
     Route::resource('sessions.answerchoices', AnswerChoiceController::class);
     Route::post('sessions/{session}/newfromincorrect', [SessionController::class, 'newFromIncorrect']);
 
