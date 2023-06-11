@@ -78,10 +78,10 @@
 </script>
 
 <div class="row mb-5">
-    <div class="col-md">
+    <div class="col-md-5">
         <canvas bind:this={canvasAnsweredQuestions}></canvas>
     </div>
-    <div class="col-md mt-3">
+    <div class="col-md-7 mt-3">
         <table class="table">
             <thead></thead>
             <tbody>
@@ -91,23 +91,28 @@
                 </tr>
                 <tr>
                     <td>Answered questions</td>
-                    <td class="font-monospace text-end">{numAnsweredQuestions}</td>
+                    <td class="font-monospace text-end">{numAnsweredQuestions}
+                        ({Math.round(100 * numAnsweredQuestions/numQuestionsInModule).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
                 </tr>
                 <tr>
                     <td>Unanswered questions</td>
-                    <td class="font-monospace text-end">{numUnansweredQuestions}</td>
+                    <td class="font-monospace text-end">{numUnansweredQuestions}
+                        ({Math.round(100 * numUnansweredQuestions/numQuestionsInModule).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
                 </tr>
                 <tr>
                     <td>Correct answers</td>
-                    <td class="font-monospace text-end">{numCorrectAnsweredQuestions}</td>
+                    <td class="font-monospace text-end">{numCorrectAnsweredQuestions}
+                        ({Math.round(100 * numCorrectAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
                 </tr>
                 <tr>
                     <td>Correct answers with help</td>
-                    <td class="font-monospace text-end">{numCorrectWithHelpAnsweredQuestions}</td>
+                    <td class="font-monospace text-end">{numCorrectWithHelpAnsweredQuestions}
+                        ({Math.round(100 * numCorrectWithHelpAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
                 </tr>
                 <tr>
                     <td>Incorrect answers</td>
-                    <td class="font-monospace text-end">{numIncorrectAnsweredQuestions}</td>
+                    <td class="font-monospace text-end">{numIncorrectAnsweredQuestions}
+                        ({Math.round(100 * numIncorrectAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
                 </tr>
             </tbody>
         </table>
