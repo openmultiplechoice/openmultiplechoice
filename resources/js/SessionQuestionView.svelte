@@ -12,6 +12,7 @@
     export let helpUsed;
     export let answerChoice;
     export let submitAnswer;
+    export let deleteAnswer;
     export let examMode;
 
     var showEditor = false;
@@ -127,6 +128,13 @@
             {/if}
             <div class="row mt-1 mb-1 pt-2">
                 <div class="d-flex justify-content-end">
+                    {#if questionAnswered}
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm me-1"
+                        on:click|preventDefault={deleteAnswer}>
+                            <i class="bi bi-arrow-counterclockwise" /> Reset</button>
+                    {/if}
                     {#key question.id}
                         <AddToDeckDialog questionId={question.id} />
                     {/key}

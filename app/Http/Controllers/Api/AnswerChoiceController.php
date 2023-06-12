@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\AnswerChoice;
 use App\Models\Session;
@@ -36,5 +37,16 @@ class AnswerChoiceController extends Controller
         }
 
         return response()->json($answerChoice);
+    }
+
+    public function destroy(Request $request, Session $session, $answerChoiceId)
+    {
+        if (Auth::id() != $session->user_id) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        AnswerChoice::destroy($answerChoiceId);
+
+        return response()->noContent();
     }
 }
