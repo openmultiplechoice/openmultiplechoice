@@ -12,7 +12,7 @@ decks.
 
 ![](docs/images/omc-screenshot.png)
 
-**Please note**: OpenMultiplceChoice is currently under active development and
+**Please note**: OpenMultipleChoice is currently under active development and
 does not yet accept pull requests.
 
 For news and updates, join the Discord server or watch the repository here on
