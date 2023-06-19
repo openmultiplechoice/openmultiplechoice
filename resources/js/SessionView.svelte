@@ -256,6 +256,26 @@
                 alert(error);
             });
     }
+
+    function deleteAnswer() {
+        if (!currentQuestionAnswered) {
+            return;
+        }
+
+        answerChoice = data.session.answer_choices.find(e => e.question_id === currentQuestionId);
+        if (!answerChoices) {
+            return;
+        }
+
+        axios
+            .delete("/api/sessions/" + id + "/answerchoices/" + answerChoice.id)
+            .then(function (response) {
+                data.session.answer_choices = [...data.session.answer_choices.filter(e => e.question_id !== currentQuestionId)];
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    }
 </script>
 
 {#if data}
@@ -314,7 +334,8 @@
                     bind:helpUsed
                     bind:answerChoice
                     bind:examMode={examMode}
-                    {submitAnswer} />
+                    {submitAnswer}
+                    {deleteAnswer} />
                 {#if !examMode && currentQuestionAnswered}
                     <Messages bind:questionId={currentQuestion.id} />
                 {/if}

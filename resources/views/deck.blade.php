@@ -5,6 +5,18 @@
 @section('content')
 
 <div class="row">
+    <div class="col">
+        <h1 class="h4">{{ $deck->name }}</h1>
+        <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
+            @csrf
+            <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
+            <button type="submit" class="btn btn-sm btn-primary">New session</button>
+        </form>
+        <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary mb-3">Edit deck</a>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-lg-3 d-none d-lg-block">
         <div class="list-group text-small">
             <a href="{{ url('decks', $deck->id) }}"
@@ -38,13 +50,8 @@
                 </div>
             @endif
         </div>
-        <h1 class="h4">{{ $deck->name }}</h1>
-        <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
-            @csrf
-            <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
-            <button type="submit" class="btn btn-sm btn-primary">New session</button>
-        </form>
-        <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary mb-3">Edit deck</a>
+
+        <p>Number of questions in this deck: <span class="font-monospace">{{ count($questions) }}</span></p>
 
         @if ($deck->description)
             <h2 class="h5">Description</h2>

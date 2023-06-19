@@ -1,9 +1,13 @@
 <script>
-    import { format, parseISO } from "date-fns";
+    import { format, formatDistance, parseISO } from "date-fns";
     import SessionProgressBar from "./SessionProgressBar.svelte";
     import { sessionProgressPercentage } from "./StatsHelper.js";
 
     export let session;
+
+    $: sessionAtPretty = formatDistance(parseISO(session.created_at), new Date());
+
+    $: sessionAt = format(parseISO(session.created_at), "dd/MM/yyyy HH:mm")
 
     $: progressPercentage = session
         ? sessionProgressPercentage(session.deck.questions.length, session.answerchoices.filter(
@@ -47,12 +51,12 @@
                 </button>
             {/if}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" title="{sessionAt}">
             <span class="float-end d-none d-sm-none d-md-inline">
-                <small>{format(parseISO(session.created_at), "dd/MM/yyyy HH:mm")}</small>
+                <small>{sessionAtPretty} ago</small>
             </span>
             <span class="d-inline d-sm-inline d-md-none">
-                <small>{format(parseISO(session.created_at), "dd/MM/yyyy HH:mm")}</small>
+                <small>{sessionAtPretty} ago</small>
             </span>
         </div>
     </div>

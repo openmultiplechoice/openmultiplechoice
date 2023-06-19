@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
+use App\Models\Module;
 use App\Models\Session;
+use App\Models\Question;
 
 class SessionController extends Controller
 {
@@ -61,6 +63,40 @@ class SessionController extends Controller
         $deck->save();
 
         $deck->questions()->attach($question_ids);
+
+        $newSession = new Session();
+
+        $newSession->deck_id = $deck->id;
+        $newSession->name = $deck->name;
+        $newSession->current_question_id = $deck->questions()->first()->id;
+        $newSession->user_id = Auth::id();
+        $newSession->save();
+
+        return response()->json($newSession);
+    }
+
+    public function newFromQuestionIds(Request $request)
+    {
+        $questions = Question::findMany($request->question_ids);
+        if (!$questions) {
+            abort(400, 'No question IDs given');
+        }
+
+        $deckName = $request->deck_name ?? 'Repeat '. count($questions) .' incorrect questions';
+
+        if ($request->module_id) {
+            $module = Module::findOrFail($request->module_id);
+            $deckName = $deckName .' of module "'. $module->name .'"';
+        }
+
+        $deck = new Deck();
+        $deck->is_ephemeral = true;
+        $deck->name = $deckName;
+        $deck->user_id = Auth::id();
+
+        $deck->save();
+
+        $deck->questions()->attach($questions);
 
         $newSession = new Session();
 
