@@ -149,7 +149,7 @@
         </div>
     {/if}
 
-    {#if !questionAnswered && !examMode}
+    {#if !questionAnswered && !examMode && !(question.type === 'card')}
         <div class="mt-3">
             <button
                 on:click|preventDefault={() => submitAnswer("")}
