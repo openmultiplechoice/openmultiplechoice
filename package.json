@@ -30,7 +30,7 @@
         "sass-loader": "^13.2.2",
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
-        "svelte": "^3.58.0",
+        "svelte": "^4.0.5",
         "svelte-loader": "^3.1.7",
         "trix": "^2.0.4",
         "vue-template-compiler": "^2.7.14"
