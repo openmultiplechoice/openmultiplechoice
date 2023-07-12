@@ -20,7 +20,12 @@ class DeckController extends Controller
 
         if ($request->module) {
             return response()->json(
-                Deck::where('module_id', '=', $request->module)->with('module', 'module.subject', 'questions:id')->get()
+                Deck::where('module_id', '=', $request->module)->with('module', 'module.subject', 'questions:id', 'questions.images:id,question_id')->get()
+            );
+        }
+        if ($request->decks) {
+            return response()->json(
+                Deck::whereIn('id', $request->decks)->with('module', 'module.subject', 'questions:id', 'questions.images:id,question_id')->get()
             );
         }
         return response()->json(
@@ -65,32 +70,11 @@ class DeckController extends Controller
 
         $deck->save();
 
-        // If `$request->deck_ids` is set, we create
+        // If `$request->question_ids` is set, we create
         // a "super deck" that contains all questions
-        // of all decks
-        if ($request->deck_ids) {
-            // The question IDs to attach to the new super deck
-            $question_ids = [];
-
-            foreach ($request->deck_ids as $deck_id) {
-                $d = Deck::findOrFail((int)$deck_id);
-
-                // Create an array of question ids
-                $questions = $d->questions()->get()->toArray();
-                $ids = array_map(
-                    function ($q) {
-                        return $q['id'];
-                    },
-                    $questions
-                );
-
-                $question_ids = array_merge($question_ids, $ids);
-            }
-
-            $question_ids = array_unique($question_ids);
-
+        if ($request->question_ids) {
             // Attach the questions to the new super deck
-            $deck->questions()->attach($question_ids);
+            $deck->questions()->attach($request->question_ids);
         }
 
         return response()->json($deck);

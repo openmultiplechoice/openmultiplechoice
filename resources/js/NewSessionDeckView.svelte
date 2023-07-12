@@ -91,14 +91,12 @@
                 deckStats.deck.questions.length,
                 deckStats.answer_choices
             );
-            var indicatorColorClass = "text-bg-danger";
+            var indicatorColorStyle = 'style="color: #721c24; background-color: #f8d7da;"';
             if (percentage.correct >= 60) {
-                indicatorColorClass = "text-bg-success";
+                indicatorColorStyle = 'style="color: #155724; background-color: #d4edda;"';
             }
             indicator[deck.id] =
-                '<span class="badge ' +
-                indicatorColorClass +
-                '" data-bs-toggle="popover" data-bs-title="Popover title" data-bs-content="And here\'s some..." title="Correct answers in percent">' +
+                '<span ' + indicatorColorStyle + ' class="badge" data-bs-toggle="popover" data-bs-title="Popover title" data-bs-content="And here\'s some..." title="Correct answers in percent">' +
                 percentage.correct +
                 " %</span>";
         }

@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
 
     import NewSessionDeckView from "./NewSessionDeckView.svelte";
+    import NewSessionSuperDeckView from "./NewSessionSuperDeckView.svelte";
 
     import { UserSettings } from "./UserSettingsStore.js";
 
@@ -104,20 +105,6 @@
         }
         userSelectedDecks = new Set([...userSelectedDecks]);
     }
-
-    function createSuperDeck() {
-        var data = {
-            deck_ids: Array.from(userSelectedDecks),
-        };
-        axios
-            .post("/api/decks", data)
-            .then(function (response) {
-                window.location.href = "/decks/" + response.data.id;
-            })
-            .catch(function (error) {
-                alert(error);
-            });
-    }
 </script>
 
 <div class="row">
@@ -149,26 +136,7 @@
         </ul>
     </div>
     <div class="col-md-8">
-        {#if userSelectedDecks.size > 0}
-            <div class="row">
-                <div class="col-md">
-                    <div class="alert alert-secondary" role="alert">
-                        <p>
-                            You have <strong
-                                >selected {userSelectedDecks.size} deck{userSelectedDecks.size >
-                                1
-                                    ? "s"
-                                    : ""}</strong
-                            >.
-                        </p>
-                        <button
-                            class="btn btn-sm btn-primary"
-                            on:click|preventDefault={createSuperDeck}
-                            >Create new super deck</button>
-                    </div>
-                </div>
-            </div>
-        {/if}
+        <NewSessionSuperDeckView bind:userSelectedDecks />
         <div class="row">
             {#if $UserSettings.last_module_id}
                 <NewSessionDeckView
