@@ -296,7 +296,10 @@
                     {/if}
                 </button>
 
-                <span class="ms-1 float-end fw-bold font-monospace badge text-bg-light">{indexCurrentQuestion}/{numberQuestions}</span>
+                <span class="ms-1 float-end fw-bold font-monospace badge text-dark"
+                    class:text-bg-light={!answerChoice || examMode}
+                    class:bg-correct={!examMode && answerChoice && answerChoice.is_correct}
+                    class:bg-incorrect={!examMode && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
                 <strong>{data.deck.name}</strong>
             </p>
         </div>
