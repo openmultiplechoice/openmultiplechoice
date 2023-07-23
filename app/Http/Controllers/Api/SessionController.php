@@ -18,7 +18,7 @@ class SessionController extends Controller
         $sessions = Session::orderBy('id', 'desc')
             ->where('user_id', '=', Auth::id())
             ->with('answerchoices')
-            ->with('deck.questions:id,correct_answer_id');
+            ->with('deck.questions:id,correct_answer_id,is_invalid');
 
         if ($request->has('take')) {
             // TODO: is this safe?

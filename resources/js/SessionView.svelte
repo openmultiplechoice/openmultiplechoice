@@ -36,6 +36,9 @@
         })();
 
     // editorconfig-checker-disable
+    $: validQuestions = data
+        ? data.deck.questions.filter((q) => !q.is_invalid)
+        : null;
     $: answerChoice = data
         ? data.session.answer_choices.find(
               (e) => e.question_id === currentQuestionId
@@ -43,7 +46,7 @@
         : null;
     $: answerChoices = data
         ? data.session.answer_choices.filter(
-            e => data.deck.questions.some(({ id }) => id === e.question_id)
+            e => validQuestions.some(({ id }) => id === e.question_id)
           )
         : null;
     $: currentQuestion = data
@@ -52,7 +55,7 @@
           )
         : null;
     $: sessionComplete = data
-        ? data.deck.questions.length === answerChoices.length
+        ? validQuestions.length === answerChoices.length
         : false;
     $: if (sessionComplete) {
         examMode = false;
@@ -73,7 +76,7 @@
     // editorconfig-checker-disable
     $: progressPercentage = data
         ? sessionProgressPercentage(
-              data.deck.questions.length,
+              validQuestions.length,
               answerChoices
           )
         : null;
@@ -298,8 +301,8 @@
 
                 <span class="ms-1 float-end fw-bold font-monospace badge text-dark"
                     class:text-bg-light={!answerChoice || examMode}
-                    class:bg-correct={!examMode && answerChoice && answerChoice.is_correct}
-                    class:bg-incorrect={!examMode && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
+                    class:bg-correct={!examMode && !currentQuestion.is_invalid && answerChoice && answerChoice.is_correct}
+                    class:bg-incorrect={!examMode && !currentQuestion.is_invalid && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
                 <strong>{data.deck.name}</strong>
             </p>
         </div>
