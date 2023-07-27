@@ -88,7 +88,7 @@
             }
             const deckStats = decksStats[deck.id];
             const percentage = sessionProgressPercentage(
-                deckStats.deck.questions.length,
+                deckStats.deck.questions.filter(q => !q.is_invalid).length,
                 deckStats.answer_choices
             );
             var indicatorColorStyle = 'style="color: #721c24; background-color: #f8d7da;"';

@@ -20,7 +20,7 @@ class StatsController extends Controller
         $sessions = array();
         $userId = Auth::id();
         foreach ($request->decks as $deckId) {
-            $latestSession = Session::with('answerChoices', 'deck.questions:id')
+            $latestSession = Session::with('answerChoices', 'deck.questions:id,is_invalid')
                 ->where([
                     'user_id' => $userId,
                     'deck_id' => $deckId,
