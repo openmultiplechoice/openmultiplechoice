@@ -111,8 +111,6 @@
             if (previousProgressPercentageCorrect < 60) {
                 previousProgressPercentageCorrect = progressPercentageCorrect;
 
-                console.debug("progressPercentag", progressPercentage);
-
                 axios
                     .get('/api/magic-gif')
                     .then(function (response) {

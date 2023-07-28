@@ -16,7 +16,6 @@
     });
 
     $: if (settings) {
-            console.debug('update settings', settings);
             axios
                 .put("/api/users/me/settings", settings)
                 .then(function (response) {})
