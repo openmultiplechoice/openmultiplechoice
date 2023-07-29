@@ -53,10 +53,10 @@
         </div>
 
         <div id="QuestionView" data-question="{{ $question }}" ></div>
-        <script src="{{ asset('js/QuestionView.js') }}"></script>
+        <script src="{{ mix('js/QuestionView.js') }}"></script>
 
         <div id="MessagesView" data-question-id="{{ $question->id }}" ></div>
-        <script src="{{ asset('js/Messages.js') }}"></script>
+        <script src="{{ mix('js/Messages.js') }}"></script>
     </div>
 </div>
 

@@ -9,7 +9,7 @@
         <p>Here you can manage your personal settings.</p>
 
         <div id="UserSettingsView"></div>
-        <script src="{{ asset('js/UserSettingsView.js') }}"></script>
+        <script src="{{ mix('js/UserSettingsView.js') }}"></script>
     </div>
 </div>
 

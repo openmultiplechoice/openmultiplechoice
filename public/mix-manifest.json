@@ -1,13 +1,13 @@
 {
-    "/js/bootstrap.bundle.min.js": "/js/bootstrap.bundle.min.js",
-    "/js/trix.min.js": "/js/trix.min.js",
-    "/js/app.js": "/js/app.js",
-    "/js/DeckForm.js": "/js/DeckForm.js",
-    "/js/IndexSessionView.js": "/js/IndexSessionView.js",
-    "/js/NewSessionView.js": "/js/NewSessionView.js",
-    "/js/SessionView.js": "/js/SessionView.js",
-    "/js/QuestionView.js": "/js/QuestionView.js",
-    "/js/Messages.js": "/js/Messages.js",
-    "/js/UserSettingsView.js": "/js/UserSettingsView.js",
-    "/css/app.css": "/css/app.css"
+    "/js/bootstrap.bundle.min.js": "/js/bootstrap.bundle.min.js?id=40b8e74df50f196d7e5fa67669a84655",
+    "/js/trix.min.js": "/js/trix.min.js?id=4134e297f0806ed78d8a7313400cd4a1",
+    "/js/app.js": "/js/app.js?id=297c3b5f6db1e1d4a0ff62aceff3bfee",
+    "/js/DeckForm.js": "/js/DeckForm.js?id=1a69718dada531d21221d5662c0dbb76",
+    "/js/IndexSessionView.js": "/js/IndexSessionView.js?id=2c98c760886cef668766f1e6efeff642",
+    "/js/NewSessionView.js": "/js/NewSessionView.js?id=04dd48e0aa9b292b0ac834274f42a02e",
+    "/js/SessionView.js": "/js/SessionView.js?id=635b183e0c0541fc627d3e7ba42018d9",
+    "/js/QuestionView.js": "/js/QuestionView.js?id=9c3c3ee254ff00d2d5c57163bfdda968",
+    "/js/Messages.js": "/js/Messages.js?id=b0cd17e98152178f0a1e7fb7c50a4536",
+    "/js/UserSettingsView.js": "/js/UserSettingsView.js?id=5c978ca900c3f7085373396a0d66d676",
+    "/css/app.css": "/css/app.css?id=4ef8f6a5056a29762c34ab7f312683f3"
 }
