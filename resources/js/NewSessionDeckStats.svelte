@@ -8,14 +8,19 @@
     let chartAnsweredQuestions;
     let canvasAnsweredQuestions;
 
-    $: numQuestionsInModule = questionsInModule.length;
-    $: numAnsweredQuestions = answerChoices.length;
-    $: numUnansweredQuestions = numQuestionsInModule - numAnsweredQuestions;
-    $: numCorrectAnsweredQuestions = answerChoices.filter(a => a.is_correct === 1 && a.help_used === 0).length;
-    $: numCorrectWithHelpAnsweredQuestions = answerChoices.filter(a => a.is_correct === 1 && a.help_used === 1).length;
-    $: numIncorrectAnsweredQuestions = answerChoices.filter(a => a.is_correct === 0).length
+    $: validQuestionsInModule = questionsInModule.filter(q => !q.is_invalid);
+    $: validAnswerChoices = answerChoices.filter(
+        e => validQuestionsInModule.some(({ id }) => id === e.question_id)
+    );
 
-    $: incorrectAnsweredQuestionsIds = answerChoices.filter(a => a.is_correct === 0).map(ac => ac.question_id);
+    $: numQuestionsInModule = validQuestionsInModule.length;
+    $: numAnsweredQuestions = validAnswerChoices.length;
+    $: numUnansweredQuestions = numQuestionsInModule - numAnsweredQuestions;
+    $: numCorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 0).length;
+    $: numCorrectWithHelpAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 1).length;
+    $: numIncorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 0).length
+
+    $: incorrectAnsweredQuestionsIds = validAnswerChoices.filter(a => a.is_correct === 0).map(ac => ac.question_id);
 
     $: if (canvasAnsweredQuestions) {
         (() => {

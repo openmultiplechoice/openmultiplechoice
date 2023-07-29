@@ -87,9 +87,13 @@
                 continue;
             }
             const deckStats = decksStats[deck.id];
+            const validQuestions = deckStats.deck.questions.filter(q => !q.is_invalid);
+            const filteredAnswerChoices = deckStats.answer_choices.filter(
+                e => validQuestions.some(({ id }) => id === e.question_id)
+            );
             const percentage = sessionProgressPercentage(
-                deckStats.deck.questions.filter(q => !q.is_invalid).length,
-                deckStats.answer_choices
+                validQuestions.length,
+                filteredAnswerChoices
             );
             var indicatorColorStyle = 'style="color: #721c24; background-color: #f8d7da;"';
             if (percentage.correct >= 60) {

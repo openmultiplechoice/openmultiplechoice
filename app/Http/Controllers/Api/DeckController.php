@@ -20,7 +20,7 @@ class DeckController extends Controller
 
         if ($request->module) {
             return response()->json(
-                Deck::where('module_id', '=', $request->module)->with('module', 'module.subject', 'questions:id', 'questions.images:id,question_id')->get()
+                Deck::where('module_id', '=', $request->module)->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')->get()
             );
         }
         if ($request->decks) {
