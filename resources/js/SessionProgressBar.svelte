@@ -1,8 +1,10 @@
 <script>
     export let progressPercentage;
+
+    $: title = JSON.stringify(progressPercentage, null, 2);
 </script>
 
-<div class="progress" style="height: 20px;">
+<div class="progress" style="height: 20px;" title="{title}">
     <div
         class="progress-bar"
         role="progressbar"
