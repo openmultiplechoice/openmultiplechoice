@@ -40,6 +40,7 @@ class DeckController extends Controller
                 ['user_id', '=', $user_id],
                 ['access', '!=', 'public-rw-listed'],
                 ['is_ephemeral', '=', false],
+                ['is_archived', '=', false],
             ])->with('questions:id')->get();
         return response()->json($decks);
     }

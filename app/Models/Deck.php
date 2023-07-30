@@ -9,7 +9,7 @@ class Deck extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'exam_at', 'questions', 'module_id'];
+    protected $fillable = ['name', 'description', 'exam_at', 'questions', 'module_id', 'is_archived'];
 
     public function questions()
     {
