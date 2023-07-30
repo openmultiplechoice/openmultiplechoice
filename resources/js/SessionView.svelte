@@ -284,17 +284,11 @@
         <div class="col mb-1">
             <p class="text-overflow">
                 <button
-                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline"
-                    class:bg-light={showSidebar}
-                    class:bg-secondary-subtle={!showSidebar}
+                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline bg-light"
                     on:click|preventDefault={() => {
                         $UserSettings.session_show_sidebar = !$UserSettings.session_show_sidebar;
                     }}>
-                    {#if showSidebar}
-                        <i class="bi bi-layout-sidebar" />
-                    {:else}
-                        <i class="bi bi-layout-sidebar" />
-                    {/if}
+                    <i class="bi bi-layout-sidebar" />
                 </button>
 
                 <span class="ms-1 float-end fw-bold font-monospace badge text-dark"
