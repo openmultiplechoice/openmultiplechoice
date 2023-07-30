@@ -38,7 +38,7 @@ export function sessionProgressPercentage(numQuestions, answerChoices) {
         } else if (percentage.incorrect > 0) {
             percentage.incorrect = percentage.incorrect + 1;
         } else if (percentage.correctWithHelp > 0) {
-            percentage.incorrectWithHelp = percentage.correctWithHelp + 1;
+            percentage.correctWithHelp = percentage.correctWithHelp + 1;
         } else if (percentage.correct > 0) {
             percentage.correct = percentage.correct + 1;
         }
