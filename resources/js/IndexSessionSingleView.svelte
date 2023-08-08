@@ -9,9 +9,13 @@
 
     $: sessionAt = format(parseISO(session.created_at), "dd/MM/yyyy HH:mm")
 
+    $: validQuestions = session
+        ? session.deck.questions.filter((q) => !q.is_invalid)
+        : null;
+
     $: progressPercentage = session
-        ? sessionProgressPercentage(session.deck.questions.length, session.answerchoices.filter(
-            e => session.deck.questions.some(({ id }) => id === e.question_id)
+        ? sessionProgressPercentage(validQuestions.length, session.answerchoices.filter(
+            e => validQuestions.some(({ id }) => id === e.question_id)
         ))
         : null;
 

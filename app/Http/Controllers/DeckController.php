@@ -62,7 +62,11 @@ class DeckController extends Controller
 
     public function update(Request $request, Deck $deck)
     {
-        //
+        if ($deck->user_id != Auth::id() && !$request->user()->is_admin) {
+            abort(403, 'Unauthorized');
+        }
+        $deck->update($request->all());
+        return back();
     }
 
     public function destroy($id)

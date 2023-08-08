@@ -5,6 +5,6 @@
 @section('content')
 
 <div id="NewSessionView"></div>
-<script src="{{ asset('js/NewSessionView.js') }}"></script>
+<script src="{{ mix('js/NewSessionView.js') }}"></script>
 
 @endsection

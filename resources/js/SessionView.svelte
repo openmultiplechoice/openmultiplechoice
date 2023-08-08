@@ -36,6 +36,9 @@
         })();
 
     // editorconfig-checker-disable
+    $: validQuestions = data
+        ? data.deck.questions.filter((q) => !q.is_invalid)
+        : null;
     $: answerChoice = data
         ? data.session.answer_choices.find(
               (e) => e.question_id === currentQuestionId
@@ -43,7 +46,7 @@
         : null;
     $: answerChoices = data
         ? data.session.answer_choices.filter(
-            e => data.deck.questions.some(({ id }) => id === e.question_id)
+            e => validQuestions.some(({ id }) => id === e.question_id)
           )
         : null;
     $: currentQuestion = data
@@ -52,7 +55,7 @@
           )
         : null;
     $: sessionComplete = data
-        ? data.deck.questions.length === answerChoices.length
+        ? validQuestions.length === answerChoices.length
         : false;
     $: if (sessionComplete) {
         examMode = false;
@@ -73,7 +76,7 @@
     // editorconfig-checker-disable
     $: progressPercentage = data
         ? sessionProgressPercentage(
-              data.deck.questions.length,
+              validQuestions.length,
               answerChoices
           )
         : null;
@@ -107,8 +110,6 @@
             }
             if (previousProgressPercentageCorrect < 60) {
                 previousProgressPercentageCorrect = progressPercentageCorrect;
-
-                console.debug("progressPercentag", progressPercentage);
 
                 axios
                     .get('/api/magic-gif')
@@ -283,20 +284,17 @@
         <div class="col mb-1">
             <p class="text-overflow">
                 <button
-                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline"
-                    class:bg-light={showSidebar}
-                    class:bg-secondary-subtle={!showSidebar}
+                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline bg-light"
                     on:click|preventDefault={() => {
                         $UserSettings.session_show_sidebar = !$UserSettings.session_show_sidebar;
                     }}>
-                    {#if showSidebar}
-                        <i class="bi bi-layout-sidebar" />
-                    {:else}
-                        <i class="bi bi-layout-sidebar" />
-                    {/if}
+                    <i class="bi bi-layout-sidebar" />
                 </button>
 
-                <span class="ms-1 float-end fw-bold font-monospace badge text-bg-light">{indexCurrentQuestion}/{numberQuestions}</span>
+                <span class="ms-1 float-end fw-bold font-monospace badge text-dark"
+                    class:text-bg-light={!answerChoice || examMode}
+                    class:bg-correct={!examMode && !currentQuestion.is_invalid && answerChoice && answerChoice.is_correct}
+                    class:bg-incorrect={!examMode && !currentQuestion.is_invalid && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
                 <strong>{data.deck.name}</strong>
             </p>
         </div>

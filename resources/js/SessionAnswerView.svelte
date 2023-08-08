@@ -90,14 +90,4 @@
     .cursor-pointer:hover {
         cursor: pointer;
     }
-    .bg-cancelled {
-        color: #495057 !important;
-        background: #f8d7da !important;
-    }
-    .bg-correct {
-        background-color: #d4edda !important;
-    }
-    .bg-incorrect {
-        background-color: #f8d7da !important;
-    }
 </style>

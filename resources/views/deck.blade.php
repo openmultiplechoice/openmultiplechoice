@@ -54,9 +54,35 @@
         <p>Number of questions in this deck: <span class="font-monospace">{{ count($questions) }}</span></p>
 
         @if ($deck->description)
-            <h2 class="h5">Description</h2>
+            <h2 class="h4">Description</h2>
             <p>{{ $deck->description }}</p>
         @endif
+
+        @if ($deck->user_id == Auth::id() || Auth::user()->is_admin)
+            <h2 class="h4">Danger Zone</h2>
+            <div class="m-1 p-3 border border-danger rounded">
+                <div class="row">
+                    <div class="col-md">
+                        <p>
+                            <strong>Archive this deck</strong><br>
+                            Archived decks are not listed but can be unarchived.
+                        </p>
+                    </div>
+                    <div class="col-md">
+                        <form action="/decks/{{ $deck->id }}" method="post">
+                            @method('PUT')
+                            @csrf
+
+                            <input type="hidden" name="is_archived" value="{{ $deck->is_archived ? 0 : 1 }}" />
+                            <button class="btn btn-sm {{ $deck->is_archived ? 'btn-outline-danger' : 'btn-danger' }}" type="submit">
+                                {{ $deck->is_archived ?  "Unarchive deck" : "Archive this deck" }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif
+
     </div>
 </div>
 

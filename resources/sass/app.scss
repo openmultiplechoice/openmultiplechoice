@@ -32,3 +32,14 @@ trix-toolbar .trix-button--icon-heading-1 {
 #questionText li:hover {
     cursor: pointer;
 }
+
+.bg-correct {
+    background-color: #d4edda !important;
+}
+.bg-incorrect {
+    background-color: #f8d7da !important;
+}
+.bg-cancelled {
+    color: #495057 !important;
+    background: #f8d7da !important;
+}

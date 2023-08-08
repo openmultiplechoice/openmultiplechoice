@@ -118,6 +118,19 @@
                 alert(error);
             });
     }
+
+    function toggleQuestionValid() {
+        axios
+            .put("/api/questions/" + question.id, {
+                is_invalid: !question.is_invalid,
+            })
+            .then(function (response) {
+                question.is_invalid = !question.is_invalid;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    }
 </script>
 
 <div class="mt-1 mb-1">
@@ -141,6 +154,13 @@
                     id="editor-questionText"
                     bind:this={editor}
                     input="questionText" />
+            </div>
+
+            <div class="mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="checkInvalidQuestion" bind:checked={question.is_invalid} on:click|preventDefault={toggleQuestionValid}>
+                    <label class="form-check-label" for="checkInvalidQuestion">Invalid question - Is the answer unknown or disputed? Invalid questions remain in deck but are not counted into results.</label>
+                </div>
             </div>
         {/key}
 

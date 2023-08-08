@@ -64,6 +64,15 @@
         <QuestionForm bind:question {toggleEditor} />
     {:else}
         <div id="question{question.id}">
+            {#if question.is_invalid}
+                <div class="row">
+                    <div class="col">
+                        <div class="alert alert-light" role="alert">
+                            <i class="bi bi-cone-striped" /> <strong>Question is marked invalid</strong> and safe to skip!
+                        </div>
+                    </div>
+                </div>
+            {/if}
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
                 {#if question.text}
                     <div class="col-lg">
