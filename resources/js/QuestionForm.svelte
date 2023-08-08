@@ -193,7 +193,7 @@
                                 handleImageRemove(image.id);
                             }}
                             type="button"
-                            class="btn"><i class="bi bi-trash" /></button>
+                            class="btn btn-sm btn-light"><i class="bi bi-trash" /></button>
                     </div>
                     <img src="/{image.path}" class="card-img-top" alt="" />
                     {#if image.comment}
@@ -217,10 +217,10 @@
                         updateCorrectAnswer(answer.id);
                     }}
                     type="button"
-                    class="btn btn-outline-success {correctAnswerId ===
+                    class="btn btn-sm {correctAnswerId ===
                     answer.id
-                        ? 'active'
-                        : ''}"
+                        ? 'btn-outline-success'
+                        : 'btn-light'}"
                     title="Set as correct answer"
                     ><i class="bi bi-check-lg" /></button>
             {/if}
@@ -229,7 +229,7 @@
                     handleAnswerRemove(answer.id);
                 }}
                 type="button"
-                class="btn btn-outline-secondary"
+                class="btn btn-sm btn-light"
                 title="Remove answer"><i class="bi bi-trash" /></button>
         </div>
     {/each}
