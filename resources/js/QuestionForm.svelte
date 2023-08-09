@@ -6,12 +6,23 @@
     export let toggleEditor;
 
     let editor;
+    let savingStatus = "";
 
     $: correctAnswerId = question.correct_answer_id;
     $: if (editor) {
         editor.addEventListener("trix-change", function () {
             question.text = document.getElementById("questionText").value;
+            savingStatus = '<p class="text-end">Saving ...</p>';
             handleChange();
+        });
+
+        editor.toolbarElement.style.display = "none";
+
+        editor.addEventListener("trix-focus", function(event) {
+            event.target.toolbarElement.style.display = "block";
+        });
+        editor.addEventListener("trix-blur", function(event) {
+            event.target.toolbarElement.style.display = "none";
         });
     }
 
@@ -39,8 +50,11 @@
             () => {
                 axios
                     .put("/api/questions/" + question.id, question)
-                    .then(function (response) {})
+                    .then(function (response) {
+                        savingStatus = '<p class="text-end">Saved <span class="text-success-dark">&check;</span></p>';
+                    })
                     .catch(function (error) {
+                        savingStatus = '<p class="text-end">Saving ... <span class="text-danger-dark">failed!</span></p>';
                         alert(error);
                     });
             },
@@ -146,14 +160,9 @@
 
         {#key question.id}
             <div class="mt-3 mb-3">
-                <input
-                    id="questionText"
-                    type="hidden"
-                    bind:value={question.text} />
-                <trix-editor
-                    id="editor-questionText"
-                    bind:this={editor}
-                    input="questionText" />
+                <input id="questionText" type="hidden" bind:value={question.text} />
+                <trix-editor id="editor-questionText" class="bg-light" bind:this={editor} input="questionText" />
+                {@html savingStatus}
             </div>
 
             <div class="mb-3">
@@ -219,7 +228,7 @@
                     type="button"
                     class="btn btn-sm {correctAnswerId ===
                     answer.id
-                        ? 'btn-outline-success'
+                        ? 'btn-success'
                         : 'btn-light'}"
                     title="Set as correct answer"
                     ><i class="bi bi-check-lg" /></button>
