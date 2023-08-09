@@ -6,7 +6,7 @@
  */
 
 /*!
- * Chart.js v4.3.2
+ * Chart.js v4.3.3
  * https://www.chartjs.org
  * (c) 2023 Chart.js Contributors
  * Released under the MIT License
@@ -15,7 +15,7 @@
 /*! @license DOMPurify 3.0.5 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.0.5/LICENSE */
 
 /**! 
- * hotkeys-js v3.11.2 
+ * hotkeys-js v3.12.0 
  * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies. 
  * 
  * Copyright (c) 2023 kenny wong <wowohoo@qq.com> 

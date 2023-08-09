@@ -41,7 +41,10 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    hover: {
+                        mode: null
+                    },
                 }
             };
 

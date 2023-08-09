@@ -30,12 +30,12 @@
         }
         if (answerChoice.is_correct) {
             if (answerChoice.help_used) {
-                return '<span class="text-warning fw-bold">&check;</span>';
+                return '<span class="text-warning-dark fw-bold">&check;</span>';
             } else {
-                return '<span class="text-success fw-bold">&check;</span>';
+                return '<span class="text-success-dark fw-bold">&check;</span>';
             }
         } else {
-            return '<span class="text-danger fw-bold">&cross;</span>';
+            return '<span class="text-danger-dark fw-bold">&cross;</span>';
         }
     };
 </script>

@@ -29,9 +29,13 @@
 <div
     id="answer{answer.id}"
     class="row border-start border-3 m-1 pt-2 {answerStatusIndicator}"
-    class:bg-light={!cancelled}
-    class:bg-correct={!cancelled && !examMode && hasAnswer && isCorrectAnswer}
-    class:bg-incorrect={!cancelled && !examMode && hasAnswer && !isCorrectAnswer && isChosenAnswer}
+    class:bg-light={
+        (!hasAnswer && !cancelled && !isChosenAnswer) ||
+        (hasAnswer && !isCorrectAnswer && !isChosenAnswer) ||
+        examMode
+    }
+    class:text-bg-success={!cancelled && !examMode && hasAnswer && isCorrectAnswer}
+    class:text-bg-danger={!cancelled && !examMode && hasAnswer && !isCorrectAnswer && isChosenAnswer}
     class:bg-cancelled={cancelled}>
     {#if !hasAnswer}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -66,11 +70,11 @@
                 type="button"
                 class="btn-close" />
         {:else if !examMode && isCorrectAnswer && isChosenAnswer}
-            <span class="text-success fw-bold fs-3">&check;</span>
+            <span class="text-success-dark fw-bold fs-3">&check;</span>
         {:else if !examMode && isCorrectAnswer && !isChosenAnswer}
-            <span class="text-success fw-bold fs-3">&#8672;</span>
+            <span class="text-success-dark fw-bold fs-3">&#8672;</span>
         {:else if !examMode && isChosenAnswer}
-            <span class="text-danger fw-bold fs-3">&cross;</span>
+            <span class="text-danger-dark fw-bold fs-3">&cross;</span>
         {:else if examMode && isChosenAnswer}
             <span class="text-secondary fw-bold fs-3">&cross;</span>
         {/if}
