@@ -1,13 +1,13 @@
 {
-    "/js/bootstrap.bundle.min.js": "/js/bootstrap.bundle.min.js?id=ebdf77f6e717ba42b74b9c203aaddc2f",
-    "/js/trix.min.js": "/js/trix.min.js?id=4134e297f0806ed78d8a7313400cd4a1",
-    "/js/app.js": "/js/app.js?id=297c3b5f6db1e1d4a0ff62aceff3bfee",
-    "/js/DeckForm.js": "/js/DeckForm.js?id=1a69718dada531d21221d5662c0dbb76",
-    "/js/IndexSessionView.js": "/js/IndexSessionView.js?id=7f9f2b1a7d20e4483c979bfb991fa94a",
-    "/js/NewSessionView.js": "/js/NewSessionView.js?id=ce52466d4b10fbd050406cb887771e28",
-    "/js/SessionView.js": "/js/SessionView.js?id=09ba6bad071dbd462aeb11c9544fe4d5",
-    "/js/QuestionView.js": "/js/QuestionView.js?id=9c3c3ee254ff00d2d5c57163bfdda968",
-    "/js/Messages.js": "/js/Messages.js?id=b0cd17e98152178f0a1e7fb7c50a4536",
-    "/js/UserSettingsView.js": "/js/UserSettingsView.js?id=5c978ca900c3f7085373396a0d66d676",
-    "/css/app.css": "/css/app.css?id=b3afd7427ed965f112e1f0ffc8f72cca"
+    "/js/bootstrap.bundle.min.js": "/js/bootstrap.bundle.min.js?id=86276fdd20c21121900eea73d8bef8a6",
+    "/js/trix.min.js": "/js/trix.min.js?id=5e13a750be77a41cededf7be122b89ac",
+    "/js/app.js": "/js/app.js?id=9f04eb4517ae3459f91d7ac6b0a1e392",
+    "/js/DeckForm.js": "/js/DeckForm.js?id=cb8a3ed1597de8006e0cd0214766911c",
+    "/js/IndexSessionView.js": "/js/IndexSessionView.js?id=ae7d41c9345dacaf8fe057000d8588e8",
+    "/js/NewSessionView.js": "/js/NewSessionView.js?id=c26ece11ec2f7d7d26600291e140d936",
+    "/js/SessionView.js": "/js/SessionView.js?id=cfbad88c4685ad3074c2b41ebc1d58db",
+    "/js/QuestionView.js": "/js/QuestionView.js?id=dca403e0d99a41e6feb681dc23ed5b23",
+    "/js/Messages.js": "/js/Messages.js?id=1553bfd85c439f30c82b151db800508d",
+    "/js/UserSettingsView.js": "/js/UserSettingsView.js?id=8d70c63ae1687843b37ee79659e766a2",
+    "/css/app.css": "/css/app.css?id=2fc346598e39737df07379ca51e36eb9"
 }

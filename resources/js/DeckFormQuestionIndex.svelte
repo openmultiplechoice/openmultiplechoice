@@ -13,10 +13,10 @@
                 on:click|preventDefault={() => {
                     data.current_question_id = question.id;
                 }}
-                class="list-group-item list-group-item-action {question.id ===
+                class="list-group-item {question.id ===
                 data.current_question_id
-                    ? 'active'
-                    : ''}"
+                    ? 'list-group-item-secondary'
+                    : 'list-group-item-light'}"
                 aria-current="true">
                 <div class="d-flex w-100 justify-content-between mb-1">
                     <p class="mb-1 font-monospace">ID: {question.id}</p>

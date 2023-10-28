@@ -6,21 +6,21 @@
 
 <div class="progress" style="height: 20px;" title="{title}">
     <div
-        class="progress-bar"
+        class="progress-bar bg-success text-dark"
         role="progressbar"
-        style="color: #155724; background-color: #d4edda; width: {progressPercentage.correct}%">
+        style="width: {progressPercentage.correct}%">
         {progressPercentage.correct > 4 ? progressPercentage.correct + "%" : ""}
     </div>
     <div
-        class="progress-bar"
+        class="progress-bar bg-warning text-dark"
         role="progressbar"
-        style="color: #664d03; background-color: #fff3cd; width: {progressPercentage.correctWithHelp}%">
+        style="width: {progressPercentage.correctWithHelp}%">
         {progressPercentage.correctWithHelp > 4 ? progressPercentage.correctWithHelp + "%" : ""}
     </div>
     <div
-        class="progress-bar"
+        class="progress-bar bg-danger text-dark"
         role="progressbar"
-        style="color: #721c24; background-color: #f8d7da; width: {progressPercentage.incorrect}%">
+        style="width: {progressPercentage.incorrect}%">
         {progressPercentage.incorrect > 4 ? progressPercentage.incorrect + "%" : ""}
     </div>
     <div

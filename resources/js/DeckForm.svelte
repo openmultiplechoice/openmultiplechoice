@@ -102,41 +102,8 @@
 
 <div class="row">
     <div class="col">
-        <div class="btn-group">
-            <button
-                type="button"
-                class="btn btn-primary"
-                on:click={() => {
-                    addNewQuestion("mc");
-                }}>Add question</button>
-            <button
-                type="button"
-                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <!-- svelte-ignore a11y-invalid-attribute -->
-                    <a
-                        class="dropdown-item"
-                        href="#"
-                        on:click={() => {
-                            addNewQuestion("mc");
-                        }}>Add multiple choice question</a>
-                </li>
-                <li>
-                    <!-- svelte-ignore a11y-invalid-attribute -->
-                    <a
-                        class="dropdown-item"
-                        href="#"
-                        on:click={() => {
-                            addNewQuestion("card");
-                        }}>Add card question</a>
-                </li>
-            </ul>
-        </div>
+        <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("mc"); }}>Add MC question</button>
+        <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("card"); }}>Add card question</button>
     </div>
 
     <div class="col">

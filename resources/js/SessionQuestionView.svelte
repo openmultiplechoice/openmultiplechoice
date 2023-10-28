@@ -61,7 +61,9 @@
 
 {#if question}
     {#if showEditor}
-        <QuestionForm bind:question {toggleEditor} />
+        <div class="pt-1 pb-3 border-warning" style="border-top: dashed; border-bottom: dashed; border-width: 10px;">
+            <QuestionForm bind:question {toggleEditor} />
+        </div>
     {:else}
         <div id="question{question.id}">
             {#if question.is_invalid}

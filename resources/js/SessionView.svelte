@@ -293,8 +293,8 @@
 
                 <span class="ms-1 float-end fw-bold font-monospace badge text-dark"
                     class:text-bg-light={!answerChoice || examMode}
-                    class:bg-correct={!examMode && !currentQuestion.is_invalid && answerChoice && answerChoice.is_correct}
-                    class:bg-incorrect={!examMode && !currentQuestion.is_invalid && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
+                    class:bg-success={!examMode && !currentQuestion.is_invalid && answerChoice && answerChoice.is_correct}
+                    class:bg-danger={!examMode && !currentQuestion.is_invalid && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
                 <strong>{data.deck.name}</strong>
             </p>
         </div>
