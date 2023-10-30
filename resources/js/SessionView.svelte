@@ -21,13 +21,26 @@
     var magicGIFPath = '';
 
     $: examMode = !sessionComplete ? $UserSettings.session_exam_mode : false;
-    $: showSidebar = $UserSettings.session_show_sidebar;
+    $: settingsShowSidebar = $UserSettings.session_show_sidebar;
+    $: settingsExamMode = $UserSettings.session_exam_mode;
 
-    $: showSidebar,
+    $: settingsShowSidebar,
         (()=> {
             axios
                 .put("/api/users/me/settings", {
-                    session_show_sidebar: showSidebar
+                    session_show_sidebar: settingsShowSidebar
+                })
+                .then(function (response) {})
+                .catch(function (error) {
+                    alert(error);
+                });
+        })();
+
+    $: settingsExamMode,
+        (()=> {
+            axios
+                .put("/api/users/me/settings", {
+                    session_exam_mode: settingsExamMode
                 })
                 .then(function (response) {})
                 .catch(function (error) {
@@ -285,10 +298,21 @@
             <p class="text-overflow">
                 <button
                     class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline bg-light"
+                    title="Toggle sidebar"
                     on:click|preventDefault={() => {
                         $UserSettings.session_show_sidebar = !$UserSettings.session_show_sidebar;
                     }}>
                     <i class="bi bi-layout-sidebar" />
+                </button>
+                <button
+                    class="btn btn-sm"
+                    class:bg-light={!settingsExamMode}
+                    class:bg-dark-subtle={settingsExamMode}
+                    title="Toggle exam mode"
+                    on:click|preventDefault={() => {
+                        $UserSettings.session_exam_mode = !$UserSettings.session_exam_mode;
+                    }}>
+                    <i class="bi bi-exclamation-square" />
                 </button>
 
                 <span class="ms-1 float-end fw-bold font-monospace badge text-dark"
@@ -311,15 +335,15 @@
         </div>
     </div>
     <div class="row mt-3">
-        {#if showSidebar}
+        {#if settingsShowSidebar}
             <div class="col-lg-3 d-none d-lg-block">
                 <SessionQuestionIndexView bind:data bind:examMode={examMode} />
             </div>
         {/if}
         <div
-            class:col-lg-9={showSidebar}
-            class:col-lg-10={!showSidebar}
-            class:offset-lg-1={!showSidebar}
+            class:col-lg-9={settingsShowSidebar}
+            class:col-lg-10={!settingsShowSidebar}
+            class:offset-lg-1={!settingsShowSidebar}
             class="col-md-12">
             <SessionQuestionNav
                 bind:data
