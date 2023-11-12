@@ -7,11 +7,13 @@
 <div class="row">
     <div class="col">
         <h1 class="h4">{{ $deck->name }}</h1>
-        <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
-            @csrf
-            <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
-            <button type="submit" class="btn btn-sm btn-primary">New session</button>
-        </form>
+        @if (count($questions) > 0)
+            <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
+                @csrf
+                <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
+                <button type="submit" class="btn btn-sm btn-primary">New session</button>
+            </form>
+        @endif
         <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary mb-3">Edit deck</a>
     </div>
 </div>

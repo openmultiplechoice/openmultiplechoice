@@ -26,6 +26,8 @@ class SessionController extends Controller
 
         $deck = Deck::findOrFail($request->deck_id);
 
+        abort_if($deck->questions->isEmpty(), 400);
+
         $newSession->deck_id = $deck->id;
         $newSession->name = $deck->name;
         $newSession->current_question_id = $newSession->deck->questions->first()->id;
