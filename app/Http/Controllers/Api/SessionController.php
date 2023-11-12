@@ -116,8 +116,23 @@ class SessionController extends Controller
         }
 
         $deck = Deck::with('questions', 'questions.images', 'questions.answers')->find($session->deck_id);
+        $session = $session->load('answerChoices');
+
+        // If all questions have been removed from the
+        // underlying deck, error out.
+        // TODO(schu): is there a better HTTP error code?
+        // TODO(schu): give the user a clue what's wrong
+        abort_if($deck->questions->isEmpty(), 410);
+
+        // If the sessions's current question has
+        // been deleted, set it to the first question
+        if (!in_array($session->current_question_id, array_column($deck->questions->toArray(), 'id'))) {
+            $session->current_question_id = $deck->questions()->first()->id;
+            $session->save();
+        }
+
         return response()->json([
-            'session' => $session->load('answerChoices'),
+            'session' => $session,
             'deck' => $deck
         ]);
     }
