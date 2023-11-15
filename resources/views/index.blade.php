@@ -20,13 +20,21 @@
             <h4><a class="text-reset text-decoration-none" href="{{ url('info') }}">Info</a></h4>
             @foreach ($info as $entry)
                 <div class="alert alert-light" role="alert">
-                    <h6 class="alert-heading"><a class="link-dark" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
+                    <h6 class="alert-heading"><a class="link-dark alert-link" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
                     <p><small><span class="font-monospace">{{ $entry->created_at->format('d.m.Y') }}</span> {!! $entry->is_pinned ? '<i class="bi bi-pin-angle"></i>' : '' !!}</small></p>
                     <p>{!! $purifier->purify(preg_split("/<br>/", $entry->text)[0]) !!}</p>
                 </div>
             @endforeach
         </div>
     @endif
+</div>
+
+<div class="row">
+    <div class="col-md">
+        <h4>Stats</h4>
+        <div id="IndexStatsView"></div>
+        @vite(['resources/js/IndexStatsView.js'])
+    </div>
 </div>
 
 @endsection

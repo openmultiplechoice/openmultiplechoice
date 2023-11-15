@@ -21,7 +21,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
 
 use App\Models\Info;
-use App\Models\Session;
 use App\Models\User;
 
 /*

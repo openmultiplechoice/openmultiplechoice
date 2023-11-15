@@ -12,6 +12,7 @@ export default defineConfig({
 
             'resources/js/DeckForm.js',
             'resources/js/IndexSessionView.js',
+            'resources/js/IndexStatsView.js',
             'resources/js/Messages.js',
             'resources/js/NewSessionView.js',
             'resources/js/QuestionView.js',

@@ -123,6 +123,15 @@ ASSET_URL=http://127.0.0.1:8000
 ...
 ```
 
+## Testing scheduled jobs
+
+To test scheduled jobs, you need to run the scheduler. During development,
+this can be done with running the schedule worker as follows:
+
+```
+php artisan schedule:work
+```
+
 ## Building JavaScript and CSS files
 
 OMC uses Vite as a frontend build tool and asset bundler. The most used
