@@ -119,7 +119,7 @@
         {#each decksOther as deck}
             <div class="row mb-1">
                 <div class="col-9 text-overflow">
-                    {deck.name}
+                    <a href="/decks/{deck.id}">{deck.name}</a>
                 </div>
                 <div class="col-3 d-grid gap-4">
                     <button
@@ -135,7 +135,7 @@
         {#each decksAdded as deck}
             <div class="row mb-1">
                 <div class="col-9 text-overflow">
-                    {deck.name}
+                    <a href="/decks/{deck.id}">{deck.name}</a>
                 </div>
                 <div class="col-3 d-grid gap-4">
                     <button
