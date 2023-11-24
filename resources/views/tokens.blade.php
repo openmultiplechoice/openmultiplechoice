@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', [ 'container_class' => 'container'])
 
 @section('title', 'Tokens')
 
