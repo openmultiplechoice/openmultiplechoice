@@ -37,7 +37,10 @@
             event.target.toolbarElement.style.display = "block";
         });
         editor.addEventListener("trix-blur", function(event) {
-            event.target.toolbarElement.style.display = "none";
+            // Don't hide the toolbar if we've unfocused to focus on the link dialog
+            if (!event.target.toolbarElement.contains(document.activeElement)) {
+                event.target.toolbarElement.style.display = "none";
+            }
         });
     }
 
