@@ -121,7 +121,8 @@
 
 <div class="row">
     <div class="col">
-        <hr />
+        <div class="mt-3 mb-3 border-dark" style="border-bottom: dotted; border-width: 1px;">
+        </div>
     </div>
 </div>
 
