@@ -1,17 +1,24 @@
 <script>
     import debounce from "lodash/debounce";
-    import { onMount } from "svelte";
 
     export let answer;
 
-    let editor;
+    let editorAnswer;
+    let editorHint;
+
     let savingStatus = "";
 
-    onMount(() => {
-        document
-            .getElementById("editor-answer" + answer.id)
-            .addEventListener("trix-change", function () {
-                answer.text = document.getElementById("answer" + answer.id).value;
+    $: if (editorAnswer) {
+        configureEditorEventListener(editorAnswer);
+    }
+    $: if (editorHint) {
+        configureEditorEventListener(editorHint);
+    }
+
+    function configureEditorEventListener(editor) {
+        editor.addEventListener("trix-change", function () {
+                answer.text = document.getElementById("answerText" + answer.id).value;
+                answer.hint = document.getElementById("answerHint" + answer.id).value;
                 savingStatus = '<p class="text-end">Saving ...</p>';
                 handleChange();
             });
@@ -24,7 +31,7 @@
         editor.addEventListener("trix-blur", function(event) {
             event.target.toolbarElement.style.display = "none";
         });
-    });
+    };
 
     var debounced;
 
@@ -55,8 +62,16 @@
 
 <form action="#" class="mt-3">
     <div class="mb-3">
-        <input id="answer{answer.id}" type="hidden" bind:value={answer.text} />
-        <trix-editor id="editor-answer{answer.id}" class="bg-light" bind:this={editor} input="answer{answer.id}" />
+        <label for="answerText{answer.id}" class="form-label">Answer text</label>
+        <input id="answerText{answer.id}" type="hidden" bind:value={answer.text} />
+        <trix-editor id="editor-answer{answer.id}" class="bg-light" bind:this={editorAnswer} input="answerText{answer.id}" />
+        {@html savingStatus}
+    </div>
+
+    <div class="mb-3">
+        <label for="answerHint{answer.id}t" class="form-label">Answer hint (optional)</label>
+        <input id="answerHint{answer.id}" type="hidden" bind:value={answer.hint} />
+        <trix-editor id="editor-answerHint{answer.id}" class="bg-light" bind:this={editorHint} input="answerHint{answer.id}" />
         {@html savingStatus}
     </div>
 </form>

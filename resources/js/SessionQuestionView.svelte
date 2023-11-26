@@ -132,7 +132,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="alert alert-light" role="alert">
-                            {question.comment}
+                            {@html DOMPurify.sanitize(question.comment)}
                         </div>
                     </div>
                 </div>

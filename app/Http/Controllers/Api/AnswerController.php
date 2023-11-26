@@ -13,7 +13,7 @@ class AnswerController extends Controller
     {
         $answer = new Answer();
 
-        $answer->text = $request->text;
+        $answer->fill($request->all());
 
         $answer->save();
 
@@ -22,7 +22,7 @@ class AnswerController extends Controller
 
     public function update(Request $request, Answer $answer)
     {
-        $answer->text = $request->text;
+        $answer->fill($request->all());
         $answer->save();
 
         return response()->json($answer);
