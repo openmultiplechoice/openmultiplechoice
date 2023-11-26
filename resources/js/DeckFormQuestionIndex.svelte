@@ -55,5 +55,6 @@
         overflow: hidden !important;
         white-space: nowrap;
         text-overflow: ellipsis !important;
+        text-align: left;
     }
 </style>
