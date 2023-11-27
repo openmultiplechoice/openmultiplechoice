@@ -61,7 +61,7 @@
 
 {#if question}
     {#if showEditor}
-        <div class="pt-1 pb-3 border-warning" style="border-top: dashed; border-bottom: dashed; border-width: 10px;">
+        <div class="pt-1 pb-3 border-dark" style="border-top: dotted; border-bottom: dotted; border-width: 1px;">
             <QuestionForm bind:question {toggleEditor} />
         </div>
     {:else}
@@ -132,7 +132,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="alert alert-light" role="alert">
-                            {question.comment}
+                            {@html DOMPurify.sanitize(question.comment)}
                         </div>
                     </div>
                 </div>

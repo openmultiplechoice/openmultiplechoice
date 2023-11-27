@@ -5,13 +5,28 @@
     export let question;
     export let toggleEditor;
 
-    let editor;
+    let editorQuestion;
+    let editorComment;
+    let editorHint;
+
     let savingStatus = "";
 
     $: correctAnswerId = question.correct_answer_id;
-    $: if (editor) {
+    $: if (editorQuestion) {
+        configureEditorEventListener(editorQuestion);
+    }
+    $: if (editorComment) {
+        configureEditorEventListener(editorComment);
+    }
+    $: if (editorHint) {
+        configureEditorEventListener(editorHint);
+    }
+
+    function configureEditorEventListener(editor) {
         editor.addEventListener("trix-change", function () {
             question.text = document.getElementById("questionText").value;
+            question.comment = document.getElementById("questionComment").value;
+            question.hint = document.getElementById("questionHint").value;
             savingStatus = '<p class="text-end">Saving ...</p>';
             handleChange();
         });
@@ -22,7 +37,10 @@
             event.target.toolbarElement.style.display = "block";
         });
         editor.addEventListener("trix-blur", function(event) {
-            event.target.toolbarElement.style.display = "none";
+            // Don't hide the toolbar if we've unfocused to focus on the link dialog
+            if (!event.target.toolbarElement.contains(document.activeElement)) {
+                event.target.toolbarElement.style.display = "none";
+            }
         });
     }
 
@@ -153,15 +171,28 @@
             <button
                 type="button"
                 on:click|preventDefault={toggleEditor}
-                class="btn btn-outline-secondary btn-sm">Close</button>
-
-            <hr />
+                class="btn btn-outline-secondary btn-sm">Close editor</button>
         {/if}
 
         {#key question.id}
             <div class="mt-3 mb-3">
+                <label for="questionText" class="form-label">Question text</label>
                 <input id="questionText" type="hidden" bind:value={question.text} />
-                <trix-editor id="editor-questionText" class="bg-light" bind:this={editor} input="questionText" />
+                <trix-editor id="editor-questionText" class="bg-light" bind:this={editorQuestion} input="questionText" />
+                {@html savingStatus}
+            </div>
+
+            <div class="mt-3 mb-3">
+                <label for="questionHint" class="form-label">Question hint (optional)</label>
+                <input id="questionHint" type="hidden" bind:value={question.hint} />
+                <trix-editor id="editor-questionHint" class="bg-light" bind:this={editorHint} input="questionHint" />
+                {@html savingStatus}
+            </div>
+
+            <div class="mt-3 mb-3">
+                <label for="questionComment" class="form-label">Question comment (optional)</label>
+                <input id="questionComment" type="hidden" bind:value={question.comment} />
+                <trix-editor id="editor-questionComment" class="bg-light" bind:this={editorComment} input="questionComment" />
                 {@html savingStatus}
             </div>
 

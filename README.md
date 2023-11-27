@@ -31,6 +31,10 @@ GitHub.
 For security issues, please send a private mail to `security@openmultiplechoice.de`
 and do not open an issue.
 
+## Contact
+
+`mail@openmultiplechoice.de`
+
 ## License
 
 Copyright (C) 2020 Michael Schubert and [contributors](https://github.com/openmultiplechoice/openmultiplechoice/graphs/contributors).
