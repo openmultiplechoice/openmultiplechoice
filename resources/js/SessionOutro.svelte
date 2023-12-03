@@ -73,19 +73,8 @@
         <canvas bind:this={canvas}></canvas>
     </div>
     <div class="col-md">
-        <p class="mt-3">
-            <strong>{progressPercentage.correct}%</strong> correct -
-            {#if progressPercentage.correct >= 90}
-                Brain!
-            {:else if progressPercentage.correct >= 80}
-                Boom!
-            {:else if progressPercentage.correct >= 70}
-                Great!
-            {:else if progressPercentage.correct >= 60}
-                Well done!
-            {:else}
-                Next time!
-            {/if}
+        <p class="mt-3 text-dark">
+            <span class="fs-4 font-monospace">{progressPercentage.correct}%</span> correct
         </p>
 
         <div class="d-grid gap-2">
