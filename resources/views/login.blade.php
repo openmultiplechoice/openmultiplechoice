@@ -30,7 +30,7 @@
 @endif
 
 @if (config('app.login.keycloak'))
-        <hr class="mt-5">
+        <hr class="my-5">
         <p>Use <span class="fw-bold">{{ parse_url(config('services.keycloak.base_url'), PHP_URL_HOST) }}</span> to log in:</p>
         <form action="{{ route('keycloak-login') }}" method="get">
             @csrf
