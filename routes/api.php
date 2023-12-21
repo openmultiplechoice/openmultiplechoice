@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\AnswerChoiceController;
 
 use App\Http\Controllers\Api\SessionController;
 
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserSettingsController;
 
 use App\Http\Controllers\Api\StatsController;
@@ -73,6 +74,9 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
 
     Route::get('users/me/settings', [UserSettingsController::class, 'show']);
     Route::put('users/me/settings', [UserSettingsController::class, 'update']);
+
+    Route::get('users/showbylegacyid', [UserController::class, 'showByLegacyId']);
+    Route::resource('users', UserController::class);
 
     Route::resource('stats', StatsController::class);
 
