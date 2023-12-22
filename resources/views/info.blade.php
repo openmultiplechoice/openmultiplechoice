@@ -7,12 +7,19 @@
 <div class="row">
     <div class="col-md">
         <h1 class="h4">Info</h1>
-        <ul>
-@foreach ($info as $n)
-            <li><span class="font-monospace">{{ $n->created_at }}<span> <a class="link-dark" href="{{ url('info', $n->id) }}">{{ $n->title }}</a></li>
-@endforeach
-        </ul>
     </div>
+</div>
+
+<div class="row">
+    @foreach ($info as $entry)
+        <div class="col-md-4">
+            <div class="alert alert-light" role="alert">
+                <h6 class="alert-heading"><a class="link-dark" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
+                <p class="font-monospace"><small>{{ $entry->created_at->format('d.m.Y') }}</small></p>
+                <p>{!! $entry->text !!}</p>
+            </div>
+        </div>
+    @endforeach
 </div>
 
 @endsection
