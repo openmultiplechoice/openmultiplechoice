@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\News;
+use App\Models\Info;
 
-class NewsController extends Controller
+class InfoController extends Controller
 {
     public function index()
     {
-        $news = News::orderBy('id', 'desc')->get();
-        return view('news', ['news' => $news]);
+        $info = Info::orderBy('id', 'desc')->get();
+        return view('info', ['info' => $info]);
     }
 
     public function create(Request $request)
@@ -21,7 +21,7 @@ class NewsController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return view('news-editor');
+        return view('info-editor');
     }
 
     public function store(Request $request)
@@ -30,44 +30,44 @@ class NewsController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $newEntry = new News();
+        $newEntry = new Info();
         $newEntry->fill($request->all());
         $newEntry->save();
 
-        return redirect()->route('show.news', [
-            'news' => $newEntry->id,
+        return redirect()->route('show.info', [
+            'info' => $newEntry->id,
         ]);
     }
 
-    public function show(News $news)
+    public function show(Info $info)
     {
-        return view('news-single', ['news' => $news]);
+        return view('info-single', ['info' => $info]);
     }
 
-    public function edit(Request $request, News $news)
+    public function edit(Request $request, Info $info)
     {
         if (!$request->user()->is_admin) {
             abort(403, 'Unauthorized');
         }
 
-        return view('news-editor', ['news' => $news]);
+        return view('info-editor', ['info' => $info]);
     }
 
-    public function update(Request $request, News $news)
+    public function update(Request $request, Info $info)
     {
         if (!$request->user()->is_admin) {
             abort(403, 'Unauthorized');
         }
 
-        $news->update($request->all());
-        $news->save();
+        $info->update($request->all());
+        $info->save();
 
-        return redirect()->route('show.news', [
-            'news' => $news->id,
+        return redirect()->route('show.info', [
+            'info' => $info->id,
         ]);
     }
 
-    public function destroy(News $news)
+    public function destroy(Info $info)
     {
         //
     }

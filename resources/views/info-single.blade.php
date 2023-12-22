@@ -6,9 +6,9 @@
 
 <div class="row">
     <div class="col-md">
-        <h1 class="h4">{{ $news->title }}</h1>
-        <p class="font-monospace"><small>{{ $news->created_at }}</small></p>
-        <p>{!! $news->text !!}</p>
+        <h1 class="h4">{{ $info->title }}</h1>
+        <p class="font-monospace"><small>{{ $info->created_at->format('d.m.Y') }}</small></p>
+        <p>{!! $info->text !!}</p>
     </div>
 </div>
 

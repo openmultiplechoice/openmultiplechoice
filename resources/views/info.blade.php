@@ -6,10 +6,10 @@
 
 <div class="row">
     <div class="col-md">
-        <h1 class="h4">News</h1>
+        <h1 class="h4">Info</h1>
         <ul>
-@foreach ($news as $n)
-            <li><span class="font-monospace">{{ $n->created_at }}<span> <a class="link-dark" href="{{ url('news', $n->id) }}">{{ $n->title }}</a></li>
+@foreach ($info as $n)
+            <li><span class="font-monospace">{{ $n->created_at }}<span> <a class="link-dark" href="{{ url('info', $n->id) }}">{{ $n->title }}</a></li>
 @endforeach
         </ul>
     </div>

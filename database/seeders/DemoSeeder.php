@@ -8,7 +8,7 @@ use App\Models\Answer;
 use App\Models\Module;
 use App\Models\Deck;
 use App\Models\Image;
-use App\Models\News;
+use App\Models\Info;
 use App\Models\Question;
 use App\Models\Subject;
 
@@ -21,11 +21,11 @@ class DemoSeeder extends Seeder
      */
     public function run()
     {
-        News::create([
+        Info::create([
             'title' => 'Please note: demo resets happen without notice',
             'text' => 'All test data will be destroyed.',
         ]);
-        News::create([
+        Info::create([
             'title' => 'Welcome!',
             'text' => 'This is the OpenMultipleChoice demo instance.
             OpenMultipleChoice is a work in progress (and comes with

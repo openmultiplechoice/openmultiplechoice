@@ -13,13 +13,13 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\MagicGIFController;
-use App\Http\Controllers\NewsController;
+use App\Http\Controllers\InfoController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SessionQuestionController;
 use App\Http\Controllers\UserSettingsController;
 
-use App\Models\News;
+use App\Models\Info;
 use App\Models\Session;
 use App\Models\User;
 
@@ -36,9 +36,9 @@ use App\Models\User;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/', function () {
-        $news = News::orderByDesc('id')->take(4)->get();
+        $info = Info::orderByDesc('id')->take(4)->get();
         return view('index', [
-            'news' => $news,
+            'info' => $info,
         ]);
     })->name('index');
 
@@ -54,8 +54,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/modules', ModuleController::class);
     Route::get('/modules/{module}', [ModuleController::class, 'show'])->name('show.module');
 
-    Route::resource('/news', NewsController::class);
-    Route::get('/news/{news}', [NewsController::class, 'show'])->name('show.news');
+    Route::resource('/info', InfoController::class);
+    Route::get('/info/{info}', [InfoController::class, 'show'])->name('show.info');
 
     Route::resource('/sessions', SessionController::class);
     Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('show.session');
