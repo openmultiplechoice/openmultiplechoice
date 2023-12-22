@@ -42,16 +42,16 @@
         <div class="col-md-4">
             {#if progressPercentage.unanswered > 0}
                 <a href="/sessions/{session.id}" class="btn btn-sm btn-primary"
-                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"><i class="bi bi-ui-checks-grid" /> Continue</a>
+                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"><i class="bi bi-rocket-takeoff" /> Continue</a>
             {:else}
                 <a href="/sessions/{session.id}" class="btn btn-sm btn-outline-secondary"
-                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"><i class="bi bi-ui-checks-grid" /> Open</a>
+                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"><i class="bi bi-rocket-takeoff" /> Open</a>
             {/if}
             {#if progressPercentage.unanswered === 0 && progressPercentage.incorrect > 0}
                 <button on:click|preventDefault={() => createSession(session.id)}
                     class="btn btn-sm btn-outline-secondary"
                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" type="button">
-                        <i class="bi bi-arrow-repeat" /> Repeat incorrect
+                        <i class="bi bi-repeat" /> Repeat incorrect
                 </button>
             {/if}
         </div>

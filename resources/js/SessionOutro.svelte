@@ -79,11 +79,11 @@
 
         <div class="d-grid gap-2">
             <a href="/sessions/create" class="btn btn-sm btn-primary">
-                <i class="bi bi-ui-checks-grid"></i> New session</a>
+                <i class="bi bi-rocket-takeoff"></i> New session</a>
             {#if progressPercentage.incorrect > 0}
                 <button on:click|preventDefault={() => createSession(sessionId)}
                     class="btn btn-sm btn-outline-secondary" type="button">
-                        <i class="bi bi-arrow-repeat" /> Repeat incorrect
+                        <i class="bi bi-repeat" /> Repeat incorrect
                 </button>
             {/if}
             <a href="/" class="btn btn-sm btn-outline-secondary">Home</a>
