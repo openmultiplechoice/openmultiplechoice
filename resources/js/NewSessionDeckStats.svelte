@@ -130,18 +130,18 @@
                 {#if numIncorrectAnsweredQuestions >= 40}
                     <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 30))}
                         class="btn btn-sm btn-outline-secondary" type="button">
-                            <i class="bi bi-arrow-repeat" /> Repeat 30 incorrect
+                            <i class="bi bi-repeat" /> Repeat 30 incorrect
                     </button>
                 {/if}
                 {#if numIncorrectAnsweredQuestions >= 70}
                     <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 60))}
                         class="btn btn-sm btn-outline-secondary" type="button">
-                            <i class="bi bi-arrow-repeat" /> Repeat 60 incorrect
+                            <i class="bi bi-repeat" /> Repeat 60 incorrect
                     </button>
                 {/if}
                 <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds)}
                     class="btn btn-sm btn-outline-secondary" type="button">
-                        <i class="bi bi-arrow-repeat" /> Repeat {numIncorrectAnsweredQuestions} incorrect
+                        <i class="bi bi-repeat" /> Repeat {numIncorrectAnsweredQuestions} incorrect
                 </button>
             </div>
         {/if}
