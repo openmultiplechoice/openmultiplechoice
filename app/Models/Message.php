@@ -9,7 +9,16 @@ class Message extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['text', 'question_id', 'parent_message_id', 'legacy_message_id', 'legacy_parent_message_id', 'legacy_author_name'];
+    protected $fillable = [
+        'author_id',
+        'text',
+        'question_id',
+        'parent_message_id',
+        'legacy_message_id',
+        'legacy_parent_message_id',
+        'legacy_author_name',
+        'is_anonymous',
+    ];
 
     public function question()
     {
