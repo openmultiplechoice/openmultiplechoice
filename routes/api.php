@@ -63,7 +63,9 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
 
     Route::resource('images', ImageController::class);
 
-    Route::resource('messages', MessageController::class);
+    Route::resource('messages', MessageController::class)->only([
+        'update'
+    ]);
 
     Route::resource('answers', AnswerController::class);
 

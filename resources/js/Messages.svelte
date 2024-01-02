@@ -1,6 +1,5 @@
 <script>
     import debounce from "lodash/debounce";
-    import { onMount } from "svelte";
     import MessageView from "./MessageView.svelte";
 
     export let questionId;
@@ -100,6 +99,7 @@
     function handleSubmit() {
         var newMessage = {
             text: document.getElementById("message").value,
+            is_anonymous: document.getElementById("anonymous").checked,
         };
         axios
             .post("/api/questions/" + questionId + "/messages", newMessage)
@@ -135,16 +135,23 @@
                     <input id="message" type="hidden" name="message" value="" />
                     <trix-editor input="message" />
                 </div>
-                <input
-                    class="btn btn-sm btn-primary"
-                    type="submit"
-                    value="Send" />
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="anonymous" checked>
+                    <label class="form-check-label" for="anonymous">Anonymous</label>
+                </div>
+                <input class="btn btn-sm btn-primary" type="submit" value="Send" />
+                <button
+                    on:click|preventDefault={toggleEditor}
+                    class="btn btn-link mr-0">
+                        Cancel
+                </button>
             </form>
         </div>
     {:else}
         <button
             on:click|preventDefault={toggleEditor}
-            class="btn btn-sm btn-primary"
-            ><i class="bi bi-chat-square-dots-fill" /> Add comment</button>
+            class="btn btn-sm btn-primary">
+                <i class="bi bi-chat-square-dots-fill" /> Add comment
+        </button>
     {/if}
 </div>
