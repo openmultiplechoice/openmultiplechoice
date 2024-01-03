@@ -16,7 +16,10 @@ class MessageController extends Controller
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
-        $message->text = $request->text;
+        $message->fill($request->all());
+        if ($message->author_id != Auth::id() && !$request->user()->is_admin) {
+            abort(403, 'Unauthorized');
+        }
         $message->save();
 
         return response()->json($message);
