@@ -163,6 +163,30 @@ run
 composer update
 ```
 
+If `composer install` leads to an error like the example below, the issue could
+be a more recent php version on the machine where the update was done (for example,
+php8.3 on the developer machine and php8.1 on the target server).
+
+```
+$ composer install
+Installing dependencies from lock file (including require-dev)
+Verifying lock file contents can be installed on current platform.
+Your lock file does not contain a compatible set of packages. Please run composer update.
+
+  Problem 1
+    - symfony/css-selector is locked to version v7.0.0 and an update of this package was not requested.
+    - symfony/css-selector v7.0.0 requires php >=8.2 -> your php version (8.1.2) does not satisfy that requirement.
+  Problem 2
+[...]
+```
+
+In this case, make sure to use a compatible php version for the update. For
+example, on a macOS system with a brew php8.1. installation:
+
+```
+/opt/homebrew/opt/php@8.1/bin/php /opt/homebrew/bin/composer update
+```
+
 To upgrade packages to the latest version, find all outdated packages, update
 the version in `composer.json` and then update.
 

@@ -151,7 +151,7 @@
         <hr />
         <div class="row">
             <div class="col">
-                <p>Create a new deck:</p>
+                <p>Create new deck:</p>
                 <div class="mb-3">
                     <input bind:value={deckName} type="text" class="form-control" id="name" name="name" placeholder="My new deck ...">
                 </div>

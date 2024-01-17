@@ -13,7 +13,23 @@ class QuestionMessageController extends Controller
 {
     public function index(Question $question)
     {
-        $messages = $question->messages()->with('author')->get();
+        // TODO: is it possible to load the `author_id`
+        // (to later load author info) only for messages
+        // which are not anonymous?
+        $messages = $question->messages()->get();
+        // Load author info for messages which are
+        // not anonymous and for messages of the
+        // current user
+        $messages->each(function ($m) {
+            if (!$m->is_anonymous || $m->author_id == Auth::id()) {
+                $m->load('author:id,name');
+            } else {
+                // Null the `author_id` for messages
+                // which are anonymous to avoid nosy
+                // users..
+                $m->author_id = null;
+            }
+        });
         return response()->json($messages);
     }
 
@@ -27,7 +43,7 @@ class QuestionMessageController extends Controller
         $question->messages()->save($message);
 
         // Frontend expects author info in the message object
-        $message->load('author');
+        $message->load('author:id,name');
 
         return response()->json($message);
     }

@@ -99,7 +99,7 @@
                         }}
                         type="button"
                         class="btn btn-outline-secondary btn-sm mb-3"
-                        >Show hint</button>
+                        ><i class="bi bi-question"></i> Show hint</button>
                 {/if}
             {/if}
             {#if question.type === "mc"}
@@ -165,7 +165,7 @@
             <button
                 on:click|preventDefault={() => submitAnswer("")}
                 type="button"
-                class="btn btn-outline-secondary btn-sm">Show answer</button>
+                class="btn btn-outline-secondary btn-sm">&rightarrow; Show answer</button>
         </div>
     {/if}
 {:else}

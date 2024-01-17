@@ -40,7 +40,7 @@
                                 <a class="dropdown-item" href="{{ url('subjects') }}">Subjects</a>
                                 <a class="dropdown-item" href="{{ url('modules') }}">Modules</a>
                             @endif
-                            <a class="dropdown-item" href="{{ url('news') }}">News</a>
+                            <a class="dropdown-item" href="{{ url('info') }}">Info</a>
                         </div>
                     </li>
                     @if (Auth::user()->is_admin || Auth::user()->is_moderator)

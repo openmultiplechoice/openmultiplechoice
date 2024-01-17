@@ -73,28 +73,17 @@
         <canvas bind:this={canvas}></canvas>
     </div>
     <div class="col-md">
-        <p class="mt-3">
-            <strong>{progressPercentage.correct}%</strong> correct -
-            {#if progressPercentage.correct >= 90}
-                Brain!
-            {:else if progressPercentage.correct >= 80}
-                Boom!
-            {:else if progressPercentage.correct >= 70}
-                Great!
-            {:else if progressPercentage.correct >= 60}
-                Well done!
-            {:else}
-                Next time!
-            {/if}
+        <p class="mt-3 text-dark">
+            <span class="fs-4 font-monospace">{progressPercentage.correct}%</span> correct
         </p>
 
         <div class="d-grid gap-2">
             <a href="/sessions/create" class="btn btn-sm btn-primary">
-                <i class="bi bi-ui-checks-grid"></i> New session</a>
+                <i class="bi bi-rocket-takeoff"></i> New session</a>
             {#if progressPercentage.incorrect > 0}
                 <button on:click|preventDefault={() => createSession(sessionId)}
                     class="btn btn-sm btn-outline-secondary" type="button">
-                        <i class="bi bi-arrow-repeat" /> Repeat incorrect
+                        <i class="bi bi-repeat" /> Repeat incorrect
                 </button>
             {/if}
             <a href="/" class="btn btn-sm btn-outline-secondary">Home</a>

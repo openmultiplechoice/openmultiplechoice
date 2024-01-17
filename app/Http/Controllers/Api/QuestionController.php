@@ -40,9 +40,9 @@ class QuestionController extends Controller
     {
         $legacy_question_id = $request->get('id');
         $question = Question::where('legacy_question_id', '=', $legacy_question_id)->first();
-        if ($question == null) {
-            abort(404);
-        }
+
+        abort_unless($question, 404);
+
         return response()->json($question);
     }
 

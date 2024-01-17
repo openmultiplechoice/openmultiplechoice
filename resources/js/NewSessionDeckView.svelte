@@ -151,7 +151,7 @@
                         createSession(deck.id)}
                     type="button"
                     class="btn btn-sm btn-primary"
-                    ><i class="bi bi-ui-checks-grid" /> New session</button>
+                    ><i class="bi bi-rocket-takeoff" /> New session</button>
                 <a href="/decks/{deck.id}" class="card-link"
                     >Browse deck</a>
             </div>
