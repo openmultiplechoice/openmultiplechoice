@@ -125,8 +125,8 @@ ASSET_URL=http://127.0.0.1:8000
 
 ## Building JavaScript and CSS files
 
-OMC uses Laravel's [Mix](https://laravel.com/docs/8.x/mix) as a configuration
-layer on top of webpack. The most used commands are described below.
+OMC uses Vite as a frontend build tool and asset bundler. The most used
+commands are described below.
 
 ### Requirements
 
@@ -142,12 +142,12 @@ npm install --also=dev
 
 ### Production build
 
-If you made a change to Svelte, Sass or JavaScript files, run `npm run prod`
+If you made a change to Svelte, Sass or JavaScript files, run `npm run build`
 to rebuild the bundle files and commit the changes.
 
 ### Development workflow
 
-During development, `npm run watch` can be used to make webpack watch the
+During development, `npm run dev` can be used to make webpack watch the
 sources and trigger a rebuild whenever you made a change. This way you can
 jump back and forth between your editor and the browser and instantly see
 the result of your changes.

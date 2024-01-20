@@ -13,7 +13,9 @@ $theme-colors: (
 );
 
 @import '~bootstrap/scss/bootstrap';
-@import '~bootstrap-icons/font/bootstrap-icons';
+// Explicity import .css file to avoid the following regression:
+// https://github.com/twbs/icons/issues/1381
+@import '~bootstrap-icons/font/bootstrap-icons.css';
 
 @import '~trix/dist/trix.css';
 

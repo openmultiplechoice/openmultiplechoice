@@ -8,11 +8,9 @@
 
     <meta name="generator" content="OpenMultipleChoice - https://github.com/openmultiplechoice/openmultiplechoice" />
 
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
-    <script src="{{ mix('js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ mix('js/trix.min.js') }}"></script>
-    <script src="{{ mix('js/app.js') }}"></script>
+    @vite(['node_modules/bootstrap/dist/js/bootstrap.esm.js'])
+    @vite(['node_modules/trix/dist/trix.esm.js'])
+    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 <body>
 

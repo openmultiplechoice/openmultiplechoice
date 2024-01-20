@@ -2,15 +2,9 @@
     "exclude": [
         "\\.txt$",
         "\\.md$",
-        "public/js/DeckForm.js",
-        "public/js/IndexSessionView.js",
-        "public/js/NewSessionView.js",
-        "public/js/SessionView.js",
-        "public/js/QuestionView.js",
-        "public/js/UserSettingsView.js",
-        "public/js/Messages.js",
-        "public/js/app.js",
-        "public/js/trix.js",
-        "public/css/app.css"
+        "public/build/assets/.*\\.css$",
+        "public/build/assets/.*\\.woff[2]$",
+        "public/build/assets/.*\\.js$",
+        "public/build/.*\\.json$"
     ]
 }
