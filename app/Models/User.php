@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function messages()
     {
-        return $this->belongsToMany(Message::class);
+        return $this->hasMany(Message::class, 'author_id');
     }
 
     public function decks()
