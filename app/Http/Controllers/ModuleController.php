@@ -17,24 +17,11 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        $modules = Module::orderBy('id', 'desc')->get();
-        return view('modules', ['modules' => $modules]);
-    }
+        $subjects = Subject::orderBy('name')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        if (!$request->user()->is_admin && !$request->user()->is_moderator) {
-            abort(403, 'Unauthorized');
-        }
-
-        $subjects = Subject::all();
-
-        return view('module-editor', ['subjects' => $subjects]);
+        return view('modules', [
+            'subjects' => $subjects,
+        ]);
     }
 
     /**
@@ -48,8 +35,6 @@ class ModuleController extends Controller
         if (!$request->user()->is_admin && !$request->user()->is_moderator) {
             abort(403, 'Unauthorized');
         }
-
-        Log::debug($request->all());
 
         abort_if(!$request->subject_id, 400);
 
@@ -75,18 +60,12 @@ class ModuleController extends Controller
      */
     public function show(Module $module)
     {
-        return view('module');
-    }
+        $subjects = Subject::orderBy('name')->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Module  $module
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Module $module)
-    {
-        //
+        return view('module', [
+            'module' => $module,
+            'subjects' => $subjects,
+        ]);
     }
 
     /**
@@ -98,17 +77,22 @@ class ModuleController extends Controller
      */
     public function update(Request $request, Module $module)
     {
-        //
-    }
+        if (!$request->user()->is_admin && !$request->user()->is_moderator) {
+            abort(403, 'Unauthorized');
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Module  $module
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Module $module)
-    {
-        //
+        abort_if(!$request->subject_id, 400);
+
+        $subject = Subject::find($request->subject_id);
+        abort_if(!$subject, 400);
+
+        $module->fill($request->all());
+        $module->save();
+
+        $subject->modules()->save($module);
+
+        return redirect()->route('show.module', [
+            'module' => $module->id,
+        ]);
     }
 }
