@@ -14,22 +14,9 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::orderBy('id', 'desc')->get();
+        $subjects = Subject::orderBy('name')->get();
+
         return view('subjects', ['subjects' => $subjects]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        if (!$request->user()->is_admin && !$request->user()->is_moderator) {
-            abort(403, 'Unauthorized');
-        }
-
-        return view('subject-editor');
     }
 
     /**
@@ -61,18 +48,12 @@ class SubjectController extends Controller
      */
     public function show(Subject $subject)
     {
-        return view('subject');
-    }
+        $modules = $subject->modules->sortBy('name');
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Subject $subject)
-    {
-        //
+        return view('subject', [
+            'subject' => $subject,
+            'modules' => $modules,
+        ]);
     }
 
     /**
@@ -84,17 +65,15 @@ class SubjectController extends Controller
      */
     public function update(Request $request, Subject $subject)
     {
-        //
-    }
+        if (!$request->user()->is_admin && !$request->user()->is_moderator) {
+            abort(403, 'Unauthorized');
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Subject $subject)
-    {
-        //
+        $subject->fill($request->all());
+        $subject->save();
+
+        return redirect()->route('show.subject', [
+            'subject' => $subject->id,
+        ]);
     }
 }

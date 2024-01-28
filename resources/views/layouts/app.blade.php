@@ -8,11 +8,9 @@
 
     <meta name="generator" content="OpenMultipleChoice - https://github.com/openmultiplechoice/openmultiplechoice" />
 
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
-    <script src="{{ mix('js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ mix('js/trix.min.js') }}"></script>
-    <script src="{{ mix('js/app.js') }}"></script>
+    @vite(['node_modules/bootstrap/dist/js/bootstrap.esm.js'])
+    @vite(['node_modules/trix/dist/trix.esm.js'])
+    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 <body>
 
@@ -35,11 +33,8 @@
                             {{ __('omc.more') }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('decks') }}">Decks</a>
-                            @if (Auth::user()->is_admin)
-                                <a class="dropdown-item" href="{{ url('subjects') }}">Subjects</a>
-                                <a class="dropdown-item" href="{{ url('modules') }}">Modules</a>
-                            @endif
+                            <a class="dropdown-item" href="{{ url('decks') }}">Your decks</a>
+                            <hr class="dropdown-divider">
                             <a class="dropdown-item" href="{{ url('info') }}">Info</a>
                         </div>
                     </li>
@@ -49,10 +44,14 @@
                                 Admin
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @if (config('app.magic') && (Auth::user()->is_admin || Auth::user()->is_moderator))
+                                <a class="dropdown-item" href="{{ url('subjects') }}">Subjects</a>
+                                <a class="dropdown-item" href="{{ url('modules') }}">Modules</a>
+                                @if (config('app.magic'))
+                                    <hr class="dropdown-divider">
                                     <a class="dropdown-item" href="{{ url('magic-gifs') }}">Magic GIFs</a>
                                 @endif
                                 @if (Auth::user()->is_admin)
+                                    <hr class="dropdown-divider">
                                     <a class="dropdown-item" href="{{ url('tokens') }}">API Token</a>
                                 @endif
                             </div>
@@ -64,6 +63,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownUser">
                             <a class="dropdown-item" href="/me/settings">Settings</a>
+                            <hr class="dropdown-divider">
                             <a class="dropdown-item" href="/logout">Log out</a>
                         </div>
                     </li>

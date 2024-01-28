@@ -32,10 +32,10 @@
 <div class="row">
     <div class="col">
         <div id="QuestionView" data-question="{{ $question }}" ></div>
-        <script src="{{ mix('js/QuestionView.js') }}"></script>
+        @vite(['resources/js/QuestionView.js'])
 
         <div id="MessagesView" data-question-id="{{ $question->id }}" ></div>
-        <script src="{{ mix('js/Messages.js') }}"></script>
+        @vite(['resources/js/Messages.js'])
     </div>
 </div>
 

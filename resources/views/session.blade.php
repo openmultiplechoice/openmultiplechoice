@@ -5,6 +5,6 @@
 @section('content')
 
 <div id="SessionView" data-session-id="{{ $session->id }}" ></div>
-<script src="{{ mix('js/SessionView.js') }}"></script>
+@vite(['resources/js/SessionView.js'])
 
 @endsection

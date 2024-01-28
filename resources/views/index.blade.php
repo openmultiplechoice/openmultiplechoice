@@ -9,7 +9,7 @@
         <a href="/sessions/create" class="btn btn-primary mb-3"><i class="bi bi-rocket-takeoff"></i> {{ __('omc.newsession') }}</a>
         <a href="{{ url('decks') }}" class="btn btn-primary mb-3"><i class="bi bi-collection-fill"></i> New deck</a>
         <div id="IndexSessionView" data-user-id="{{ Auth::user()->id }}" ></div>
-        <script src="{{ mix('js/IndexSessionView.js') }}"></script>
+        @vite(['resources/js/IndexSessionView.js'])
     </div>
     <div class="col-lg-4">
         <h4><a class="text-reset text-decoration-none" href="{{ url('info') }}">Info</a></h4>

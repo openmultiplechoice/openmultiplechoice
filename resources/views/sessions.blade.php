@@ -5,6 +5,6 @@
 @section('content')
 
 <div id="NewSessionView"></div>
-<script src="{{ mix('js/NewSessionView.js') }}"></script>
+@vite(['resources/js/NewSessionView.js'])
 
 @endsection

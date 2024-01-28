@@ -1,0 +1,78 @@
+@import '~bootstrap/scss/_functions.scss';
+@import '~bootstrap/scss/_variables.scss';
+
+$theme-colors: (
+    "primary":    $primary,
+    "secondary":  $secondary,
+    "success":    $success-bg-subtle,
+    "info":       $info-bg-subtle,
+    "warning":    $warning-bg-subtle,
+    "danger":     $danger-bg-subtle,
+    "light":      $light,
+    "dark":       $dark
+);
+
+@import '~bootstrap/scss/bootstrap';
+// Explicity import .css file to avoid the following regression:
+// https://github.com/twbs/icons/issues/1381
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
+@import '~trix/dist/trix.css';
+
+@import url('https://rsms.me/inter/inter.css');
+
+html, body { font-family: 'Inter', sans-serif !important; }
+@supports (font-variation-settings: normal) {
+    html, body { font-family: 'Inter var', sans-serif !important; }
+}
+
+textarea {
+    overflow: hidden;
+    min-height: 5rem !important;
+    resize: vertical;
+}
+
+trix-toolbar .trix-button-group--file-tools,
+trix-toolbar .trix-button--icon-heading-1 {
+    display: none !important;
+}
+
+.dropdown-menu {
+    z-index: 1300;
+}
+
+#questionText li {
+    padding-left: 5px;
+}
+
+#questionText li:hover {
+    cursor: pointer;
+}
+
+.text-success-dark {
+    color: $success,
+}
+.text-danger-dark {
+    color: $danger,
+}
+.text-warning-dark {
+    color: $warning,
+}
+
+.bg-success-dark {
+    background-color: $success;
+}
+.bg-danger-dark {
+    background-color: $danger;
+}
+.bg-cancelled {
+    color: #495057 !important;
+    background: #f8d7da !important;
+}
+
+.border-success {
+    border-color: $success !important;
+}
+.border-danger {
+    border-color: $danger !important;
+}
