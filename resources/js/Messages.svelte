@@ -150,8 +150,8 @@
     {:else}
         <button
             on:click|preventDefault={toggleEditor}
-            class="btn btn-sm btn-primary">
-                <i class="bi bi-chat-square-dots-fill" /> Add comment
+            class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-chat-square-dots" /> Add comment
         </button>
     {/if}
 </div>
