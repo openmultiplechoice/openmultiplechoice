@@ -10,6 +10,18 @@ use App\Models\Message;
 
 class MessageController extends Controller
 {
+    public function store(Request $request)
+    {
+        abort_unless(Auth::user()->is_admin, 403);
+
+        $message = new Message();
+
+        $message->fill($request->all());
+        $message->save();
+
+        return response()->json($message);
+    }
+
     public function update(Request $request, Message $message)
     {
         if (Auth::id() != $message->author_id) {
