@@ -16,7 +16,7 @@ use App\Http\Controllers\MagicGIFController;
 use App\Http\Controllers\InfoController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\SessionController;
-use App\Http\Controllers\SessionQuestionController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
 
 use App\Models\Info;
@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/tokens', [TokenController::class, 'index'])->name('index.tokens');
 
     Route::get('me/settings', [UserSettingsController::class, 'show']);
+    Route::put('me', [UserController::class, 'update']);
 
     Route::get('/logout', function (Request $request) {
         # https://laravel.com/docs/10.x/authentication#logging-out
