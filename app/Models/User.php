@@ -30,9 +30,6 @@ class User extends Authenticatable
         'name',
         'public_name',
         'email',
-        'password',
-        'is_admin',
-        'is_moderator',
         'legacy_user_id',
     ];
 
