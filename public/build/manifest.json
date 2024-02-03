@@ -27,11 +27,11 @@
     "file": "assets/SessionQuestionView-Ku2Ggeg4.css",
     "src": "_SessionQuestionView-!~{00n}~.js"
   },
-  "_SessionQuestionView-7tvmDSJP.js": {
+  "_SessionQuestionView-n5ZpTf_V.js": {
     "css": [
       "assets/SessionQuestionView-Ku2Ggeg4.css"
     ],
-    "file": "assets/SessionQuestionView-7tvmDSJP.js",
+    "file": "assets/SessionQuestionView-n5ZpTf_V.js",
     "imports": [
       "_index-CfkxbGBF.js",
       "_each-11-GcuRw.js",
@@ -86,7 +86,7 @@
     "src": "node_modules/bootstrap/dist/js/bootstrap.esm.js"
   },
   "node_modules/trix/dist/trix.esm.js": {
-    "file": "assets/trix.esm-C976_W5h.js",
+    "file": "assets/trix.esm-anw7GvEL.js",
     "isEntry": true,
     "src": "node_modules/trix/dist/trix.esm.js"
   },
@@ -145,9 +145,9 @@
     "src": "resources/js/NewSessionView.js"
   },
   "resources/js/QuestionView.js": {
-    "file": "assets/QuestionView-VdeT5lG4.js",
+    "file": "assets/QuestionView-gyBA_eIp.js",
     "imports": [
-      "_SessionQuestionView-7tvmDSJP.js",
+      "_SessionQuestionView-n5ZpTf_V.js",
       "_index-CfkxbGBF.js",
       "_each-11-GcuRw.js",
       "_purify.es-WTxncMLc.js",
@@ -161,7 +161,7 @@
     "css": [
       "assets/SessionView-55vVxhld.css"
     ],
-    "file": "assets/SessionView-ZBYLii30.js",
+    "file": "assets/SessionView--4X_WRUX.js",
     "imports": [
       "_index-CfkxbGBF.js",
       "_purify.es-WTxncMLc.js",
@@ -169,7 +169,7 @@
       "_auto-ovie_dKz.js",
       "_SessionProgressBar-cJESuo9E.js",
       "_each-11-GcuRw.js",
-      "_SessionQuestionView-7tvmDSJP.js",
+      "_SessionQuestionView-n5ZpTf_V.js",
       "_StatsHelper-9ER37DPz.js",
       "_UserSettingsStore--bDKyU3G.js",
       "__commonjsHelpers-5-cIlDoe.js",
@@ -196,7 +196,7 @@
     "src": "resources/js/app.js"
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-aSdMscBv.css",
+    "file": "assets/app-ZLvxQAv4.css",
     "isEntry": true,
     "src": "resources/scss/app.scss"
   }
