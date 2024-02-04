@@ -9,13 +9,14 @@ use Laravel\Socialite\Facades\Socialite;
 
 use App\Http\Controllers\DeckController;
 use App\Http\Controllers\DeckQuestionController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\ModuleController;
-use App\Http\Controllers\MagicGIFController;
 use App\Http\Controllers\InfoController;
-use App\Http\Controllers\TokenController;
+use App\Http\Controllers\MagicGIFController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TokenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
 
@@ -43,6 +44,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     })->name('index');
 
     Route::resource('/decks', DeckController::class);
+
+    Route::get('/messages', [MessageController::class, 'index']);
 
     Route::resource('decks.questions', DeckQuestionController::class);
 
