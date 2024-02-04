@@ -199,7 +199,7 @@
             <div class="mb-3">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="checkInvalidQuestion" bind:checked={question.is_invalid} on:click|preventDefault={toggleQuestionValid}>
-                    <label class="form-check-label" for="checkInvalidQuestion">Invalid question - Is the answer unknown or disputed? Invalid questions remain in deck but are not counted into results.</label>
+                    <label class="form-check-label" for="checkInvalidQuestion"><i class="bi bi-cone-striped" /> <strong>Invalid question</strong> - Is the answer unknown or disputed? Invalid questions remain in deck but are not counted into results.</label>
                 </div>
             </div>
         {/key}
