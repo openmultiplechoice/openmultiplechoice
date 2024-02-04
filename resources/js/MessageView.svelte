@@ -83,16 +83,16 @@
                     <small>
                         {#if $UserSettings.id === message.author_id}
                             <button
-                                class="btn btn-sm btn-link"
+                                class="btn btn-sm btn-link link-dark"
                                 on:click|preventDefault={toggleEditor}
                                 >Edit</button>
                             <button
-                                class="btn btn-sm btn-link"
+                                class="btn btn-sm btn-link link-dark"
                                 on:click|preventDefault={handleDelete}
                                 >Delete</button>
                         {/if}
                         <button
-                            class="btn btn-sm btn-link"
+                            class="btn btn-sm btn-link link-dark"
                             on:click|preventDefault={toggleEditorReply}
                             >Reply</button>
                         {format(

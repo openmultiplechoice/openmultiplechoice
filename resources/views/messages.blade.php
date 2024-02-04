@@ -16,7 +16,7 @@
             </div>
             <p class="text-muted text-end">
                 <small>
-                    <a href="{{ url('questions', $message->question->id) }}" target="_blank">Link</a>
+                    <a href="{{ url('questions', $message->question->id) }}" target="_blank" class="btn btn-sm btn-link link-dark">Show</a>
                     {{ Carbon\Carbon::parse($message->created_at)->setTimezone(config('app.timezone_view'))->format('d/m/Y H:i') }}
                 </small>
             </p>
