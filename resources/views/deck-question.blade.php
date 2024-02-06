@@ -5,7 +5,7 @@
 @section('content')
 
 
-<div class="row">
+<div class="row mb-3">
     <div class="col">
         <h1 class="h4">{{ $deck->name }}</h1>
         <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
@@ -13,7 +13,6 @@
             <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
             <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> New session</button>
         </form>
-        <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary mb-3"><i class="bi bi-pencil"></i> Edit deck</a>
     </div>
 </div>
 

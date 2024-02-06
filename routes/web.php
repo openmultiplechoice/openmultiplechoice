@@ -47,7 +47,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/messages', [MessageController::class, 'index']);
 
-    Route::resource('decks.questions', DeckQuestionController::class);
+    Route::get('/decks/{deck}/questions/edit', [DeckQuestionController::class, 'edit']); // This route must be before the next one
+    Route::get('/decks/{deck}/questions/{question}', [DeckQuestionController::class, 'show']);
 
     Route::resource('/questions', QuestionController::class);
 
@@ -66,8 +67,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/tokens', TokenController::class);
     Route::get('/tokens', [TokenController::class, 'index'])->name('index.tokens');
 
-    Route::get('me/settings', [UserSettingsController::class, 'show']);
-    Route::put('me', [UserController::class, 'update']);
+    Route::get('/me/settings', [UserSettingsController::class, 'show']);
+    Route::put('/me', [UserController::class, 'update']);
 
     Route::get('/logout', function (Request $request) {
         # https://laravel.com/docs/10.x/authentication#logging-out

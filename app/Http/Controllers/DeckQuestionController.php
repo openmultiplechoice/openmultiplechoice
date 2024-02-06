@@ -11,21 +11,6 @@ use App\Models\Question;
 
 class DeckQuestionController extends Controller
 {
-    public function index(Request $request)
-    {
-        //
-    }
-
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
     public function show(Deck $deck, Question $question)
     {
         $questions = $deck->questions()->orderBy('id', 'asc')->get();
@@ -59,16 +44,6 @@ class DeckQuestionController extends Controller
 
     public function edit(Deck $deck)
     {
-        //
-    }
-
-    public function update(Request $request, Deck $deck)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
+        return view('deck-question-editor', ['deck' => $deck]);
     }
 }
