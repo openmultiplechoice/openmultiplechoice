@@ -1,10 +1,62 @@
-@extends('layouts.app')
+@extends('layouts.app', [ 'container_class' => 'container'])
 
-@section('title', 'Decks')
+@section('title', 'Subjects')
 
 @section('content')
 
-<div id="DeckForm" data-deck-id="{{ $deck->id }}" data-deck-name="{{ $deck->name }}" data-module-id="{{ $deck->module_id }}"></div>
-@vite(['resources/js/DeckForm.js'])
+<div class="row">
+    <div class="col-md">
+        <h1 class="h4"><a href="{{ url('decks', $deck->id) }}" class="text-reset text-decoration-none">{{ $deck->name }}</a></h1>
+        <form action="/decks/{{ isset($deck) ? $deck->id : '' }}" method="post" class="mt-3 mb-3">
+            @isset($deck)
+                @method('PUT')
+            @endisset
+            @csrf
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input id="name" type="text" name="name" class="form-control" value="{{ $deck->name ?? '' }}">
+            </div>
+            <div class="mb-3">
+                <label for="module_id" class="form-label">Module</label>
+                <select id="module_id" name="module_id" class="form-select">
+                    <option value="" selected>Select a module ...</option>
+                    @foreach ($modules as $module)
+                        <option value="{{ $module->id }}" {{ ($module->id == $deck->module_id) ? 'selected' : '' }}>{{ $module->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description (optional)</label>
+                <textarea class="form-control" id="description" name="description" rows="4">{{ $deck->description }}</textarea>
+            </div>
+            <button class="btn btn-sm btn-primary" type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
+@if ($deck->user_id == Auth::id() || Auth::user()->is_admin)
+    <h2 class="h4">Danger Zone</h2>
+    <div class="m-1 p-3 border border-danger rounded">
+        <div class="row">
+            <div class="col-md">
+                <p>
+                    <strong>Archive this deck</strong><br>
+                    Archived decks are not listed but can be unarchived.
+                </p>
+            </div>
+            <div class="col-md">
+                <form action="/decks/{{ $deck->id }}" method="post">
+                    @method('PUT')
+                    @csrf
+
+                    <input type="hidden" name="is_archived" value="{{ $deck->is_archived ? 0 : 1 }}" />
+                    <button class="btn btn-sm {{ $deck->is_archived ? 'btn-outline-danger' : 'btn-danger' }}" type="submit">
+                        {{ $deck->is_archived ?  "Unarchive deck" : "Archive this deck" }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+@endif
 
 @endsection

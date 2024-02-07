@@ -9,14 +9,15 @@ use Laravel\Socialite\Facades\Socialite;
 
 use App\Http\Controllers\DeckController;
 use App\Http\Controllers\DeckQuestionController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\ModuleController;
-use App\Http\Controllers\MagicGIFController;
 use App\Http\Controllers\InfoController;
-use App\Http\Controllers\TokenController;
+use App\Http\Controllers\MagicGIFController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SessionController;
-use App\Http\Controllers\SessionQuestionController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TokenController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
 
 use App\Models\Info;
@@ -44,7 +45,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::resource('/decks', DeckController::class);
 
-    Route::resource('decks.questions', DeckQuestionController::class);
+    Route::get('/messages', [MessageController::class, 'index']);
+
+    Route::get('/decks/{deck}/questions/edit', [DeckQuestionController::class, 'edit']); // This route must be before the next one
+    Route::get('/decks/{deck}/questions/{question}', [DeckQuestionController::class, 'show']);
 
     Route::resource('/questions', QuestionController::class);
 
@@ -63,7 +67,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/tokens', TokenController::class);
     Route::get('/tokens', [TokenController::class, 'index'])->name('index.tokens');
 
-    Route::get('me/settings', [UserSettingsController::class, 'show']);
+    Route::get('/me/settings', [UserSettingsController::class, 'show']);
+    Route::put('/me', [UserController::class, 'update']);
 
     Route::get('/logout', function (Request $request) {
         # https://laravel.com/docs/10.x/authentication#logging-out

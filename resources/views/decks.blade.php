@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', [ 'container_class' => 'container'])
 
 @section('title', 'Decks')
 
@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md mb-3">
-        <h4>New deck</h4>
+        <h4>Create new deck</h4>
         <form method="post">
             @csrf
             <div class="mb-3">
@@ -20,18 +20,42 @@
             <button type="submit" class="btn btn-sm btn-primary">Create deck</button>
         </form>
     </div>
+</div>
+
+@if ($decks->count() > 0)
+<div class="row">
     <div class="col-md">
         <h4>Your decks</h4>
-        @if ($decks->count() > 0)
-            <ul>
-                @foreach ($decks as $deck)
-                    <li><a href="{{ url('decks', $deck->id) }}">{{ $deck->name }}</a></li>
-                @endforeach
-            </ul>
-        @else
-            <p>No decks yet</p>
-        @endif
     </div>
 </div>
+
+<div class="row">
+    @foreach ($decks as $deck)
+        <div class="col-md-4 mb-1">
+            <div class="card">
+                <div class="card-header">
+                    <span class="badge text-bg-light">
+                        @if ($deck->exam_at)
+                            {{ $deck->exam_at->format('d/m/Y') }}
+                        @else
+                            {{ $deck->created_at->format('d/m/Y') }}
+                        @endif
+                    </span>
+                    <span class="badge text-bg-secondary" title="Number of questions">
+                        {{ sizeof($deck->questions) }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-nowrap overflow-hidden" title="{{ $deck->name }}">
+                        {{ $deck->name }}
+                    </h6>
+
+                    <a class="btn btn-sm btn-primary" href="{{ url('decks', $deck->id) }}" role="button"><i class="bi bi-collection-fill"></i> Open</a>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+@endif
 
 @endsection

@@ -54,6 +54,7 @@ class UserSettingsController extends Controller
         $userSettings = [
             'id' => $user->id,
             'name' => $user->name,
+            'public_name' => $user->public_name,
             'is_admin' => $user->is_admin,
             'is_moderator' => $user->is_moderator,
 

@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="row">
+<div class="row mb-3">
     <div class="col">
         <h1 class="h4">{{ $deck->name }}</h1>
         @if (count($questions) > 0)
@@ -14,7 +14,6 @@
                 <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> New session</button>
             </form>
         @endif
-        <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary mb-3"><i class="bi bi-pencil"></i> Edit deck</a>
     </div>
 </div>
 
@@ -60,30 +59,14 @@
             <p>{{ $deck->description }}</p>
         @endif
 
-        @if ($deck->user_id == Auth::id() || Auth::user()->is_admin)
-            <h2 class="h4">Danger Zone</h2>
-            <div class="m-1 p-3 border border-danger rounded">
-                <div class="row">
-                    <div class="col-md">
-                        <p>
-                            <strong>Archive this deck</strong><br>
-                            Archived decks are not listed but can be unarchived.
-                        </p>
-                    </div>
-                    <div class="col-md">
-                        <form action="/decks/{{ $deck->id }}" method="post">
-                            @method('PUT')
-                            @csrf
-
-                            <input type="hidden" name="is_archived" value="{{ $deck->is_archived ? 0 : 1 }}" />
-                            <button class="btn btn-sm {{ $deck->is_archived ? 'btn-outline-danger' : 'btn-danger' }}" type="submit">
-                                {{ $deck->is_archived ?  "Unarchive deck" : "Archive this deck" }}
-                            </button>
-                        </form>
-                    </div>
-                </div>
+        <div class="row mb-3">
+            <div class="col-md mb-3">
+                <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-pencil"></i> Edit deck</a>
             </div>
-        @endif
+            <div class="col-md">
+                <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-pencil"></i> Add / remove questions</a>
+            </div>
+        </div>
 
     </div>
 </div>

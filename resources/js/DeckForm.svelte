@@ -5,9 +5,6 @@
 
     export let id;
     export let name;
-    export let moduleId;
-
-    var modules = [];
 
     let data = { questions: [] };
 
@@ -24,15 +21,6 @@
                     data.current_question_id =
                         data.questions[data.questions.length - 1].id;
                 }
-            })
-            .catch(function (error) {
-                alert(error);
-            });
-
-        axios
-            .get("/api/modules")
-            .then(function (response) {
-                modules = response.data;
             })
             .catch(function (error) {
                 alert(error);
@@ -77,26 +65,11 @@
                 alert(error);
             });
     }
-
-    function updateModule(newModuleId) {
-        var update = {
-            module_id: newModuleId,
-        };
-
-        axios
-            .put("/api/decks/" + id, update)
-            .then(function (response) {
-                moduleId = newModuleId;
-            })
-            .catch(function (error) {
-                alert(error);
-            });
-    }
 </script>
 
 <div class="row">
     <div class="col">
-        <h4>{name}</h4>
+        <h4><a href="/decks/{id}" class="text-reset text-decoration-none">{name}</a></h4>
     </div>
 </div>
 
@@ -104,18 +77,6 @@
     <div class="col">
         <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("mc"); }}>Add MC question</button>
         <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("card"); }}>Add card question</button>
-    </div>
-
-    <div class="col">
-        <select
-            bind:value={moduleId}
-            on:change={() => updateModule(moduleId)}
-            class="form-select">
-            <option value="" disabled>Select module ...</option>
-            {#each modules as module (module.id)}
-                <option value={module.id.toString()}>{module.name}</option>>
-            {/each}
-        </select>
     </div>
 </div>
 

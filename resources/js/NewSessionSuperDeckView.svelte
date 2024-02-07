@@ -79,7 +79,7 @@
                 </p>
                 <div class="mb-3">
                     <label for="name" class="form-label">Deck Name</label>
-                    <input type="text" class="form-control" id="name" value={deckName} on:focus={event => event.target.select()}>
+                    <input type="text" class="form-control" id="name" bind:value={deckName} on:focus={event => event.target.select()}>
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" id="checkboxRemoveDuplicates" bind:checked={filterOutDuplicates}>

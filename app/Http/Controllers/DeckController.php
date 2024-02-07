@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
+use App\Models\Module;
 
 class DeckController extends Controller
 {
@@ -18,11 +19,6 @@ class DeckController extends Controller
                 ['is_ephemeral', '=', false],
             ])->get();
         return view('decks', ['decks' => $decks]);
-    }
-
-    public function create()
-    {
-        //
     }
 
     public function store(Request $request)
@@ -57,20 +53,24 @@ class DeckController extends Controller
 
     public function edit(Deck $deck)
     {
-        return view('deck-editor', ['deck' => $deck]);
+        $modules = Module::orderBy('name')->get();
+
+        return view('deck-editor', [
+            'deck' => $deck,
+            'modules' => $modules,
+        ]);
     }
 
     public function update(Request $request, Deck $deck)
     {
+        // TODO(schu): check if the user is allowed to update the deck
         if ($deck->user_id != Auth::id() && !$request->user()->is_admin) {
             abort(403, 'Unauthorized');
         }
-        $deck->update($request->all());
-        return back();
-    }
 
-    public function destroy($id)
-    {
-        //
+        $deck->update($request->all());
+        $deck->save();
+
+        return back();
     }
 }
