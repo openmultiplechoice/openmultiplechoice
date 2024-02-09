@@ -71,6 +71,9 @@ class DeckController extends Controller
         $deck->update($request->all());
         $deck->save();
 
-        return back();
+        return redirect()->route(
+            'show.deck',
+            ['deck' => $deck->id]
+        );
     }
 }

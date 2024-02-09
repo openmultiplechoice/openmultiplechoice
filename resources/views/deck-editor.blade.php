@@ -17,7 +17,7 @@
                 <input id="name" type="text" name="name" class="form-control" value="{{ $deck->name ?? '' }}">
             </div>
             <div class="mb-3">
-                <label for="module_id" class="form-label">Module</label>
+                <label for="module_id" class="form-label">Module (optional)</label>
                 <select id="module_id" name="module_id" class="form-select">
                     <option value="" selected>Select a module ...</option>
                     @foreach ($modules as $module)
@@ -27,7 +27,8 @@
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description (optional)</label>
-                <textarea class="form-control" id="description" name="description" rows="4">{{ $deck->description }}</textarea>
+                <input type="hidden" id="description" name="description" value="{{ $deck->description ?? '' }}">
+                <trix-editor input="description"></trix-editor>
             </div>
             <button class="btn btn-sm btn-primary" type="submit">Save</button>
         </form>
