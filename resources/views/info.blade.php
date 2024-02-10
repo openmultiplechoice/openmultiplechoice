@@ -4,6 +4,10 @@
 
 @section('content')
 
+@php
+    $purifier = new HTMLPurifier(HTMLPurifier_Config::createDefault());
+@endphp
+
 <div class="row">
     <div class="col-md">
         <h1 class="h4">Info</h1>
@@ -16,7 +20,7 @@
             <div class="alert alert-light" role="alert">
                 <h6 class="alert-heading"><a class="link-dark" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
                 <p class="font-monospace"><small>{{ $entry->created_at->format('d.m.Y') }}</small></p>
-                <p>{!! $entry->text !!}</p>
+                <p>{!! $purifier->purify($entry->text) !!}</p>
             </div>
         </div>
     @endforeach
