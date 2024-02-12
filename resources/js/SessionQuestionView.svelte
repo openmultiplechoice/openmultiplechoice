@@ -138,7 +138,7 @@
             {/if}
             <div class="row mt-1 mb-1 pt-2">
                 <div class="d-flex justify-content-end">
-                    {#if questionAnswered}
+                    {#if questionAnswered && answerChoice !== -1}
                     <button
                         type="button"
                         class="btn btn-outline-secondary btn-sm me-1"
