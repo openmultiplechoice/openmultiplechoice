@@ -106,7 +106,6 @@
                 {#each question.answers as answer, index}
                     <SessionAnswerView
                         bind:answer
-                        bind:answerChoice
                         bind:examMode={examMode}
                         {submitAnswer}
                         badgeText={"ABCDEFGHIJKLMN".charAt(index)}
