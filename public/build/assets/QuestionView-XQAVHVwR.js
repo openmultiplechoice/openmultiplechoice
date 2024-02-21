@@ -1,1 +1,0 @@
-import{S as t}from"./SessionQuestionView-iJ0Qxkip.js";import"./index-lwMDWDKL.js";import"./each-_vP4lz_n.js";import"./purify.es-WTxncMLc.js";import"./_commonjsHelpers-5-cIlDoe.js";import"./QuestionForm-HINkbC4S.js";const e=document.getElementById("QuestionView");new t({target:e,props:{question:JSON.parse(e.dataset.question),questionAnswered:!0,answerChoice:-1}});
