@@ -21,7 +21,7 @@
         <div class="alert alert-light" role="alert">
             <h6 class="alert-heading"><a class="link-dark" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
             <p class="font-monospace"><small>{{ $entry->created_at->format('d.m.Y') }}</small></p>
-            <p>{!! $purifier->purify($entry->text) !!}</p>
+            <p>{!! $purifier->purify(preg_split("/<br>/", $entry->text)[0]) !!}</p>
         </div>
 @empty
         <p>No info yet</p>
