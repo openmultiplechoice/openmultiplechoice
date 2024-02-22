@@ -37,7 +37,7 @@ use App\Models\User;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/', function () {
-        $info = Info::orderByDesc('id')->take(4)->get();
+        $info = Info::where('is_pinned', '=', true)->orderByDesc('id')->get();
         return view('index', [
             'info' => $info,
         ]);

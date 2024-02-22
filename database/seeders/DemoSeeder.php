@@ -24,12 +24,14 @@ class DemoSeeder extends Seeder
         Info::create([
             'title' => 'Please note: demo resets happen without notice',
             'text' => 'All test data will be destroyed.',
+            'is_pinned' => true,
         ]);
         Info::create([
             'title' => 'Welcome!',
             'text' => 'This is the OpenMultipleChoice demo instance.
             OpenMultipleChoice is a work in progress (and comes with
             stubs and bugs).',
+            'is_pinned' => true,
         ]);
 
         // Demo deck 1
