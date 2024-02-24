@@ -26,6 +26,10 @@
                 </select>
             </div>
             <div class="mb-3">
+                <label for="exam_at" class="form-label">Exam date (optional)</label>
+                <input id="exam_at" type="date" name="exam_at" class="form-control" value="{{ $deck->exam_at ?? '' }}">
+            </div>
+            <div class="mb-3">
                 <label for="description" class="form-label">Description (optional)</label>
                 <input type="hidden" id="description" name="description" value="{{ $deck->description ?? '' }}">
                 <trix-editor input="description"></trix-editor>
