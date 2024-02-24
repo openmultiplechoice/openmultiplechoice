@@ -96,6 +96,11 @@
                     on:click|preventDefault={() => createSuperDeck(deckName, questionsWithImages.map(q => q.id))}>
                         Create deck ({questionsWithImages.length} image question{questionsWithImages.length > 1 ? "s" : ""})
                 </button>
+                <button
+                    class="btn btn-sm btn-link"
+                    on:click|preventDefault={() => userSelectedDecks = new Set()}>
+                        Cancel
+                </button>
                 </div>
             </div>
         </div>
