@@ -13,7 +13,13 @@
         <h1 class="h4"><a class="text-reset text-decoration-none" href="{{ url('info') }}">Info</a></h1>
 
         <h2 class="h5">{{ $info->title }}</h2>
-        <p class="font-monospace"><small>{{ $info->created_at->format('d.m.Y') }}</small></p>
+        <p>
+            <small>
+                <span class="font-monospace">{{ $info->created_at->format('d.m.Y') }}</span>
+                {!! $info->is_pinned ? '<i class="bi bi-pin-angle"></i>' : '' !!}
+                {!! Auth::user()->is_admin ? '<a href="/info/'. $info->id .'/edit" class="text-reset text-decoration-none"><i class="bi bi-pencil"></i></a>' : '' !!}
+            </small>
+        </p>
         <p>{!! $purifier->purify($info->text) !!}</p>
     </div>
 </div>

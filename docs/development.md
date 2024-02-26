@@ -215,5 +215,5 @@ npm install
 In both cases, you have to rebuild the bundle files after:
 
 ```
-npm run prod
+npm run build
 ```

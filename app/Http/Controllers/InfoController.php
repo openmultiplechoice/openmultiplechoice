@@ -11,7 +11,7 @@ class InfoController extends Controller
 {
     public function index()
     {
-        $info = Info::orderBy('id', 'desc')->get();
+        $info = Info::orderBy('is_pinned', 'desc')->orderBy('id', 'desc')->get();
         return view('info', ['info' => $info]);
     }
 
@@ -32,6 +32,7 @@ class InfoController extends Controller
 
         $newEntry = new Info();
         $newEntry->fill($request->all());
+        $newEntry->is_pinned = !!$request->input('is_pinned', false);
         $newEntry->save();
 
         return redirect()->route('show.info', [
@@ -60,6 +61,7 @@ class InfoController extends Controller
         }
 
         $info->update($request->all());
+        $info->is_pinned = !!$request->input('is_pinned', false);
         $info->save();
 
         return redirect()->route('show.info', [
