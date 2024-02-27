@@ -17,8 +17,8 @@
       "_purify.es-BxOHINE-.js"
     ]
   },
-  "_SessionProgressBar-C2uY-rjR.js": {
-    "file": "assets/SessionProgressBar-C2uY-rjR.js",
+  "_SessionProgressBar-CqGfgLl-.js": {
+    "file": "assets/SessionProgressBar-CqGfgLl-.js",
     "imports": [
       "_index-DgDIGCFR.js"
     ]
@@ -106,13 +106,13 @@
     ]
   },
   "resources/js/IndexSessionView.js": {
-    "file": "assets/IndexSessionView-D0qTnGax.js",
+    "file": "assets/IndexSessionView-Rx11luFU.js",
     "src": "resources/js/IndexSessionView.js",
     "isEntry": true,
     "imports": [
       "_index-DgDIGCFR.js",
       "_each-CvUUWvvD.js",
-      "_SessionProgressBar-C2uY-rjR.js",
+      "_SessionProgressBar-CqGfgLl-.js",
       "_StatsHelper-B91isISU.js",
       "_parseISO-BExOa55U.js"
     ]
@@ -158,7 +158,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-B218Yw-G.js",
+    "file": "assets/SessionView-CmHPLPB-.js",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
     "imports": [
@@ -166,7 +166,7 @@
       "_purify.es-BxOHINE-.js",
       "_Messages-B-m68bx9.js",
       "_auto-Aq1nblnl.js",
-      "_SessionProgressBar-C2uY-rjR.js",
+      "_SessionProgressBar-CqGfgLl-.js",
       "_each-CvUUWvvD.js",
       "_SessionQuestionView-CxNXt1mh.js",
       "_StatsHelper-B91isISU.js",
