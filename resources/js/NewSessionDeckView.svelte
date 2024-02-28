@@ -118,14 +118,14 @@
                     <span class="badge text-bg-light">
                         {format(
                             parseISO(deck.exam_at),
-                            "dd/MM/yyyy"
+                            "dd.MM.yyyy"
                         )}
                     </span>
                 {:else}
                     <span class="badge text-bg-light">
                         {format(
                             parseISO(deck.created_at),
-                            "dd/MM/yyyy"
+                            "dd.MM.yyyy"
                         )}
                     </span>
                 {/if}
