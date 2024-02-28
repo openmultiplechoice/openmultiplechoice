@@ -97,7 +97,7 @@
                             >Reply</button>
                         {format(
                             parseISO(message.created_at),
-                            "dd/MM/yyyy HH:mm"
+                            "dd.MM.yyyy HH:mm"
                         )}
                         {#if message.author}
                             {message.author.name}

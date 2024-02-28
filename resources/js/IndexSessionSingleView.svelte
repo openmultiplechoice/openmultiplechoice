@@ -7,7 +7,7 @@
 
     $: sessionAtPretty = formatDistance(parseISO(session.created_at), new Date());
 
-    $: sessionAt = format(parseISO(session.created_at), "dd/MM/yyyy HH:mm")
+    $: sessionAt = format(parseISO(session.created_at), "dd.MM.yyyy HH:mm")
 
     $: validQuestions = session
         ? session.deck.questions.filter((q) => !q.is_invalid)
