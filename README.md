@@ -18,8 +18,9 @@ does not yet accept pull requests.
 For news and updates, join the Discord server or watch the repository here on
 GitHub.
 
+* Questions: [Questions & Answers](https://github.com/openmultiplechoice/openmultiplechoice/discussions/categories/q-a)
+* Bug reports: [Issues](https://github.com/openmultiplechoice/openmultiplechoice/issues)
 * Discord: https://discord.gg/NdvVNBN5Dh
-* Demo: https://demo.openmultiplechoice.de (coming soon)
 
 ## Documentation
 
