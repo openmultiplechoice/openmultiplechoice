@@ -11,6 +11,10 @@ class Deck extends Model
 
     protected $fillable = ['name', 'description', 'exam_at', 'questions', 'module_id', 'is_archived'];
 
+    protected $casts = [
+        'exam_at' => 'datetime:Y-m-d',
+    ];
+
     public function questions()
     {
         return $this->belongsToMany(Question::class);
