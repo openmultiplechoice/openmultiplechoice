@@ -14,6 +14,7 @@
     export let submitAnswer;
     export let deleteAnswer;
     export let examMode;
+    export let updateCurrentQuestionData;
 
     var showEditor = false;
     var showHint = questionAnswered;
@@ -55,7 +56,18 @@
     }
 
     function toggleEditor() {
-        showEditor = !showEditor;
+        const doShow = !showEditor;
+        if (doShow) {
+            // First, update the question data to the latest
+            // to avoid overwriting changes made by other users,
+            // then show the editor
+            updateCurrentQuestionData().then(() => {
+                showEditor = doShow;
+            });
+        } else {
+            // Close the editor
+            showEditor = doShow;
+        }
     }
 </script>
 
