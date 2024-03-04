@@ -34,4 +34,9 @@ class Deck extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function submission()
+    {
+        return $this->hasOne(DeckSubmission::class);
+    }
 }

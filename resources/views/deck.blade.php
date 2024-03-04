@@ -10,7 +10,11 @@
 
 <div class="row mb-3">
     <div class="col">
-        <h1 class="h4">{{ $deck->name }}</h1>
+        <h1 class="h4">{{ $deck->name }}
+            @if($deck->submission)
+                <span class="badge text-rounded-pill text-bg-secondary">Submitted</span>
+            @endif
+        </h1>
         @if (count($questions) > 0)
             <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
                 @csrf

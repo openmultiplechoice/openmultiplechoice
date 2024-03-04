@@ -19,6 +19,8 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\SubmissionsController;
+use App\Http\Controllers\DeckSubmissionController;
 
 use App\Models\Info;
 use App\Models\Session;
@@ -52,6 +54,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/decks/{deck}/questions/{question}', [DeckQuestionController::class, 'show']);
 
     Route::resource('/questions', QuestionController::class);
+
+    Route::resource('/submissions', DeckSubmissionController::class);
+    Route::put('/submissions/{submission}/approve', [DeckSubmissionController::class, 'approve']);
 
     Route::resource('/subjects', SubjectController::class);
     Route::get('/subjects/{subject}', [SubjectController::class, 'show'])->name('show.subject');

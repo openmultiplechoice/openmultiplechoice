@@ -49,6 +49,7 @@ class DemoSeeder extends Seeder
             'name' => 'OpenMultipleChoice Demo Deck',
             'description' => 'You can use the demo deck to get an idea about how OMC works and looks like.',
             'module_id' => $module->id,
+            'access' => 'public-rw-listed',
         ]);
 
         // Question 1
@@ -221,6 +222,7 @@ class DemoSeeder extends Seeder
         $deck = Deck::create([
             'name' => 'Sugars',
             'module_id' => $module->id,
+            'access' => 'public-rw-listed',
         ]);
 
         // Question 1
