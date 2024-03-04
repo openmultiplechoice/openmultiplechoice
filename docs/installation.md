@@ -107,3 +107,11 @@ sudo systemctl restart nginx
 ```
 
 OMC should now be reachable under your server name.
+
+Configure the [scheduler](https://laravel.com/docs/10.x/scheduling#running-the-scheduler)
+to run scheduled tasks with the following cron job for the OMC user
+(`crontab -e`):
+
+```
+* * * * * cd /var/www/openmultiplechoice && php artisan schedule:run >> /dev/null 2>&1
+```
