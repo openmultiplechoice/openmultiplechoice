@@ -132,6 +132,18 @@ this can be done with running the schedule worker as follows:
 php artisan schedule:work
 ```
 
+## Testing the API
+
+To test the API, create an API token and use it as Bearer token with curl.
+
+For example, to fetch all decks:
+
+```
+curl -H 'Authorization: Bearer <TOKEN>' http://omc.test/api/decks
+```
+
+Please note that the API is a work in progress and neither complete nor stable.
+
 ## Building JavaScript and CSS files
 
 OMC uses Vite as a frontend build tool and asset bundler. The most used
