@@ -37,6 +37,8 @@ class DeckController extends Controller
     {
         $questions = $deck->questions()->orderBy('id', 'asc')->get();
         $nextQuestion = $questions->first();
+        // Load the submission relationship to check if the deck has been submitted (used in template)
+        $deck->load('submission');
 
         $urlPrev = null;
         $urlNext = null;
@@ -54,6 +56,8 @@ class DeckController extends Controller
     public function edit(Deck $deck)
     {
         $modules = Module::orderBy('name')->get();
+        // Load the submission relationship to check if the deck has been submitted (used in template)
+        $deck->load('submission');
 
         return view('deck-editor', [
             'deck' => $deck,
@@ -66,6 +70,12 @@ class DeckController extends Controller
         // TODO(schu): check if the user is allowed to update the deck
         if ($deck->user_id != Auth::id() && !$request->user()->is_admin) {
             abort(403, 'Unauthorized');
+        }
+
+        // You should not be able to archive the deck if it was submitted or listed
+        $is_submitted_or_listed = ($deck->submission()->exists() || $deck->access == 'public-rw-listed');
+        if ($request->is_archived and $is_submitted_or_listed) {
+            return back()->with('msg-error', 'You cannot archive a deck that was submitted or is publicly listed!');
         }
 
         $deck->update($request->all());

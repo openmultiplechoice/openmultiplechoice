@@ -39,8 +39,28 @@
     </div>
 </div>
 
-@if ($deck->user_id == Auth::id() || Auth::user()->is_admin)
+@if ($deck->access != 'public-rw-listed' && ($deck->user_id == Auth::id() || Auth::user()->is_admin))
     <h2 class="h4">Danger Zone</h2>
+    <div class="m-1 p-3 border border-primary-subtle rounded">
+        <div class="row">
+            <div class="col-md">
+                <p>
+                    <strong>Submit this deck for listing</strong><br>
+                    Submit this deck for listing in the public deck directory for other users to use.
+                </p>
+            </div>
+            <div class="col-md">
+                <form action="/submissions{{ $deck->submission ? '/'.$deck->submission->id : '' }}" method="post">
+                    @method($deck->submission ? 'delete' : 'post')
+                    @csrf
+                    <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
+                    <button class="btn btn-sm {{ $deck->submission ? 'btn-outline-primary' : 'btn-primary' }}" type="submit">
+                        {{ $deck->submission ? "Retract submission" : "Submit this deck" }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="m-1 p-3 border border-danger rounded">
         <div class="row">
             <div class="col-md">

@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserSettings::class);
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(DeckSubmission::class);
+    }
 }

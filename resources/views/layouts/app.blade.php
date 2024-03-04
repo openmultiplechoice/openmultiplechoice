@@ -45,6 +45,8 @@
                                 Admin
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ url('submissions') }}">Submissions</a>
+                                <hr class="dropdown-divider">
                                 <a class="dropdown-item" href="{{ url('subjects') }}">Subjects</a>
                                 <a class="dropdown-item" href="{{ url('modules') }}">Modules</a>
                                 @if (config('app.magic'))

@@ -20,7 +20,10 @@ class DeckController extends Controller
 
         if ($request->module) {
             return response()->json(
-                Deck::where('module_id', '=', $request->module)->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')->get()
+                Deck::where([
+                    ['module_id', '=', $request->module],
+                    ['access' ,'=', 'public-rw-listed'],
+                ])->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')->get()
             );
         }
         if ($request->decks) {
@@ -84,6 +87,14 @@ class DeckController extends Controller
     public function update(Request $request, Deck $deck)
     {
         // TODO(schu): check if user owner
+
+        // You should not be able to archive the deck if it was submitted or listed
+        $is_submitted_or_listed = ($deck->submission()->exists() || $deck->access == 'public-rw-listed');
+        if ($request->is_archived and $is_submitted_or_listed) {
+            return response()->json([
+                'error' => 'This deck cannot be archived because it was already submitted or listed.',
+            ], 400);
+        }
 
         $deck->update($request->all());
         return response()->json($deck);
