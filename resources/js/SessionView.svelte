@@ -23,6 +23,7 @@
     $: examMode = !sessionComplete ? $UserSettings.session_exam_mode : false;
     $: settingsShowSidebar = $UserSettings.session_show_sidebar;
     $: settingsExamMode = $UserSettings.session_exam_mode;
+    $: settingsShuffleAnswers = $UserSettings.session_shuffle_answers;
 
     $: settingsShowSidebar,
         (()=> {
@@ -269,12 +270,24 @@
         <div class="col mb-1">
             <p class="text-overflow">
                 <button
-                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline bg-light"
+                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline"
+                    class:bg-light={!settingsShowSidebar}
+                    class:bg-dark-subtle={settingsShowSidebar}
                     title="Toggle sidebar"
                     on:click|preventDefault={() => {
                         $UserSettings.session_show_sidebar = !$UserSettings.session_show_sidebar;
                     }}>
                     <i class="bi bi-layout-sidebar" />
+                </button>
+                <button
+                    class="btn btn-sm"
+                    class:bg-light={!settingsShuffleAnswers}
+                    class:bg-dark-subtle={settingsShuffleAnswers}
+                    title="Toggle answer shuffling"
+                    on:click|preventDefault={() => {
+                        $UserSettings.session_shuffle_answers = !$UserSettings.session_shuffle_answers;
+                    }}>
+                    <i class="bi bi-shuffle" />
                 </button>
                 <button
                     class="btn btn-sm"
@@ -328,6 +341,7 @@
                     bind:helpUsed
                     bind:answerChoice
                     bind:examMode={examMode}
+                    bind:settingsShuffleAnswers
                     {submitAnswer}
                     {deleteAnswer}
                     {updateCurrentQuestionData} />

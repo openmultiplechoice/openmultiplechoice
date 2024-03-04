@@ -10,43 +10,6 @@ use App\Models\UserSettings;
 
 class UserSettingsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show()
     {
         $user = Auth::user();
@@ -63,29 +26,12 @@ class UserSettingsController extends Controller
 
             'session_show_sidebar' => $user->settings->session_show_sidebar,
             'session_exam_mode' => $user->settings->session_exam_mode,
+            'session_shuffle_answers' => $user->settings->session_shuffle_answers,
         ];
 
         return response()->json($userSettings);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -93,16 +39,5 @@ class UserSettingsController extends Controller
         $userSettings = UserSettings::updateOrCreate(['user_id' => $user->id], $request->all());
 
         return response()->json($userSettings);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

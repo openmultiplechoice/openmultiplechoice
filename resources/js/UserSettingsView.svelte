@@ -28,8 +28,12 @@
 {#if settings}
     <h4>Session</h4>
     <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.session_shuffle_answers}>
+        <label class="form-check-label" for="flexSwitchCheckDefault">Shuffle answers</label>
+    </div>
+    <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.session_show_sidebar}>
-        <label class="form-check-label" for="flexSwitchCheckDefault">Show sidebar in session view</label>
+        <label class="form-check-label" for="flexSwitchCheckDefault">Show sidebar</label>
     </div>
     <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.session_exam_mode}>

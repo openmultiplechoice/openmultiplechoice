@@ -1,5 +1,8 @@
 <script>
+    import { onMount } from "svelte";
+
     import DOMPurify from "dompurify";
+    import _ from 'lodash';
 
     import SessionAnswerView from "./SessionAnswerView.svelte";
     import SessionCardAnswerView from "./SessionCardAnswerView.svelte";
@@ -15,6 +18,7 @@
     export let deleteAnswer;
     export let examMode;
     export let updateCurrentQuestionData;
+    export let settingsShuffleAnswers
 
     var showEditor = false;
     var showHint = questionAnswered;
@@ -34,6 +38,15 @@
         [].map.call(listItems, function(item) {
             item.addEventListener('click', toggleListItemColor, false);
         });
+    })();
+
+    $: question, (() => {
+        // Only shuffle if answer shuffling is enabled and if the question
+        // is not already answered, otherwise the answers would be shuffled
+        // a second time after the answer was submitted.
+        if (question && question.type === 'mc' && settingsShuffleAnswers && !questionAnswered) {
+            question.answers = _.shuffle(question.answers);
+        }
     })();
 
     // Toogle none -> red -> yellow -> green -> none
