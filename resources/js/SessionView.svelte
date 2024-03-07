@@ -23,6 +23,7 @@
     $: examMode = !sessionComplete ? $UserSettings.session_exam_mode : false;
     $: settingsShowSidebar = $UserSettings.session_show_sidebar;
     $: settingsExamMode = $UserSettings.session_exam_mode;
+    $: settingsShuffleAnswers = $UserSettings.session_shuffle_answers;
 
     $: settingsShowSidebar,
         (()=> {
@@ -76,10 +77,8 @@
     // editorconfig-checker-enable
     $: currentQuestionId = data ? data.session.current_question_id : -1;
 
-    // Whenever the current question gets changed, update the question
-    // data (it could have been updated on the server side meanwhile)
-    // and we want to update the session to remember the current question.
-    $: currentQuestionId, updateCurrentQuestionData();
+    // Whenever the current question gets changed, we want to update
+    // the session to remember the current question.
     $: currentQuestionId, updateSession();
 
     $: currentQuestionAnswered = data ? !!answerChoice : false;
@@ -146,46 +145,20 @@
             });
     });
 
-    var debouncedUpdateCurrentQuestionData;
-
     function updateCurrentQuestionData() {
-        if (debouncedUpdateCurrentQuestionData) {
-            debouncedUpdateCurrentQuestionData.cancel();
-        }
-
-        // Avoid race condition by checking if currentQuestion
-        // is set right now (user could be switching questions
-        // simultaneously)
-        if (!currentQuestion) {
-            return;
-        }
-
-        // Avoid race condition in the debounced function
-        // by storing the currentQuestion.id in a private
-        // variable
-        var cqid = currentQuestion.id;
-
-        debouncedUpdateCurrentQuestionData = debounce(
-            () => {
-                axios
-                    .get("/api/questions/" + cqid)
-                    .then(function (response) {
-                        var currentQuestionIndex =
-                            data.deck.questions.findIndex((q) => q.id === cqid);
-                        var questionData = response.data;
-                        data.deck.questions[currentQuestionIndex] =
-                            questionData;
-                        updateQuestionAnswerChoice(questionData);
-                    })
-                    .catch(function (error) {
-                        alert(error);
-                    });
-            },
-            500,
-            { maxWait: 1000 }
-        );
-
-        debouncedUpdateCurrentQuestionData();
+        return axios
+            .get("/api/questions/" + currentQuestion.id)
+            .then(function (response) {
+                var currentQuestionIndex =
+                    data.deck.questions.findIndex((q) => q.id === currentQuestion.id);
+                var questionData = response.data;
+                data.deck.questions[currentQuestionIndex] =
+                    questionData;
+                updateQuestionAnswerChoice(questionData);
+            })
+            .catch(function (error) {
+                alert(error);
+            });
     }
 
     function updateQuestionAnswerChoice(question) {
@@ -297,12 +270,24 @@
         <div class="col mb-1">
             <p class="text-overflow">
                 <button
-                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline bg-light"
+                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline"
+                    class:bg-light={!settingsShowSidebar}
+                    class:bg-dark-subtle={settingsShowSidebar}
                     title="Toggle sidebar"
                     on:click|preventDefault={() => {
                         $UserSettings.session_show_sidebar = !$UserSettings.session_show_sidebar;
                     }}>
                     <i class="bi bi-layout-sidebar" />
+                </button>
+                <button
+                    class="btn btn-sm"
+                    class:bg-light={!settingsShuffleAnswers}
+                    class:bg-dark-subtle={settingsShuffleAnswers}
+                    title="Toggle answer shuffling"
+                    on:click|preventDefault={() => {
+                        $UserSettings.session_shuffle_answers = !$UserSettings.session_shuffle_answers;
+                    }}>
+                    <i class="bi bi-shuffle" />
                 </button>
                 <button
                     class="btn btn-sm"
@@ -356,8 +341,10 @@
                     bind:helpUsed
                     bind:answerChoice
                     bind:examMode={examMode}
+                    bind:settingsShuffleAnswers
                     {submitAnswer}
-                    {deleteAnswer} />
+                    {deleteAnswer}
+                    {updateCurrentQuestionData} />
                 {#if !examMode && currentQuestionAnswered}
                     <Messages bind:questionId={currentQuestion.id} />
                 {/if}

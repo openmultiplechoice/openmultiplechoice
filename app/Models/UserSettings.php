@@ -14,6 +14,7 @@ class UserSettings extends Model
         'last_module_id',
         'session_show_sidebar',
         'session_exam_mode',
+        'session_shuffle_answers',
     ];
 
     public function user()
