@@ -45,6 +45,11 @@
                     hover: {
                         mode: null
                     },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
                 }
             };
 
