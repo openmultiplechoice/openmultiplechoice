@@ -7,14 +7,26 @@
     let canvasAnswers;
     let chart;
     let statsAnswersByHour = [];
+    let statsUsersByHour = [];
     let statsDecksNew = [];
     let statsDecksPopular = [];
 
     onMount(() => {
+        // TODO: fetch data with less requests
+
         axios
             .get("/api/stats/answers/byhour")
             .then(function (response) {
                 statsAnswersByHour = response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        axios
+            .get("/api/stats/users/byhour")
+            .then(function (response) {
+                statsUsersByHour = response.data;
             })
             .catch(function (error) {
                 console.log(error);
@@ -78,6 +90,16 @@
                             pointRadius: 0,
                             tension: 0.2,
                         },
+                        {
+                            label: 'Users',
+                            data: Object.values(statsUsersByHour),
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                            borderColor: 'rgba(54, 162, 235, 0.7)',
+                            fill: true,
+                            showLine: false,
+                            pointRadius: 0,
+                            tension: 0.2,
+                        }
                     ]
                 },
                 options: {

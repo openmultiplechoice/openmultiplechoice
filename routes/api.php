@@ -82,6 +82,10 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
         $d = Cache::get('stats/answers/byhour');
         return response()->json($d);
     });
+    Route::get('/stats/users/byhour', function () {
+        $d = Cache::get('stats/users/byhour');
+        return response()->json($d);
+    });
     Route::get('/stats/decks/new', function () {
         $d = Cache::get('stats/decks/new');
         return response()->json($d);
