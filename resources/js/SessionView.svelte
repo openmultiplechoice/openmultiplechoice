@@ -49,6 +49,18 @@
                 });
         })();
 
+    $: settingsShuffleAnswers,
+        (()=> {
+            axios
+                .put("/api/users/me/settings", {
+                    session_shuffle_answers: settingsShuffleAnswers
+                })
+                .then(function (response) {})
+                .catch(function (error) {
+                    alert(error);
+                });
+        })();
+
     // editorconfig-checker-disable
     $: validQuestions = data
         ? data.deck.questions.filter((q) => !q.is_invalid)
