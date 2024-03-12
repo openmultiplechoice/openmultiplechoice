@@ -78,23 +78,8 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::get('users/showbylegacyid', [UserController::class, 'showByLegacyId']);
     Route::resource('users', UserController::class);
 
-    Route::get('/stats/answers/byhour', function () {
-        $d = Cache::get('stats/answers/byhour');
-        return response()->json($d);
-    });
-    Route::get('/stats/users/byhour', function () {
-        $d = Cache::get('stats/users/byhour');
-        return response()->json($d);
-    });
-    Route::get('/stats/decks/new', function () {
-        $d = Cache::get('stats/decks/new');
-        return response()->json($d);
-    });
-    Route::get('/stats/decks/popular', function () {
-        $d = Cache::get('stats/decks/popular');
-        return response()->json($d);
-    });
-    Route::resource('stats', StatsController::class);
+    Route::get('stats/activity', [StatsController::class, 'activity']);
+    Route::get('stats/sessionsfordecks', [StatsController::class, 'sessionsfordecks']);
 
     if (config('app.magic')) {
         Route::get('magic-gif', [MagicGIFController::class, 'show']);

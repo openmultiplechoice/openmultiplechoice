@@ -4,18 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Session;
 
 class StatsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    public function sessionsfordecks(Request $request)
     {
         $sessions = array();
         $userId = Auth::id();
@@ -34,48 +30,15 @@ class StatsController extends Controller
         return response()->json($sessions);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function activity(Request $request)
     {
-        //
-    }
+        $stats = [
+            'answers_byhour' => Cache::get('stats/answers/byhour'),
+            'users_byhour' => Cache::get('stats/users/byhour'),
+            'decks_new' => Cache::get('stats/decks/new'),
+            'decks_popular' => Cache::get('stats/decks/popular'),
+        ];
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json($stats);
     }
 }
