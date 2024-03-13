@@ -35,8 +35,12 @@ class DeckController extends Controller
 
     public function show(Deck $deck)
     {
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+
         $questions = $deck->questions()->orderBy('id', 'asc')->get();
+
         $nextQuestion = $questions->first();
+
         // Load the submission relationship to check if the deck has been submitted (used in template)
         $deck->load('submission');
 
@@ -45,6 +49,7 @@ class DeckController extends Controller
         if ($nextQuestion) {
             $urlNext = '/decks/'. $deck->id .'/questions/'. $nextQuestion->id;
         }
+
         return view('deck', [
             'deck' => $deck,
             'questions' => $questions,
@@ -55,6 +60,11 @@ class DeckController extends Controller
 
     public function edit(Deck $deck)
     {
+        // Decks with access "private" or "public-ro" can only
+        // be updated by their owner or an admin
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+        abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
+
         $modules = Module::orderBy('name')->get();
         // Load the submission relationship to check if the deck has been submitted (used in template)
         $deck->load('submission');
@@ -67,10 +77,16 @@ class DeckController extends Controller
 
     public function update(Request $request, Deck $deck)
     {
-        // TODO(schu): check if the user is allowed to update the deck
-        if ($deck->user_id != Auth::id() && !$request->user()->is_admin) {
-            abort(403, 'Unauthorized');
-        }
+        // Decks with access "private" or "public-ro" can only
+        // be updated by their owner or an admin
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+        abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
+
+        // You should not be able to change the access level to "public-rw-listed" here
+        abort_if($deck->access != "public-rw-listed" && $request->access == "public-rw-listed", 403);
+
+        // You should not be able to change the access level to "public-rw-listed" here
+        abort_if($deck->access == "public-rw-listed" && $request->access && $request->access != "public-rw-listed", 403);
 
         // You should not be able to archive the deck if it was submitted or listed
         $is_submitted_or_listed = ($deck->submission()->exists() || $deck->access == 'public-rw-listed');
@@ -79,6 +95,8 @@ class DeckController extends Controller
         }
 
         $deck->update($request->all());
+        $deck->access = $request->input('access', 'private');
+
         $deck->save();
 
         return redirect()->route(
