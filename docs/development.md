@@ -161,6 +161,16 @@ sources and trigger a rebuild whenever you made a change. This way you can
 jump back and forth between your editor and the browser and instantly see
 the result of your changes.
 
+After installing [clockwork](https://underground.works/clockwork/) from the 
+dev dependencies (which should happen automatically) you can see the data
+collected for each request by visiting `http://[your-omc-domain]/clockwork`
+or by using the clockwork browser extension (for [Chrome](https://chrome.google.com/webstore/detail/clockwork/dmggabnehkmmfmdffgajcflpdjlnoemp) 
+or [Firefox](https://addons.mozilla.org/en-US/firefox/addon/clockwork-dev-tools/)).
+You can use the collected data to analyze the performance of the application
+or eventual changes you make including a deeper look into the database queries.
+Clockwork only works while the application is in debug mode and is using a local
+domain.
+
 ## Updating dependencies
 
 ### PHP / Composer
