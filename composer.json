@@ -18,11 +18,12 @@
         "socialiteproviders/keycloak": "^5.1"
     },
     "require-dev": {
-        "spatie/laravel-ignition": "^2.0",
         "fakerphp/faker": "^1.9.1",
+        "itsgoingd/clockwork": "^5.2",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^7.1",
-        "phpunit/phpunit": "^10.0"
+        "phpunit/phpunit": "^10.0",
+        "spatie/laravel-ignition": "^2.0"
     },
     "config": {
         "optimize-autoloader": true,
