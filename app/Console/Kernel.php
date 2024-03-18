@@ -23,10 +23,11 @@ class Kernel extends ConsoleKernel
             // Get an array of all answer choices of the last 7 days,
             // grouped by the full hour
             $answerChoicesByHour = AnswerChoice::where('created_at', '>=', Carbon::now()->subDays(7))
-                ->get(['id', 'created_at'])
+                ->with('session:id,user_id')
+                ->get()
                 ->groupBy(function ($a) {
                     return Carbon::parse($a->created_at)->minute(0)->second(0);
-                })->toArray();
+                })->all();
 
             // Get a range of all hours from 7 days ago until now, e.g.
             // 2023-11-13 08:00:00
@@ -34,14 +35,22 @@ class Kernel extends ConsoleKernel
             // ...
             $range = Carbon::parse(Carbon::now()->startOfHour()->subDays(7))->hoursUntil(Carbon::now());
 
-            // For each hour, count the number of answers
-            $answerCountsByHour = [];
+            // For each hour, count the number of answers and users
+            $answersByHour = [];
+            $usersByHour = [];
             foreach($range as $hour) {
                 $hourString = $hour->format('Y-m-d H:i:s');
-                $answerCountsByHour[$hourString] = isset($answerChoicesByHour[$hourString]) ? count($answerChoicesByHour[$hourString]) : 0;
+                $answersByHour[$hourString] = isset($answerChoicesByHour[$hourString]) ? count($answerChoicesByHour[$hourString]) : 0;
+                $usersByHour[$hourString] = isset($answerChoicesByHour[$hourString]) ?
+                    count(array_unique(
+                        $answerChoicesByHour[$hourString]
+                            ->map(function ($ac) { return $ac->session->user_id; })
+                            ->toArray()
+                    )) : 0;
             }
 
-            Cache::put('stats/answers/byhour', $answerCountsByHour);
+            Cache::put('stats/answers/byhour', $answersByHour);
+            Cache::put('stats/users/byhour', $usersByHour);
         })->everyTwoMinutes();
 
         $schedule->call(function () {

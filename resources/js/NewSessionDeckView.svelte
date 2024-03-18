@@ -67,7 +67,7 @@
                 (d) => "decks[]=" + d.id
             );
             axios
-                .get("/api/stats?" + requestParameters.join("&"))
+                .get("/api/stats/sessionsfordecks?" + requestParameters.join("&"))
                 .then(function (response) {
                     decksStats = response.data;
                 })

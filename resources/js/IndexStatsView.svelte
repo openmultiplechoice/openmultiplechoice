@@ -6,32 +6,21 @@
 
     let canvasAnswers;
     let chart;
-    let statsAnswersByHour = [];
+    let statsAnswersByHour = {};
+    let statsUsersByHour = {};
     let statsDecksNew = [];
     let statsDecksPopular = [];
 
     onMount(() => {
         axios
-            .get("/api/stats/answers/byhour")
+            .get("/api/stats/activity")
             .then(function (response) {
-                statsAnswersByHour = response.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+                const stats = response.data;
 
-        axios
-            .get("/api/stats/decks/new")
-            .then(function (response) {
-                statsDecksNew = response.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-        axios.get("/api/stats/decks/popular")
-            .then(function (response) {
-                statsDecksPopular = response.data;
+                statsAnswersByHour = stats.answers_byhour;
+                statsUsersByHour = stats.users_byhour;
+                statsDecksNew = stats.decks_new;
+                statsDecksPopular = stats.decks_popular;
             })
             .catch(function (error) {
                 console.log(error);
@@ -78,6 +67,16 @@
                             pointRadius: 0,
                             tension: 0.2,
                         },
+                        {
+                            label: 'Users',
+                            data: Object.values(statsUsersByHour),
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                            borderColor: 'rgba(54, 162, 235, 0.7)',
+                            fill: true,
+                            showLine: false,
+                            pointRadius: 0,
+                            tension: 0.2,
+                        }
                     ]
                 },
                 options: {
