@@ -31,6 +31,10 @@ class QuestionMessageController extends Controller
             }
             // Load anonymized thumbs for this message to include in the response
             $m->thumbsAnonymized();
+
+            if ($m->is_deleted) {
+                $m->text = '';
+            }
         });
         return response()->json($messages);
     }
