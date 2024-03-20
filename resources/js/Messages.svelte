@@ -96,6 +96,13 @@
         nestedMessages = generateMessageTree(messages);
     }
 
+    function updateMessage(message) {
+        // Find the specified message in the list and replace it
+        const index = messages.findIndex(obj => obj.id === message.id);
+        messages[index] = message;
+        nestedMessages = generateMessageTree(messages);
+    }
+
     function handleSubmit() {
         var newMessage = {
             text: document.getElementById("message").value,
@@ -120,7 +127,7 @@
 
 <div class="mt-3 mb-3">
     {#each nestedMessages as message (message.id)}
-        <MessageView bind:message bind:questionId indent={0} {addMessage} />
+        <MessageView bind:message bind:questionId indent={0} {addMessage} {updateMessage} />
     {:else}
         <p>{messageInfo}</p>
     {/each}

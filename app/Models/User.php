@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(DeckSubmission::class);
     }
+
+    public function message_ratings()
+    {
+        return $this->hasMany(Thumb::class);
+    }
 }
