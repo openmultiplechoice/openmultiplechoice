@@ -16,7 +16,7 @@ class QuestionMessageController extends Controller
         // TODO: is it possible to load the `author_id`
         // (to later load author info) only for messages
         // which are not anonymous?
-        $messages = $question->messages()->get();
+        $messages = $question->messages()->with('thumbs')->get();
         // Load author info for messages which are
         // not anonymous and for messages of the
         // current user
@@ -29,6 +29,8 @@ class QuestionMessageController extends Controller
                 // users..
                 $m->author_id = null;
             }
+            // Load anonymized thumbs for this message to include in the response
+            $m->thumbsAnonymized();
         });
         return response()->json($messages);
     }
@@ -44,6 +46,9 @@ class QuestionMessageController extends Controller
 
         // Frontend expects author info in the message object
         $message->load('author:id,name');
+
+        // Load anonymized thumbs for this message to include in the response
+        $message->thumbsAnonymized();
 
         return response()->json($message);
     }

@@ -7,7 +7,12 @@
     export let message;
     export let indent;
     export let addMessage;
+    export let updateMessage;
     export let questionId;
+
+    $: num_upvotes = message.thumbs.filter((vote) => vote.thumb === "up").length ?? 0
+    $: num_downvotes = message.thumbs.filter((vote) => vote.thumb === "down").length ?? 0
+    $: user_vote = message.thumbs.find((entry) => entry.user_id !== undefined) ?? null
 
     var showEditor = false;
     var showEditorReply = false;
@@ -30,6 +35,7 @@
             .then(function (response) {
                 toggleEditor();
                 message.text = response.data.text;
+                updateMessage(message);
             })
             .catch(function (error) {
                 alert(error);
@@ -61,10 +67,58 @@
             .put("/api/messages/" + message.id, newMessage)
             .then(function (response) {
                 message.text = "";
+                updateMessage(message);
             })
             .catch(function (error) {
                 alert(error);
             });
+    }
+
+    function handleThumb(type) {
+        // If the user already voted on the message:
+        if (user_vote !== null) {
+            // and the vote is the same as the one they clicked, delete the vote
+            if (user_vote.thumb === type) {
+                axios
+                    .delete("/api/messages/" + message.id + "/thumbs/" + user_vote.id)
+                    .then(function(response) {
+                        // update the thumbs array to remove the user's vote in the local copy
+                        message.thumbs = message.thumbs.filter((entry) => entry.user_id === undefined);
+                        updateMessage(message);
+                    })
+                    .catch(function(error) {
+                        alert(error);
+                    });
+            // if the vote is different, update the vote
+            } else {
+                axios
+                    .put("/api/messages/" + message.id + "/thumbs/" + user_vote.id, { type: type })
+                    .then(function(response) {
+                        // update the thumbs array to update the user's vote in the local copy
+                        message.thumbs.find((entry) => entry.user_id !== undefined).thumb = type;
+                        updateMessage(message);
+                    })
+                    .catch(function(error) {
+                        alert(error);
+                    });
+            }
+        // If the user hasn't voted on the message yet, create a new vote
+        } else {
+            axios
+                .post("/api/messages/" + message.id + "/thumbs", { type: type })
+                .then(function(response) {
+                    // add the new vote to the thumbs array in the local copy
+                    message.thumbs.push({
+                        "thumb": response.data.type,
+                        "user_id": response.data.user_id,
+                        "id": response.data.id
+                    });
+                    updateMessage(message);
+                })
+                .catch(function(error) {
+                    alert(error);
+                });
+        }
     }
 </script>
 
@@ -81,6 +135,20 @@
                 </p>
                 <p class="text-muted text-end mb-0">
                     <small>
+                        {num_upvotes}
+                        <button class="btn"
+                                on:click|preventDefault={() => handleThumb("up")}>
+                                <i class="bi"
+                                    class:bi-hand-thumbs-up-fill={user_vote?.thumb === "up"}
+                                    class:bi-hand-thumbs-up={!(user_vote?.thumb === "up")}></i>
+                        </button>
+                        {num_downvotes}
+                        <button class="btn"
+                                on:click|preventDefault={() => handleThumb("down")}>
+                                <i class="bi"
+                                    class:bi-hand-thumbs-down-fill={user_vote?.thumb === "down"}
+                                    class:bi-hand-thumbs-down={!(user_vote?.thumb === "down")}></i>
+                        </button>
                         {#if $UserSettings.id === message.author_id}
                             <button
                                 class="btn btn-sm btn-link link-dark"
@@ -163,6 +231,7 @@
             bind:message={child}
             indent={indent + 1}
             {addMessage}
+            {updateMessage}
             {questionId} />
     {/each}
 {/if}

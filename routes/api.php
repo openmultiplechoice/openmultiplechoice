@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\QuestionMessageController;
 use App\Http\Controllers\Api\ImageController;
 
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\MessageThumbController;
 
 use App\Http\Controllers\Api\AnswerController;
 use App\Http\Controllers\Api\AnswerChoiceController;
@@ -64,6 +65,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('images', ImageController::class);
 
     Route::resource('messages', MessageController::class);
+    Route::resource('messages.thumbs', MessageThumbController::class);
 
     Route::resource('answers', AnswerController::class);
 
