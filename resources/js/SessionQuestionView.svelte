@@ -71,12 +71,16 @@
     function toggleEditor() {
         const doShow = !showEditor;
         if (doShow) {
-            // First, update the question data to the latest
-            // to avoid overwriting changes made by other users,
-            // then show the editor
-            updateCurrentQuestionData().then(() => {
+            if (updateCurrentQuestionData) {
+                // First, update the question data to the latest
+                // to avoid overwriting changes made by other users,
+                // then show the editor
+                updateCurrentQuestionData().then(() => {
+                    showEditor = doShow;
+                });
+            } else {
                 showEditor = doShow;
-            });
+            }
         } else {
             // Close the editor
             showEditor = doShow;
