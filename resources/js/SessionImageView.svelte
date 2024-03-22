@@ -47,7 +47,7 @@
         <div class="row row-cols-1 row-cols-sm-3 g-4">
             {#each images as image (image.id)}
                 <div class="col">
-                    <div class="card" style="max-width: 18rem">
+                    <div class="card" style="max-width: 18rem; cursor: pointer;">
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <img
                             on:click={() => fullscreenToggle(image.id)}
