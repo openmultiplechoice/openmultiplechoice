@@ -10,7 +10,7 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\DeckController;
 use App\Http\Controllers\DeckQuestionController;
 use App\Http\Controllers\InfoController;
-use App\Http\Controllers\MagicGIFController;
+use App\Http\Controllers\MagicGifController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\QuestionController;
@@ -87,7 +87,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     if (config('app.magic')) {
-        Route::resource('/magic-gifs', MagicGIFController::class);
+        Route::resource('/magic-gifs', MagicGifController::class);
     }
 });
 
