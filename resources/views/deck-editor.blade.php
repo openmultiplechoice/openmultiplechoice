@@ -30,6 +30,27 @@
                 <input id="exam_at" type="date" name="exam_at" class="form-control" value="{{ optional($deck->exam_at)->format('Y-m-d') ?? '' }}">
             </div>
             <div class="mb-3">
+                <label for="access" class="form-label">Access</label>
+                @if ($deck->access == 'public-rw-listed')
+                    <input type="hidden" id="access" name="access" value="public-rw-listed">
+                    <select id="access" name="access" class="form-select" disabled>
+                        <option value="public-rw-listed" selected>public-rw-listed</option>
+                    </select>
+                @else
+                    <select id="access" name="access" class="form-select">
+                        @foreach (['private', 'public-ro', 'public-rw'] as $access)
+                            <option value="{{ $access }}" {{ ($deck->access == $access) ? 'selected' : '' }}>{{ $access }}</option>
+                        @endforeach
+                    </select>
+                @endif
+                <div class="form-text">
+                    Access can be <i>private</i> (only you can see this deck),
+                    <i>public-ro</i> (anyone can see this deck, but only you can edit it) or
+                    <i>public-rw</i> (anyone can see and edit this deck). If a deck is <i>public-rw-listed</i>,
+                    access cannot be changed.
+                </div>
+            </div>
+            <div class="mb-3">
                 <label for="description" class="form-label">Description (optional)</label>
                 <input type="hidden" id="description" name="description" value="{{ $deck->description ?? '' }}">
                 <trix-editor input="description"></trix-editor>

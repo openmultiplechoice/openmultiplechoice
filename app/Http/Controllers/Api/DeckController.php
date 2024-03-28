@@ -19,37 +19,50 @@ class DeckController extends Controller
         // etc.
 
         if ($request->module) {
+            // Return all public decks for the given module
             return response()->json(
                 Deck::where([
                     ['module_id', '=', $request->module],
-                    ['access' ,'=', 'public-rw-listed'],
+                    ['access', '=', 'public-rw-listed'],
                 ])->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')->get()
             );
         }
         if ($request->decks) {
+            // Return the decks with the given IDs; this endpoint
+            // is used by the superdeck creation form to get the
+            // number of questions and images in each deck
             return response()->json(
-                Deck::whereIn('id', $request->decks)->with('module', 'module.subject', 'questions:id', 'questions.images:id,question_id')->get()
+                Deck::whereIn('id', $request->decks)
+                    ->where('access', '=', 'public-rw-listed')
+                    ->with('questions:id', 'questions.images:id,question_id')->get()
             );
         }
+
+        // Return all public decks
         return response()->json(
-            Deck::with('module', 'module.subject', 'questions:id')->get()
+            Deck::where('access', '=', 'public-rw-listed')
+                ->with('module', 'module.subject', 'questions:id')->get()
         );
     }
 
     public function indexWithQuestionIds(Request $request)
     {
         $user_id = Auth::id();
+
         $decks = Deck::where([
                 ['user_id', '=', $user_id],
                 ['access', '!=', 'public-rw-listed'],
                 ['is_ephemeral', '=', false],
                 ['is_archived', '=', false],
             ])->with('questions:id')->get();
+
         return response()->json($decks);
     }
 
     public function store(Request $request)
     {
+        abort_if($request->access == "public-rw-listed", 403);
+
         $deck = new Deck();
 
         $user = Auth::user();
@@ -65,12 +78,7 @@ class DeckController extends Controller
         $deck->module_id = $request->module_id;
         $deck->user_id = $user->id;
 
-        if ($request->access) {
-            if ($request->access == 'public-rw-listed' && !$user->is_admin) {
-                abort(403, 'Unauthorized');
-            }
-            $deck->access = $request->access;
-        }
+        $deck->access = $request->input('access', 'private');
 
         $deck->save();
 
@@ -86,7 +94,16 @@ class DeckController extends Controller
 
     public function update(Request $request, Deck $deck)
     {
-        // TODO(schu): check if user owner
+        // Decks with access "private" or "public-ro" can only
+        // be updated by their owner or an admin
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+        abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
+
+        // You should not be able to change the access level to "public-rw-listed" here
+        abort_if($deck->access != "public-rw-listed" && $request->access == "public-rw-listed", 403);
+
+        // You should not be able to unlist the deck
+        abort_if($deck->access == "public-rw-listed" && $request->access && $request->access != "public-rw-listed", 403);
 
         // You should not be able to archive the deck if it was submitted or listed
         $is_submitted_or_listed = ($deck->submission()->exists() || $deck->access == 'public-rw-listed');
@@ -97,22 +114,36 @@ class DeckController extends Controller
         }
 
         $deck->update($request->all());
+        $deck->access = $request->input('access', 'private');
+
+        $deck->save();
+
         return response()->json($deck);
     }
 
     public function addQuestionById(Request $request, Deck $deck)
     {
-        // TODO(schu): check if user owner
+        // Decks with access "private" or "public-ro" can only
+        // be updated by their owner or an admin
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+        abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
+
         $question_id = $request->question_id;
         $deck->questions()->attach($question_id);
+
         return response()->noContent();
     }
 
     public function removeQuestionById(Request $request, Deck $deck)
     {
-        // TODO(schu): check if user owner
+        // Decks with access "private" or "public-ro" can only
+        // be updated by their owner or an admin
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+        abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
+
         $question_id = $request->question_id;
         $deck->questions()->detach($question_id);
+
         return response()->noContent();
     }
 }

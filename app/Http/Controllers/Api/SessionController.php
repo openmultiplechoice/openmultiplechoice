@@ -33,11 +33,13 @@ class SessionController extends Controller
 
     public function store(Request $request)
     {
-        $newSession = new Session();
-
         $deck = Deck::findOrFail($request->deck_id);
 
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+
         abort_if($deck->questions->isEmpty(), 400);
+
+        $newSession = new Session();
 
         $newSession->deck_id = $deck->id;
         $newSession->name = $deck->name;
