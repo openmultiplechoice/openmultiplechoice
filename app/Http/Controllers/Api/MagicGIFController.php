@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rules\File;
 
-use App\Models\MagicGIF;
+use App\Models\MagicGif;
 
 class MagicGifController extends Controller
 {

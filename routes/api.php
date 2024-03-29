@@ -30,7 +30,7 @@ use App\Http\Controllers\Api\UserSettingsController;
 
 use App\Http\Controllers\Api\StatsController;
 
-use App\Http\Controllers\Api\MagicGIFController;
+use App\Http\Controllers\Api\MagicGifController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +84,6 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::get('stats/sessionsfordecks', [StatsController::class, 'sessionsfordecks']);
 
     if (config('app.magic')) {
-        Route::get('magic-gif', [MagicGIFController::class, 'show']);
+        Route::get('magic-gif', [MagicGifController::class, 'show']);
     }
 });
