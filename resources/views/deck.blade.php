@@ -69,14 +69,16 @@
             </div>
         @endif
 
-        <div class="row mb-3">
-            <div class="col-md mb-3">
-                <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-pencil"></i> Edit deck</a>
+        @if (Auth::user()->is_admin || $deck->user_id == Auth::id() || $deck->access == "public-rw" || $deck->access == "public-rw-listed")
+            <div class="row mb-3">
+                <div class="col-md mb-3">
+                    <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-pencil"></i> Edit deck</a>
+                </div>
+                <div class="col-md">
+                    <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-pencil"></i> Add / remove questions</a>
+                </div>
             </div>
-            <div class="col-md">
-                <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-pencil"></i> Add / remove questions</a>
-            </div>
-        </div>
+        @endif
 
     </div>
 </div>

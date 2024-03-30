@@ -13,6 +13,8 @@ class DeckQuestionController extends Controller
 {
     public function show(Deck $deck, Question $question)
     {
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+
         $questions = $deck->questions()->orderBy('id', 'asc')->get();
 
         $question->load('answers', 'images');
@@ -44,6 +46,9 @@ class DeckQuestionController extends Controller
 
     public function edit(Deck $deck)
     {
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+        abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
+
         return view('deck-question-editor', ['deck' => $deck]);
     }
 }
