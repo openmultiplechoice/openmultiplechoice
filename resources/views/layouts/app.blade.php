@@ -55,6 +55,7 @@
                                 @endif
                                 @if (Auth::user()->is_admin)
                                     <hr class="dropdown-divider">
+                                    <a class="dropdown-item" href="{{ url('admin/users') }}">User management</a>
                                     <a class="dropdown-item" href="{{ url('tokens') }}">API Token</a>
                                 @endif
                             </div>

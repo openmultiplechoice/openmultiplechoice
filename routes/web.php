@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -19,8 +20,8 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
-use App\Http\Controllers\SubmissionsController;
 use App\Http\Controllers\DeckSubmissionController;
+use App\Http\Controllers\UserManagementController;
 
 use App\Models\Info;
 use App\Models\User;
@@ -75,6 +76,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me/settings', [UserSettingsController::class, 'show']);
     Route::put('/me', [UserController::class, 'update']);
 
+    Route::get('/admin/users', [UserManagementController::class, 'index']);
+    Route::put('/admin/users/{user}', [UserManagementController::class, 'update']);
+
     Route::get('/logout', function (Request $request) {
         # https://laravel.com/docs/10.x/authentication#logging-out
 
@@ -103,9 +107,17 @@ Route::post('/login', function (Request $request) {
     $remain_logged_in = $request->boolean('remain_logged_in');
 
     if (Auth::attempt($credentials, $remain_logged_in)) {
+        if (!Auth::user()->is_enabled) {
+            Auth::logout();
+            return back()->withErrors([
+                'login' => 'Your account is disabled.',
+            ]);
+        }
         if ($request->session()) {
             $request->session()->regenerate();
         }
+        Auth::user()->last_login_at = Carbon::now();
+        Auth::user()->save();
 
         return redirect()->intended('/');
     }

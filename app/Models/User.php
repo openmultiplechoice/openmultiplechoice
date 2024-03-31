@@ -21,6 +21,15 @@ class User extends Authenticatable
         });
     }
 
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            $query->where('name', 'like', "%{$search}%'")
+                ->orWhere('public_name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -50,6 +59,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',
     ];
 
     public function messages()
