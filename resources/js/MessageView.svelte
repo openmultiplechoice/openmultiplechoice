@@ -60,13 +60,11 @@
     }
 
     function handleDelete() {
-        var newMessage = {
-            text: "",
-        };
         axios
-            .put("/api/messages/" + message.id, newMessage)
+            .delete("/api/messages/" + message.id)
             .then(function (response) {
                 message.text = "";
+                message.is_deleted = true;
                 updateMessage(message);
             })
             .catch(function (error) {
@@ -122,108 +120,117 @@
     }
 </script>
 
-<div class="mt-1 mb-1">
-    <div class="row">
-        {#if !showEditor}
-            <div class="col-md offset-md-{indent}">
-                <p class="rounded-2 bg-light p-2 mb-0">
-                    {#if message.text && message.text != ""}
-                        {@html DOMPurify.sanitize(message.text)}
+{#if !message.is_deleted || (message.is_deleted && message.childs)}
+    <div class="mt-1 mb-1">
+        <div class="row">
+            {#if !showEditor}
+                <div class="col-md offset-md-{indent}">
+                    {#if !message.is_deleted}
+                        <p class="rounded-2 bg-light p-2 mb-0">
+                            {#if message.text}
+                                {@html DOMPurify.sanitize(message.text)}
+                            {/if}
+                        </p>
                     {:else}
-                        <i>Deleted</i>
+                        <p class="rounded-2 bg-light-subtle p-1 mb-0 text-muted">
+                            <small><i>deleted</i></small>
+                        </p>
                     {/if}
-                </p>
-                <p class="text-muted text-end mb-0">
-                    <small>
-                        {num_upvotes}
-                        <button class="btn"
-                                on:click|preventDefault={() => handleThumb("up")}>
-                                <i class="bi"
-                                    class:bi-hand-thumbs-up-fill={user_vote?.thumb === "up"}
-                                    class:bi-hand-thumbs-up={!(user_vote?.thumb === "up")}></i>
-                        </button>
-                        {num_downvotes}
-                        <button class="btn"
-                                on:click|preventDefault={() => handleThumb("down")}>
-                                <i class="bi"
-                                    class:bi-hand-thumbs-down-fill={user_vote?.thumb === "down"}
-                                    class:bi-hand-thumbs-down={!(user_vote?.thumb === "down")}></i>
-                        </button>
-                        {#if $UserSettings.id === message.author_id}
-                            <button
-                                class="btn btn-sm btn-link link-dark"
-                                on:click|preventDefault={toggleEditor}
-                                >Edit</button>
-                            <button
-                                class="btn btn-sm btn-link link-dark"
-                                on:click|preventDefault={handleDelete}
-                                >Delete</button>
-                        {/if}
+                    <p class="text-muted text-end mb-0">
+                        <small>
+                            {#if !message.is_deleted}
+                                {num_upvotes}
+                                <button class="btn"
+                                        on:click|preventDefault={() => handleThumb("up")}>
+                                        <i class="bi"
+                                            class:bi-hand-thumbs-up-fill={user_vote?.thumb === "up"}
+                                            class:bi-hand-thumbs-up={!(user_vote?.thumb === "up")}></i>
+                                </button>
+                                {num_downvotes}
+                                <button class="btn"
+                                        on:click|preventDefault={() => handleThumb("down")}>
+                                        <i class="bi"
+                                            class:bi-hand-thumbs-down-fill={user_vote?.thumb === "down"}
+                                            class:bi-hand-thumbs-down={!(user_vote?.thumb === "down")}></i>
+                                </button>
+                                {#if $UserSettings.id === message.author_id}
+                                    <button
+                                        class="btn btn-sm btn-link link-dark"
+                                        on:click|preventDefault={toggleEditor}
+                                        >Edit</button>
+                                    <button
+                                        class="btn btn-sm btn-link link-dark"
+                                        on:click|preventDefault={handleDelete}
+                                        >Delete</button>
+                                {/if}
+                                <button
+                                    class="btn btn-sm btn-link link-dark"
+                                    on:click|preventDefault={toggleEditorReply}
+                                    >Reply</button>
+                            {/if}
+                            {format(
+                                parseISO(message.created_at),
+                                "dd.MM.yyyy HH:mm"
+                            )}
+                            {#if message.author && !message.is_deleted}
+                                {message.author.name}
+                            {/if}
+                        </small>
+                    </p>
+                </div>
+            {:else}
+                <div class="col-md">
+                    <form on:submit|preventDefault={handleSubmit} class="mt-3 mb-3">
+                        <div class="mb-3">
+                            <input id="message" type="hidden" name="message" value={message.text} />
+                            <trix-editor input="message" />
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="anonymous" checked={message.is_anonymous}>
+                            <label class="form-check-label" for="anonymous">Anonymous</label>
+                        </div>
+                        <input
+                            class="btn btn-sm btn-primary"
+                            type="submit"
+                            value="Save" />
                         <button
-                            class="btn btn-sm btn-link link-dark"
+                            on:click|preventDefault={toggleEditor}
+                            class="btn btn-link mr-0">
+                                Cancel
+                        </button>
+                    </form>
+                </div>
+            {/if}
+        </div>
+
+        {#if showEditorReply}
+            <div class="row">
+                <div class="col-md">
+                    <form on:submit|preventDefault={handleReply} class="mt-3 mb-3">
+                        <input id="parentMessageId" type="hidden" value={message.id} />
+                        <div class="mb-3">
+                            <input id="replyMessage" type="hidden" name="replyMessage" value="" />
+                            <trix-editor input="replyMessage" />
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="replyAnonymous" checked>
+                            <label class="form-check-label" for="replyAnonymous">Anonymous</label>
+                        </div>
+                        <input
+                            class="btn btn-sm btn-primary"
+                            type="submit"
+                            value="Send reply" />
+                        <button
                             on:click|preventDefault={toggleEditorReply}
-                            >Reply</button>
-                        {format(
-                            parseISO(message.created_at),
-                            "dd.MM.yyyy HH:mm"
-                        )}
-                        {#if message.author}
-                            {message.author.name}
-                        {/if}
-                    </small>
-                </p>
-            </div>
-        {:else}
-            <div class="col-md">
-                <form on:submit|preventDefault={handleSubmit} class="mt-3 mb-3">
-                    <div class="mb-3">
-                        <input id="message" type="hidden" name="message" value={message.text} />
-                        <trix-editor input="message" />
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="anonymous" checked={message.is_anonymous}>
-                        <label class="form-check-label" for="anonymous">Anonymous</label>
-                    </div>
-                    <input
-                        class="btn btn-sm btn-primary"
-                        type="submit"
-                        value="Save" />
-                    <button
-                        on:click|preventDefault={toggleEditor}
-                        class="btn btn-link mr-0">
-                            Cancel
-                    </button>
-                </form>
+                            class="btn btn-link mr-0">
+                                Cancel
+                        </button>
+                    </form>
+                </div>
             </div>
         {/if}
     </div>
-    {#if showEditorReply}
-        <div class="row">
-            <div class="col-md">
-                <form on:submit|preventDefault={handleReply} class="mt-3 mb-3">
-                    <input id="parentMessageId" type="hidden" value={message.id} />
-                    <div class="mb-3">
-                        <input id="replyMessage" type="hidden" name="replyMessage" value="" />
-                        <trix-editor input="replyMessage" />
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="replyAnonymous" checked>
-                        <label class="form-check-label" for="replyAnonymous">Anonymous</label>
-                    </div>
-                    <input
-                        class="btn btn-sm btn-primary"
-                        type="submit"
-                        value="Send reply" />
-                    <button
-                        on:click|preventDefault={toggleEditorReply}
-                        class="btn btn-link mr-0">
-                            Cancel
-                    </button>
-                </form>
-            </div>
-        </div>
-    {/if}
-</div>
+{/if}
 
 {#if message.childs}
     {#each message.childs as child}

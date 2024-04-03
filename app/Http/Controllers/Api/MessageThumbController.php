@@ -19,9 +19,8 @@ class MessageThumbController extends Controller
      */
     public function store(Request $request, Message $message)
     {
-        if ($message->thumbs()->where('user_id', Auth::id())->exists()) {
-            abort(400, 'You have already voted on this message.');
-        }
+        abort_if($message->is_deleted, 400, 'You cannot vote on a deleted message.');
+        abort_if($message->thumbs()->where('user_id', Auth::id())->exists(), 400, 'You have already voted on this message.');
 
         $thumb = new Thumb();
         $thumb->type = $request->type;
@@ -41,9 +40,9 @@ class MessageThumbController extends Controller
      */
     public function update(Request $request, Message $message, Thumb $thumb)
     {
-        if ($thumb->user_id != Auth::id()) {
-            abort(403, 'You are not allowed to update this thumb.');
-        }
+        abort_if($message->is_deleted, 400, 'You cannot vote on a deleted message.');
+        abort_if($thumb->user_id != Auth::id(), 403, 'You are not allowed to update this thumb.');
+
         $thumb->type = $request->type;
         $thumb->save();
 
@@ -57,9 +56,7 @@ class MessageThumbController extends Controller
      */
     public function destroy(Request $request, Message $message, Thumb $thumb)
     {
-        if ($thumb->user_id != Auth::id()) {
-            abort(403, 'You are not allowed to delete this thumb.');
-        }
+        abort_if($thumb->user_id != Auth::id(), 403, 'You are not allowed to delete this thumb.');
 
         $thumb->delete();
 

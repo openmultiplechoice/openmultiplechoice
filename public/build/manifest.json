@@ -1,6 +1,6 @@
 {
-  "_Messages-oPrwoFTi.js": {
-    "file": "assets/Messages-oPrwoFTi.js",
+  "_Messages--z-bT08I.js": {
+    "file": "assets/Messages--z-bT08I.js",
     "name": "Messages",
     "imports": [
       "_index-DgDIGCFR.js",
@@ -166,12 +166,12 @@
     ]
   },
   "resources/js/Messages.js": {
-    "file": "assets/Messages-D1JwiY-o.js",
+    "file": "assets/Messages-C7dFqHmE.js",
     "name": "Messages",
     "src": "resources/js/Messages.js",
     "isEntry": true,
     "imports": [
-      "_Messages-oPrwoFTi.js",
+      "_Messages--z-bT08I.js",
       "_index-DgDIGCFR.js",
       "_each-CvUUWvvD.js",
       "_purify.es-Nj7Zb1vq.js",
@@ -212,14 +212,14 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-BLS4zy1J.js",
+    "file": "assets/SessionView-XSpYzGB4.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
     "imports": [
       "_index-DgDIGCFR.js",
       "_purify.es-Nj7Zb1vq.js",
-      "_Messages-oPrwoFTi.js",
+      "_Messages--z-bT08I.js",
       "_auto-C08LIDt6.js",
       "_SessionProgressBar-CqGfgLl-.js",
       "_each-CvUUWvvD.js",
