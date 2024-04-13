@@ -15,3 +15,7 @@ yarn-error.log
 .*.sw[po]
 .php-cs-fixer.cache
 .DS_Store
+
+/caddy
+frankenphp
+frankenphp-worker.php
