@@ -20,6 +20,7 @@ class Message extends Model
         'legacy_parent_message_id',
         'legacy_author_name',
         'is_anonymous',
+        'is_deleted',
     ];
 
     public function question()
