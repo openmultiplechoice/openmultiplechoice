@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
             $newDecks = Deck::where('access', '=', 'public-rw-listed')
                 ->select('id', 'name')
                 ->orderBy('id', 'desc')
-                ->limit(10)
+                ->limit(6)
                 ->with('questions:id')
                 ->get();
 
@@ -73,7 +73,7 @@ class Kernel extends ConsoleKernel
                 ->map(function ($s) { return $s->deck;});
 
             // Filter out private decks
-            $popularDecks = $sessionDecks->where('access', '=', 'public-rw-listed')->take(10);
+            $popularDecks = $sessionDecks->where('access', '=', 'public-rw-listed')->take(6);
 
             Cache::put('stats/decks/popular', $popularDecks);
         })->everyTwoMinutes();
