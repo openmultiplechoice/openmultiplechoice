@@ -61,7 +61,7 @@ class DeckController extends Controller
 
     public function store(Request $request)
     {
-        abort_if($request->access == "public-rw-listed", 403);
+        abort_if($request->access == "public-rw-listed" && !Auth::user()->is_admin, 403);
 
         $deck = new Deck();
 
