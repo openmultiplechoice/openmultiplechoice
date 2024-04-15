@@ -1,3 +1,15 @@
+.bash_logout
+.bashrc
+.cache/
+.cloud-locale-test.skip
+.config/
+.lesshst
+.local/
+.profile
+.viminfo
+.*.sw[po]
+.DS_Store
+
 /node_modules
 /public/hot
 /public/storage
@@ -12,9 +24,7 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 .php_cs.cache
-.*.sw[po]
 .php-cs-fixer.cache
-.DS_Store
 
 /caddy
 frankenphp
