@@ -1,28 +1,36 @@
 # Tinker
 
-## Cheatsheet
+Various helpful example commands for [Tinker](https://laravel.com/docs/11.x/artisan#tinker),
+Laravel's REPL ("read-eval-print loop").
 
-Various helpful [Tinker](https://laravel.com/docs/8.x/artisan#tinker)
-example commands.
-
-Run tinker:
+## Running
 
 ```
 cd <PROJECT_ROOT>
 php artisan tinker
 ```
 
-Add a user:
+## Users
+
+### Adding a user
 
 ```
-User::create(['name' => 'some', 'email' => 'some@example.com', 'password' => Hash::make('some')]);
+$u = User::create(['name' => 'some', 'email' => 'some@example.com']);
+$u->password = Hash::make('some');
+$u->save();
 ```
 
-Get all decks that are part of module `Demo`:
+## Decks
+
+### Lising all decks of a particular module
 
 ```
 App\Models\Module::where('name', 'Demo')->first()->decks()->get();
 ```
+
+## Files
+
+### Putting a file
 
 Put a file (e.g. an image) from disk into storage (below the storage
 path is `<PROJECT_ROOT>/storage/app/images'`):
