@@ -12,6 +12,7 @@ class Message extends Model
     use HasFactory;
 
     protected $fillable = [
+        'created_at',
         'author_id',
         'text',
         'question_id',
