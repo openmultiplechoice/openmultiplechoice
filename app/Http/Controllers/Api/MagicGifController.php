@@ -13,7 +13,7 @@ class MagicGifController extends Controller
      */
     public function show(Request $request)
     {
-        $gif = MagicGIF::inRandomOrder()->firstOrFail();
+        $gif = MagicGif::inRandomOrder()->firstOrFail();
         return response()->json($gif);
     }
 }
