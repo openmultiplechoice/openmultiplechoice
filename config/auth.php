@@ -39,6 +39,7 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+            'remember' => now()->addDays(7)->diffInMinutes(),
         ],
     ],
 
