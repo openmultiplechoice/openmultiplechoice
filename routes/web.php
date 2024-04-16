@@ -74,6 +74,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/tokens', [TokenController::class, 'index'])->name('index.tokens');
 
     Route::get('/me/settings', [UserSettingsController::class, 'show']);
+    Route::post('/me/settings/invalidate-devices', [UserSettingsController::class, 'invalidateDevices']);
     Route::put('/me', [UserController::class, 'update']);
 
     Route::get('/admin/users', [UserManagementController::class, 'index']);
