@@ -129,7 +129,7 @@
                         )}
                     </span>
                 {/if}
-                <span class="badge text-bg-secondary" title="Number of questions">{deck.questions.length}</span>
+                <span class="badge text-bg-secondary" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
                 {#if deckStatsIndicator[deck.id]}
                     {@html deckStatsIndicator[deck.id]}
                 {/if}

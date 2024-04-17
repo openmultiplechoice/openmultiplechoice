@@ -30,7 +30,7 @@
 </div>
 
 <div class="row">
-    @foreach ($decks as $deck)
+    @forelse ($decks as $deck)
         <div class="col-md-4 mb-1">
             <div class="card">
                 <div class="card-header">
@@ -42,7 +42,7 @@
                         @endif
                     </span>
                     <span class="badge text-bg-secondary" title="Number of questions">
-                        {{ sizeof($deck->questions) }}
+                        <i class="bi bi-collection"></i> {{ sizeof($deck->questions) }}
                     </span>
                 </div>
                 <div class="card-body">
@@ -54,7 +54,11 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    @empty
+        <div class="col-md">
+            <p>No decks yet</p>
+        </div>
+    @endforelse
 </div>
 @endif
 
