@@ -22,6 +22,14 @@
 
     $: incorrectAnsweredQuestionsIds = validAnswerChoices.filter(a => a.is_correct === 0).map(ac => ac.question_id);
 
+    $: questionsInModule, console.debug('questionsInModule', questionsInModule);
+    $: answerChoices, console.debug('answerChoices', answerChoices);
+    $: validAnswerChoices, console.debug('validAnswerChoices', validAnswerChoices);
+    $: numCorrectAnsweredQuestions, console.debug('numCorrectAnsweredQuestions', numCorrectAnsweredQuestions);
+    $: numCorrectWithHelpAnsweredQuestions, console.debug('numCorrectWithHelpAnsweredQuestions', numCorrectWithHelpAnsweredQuestions);
+    $: numIncorrectAnsweredQuestions, console.debug('numIncorrectAnsweredQuestions', numIncorrectAnsweredQuestions);
+    $: incorrectAnsweredQuestionsIds, console.debug('incorrectAnsweredQuestionsIds', incorrectAnsweredQuestionsIds);
+
     $: if (canvasAnsweredQuestions) {
         (() => {
             const config = {
