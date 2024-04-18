@@ -7,18 +7,29 @@
 
     let chartAnsweredQuestions;
     let canvasAnsweredQuestions;
+    let numCorrectAnsweredQuestions;
+    let numCorrectWithHelpAnsweredQuestions;
+    let numIncorrectAnsweredQuestions;
 
     $: validQuestionsInModule = questionsInModule.filter(q => !q.is_invalid);
     $: validAnswerChoices = answerChoices.filter(
         e => validQuestionsInModule.some(({ id }) => id === e.question_id)
     );
 
+    $: if (validAnswerChoices) {
+        (() => {
+            numCorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 0).length;
+            numCorrectWithHelpAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 1).length;
+            numIncorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 0).length;
+        })();
+    }
+
     $: numQuestionsInModule = validQuestionsInModule.length;
     $: numAnsweredQuestions = validAnswerChoices.length;
     $: numUnansweredQuestions = numQuestionsInModule - numAnsweredQuestions;
-    $: numCorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 0).length;
-    $: numCorrectWithHelpAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 1).length;
-    $: numIncorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 0).length
+    //$: numCorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 0).length;
+    //$: numCorrectWithHelpAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 1).length;
+    //$: numIncorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 0).length;
 
     $: incorrectAnsweredQuestionsIds = validAnswerChoices.filter(a => a.is_correct === 0).map(ac => ac.question_id);
 
@@ -56,7 +67,7 @@
                                 '#f8d7da',
                                 '#bbbbbb'
                             ],
-                            hoverOffet: 4
+                            hoverOffset: 4
                         }
                     ]
                 },
@@ -129,8 +140,8 @@
                     </tr>
                     <tr>
                         <td>Correct</td>
-                        <td class="font-monospace text-end">{numCorrectAnsweredQuestions}
-                            ({Math.round(100 * numCorrectAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
+                        <td class="font-monospace text-end">{validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 0).length}
+                            ({Math.round(100 * validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 0).length/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
                     </tr>
                     <tr>
                         <td>Correct with help</td>
