@@ -90,65 +90,73 @@
     }
 </script>
 
-<div class="row mb-5">
-    <div class="col-md-5">
-        <canvas bind:this={canvasAnsweredQuestions}></canvas>
+{#if numQuestionsInModule === numUnansweredQuestions}
+    <div class="row">
+        <div class="col-md-5">
+            <p>Number of questions in this module: <span class="badge text-bg-secondary"><i class="bi bi-collection" /> {numQuestionsInModule}</span></p>
+        </div>
     </div>
-    <div class="col-md-7 mt-3">
-        <table class="table">
-            <thead></thead>
-            <tbody>
-                <tr>
-                    <td>Questions</td>
-                    <td class="font-monospace text-end">{numQuestionsInModule}</td>
-                </tr>
-                <tr>
-                    <td>Answered questions</td>
-                    <td class="font-monospace text-end">{numAnsweredQuestions}
-                        ({Math.round(100 * numAnsweredQuestions/numQuestionsInModule).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                </tr>
-                <tr>
-                    <td>Unanswered questions</td>
-                    <td class="font-monospace text-end">{numUnansweredQuestions}
-                        ({Math.round(100 * numUnansweredQuestions/numQuestionsInModule).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                </tr>
-                <tr>
-                    <td>Correct answers</td>
-                    <td class="font-monospace text-end">{numCorrectAnsweredQuestions}
-                        ({Math.round(100 * numCorrectAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                </tr>
-                <tr>
-                    <td>Correct answers with help</td>
-                    <td class="font-monospace text-end">{numCorrectWithHelpAnsweredQuestions}
-                        ({Math.round(100 * numCorrectWithHelpAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                </tr>
-                <tr>
-                    <td>Incorrect answers</td>
-                    <td class="font-monospace text-end">{numIncorrectAnsweredQuestions}
-                        ({Math.round(100 * numIncorrectAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                </tr>
-            </tbody>
-        </table>
+{:else}
+    <div class="row mb-5">
+        <div class="col-md-5">
+            <canvas bind:this={canvasAnsweredQuestions}></canvas>
+        </div>
+        <div class="col-md-7 mt-3">
+            <table class="table">
+                <thead></thead>
+                <tbody>
+                    <tr>
+                        <td>Questions</td>
+                        <td class="font-monospace text-end">{numQuestionsInModule}</td>
+                    </tr>
+                    <tr>
+                        <td>Answered</td>
+                        <td class="font-monospace text-end">{numAnsweredQuestions}
+                            ({Math.round(100 * numAnsweredQuestions/numQuestionsInModule).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
+                    </tr>
+                    <tr>
+                        <td>Unanswered</td>
+                        <td class="font-monospace text-end">{numUnansweredQuestions}
+                            ({Math.round(100 * numUnansweredQuestions/numQuestionsInModule).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
+                    </tr>
+                    <tr>
+                        <td>Correct</td>
+                        <td class="font-monospace text-end">{numCorrectAnsweredQuestions}
+                            ({Math.round(100 * numCorrectAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
+                    </tr>
+                    <tr>
+                        <td>Correct with help</td>
+                        <td class="font-monospace text-end">{numCorrectWithHelpAnsweredQuestions}
+                            ({Math.round(100 * numCorrectWithHelpAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
+                    </tr>
+                    <tr>
+                        <td>Incorrect</td>
+                        <td class="font-monospace text-end">{numIncorrectAnsweredQuestions}
+                            ({Math.round(100 * numIncorrectAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
+                    </tr>
+                </tbody>
+            </table>
 
-        {#if numIncorrectAnsweredQuestions > 0}
-            <div class="d-grid gap-2">
-                {#if numIncorrectAnsweredQuestions >= 40}
-                    <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 30))}
+            {#if numIncorrectAnsweredQuestions > 0}
+                <div class="d-grid gap-2">
+                    {#if numIncorrectAnsweredQuestions >= 40}
+                        <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 30))}
+                            class="btn btn-sm btn-outline-secondary" type="button">
+                                <i class="bi bi-repeat" /> Repeat 30 incorrect
+                        </button>
+                    {/if}
+                    {#if numIncorrectAnsweredQuestions >= 70}
+                        <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 60))}
+                            class="btn btn-sm btn-outline-secondary" type="button">
+                                <i class="bi bi-repeat" /> Repeat 60 incorrect
+                        </button>
+                    {/if}
+                    <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds)}
                         class="btn btn-sm btn-outline-secondary" type="button">
-                            <i class="bi bi-repeat" /> Repeat 30 incorrect
+                            <i class="bi bi-repeat" /> Repeat {numIncorrectAnsweredQuestions} incorrect
                     </button>
-                {/if}
-                {#if numIncorrectAnsweredQuestions >= 70}
-                    <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 60))}
-                        class="btn btn-sm btn-outline-secondary" type="button">
-                            <i class="bi bi-repeat" /> Repeat 60 incorrect
-                    </button>
-                {/if}
-                <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds)}
-                    class="btn btn-sm btn-outline-secondary" type="button">
-                        <i class="bi bi-repeat" /> Repeat {numIncorrectAnsweredQuestions} incorrect
-                </button>
-            </div>
-        {/if}
+                </div>
+            {/if}
+        </div>
     </div>
-</div>
+{/if}

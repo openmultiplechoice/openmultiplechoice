@@ -173,7 +173,7 @@
                                 "dd.MM.yyyy HH:mm"
                             )}
                             {#if message.author && !message.is_deleted}
-                                {message.author.name}
+                                {message.author.public_name ? message.author.public_name : message.author.name}
                             {/if}
                         </small>
                     </p>

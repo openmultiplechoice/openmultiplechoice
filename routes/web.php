@@ -79,6 +79,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/admin/users', [UserManagementController::class, 'index']);
     Route::put('/admin/users/{user}', [UserManagementController::class, 'update']);
 
+    Route::get('/admin/phpinfo', function () {
+        abort_unless(Auth::user()->is_admin, 403);
+        return view('phpinfo');
+    });
+
     Route::get('/logout', function (Request $request) {
         # https://laravel.com/docs/10.x/authentication#logging-out
 

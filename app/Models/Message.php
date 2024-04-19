@@ -12,6 +12,7 @@ class Message extends Model
     use HasFactory;
 
     protected $fillable = [
+        'created_at',
         'author_id',
         'text',
         'question_id',
@@ -20,6 +21,7 @@ class Message extends Model
         'legacy_parent_message_id',
         'legacy_author_name',
         'is_anonymous',
+        'is_deleted',
     ];
 
     public function question()

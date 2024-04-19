@@ -248,3 +248,23 @@ In both cases, you have to rebuild the bundle files after:
 ```
 npm run build
 ```
+
+## Load testing
+
+There are various tools to load test web applications, [oha](https://github.com/hatoo/oha)
+is one option.
+
+To run a load test, you have to manually disable API throttling in `app/Http/Kernel.php`
+first.
+
+For example, to create 1000 sessions from 100 concurrent connections:
+
+```
+oha http://127.0.0.1:8000/api/sessions \
+  -n 1000 \
+  -c 100 \
+  -m POST \
+  -H 'Authorization: Bearer <TOKEN>'
+  -T 'application/json' \
+  -d '{"deck_id": 1}'
+```

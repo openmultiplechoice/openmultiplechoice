@@ -13,7 +13,7 @@ class MessageController extends Controller
         $messages = Message::where([
                 ['author_id', '=', Auth::id()],
                 ['is_deleted', '=', false],
-            ])->orderByDesc('id')->paginate(20);
+            ])->orderByDesc('created_at', 'desc')->paginate(20);
         return view('messages', ['messages' => $messages]);
     }
 }
