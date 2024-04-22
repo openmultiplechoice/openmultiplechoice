@@ -76,6 +76,7 @@
                     {#if questionsWithImages.length > 0}
                         / <strong>{questionsWithImages.length} question{questionsWithImages.length > 1 ? "s" : ""} with images</strong>
                     {/if}
+                    (duplicates {filterOutDuplicates ? 'excluded' : 'included'})
                 </p>
                 <div class="mb-3">
                     <label for="name" class="form-label">Deck Name</label>
