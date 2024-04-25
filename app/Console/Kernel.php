@@ -54,7 +54,7 @@ class Kernel extends ConsoleKernel
         })->everyTwoMinutes();
 
         $schedule->call(function () {
-            // Get the 10 newest decks
+            // Get the 6 newest decks
             $newDecks = Deck::where('access', '=', 'public-rw-listed')
                 ->select('id', 'name')
                 ->orderBy('id', 'desc')
@@ -64,16 +64,19 @@ class Kernel extends ConsoleKernel
 
             Cache::put('stats/decks/new', $newDecks);
 
-            // Get the 10 most popular decks of the last 7 days
+            // Get the 6 most popular decks of the last 7 days
             $sessionDecks = Session::where('created_at', '>=', Carbon::now()->subDays(7))
-                ->select('deck_id')
+                ->selectRaw('count(id) as session_count, deck_id')
                 ->with('deck:id,name,access', 'deck.questions:id', 'deck.sessions:id,deck_id')
                 ->groupBy('deck_id')
+                ->orderBy('session_count', 'desc')
                 ->get()
                 ->map(function ($s) { return $s->deck;});
 
             // Filter out private decks
-            $popularDecks = $sessionDecks->where('access', '=', 'public-rw-listed')->take(6);
+            $popularDecks = $sessionDecks
+                ->where('access', '=', 'public-rw-listed')
+                ->take(6)->values();
 
             Cache::put('stats/decks/popular', $popularDecks);
         })->everyTwoMinutes();
