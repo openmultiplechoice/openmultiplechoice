@@ -84,6 +84,13 @@
                         legend: {
                             display: false
                         },
+                        tooltip: {
+                            callbacks: {
+                                title: function (context) {
+                                    return new Date(context[0].label.concat(" UTC")).toLocaleString();
+                                }
+                            }
+                        }
                     },
                     responsive: true,
                     interaction: {
