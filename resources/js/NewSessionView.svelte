@@ -36,7 +36,13 @@
                     (value, index, self) =>
                         index === self.findIndex((o) => o.id === value.id)
                 ).sort(function (a, b) {
-                    return a.name > b.name;
+                    // To make the list of modules sorted by name in Chromium-
+                    // based browsers, we need to return -1 / 0 / 1 instead of
+                    // true / false based on the comparison of two entries.
+                    // See https://issues.chromium.org/issues/42200309
+                    if (a.name > b.name) return 1;
+                    if (a.name < b.name) return -1;
+                    return 0;
                 });
                 var subjectsArr = modules
                     .map((m) => m.subject)
@@ -45,7 +51,13 @@
                     (value, index, self) =>
                         index === self.findIndex((o) => o.id === value.id)
                 ).sort(function (a, b) {
-                    return a.name > b.name;
+                    // To make the list of modules sorted by name in Chromium-
+                    // based browsers, we need to return -1 / 0 / 1 instead of
+                    // true / false based on the comparison of two entries.
+                    // See https://issues.chromium.org/issues/42200309
+                    if (a.name > b.name) return 1;
+                    if (a.name < b.name) return -1;
+                    return 0;
                 });
             })
             .catch(function (error) {
