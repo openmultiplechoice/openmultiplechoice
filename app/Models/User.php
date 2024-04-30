@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
     use HasApiTokens;
     use HasFactory;
@@ -28,6 +29,11 @@ class User extends Authenticatable
                 ->orWhere('public_name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%");
         });
+    }
+
+    public function hasPasswordSet(): bool
+    {
+        return !is_null($this->password);
     }
 
     /**
