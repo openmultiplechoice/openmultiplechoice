@@ -25,7 +25,24 @@
                 <input type="checkbox" class="form-check-input" id="form_remain_logged_in" name="remain_logged_in">
                 <label for="form_remain_logged_in" class="form-label">Remain logged in on this device</label>
             </div>
-            <button type="submit" class="btn btn-primary">Log in</button>
+            <div class="row justify-content-between">
+                <div class="col-xl-auto d-grid gap-2 d-xl-block my-2">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                    @if(config('app.signup_enabled'))
+                        <a href="{{ route('signup') }}" class="btn btn-link">Sign up</a>
+                    @endif
+                </div>
+                <div class="col-xl-auto d-grid gap-2 d-xl-block my-2 dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Trouble logging in?
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('password.request') }}" class="dropdown-item">Forgot password?</a></li>
+                        <li><a href="{{ route('verification.resend') }}" class="dropdown-item">Resend verification email</a></li>
+                    </ul>
+                </div>
+            </div>
+
         </form>
 @endif
 
