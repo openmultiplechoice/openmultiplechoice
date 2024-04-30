@@ -41,7 +41,7 @@
             });
     }
 
-    $: if (canvasAnswers) {
+    $: if (canvasAnswers && statsAnswersByHour && statsUsersByHour) {
         (() => {
             const labels = Object.keys(statsAnswersByHour);
             const dataset = Object.values(statsAnswersByHour);
@@ -150,45 +150,49 @@
     };
 </script>
 
-<div class="row mt-3">
-    {#if statsDecksNew.length > 0}
-        <div class="col-md-6">
-            <h6>New decks</h6>
-            {#each statsDecksNew as deck}
-                <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
-                    {#if deck.questions.length > 0}
-                        <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
-                    {/if}
-                    <button on:click|preventDefault={() => createSession(deck.id)}
-                        type="button" class="btn btn-sm btn-primary">
-                            <i class="bi bi-rocket-takeoff" />
-                    </button>
-                    <a href="/decks/{deck.id}" class="alert-link text-overflow">{deck.name}</a>
-                </div>
-            {/each}
-        </div>
-    {/if}
-    {#if statsDecksPopular.length > 0}
-        <div class="col-md-6">
-            <h6>Popular decks</h6>
-            {#each statsDecksPopular as deck}
-                <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
-                    {#if deck.questions.length > 0}
-                        <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
-                    {/if}
-                    {#if deck.sessions.length > 0}
-                        <span class="badge text-bg-light" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions.length}</span>
-                    {/if}
-                    <button on:click|preventDefault={() => createSession(deck.id)}
-                        type="button" class="btn btn-sm btn-primary">
-                            <i class="bi bi-rocket-takeoff" />
-                    </button>
-                    <a href="/decks/{deck.id}" class="alert-link">{deck.name}</a>
-                </div>
-            {/each}
-        </div>
-    {/if}
-</div>
+{#if statsDecksNew && statsDecksPopular}
+    <div class="row mt-3">
+        {#if statsDecksNew.length > 0}
+            <div class="col-md-6">
+                <h6>New decks</h6>
+                {#each statsDecksNew as deck}
+                    <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
+                        {#if deck.questions.length > 0}
+                            <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
+                        {/if}
+                        <button on:click|preventDefault={() => createSession(deck.id)}
+                            type="button" class="btn btn-sm btn-primary">
+                                <i class="bi bi-rocket-takeoff" />
+                        </button>
+                        <a href="/decks/{deck.id}" class="alert-link text-overflow">{deck.name}</a>
+                    </div>
+                {/each}
+            </div>
+        {/if}
+        {#if statsDecksPopular.length > 0}
+            <div class="col-md-6">
+                <h6>Popular decks</h6>
+                {#each statsDecksPopular as deck}
+                    <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
+                        {#if deck.questions.length > 0}
+                            <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
+                        {/if}
+                        {#if deck.sessions.length > 0}
+                            <span class="badge text-bg-light" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions.length}</span>
+                        {/if}
+                        <button on:click|preventDefault={() => createSession(deck.id)}
+                            type="button" class="btn btn-sm btn-primary">
+                                <i class="bi bi-rocket-takeoff" />
+                        </button>
+                        <a href="/decks/{deck.id}" class="alert-link">{deck.name}</a>
+                    </div>
+                {/each}
+            </div>
+        {/if}
+    </div>
+{:else}
+    <p>No stats available yet</p>
+{/if}
 
 <div class="row mt-3 p-3">
     <div class="col-md">

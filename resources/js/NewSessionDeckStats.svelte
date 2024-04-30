@@ -92,7 +92,7 @@
 
 {#if numQuestionsInModule === numUnansweredQuestions}
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md">
             <p>Number of questions in this module (duplicates included): <span class="badge text-bg-secondary"><i class="bi bi-collection" /> {numQuestionsInModule}</span></p>
         </div>
     </div>
