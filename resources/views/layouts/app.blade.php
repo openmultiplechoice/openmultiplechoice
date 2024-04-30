@@ -57,6 +57,9 @@
                                     <hr class="dropdown-divider">
                                     <a class="dropdown-item" href="{{ url('admin/users') }}">User management</a>
                                     <a class="dropdown-item" href="{{ url('tokens') }}">API Token</a>
+                                    <hr class="dropdown-divider">
+                                    <h6 class="dropdown-header">Settings</h6>
+                                    <a class="dropdown-item" href="{{ url('admin/settings/signup') }}">Sign-up</a>
                                 @endif
                             </div>
                         </li>

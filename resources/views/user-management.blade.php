@@ -37,7 +37,7 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->public_name }}</td>
-                    <td>{{ $user->email }}</td>
+                    <td>{{ $user->email }} <i style="color:{{ $user->hasVerifiedEmail() ? 'green' : 'darkred' }}" class="bi {{ $user->hasVerifiedEmail() ? 'bi-check-circle-fill' : 'bi-x-circle-fill' }}"></i></td>
                     <td>{{ $user->is_admin ? 'y' : 'n' }}</td>
                     <td>{{ $user->is_moderator ? 'y' : 'n' }}</td>
                     <td>{{ $user->created_at->format('d.m.Y H:i:s') }}</td>

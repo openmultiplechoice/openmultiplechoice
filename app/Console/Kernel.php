@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\AnswerChoice;
 use App\Models\Deck;
 use App\Models\Session;
+use App\Models\RegistrationToken;
 
 class Kernel extends ConsoleKernel
 {
@@ -77,6 +78,14 @@ class Kernel extends ConsoleKernel
 
             Cache::put('stats/decks/popular', $popularDecks);
         })->everyTwoMinutes();
+
+        // Clear expired password reset tokens every 15 minutes
+        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
+
+        // Clear expired registration tokens every 15 minutes
+        $schedule->call(function () {
+            RegistrationToken::where('expires_at', '<', now())->delete();
+        })->everyFifteenMinutes();
     }
 
     /**

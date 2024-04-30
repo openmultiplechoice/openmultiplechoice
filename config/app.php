@@ -67,6 +67,8 @@ return [
         'keycloak' => env('APP_LOGIN_KEYCLOAK', false),
     ],
 
+    'signup_enabled' => env('APP_SIGNUP_ENABLED', false),
+
     /*
     |--------------------------------------------------------------------------
     | Magic
