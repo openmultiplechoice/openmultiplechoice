@@ -50,7 +50,9 @@
                     if (b.exam_at === null) {
                         return -1;
                     }
-                    return a.exam_at < b.exam_at;
+                    if (a.exam_at < b.exam_at) return 1;
+                    if (a.exam_at > b.exam_at) return -1;
+                    return 0;
                 });
             })
             .catch(function (error) {
