@@ -4,10 +4,6 @@
 
 @section('content')
 
-@php
-    $purifier = new HTMLPurifier(HTMLPurifier_Config::createDefault());
-@endphp
-
 <div class="row">
     <div class="col-md">
         <h1 class="h4"><a class="text-reset text-decoration-none" href="{{ url('info') }}">Info</a></h1>
@@ -20,7 +16,7 @@
                 {!! Auth::user()->is_admin ? '<a href="/info/'. $info->id .'/edit" class="text-reset text-decoration-none"><i class="bi bi-pencil"></i></a>' : '' !!}
             </small>
         </p>
-        <p>{!! $purifier->purify($info->text) !!}</p>
+        <p>{!! Purify::clean($info->text) !!}</p>
     </div>
 </div>
 

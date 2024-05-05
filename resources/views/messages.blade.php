@@ -4,16 +4,12 @@
 
 @section('content')
 
-@php
-    $purifier = new HTMLPurifier(HTMLPurifier_Config::createDefault());
-@endphp
-
 <div class="row">
     <div class="col-md">
         <h4>Your comments</h4>
         @forelse($messages as $message)
             <div class="rounded-2 bg-light p-2 mb-0">
-                {!! $purifier->purify($message->text) !!}
+                {!! Purify::clean($message->text) !!}
             </div>
             <p class="text-muted text-end">
                 <small>
