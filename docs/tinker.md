@@ -16,6 +16,7 @@ php artisan tinker
 
 ```
 $u = User::create(['name' => 'some', 'email' => 'some@example.com']);
+$u->email_verified_at = now();
 $u->password = Hash::make('some');
 $u->save();
 ```
