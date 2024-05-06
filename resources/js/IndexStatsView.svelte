@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
 
     import Chart from 'chart.js/auto';
-    import { format } from "date-fns";
+    import { format, parseISO } from "date-fns";
 
     let canvasAnswers;
     let chart;
@@ -87,7 +87,7 @@
                         tooltip: {
                             callbacks: {
                                 title: function (context) {
-                                    return new Date(context[0].label.concat(" UTC")).toLocaleString();
+                                    return format(parseISO(context[0].label), "dd.MM.yyyy HH:mm")
                                 }
                             }
                         }
@@ -130,7 +130,7 @@
                             ticks: {
                                 beginAtZero: true,
                                 stepSize: 1,
-                                maxTicksLimit: 5,
+                                maxTicksLimit: 4,
                                 autoSkip: true
                             },
                             border: {

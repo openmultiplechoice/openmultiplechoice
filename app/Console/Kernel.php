@@ -41,8 +41,9 @@ class Kernel extends ConsoleKernel
             $usersByHour = [];
             foreach($range as $hour) {
                 $hourString = $hour->format('Y-m-d H:i:s');
-                $answersByHour[$hourString] = isset($answerChoicesByHour[$hourString]) ? count($answerChoicesByHour[$hourString]) : 0;
-                $usersByHour[$hourString] = isset($answerChoicesByHour[$hourString]) ?
+                $hourStringISO8601 = $hour->format('Y-m-d\TH:i:s\Z');
+                $answersByHour[$hourStringISO8601] = isset($answerChoicesByHour[$hourString]) ? count($answerChoicesByHour[$hourString]) : 0;
+                $usersByHour[$hourStringISO8601] = isset($answerChoicesByHour[$hourString]) ?
                     count(array_unique(
                         $answerChoicesByHour[$hourString]
                             ->map(function ($ac) { return $ac->session->user_id; })
