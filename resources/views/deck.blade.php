@@ -4,10 +4,6 @@
 
 @section('content')
 
-@php
-    $purifier = new HTMLPurifier(HTMLPurifier_Config::createDefault());
-@endphp
-
 <div class="row mb-3">
     <div class="col">
         <h1 class="h4">{{ $deck->name }}
@@ -65,7 +61,7 @@
         @if ($deck->description)
             <h2 class="h4">Description</h2>
             <div class="mb-3">
-                {!! $purifier->purify($deck->description) !!}
+                {!! Purify::clean($deck->description) !!}
             </div>
         @endif
 

@@ -241,7 +241,7 @@ Route::post('/forgot-password', function (Request $request) {
         // TODO(levinuss) extract this to a asynchronous queue job to avoid different response times when the email exists?
         Password::sendResetLink($request->only('email'));
     }
-    return back()->with('msg-success', 'We have sent a reset link to ".'.$request->email.'".');
+    return back()->with('msg-success', 'We have sent a reset link to "'.$request->email.'".');
 })->middleware('guest')->name('password.email');
 Route::get('/reset-password/{token}', function ($token) {
     return view('reset-password', ['token' => $token]);
