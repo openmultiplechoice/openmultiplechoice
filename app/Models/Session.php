@@ -22,4 +22,9 @@ class Session extends Model
     {
         return $this->hasMany(AnswerChoice::class);
     }
+
+    public function parentSession()
+    {
+        return $this->belongsTo(Session::class, 'parent_session_id');
+    }
 }
