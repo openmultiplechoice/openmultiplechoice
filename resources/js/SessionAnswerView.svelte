@@ -76,7 +76,7 @@
         {:else if !examMode && isChosenAnswer}
             <span class="text-danger-dark fw-bold fs-3">&cross;</span>
         {:else if examMode && isChosenAnswer}
-            <span class="text-secondary fw-bold fs-3">&cross;</span>
+            <span class="text-secondary fw-bold fs-3">&check;</span>
         {/if}
     </div>
 </div>
