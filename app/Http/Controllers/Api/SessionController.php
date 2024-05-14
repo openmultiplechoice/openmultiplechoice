@@ -74,6 +74,7 @@ class SessionController extends Controller
         $newSession->name = $deck->name;
         $newSession->current_question_id = $deck->questions()->first()->id;
         $newSession->user_id = Auth::id();
+        $newSession->parent_session_id = $session->id;
         $newSession->save();
 
         return response()->json($newSession);
