@@ -120,34 +120,56 @@
 </script>
 
 <div class="row">
-    <div class="col-md-4 mb-2">
-        <ul class="list-group">
-            {#each subjects as subject}
-                <button
-                    on:click|preventDefault={() =>
-                        selectSubject(subject.id)}
-                    class="list-group-item list-group-item-action {$UserSettings.last_subject_id ===
-                    subject.id
-                        ? 'list-group-item-dark'
-                        : 'list-group-item-light'}">{subject.name}</button>
-                {#if $UserSettings.last_subject_id === subject.id}
-                    <ul class="list-group m-2 me-0">
-                        {#each selectedModules as module}
-                            <button
-                                on:click|preventDefault={() =>
-                                    selectModule(module.id)}
-                                class="list-group-item list-group-item-action {$UserSettings.last_module_id ===
-                                module.id
-                                    ? 'list-group-item-secondary'
-                                    : 'list-group-item-light'}"
-                                >{module.name}</button>
-                        {/each}
-                    </ul>
-                {/if}
-            {/each}
-        </ul>
+    <div class="col-12 d-grid mb-3">
+        <button
+            type="button"
+            class="btn btn-sm btn-primary d-lg-none my-2"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasModuleSelection"
+            aria-controls="offcanvasModuleSelection">Switch module</button>
     </div>
-    <div class="col-md-8">
+</div>
+
+<div class="row">
+    <div class="col-lg-4 offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvasModuleSelection">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasAddToDeckLabel">Choose subject and module</h5>
+            <button
+                type="button"
+                class="btn-close text-reset"
+                data-bs-target="#offcanvasModuleSelection"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close" />
+        </div>
+        <div class="offcanvas-body">
+            <ul class="list-group w-100">
+                {#each subjects as subject}
+                    <button
+                        on:click|preventDefault={() => selectSubject(subject.id)}
+                        class="list-group-item list-group-item-action {$UserSettings.last_subject_id ===
+                        subject.id
+                            ? 'list-group-item-dark'
+                            : 'list-group-item-light'}">{subject.name}</button>
+                    {#if $UserSettings.last_subject_id === subject.id}
+                        <ul class="list-group m-2 me-0">
+                            {#each selectedModules as module}
+                                <button
+                                    on:click|preventDefault={() => selectModule(module.id)}
+                                    data-bs-target="#offcanvasModuleSelection"
+                                    data-bs-dismiss="offcanvas"
+                                    class="list-group-item list-group-item-action {$UserSettings.last_module_id ===
+                                    module.id
+                                        ? 'list-group-item-secondary'
+                                        : 'list-group-item-light'}"
+                                    >{module.name}</button>
+                            {/each}
+                        </ul>
+                    {/if}
+                {/each}
+            </ul>
+        </div>
+    </div>
+    <div class="col-12 col-lg-8">
         <NewSessionSuperDeckView bind:userSelectedDecks />
         <div class="row">
             {#if $UserSettings.last_module_id}
