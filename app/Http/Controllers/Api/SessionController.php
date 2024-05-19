@@ -63,6 +63,7 @@ class SessionController extends Controller
         $deck->is_ephemeral = true;
         $deck->name = 'Repeat incorrect questions of session '. $session->id;
         $deck->user_id = Auth::id();
+        $deck->parent_session_id = $session->id;
 
         $deck->save();
 
