@@ -39,4 +39,9 @@ class Deck extends Model
     {
         return $this->hasOne(DeckSubmission::class);
     }
+
+    public function parentSession()
+    {
+        return $this->belongsTo(Session::class, 'parent_session_id');
+    }
 }
