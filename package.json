@@ -21,7 +21,7 @@
         "laravel-vite-plugin": "^1.0.1",
         "lodash": "^4.17.21",
         "resolve-url-loader": "^5.0.0",
-        "sass": "^1.69.5",
+        "sass": "^1.77.2",
         "sass-loader": "^14.0.0",
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
