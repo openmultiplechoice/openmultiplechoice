@@ -1,17 +1,41 @@
 <script>
     import Chart from 'chart.js/auto';
 
-    export let questionsInModule;
-    export let answerChoices;
+    export let decks;
     export let moduleId;
+
+    let validQuestionsInModule = [];
+    let validAnswerChoices = [];
 
     let chartAnsweredQuestions;
     let canvasAnsweredQuestions;
 
-    $: validQuestionsInModule = questionsInModule.filter(q => !q.is_invalid);
-    $: validAnswerChoices = answerChoices.filter(
-        e => validQuestionsInModule.some(({ id }) => id === e.question_id)
-    );
+    $: decks, (() => {
+        const questionsInModule = decks.map(d => d.questions).flat();
+
+        validQuestionsInModule = questionsInModule.filter(q => !q.is_invalid);
+
+        const answerChoices = [];
+        for (const deck of decks) {
+            // For each deck, get the latest session from the list of sessions
+
+            const sessions = deck.sessions.sort((a, b) => b.id - a.id /* sort by ID desc */);
+            if (sessions.length === 0) {
+                continue;
+            }
+
+            const latestSession = sessions[0];
+
+            // Take all answer choices from the latest session
+            answerChoices.push(...latestSession.answer_choices);
+        }
+
+        // Filter out answer choices for questions that are not in the module
+        // or not valid
+        validAnswerChoices = answerChoices.filter(
+            e => validQuestionsInModule.some(({ id }) => id === e.question_id)
+        );
+    })();
 
     $: numQuestionsInModule = validQuestionsInModule.length;
     $: numAnsweredQuestions = validAnswerChoices.length;
@@ -93,7 +117,7 @@
 {#if numQuestionsInModule === numUnansweredQuestions}
     <div class="row">
         <div class="col-md">
-            <p>Number of questions in this module (duplicates included): <span class="badge text-bg-secondary"><i class="bi bi-collection" /> {numQuestionsInModule}</span></p>
+            <p>Number of questions in this module (duplicates included): <span class="badge text-bg-light"><i class="bi bi-collection" /> {numQuestionsInModule}</span></p>
         </div>
     </div>
 {:else}

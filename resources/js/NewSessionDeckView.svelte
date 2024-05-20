@@ -1,164 +1,87 @@
 <script>
+    import { onMount } from "svelte";
     import { format, parseISO } from "date-fns";
 
     import { sessionProgressPercentage } from "./StatsHelper.js";
-    import NewSessionDeckStats from "./NewSessionDeckStats.svelte";
+    import { createSession } from "./NewSessionHelper.js";
 
-    export let moduleId;
-    export let createSession;
+    export let deck;
     export let selectDeck;
-    export let userSelectedDecks;
+    export let selectedDecks;
 
-    let decks = [];
-    let decksStats = {};
+    let progressIndicator = undefined;
 
-    $: questionsInModule =
-        (() => {
-            var questions = [];
-            decks.forEach((d) => questions.push(...d.questions));
-            return questions;
-        })();
+    onMount(() => {
+        const validQuestions = deck.questions.filter(q => !q.is_invalid);
 
-    $: answerChoices =
-        (() => {
-            var choices = [];
-            for (const deckId in decksStats) {
-                choices.push(...decksStats[deckId].answer_choices);
-            }
-            choices.sort(function (a, b) {
-                return a.created_at < b.created_at;
-            });
-            return choices;
-        })();
-
-    $: fetchDecks(moduleId);
-
-    function fetchDecks(moduleId) {
-        if (!moduleId) {
-            // No module selected yet
-            decks = [];
+        const sessions = deck.sessions.sort((a, b) => b.id - a.id /* sort by ID desc */);
+        if (sessions.length === 0) {
             return;
         }
-        axios
-            .get("/api/decks?module=" + moduleId)
-            .then(function (response) {
-                decks = response.data;
-                decks.sort(function (a, b) {
-                    if (a.exam_at === null) {
-                        return 1;
-                    }
-                    if (b.exam_at === null) {
-                        return -1;
-                    }
-                    if (a.exam_at < b.exam_at) return 1;
-                    if (a.exam_at > b.exam_at) return -1;
-                    return 0;
-                });
-            })
-            .catch(function (error) {
-                alert(error);
-            });
-    }
 
-    $: decks,
-        (() => {
-            if (decks.length === 0) {
-                return;
-            }
-            const requestParameters = decks.map(
-                (d) => "decks[]=" + d.id
-            );
-            axios
-                .get("/api/stats/sessionsfordecks?" + requestParameters.join("&"))
-                .then(function (response) {
-                    decksStats = response.data;
-                })
-                .catch(function (error) {
-                    alert(error);
-                });
-        })();
+        const latestSession = sessions[0];
 
-    $: deckStatsIndicator = (() => {
-        var indicator = {};
-        if (!decksStats) {
-            return indicator;
-        }
-        for (const deck of decks) {
-            if (!decksStats[deck.id]) {
-                indicator[deck.id] = "";
-                continue;
-            }
-            const deckStats = decksStats[deck.id];
-            const validQuestions = deckStats.deck.questions.filter(q => !q.is_invalid);
-            const filteredAnswerChoices = deckStats.answer_choices.filter(
-                e => validQuestions.some(({ id }) => id === e.question_id)
-            );
-            const percentage = sessionProgressPercentage(
-                validQuestions.length,
-                filteredAnswerChoices
-            );
-            var indicatorColorStyle = 'style="color: #721c24; background-color: #f8d7da;"';
-            if (percentage.correct >= 60) {
-                indicatorColorStyle = 'style="color: #155724; background-color: #d4edda;"';
-            }
-            indicator[deck.id] =
-                '<span ' + indicatorColorStyle + ' class="badge" data-bs-toggle="popover" data-bs-title="Popover title" data-bs-content="And here\'s some..." title="Correct answers in percent">' +
+        const filteredAnswerChoices = latestSession.answer_choices.filter(
+            e => validQuestions.some(({ id }) => id === e.question_id)
+        );
+
+        const percentage = sessionProgressPercentage(
+            validQuestions.length,
+            filteredAnswerChoices
+        );
+
+        if (percentage.correct >= 60) {
+            progressIndicator = '<span style="color: #155724; background-color: #d4edda;" class="badge" title="Correct answers in percent">' +
+                percentage.correct +
+                " %</span>";
+        } else {
+            progressIndicator = '<span style="color: #721c24; background-color: #f8d7da;" class="badge" title="Correct answers in percent">' +
                 percentage.correct +
                 " %</span>";
         }
-        return indicator;
-    })();
+    });
 </script>
 
-<NewSessionDeckStats bind:moduleId bind:questionsInModule bind:answerChoices />
+<div class="col-lg-6 mb-1">
+    <div class="card">
+        <div class="card-header">
+            {#if deck.exam_at}
+                <span class="badge text-bg-light">
+                    {format(
+                        parseISO(deck.exam_at),
+                        "dd.MM.yyyy"
+                    )}
+                </span>
+            {:else}
+                <span class="badge text-bg-light">
+                    {format(
+                        parseISO(deck.created_at),
+                        "dd.MM.yyyy"
+                    )}
+                </span>
+            {/if}
+            <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
+            {#if deck.sessions}
+                <span class="badge text-bg-light" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions.length}</span>
+            {/if}
+            {#if progressIndicator}
+                {@html progressIndicator}
+            {/if}
+            <input type="checkbox" class="form-check-input float-end" value="" id="selected{deck.id}"
+                on:click={() => selectDeck(deck.id)}
+                checked={selectedDecks.has(deck.id)} />
+        </div>
 
-{#each decks as deck}
-    <div class="col-lg-6 mb-1">
-        <div class="card">
-            <div class="card-header">
-                {#if deck.exam_at}
-                    <span class="badge text-bg-light">
-                        {format(
-                            parseISO(deck.exam_at),
-                            "dd.MM.yyyy"
-                        )}
-                    </span>
-                {:else}
-                    <span class="badge text-bg-light">
-                        {format(
-                            parseISO(deck.created_at),
-                            "dd.MM.yyyy"
-                        )}
-                    </span>
-                {/if}
-                <span class="badge text-bg-secondary" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
-                {#if deckStatsIndicator[deck.id]}
-                    {@html deckStatsIndicator[deck.id]}
-                {/if}
-                <input
-                    on:click={() => selectDeck(deck.id)}
-                    class="form-check-input float-end"
-                    type="checkbox"
-                    value=""
-                    id="selected{deck.id}"
-                    checked={userSelectedDecks.has(deck.id)} />
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">
-                    {deck.name}
-                </h6>
+        <div class="card-body">
+            <h6 class="card-title">
+                {deck.name}
+            </h6>
+            <button type="button" class="btn btn-sm btn-primary"
+                on:click|preventDefault={() => createSession(deck.id)}>
 
-                <button
-                    on:click|preventDefault={() =>
-                        createSession(deck.id)}
-                    type="button"
-                    class="btn btn-sm btn-primary"
-                    ><i class="bi bi-rocket-takeoff" /> New session</button>
-                <a href="/decks/{deck.id}" class="card-link"
-                    >Browse deck</a>
-            </div>
+                <i class="bi bi-rocket-takeoff" /> New session
+            </button>
+            <a href="/decks/{deck.id}" class="card-link">Browse deck</a>
         </div>
     </div>
-{:else}
-    <p>Loading ...</p>
-{/each}
+</div>

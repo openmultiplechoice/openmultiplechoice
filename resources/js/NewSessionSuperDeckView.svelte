@@ -1,11 +1,11 @@
 <script>
-    export let userSelectedDecks;
+    export let selectedDecks;
 
     let decks = [];
     let deckName = "My new super deck";
     let filterOutDuplicates = true;
 
-    $: userSelectedDecks, fetchDeckInfo();
+    $: selectedDecks, fetchDeckInfo();
 
     $: questions =
         (() => {
@@ -32,11 +32,11 @@
         })();
 
     function fetchDeckInfo() {
-        if (userSelectedDecks.size === 0) {
+        if (selectedDecks.size === 0) {
             decks = [];
             return;
         }
-        const requestParameters = [...userSelectedDecks].map(
+        const requestParameters = [...selectedDecks].map(
             (d) => "decks[]=" + d
         );
         axios
@@ -99,7 +99,7 @@
                 </button>
                 <button
                     class="btn btn-sm btn-link"
-                    on:click|preventDefault={() => userSelectedDecks = new Set()}>
+                    on:click|preventDefault={() => selectedDecks = new Set()}>
                         Cancel
                 </button>
                 </div>

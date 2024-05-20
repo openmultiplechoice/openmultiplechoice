@@ -23,7 +23,7 @@
                             {{ $submission->deck->created_at->format('d.m.Y') }}
                         @endif
                     </span>
-                    <span class="badge text-bg-secondary" title="Number of questions">
+                    <span class="badge text-bg-light" title="Number of questions">
                         {{ sizeof($submission->deck->questions) }}
                     </span>
                 </div>

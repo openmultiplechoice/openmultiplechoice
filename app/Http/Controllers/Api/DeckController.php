@@ -24,7 +24,13 @@ class DeckController extends Controller
                 Deck::where([
                     ['module_id', '=', $request->module],
                     ['access', '=', 'public-rw-listed'],
-                ])->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')->get()
+                ])
+                ->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')
+                ->with(['sessions' => function ($query) {
+                    $query->where('user_id', '=', Auth::id());
+                }])
+                ->with('sessions.answerChoices')
+                ->get()
             );
         }
         if ($request->decks) {

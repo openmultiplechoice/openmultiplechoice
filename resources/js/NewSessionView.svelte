@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
 
-    import NewSessionDeckView from "./NewSessionDeckView.svelte";
+    import NewSessionDecksView from "./NewSessionDecksView.svelte";
     import NewSessionSuperDeckView from "./NewSessionSuperDeckView.svelte";
 
     import { UserSettings } from "./UserSettingsStore.js";
@@ -11,7 +11,7 @@
 
     let selectedModules = [];
 
-    let userSelectedDecks = new Set();
+    let selectedDecks = new Set();
 
     $: $UserSettings.last_subject_id,
         (() => {
@@ -65,20 +65,6 @@
             });
     });
 
-    function createSession(deckId) {
-        var data = {
-            deck_id: deckId,
-        };
-        axios
-            .post("/api/sessions", data)
-            .then(function (response) {
-                window.location.href = "/sessions/" + response.data.id;
-            })
-            .catch(function (error) {
-                alert(error);
-            });
-    }
-
     function selectSubject(subjectId) {
         var data = {
             last_subject_id: subjectId,
@@ -110,12 +96,12 @@
     }
 
     function selectDeck(deckId) {
-        if (userSelectedDecks.has(deckId)) {
-            userSelectedDecks.delete(deckId);
+        if (selectedDecks.has(deckId)) {
+            selectedDecks.delete(deckId);
         } else {
-            userSelectedDecks.add(deckId);
+            selectedDecks.add(deckId);
         }
-        userSelectedDecks = new Set([...userSelectedDecks]);
+        selectedDecks = new Set([...selectedDecks]);
     }
 </script>
 
@@ -170,17 +156,14 @@
         </div>
     </div>
     <div class="col-12 col-lg-8">
-        <NewSessionSuperDeckView bind:userSelectedDecks />
-        <div class="row">
-            {#if $UserSettings.last_module_id}
-                <NewSessionDeckView
-                    moduleId={$UserSettings.last_module_id}
-                    bind:userSelectedDecks
-                    createSession={createSession}
-                    selectDeck={selectDeck} />
-            {:else}
-                <p>No module selected.</p>
-            {/if}
-        </div>
+        <NewSessionSuperDeckView bind:selectedDecks />
+        {#if $UserSettings.last_module_id}
+            <NewSessionDecksView
+                moduleId={$UserSettings.last_module_id}
+                bind:selectedDecks
+                selectDeck={selectDeck} />
+        {:else}
+            <p>No module selected.</p>
+        {/if}
     </div>
 </div>

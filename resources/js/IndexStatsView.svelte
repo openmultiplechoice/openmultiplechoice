@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { createSession } from "./NewSessionHelper.js";
 
     import Chart from 'chart.js/auto';
     import { format, parseISO } from "date-fns";
@@ -26,20 +27,6 @@
                 console.log(error);
             });
     });
-
-    function createSession(deckId) {
-        var data = {
-            deck_id: deckId,
-        };
-        axios
-            .post("/api/sessions", data)
-            .then(function (response) {
-                window.location.href = "/sessions/" + response.data.id;
-            })
-            .catch(function (error) {
-                alert(error);
-            });
-    }
 
     $: if (canvasAnswers && statsAnswersByHour && statsUsersByHour) {
         (() => {
