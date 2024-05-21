@@ -40,11 +40,10 @@
     $: numQuestionsInModule = validQuestionsInModule.length;
     $: numAnsweredQuestions = validAnswerChoices.length;
     $: numUnansweredQuestions = numQuestionsInModule - numAnsweredQuestions;
-    $: numCorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 0).length;
-    $: numCorrectWithHelpAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 1 && a.help_used === 1).length;
-    $: numIncorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct === 0).length
-
-    $: incorrectAnsweredQuestionsIds = validAnswerChoices.filter(a => a.is_correct === 0).map(ac => ac.question_id);
+    $: numCorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct && !a.help_used).length;
+    $: numCorrectWithHelpAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct && a.help_used).length;
+    $: numIncorrectAnsweredQuestions = validAnswerChoices.filter(a => !a.is_correct).length
+    $: incorrectAnsweredQuestionsIds = validAnswerChoices.filter(a => !a.is_correct).map(ac => ac.question_id);
 
     $: if (canvasAnsweredQuestions) {
         (() => {
