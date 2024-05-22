@@ -41,7 +41,7 @@
                             {{ $deck->created_at->format('d/m/Y') }}
                         @endif
                     </span>
-                    <span class="badge text-bg-secondary" title="Number of questions">
+                    <span class="badge text-bg-light" title="Number of questions">
                         <i class="bi bi-collection"></i> {{ sizeof($deck->questions) }}
                     </span>
                 </div>

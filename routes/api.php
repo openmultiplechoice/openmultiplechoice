@@ -81,7 +81,6 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('users', UserController::class);
 
     Route::get('stats/activity', [StatsController::class, 'activity']);
-    Route::get('stats/sessionsfordecks', [StatsController::class, 'sessionsfordecks']);
 
     if (config('app.magic')) {
         Route::get('magic-gif', [MagicGifController::class, 'show']);

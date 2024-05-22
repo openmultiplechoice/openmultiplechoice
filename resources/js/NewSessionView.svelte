@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
 
-    import NewSessionDeckView from "./NewSessionDeckView.svelte";
+    import NewSessionDecksView from "./NewSessionDecksView.svelte";
     import NewSessionSuperDeckView from "./NewSessionSuperDeckView.svelte";
 
     import { UserSettings } from "./UserSettingsStore.js";
@@ -11,7 +11,7 @@
 
     let selectedModules = [];
 
-    let userSelectedDecks = new Set();
+    let selectedDecks = new Set();
 
     $: $UserSettings.last_subject_id,
         (() => {
@@ -65,20 +65,6 @@
             });
     });
 
-    function createSession(deckId) {
-        var data = {
-            deck_id: deckId,
-        };
-        axios
-            .post("/api/sessions", data)
-            .then(function (response) {
-                window.location.href = "/sessions/" + response.data.id;
-            })
-            .catch(function (error) {
-                alert(error);
-            });
-    }
-
     function selectSubject(subjectId) {
         var data = {
             last_subject_id: subjectId,
@@ -110,55 +96,74 @@
     }
 
     function selectDeck(deckId) {
-        if (userSelectedDecks.has(deckId)) {
-            userSelectedDecks.delete(deckId);
+        if (selectedDecks.has(deckId)) {
+            selectedDecks.delete(deckId);
         } else {
-            userSelectedDecks.add(deckId);
+            selectedDecks.add(deckId);
         }
-        userSelectedDecks = new Set([...userSelectedDecks]);
+        selectedDecks = new Set([...selectedDecks]);
     }
 </script>
 
 <div class="row">
-    <div class="col-md-4 mb-2">
-        <ul class="list-group">
-            {#each subjects as subject}
-                <button
-                    on:click|preventDefault={() =>
-                        selectSubject(subject.id)}
-                    class="list-group-item list-group-item-action {$UserSettings.last_subject_id ===
-                    subject.id
-                        ? 'list-group-item-dark'
-                        : 'list-group-item-light'}">{subject.name}</button>
-                {#if $UserSettings.last_subject_id === subject.id}
-                    <ul class="list-group m-2 me-0">
-                        {#each selectedModules as module}
-                            <button
-                                on:click|preventDefault={() =>
-                                    selectModule(module.id)}
-                                class="list-group-item list-group-item-action {$UserSettings.last_module_id ===
-                                module.id
-                                    ? 'list-group-item-secondary'
-                                    : 'list-group-item-light'}"
-                                >{module.name}</button>
-                        {/each}
-                    </ul>
-                {/if}
-            {/each}
-        </ul>
+    <div class="col-12 d-grid mb-3">
+        <button
+            type="button"
+            class="btn btn-sm btn-primary d-lg-none my-2"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasModuleSelection"
+            aria-controls="offcanvasModuleSelection">Switch module</button>
     </div>
-    <div class="col-md-8">
-        <NewSessionSuperDeckView bind:userSelectedDecks />
-        <div class="row">
-            {#if $UserSettings.last_module_id}
-                <NewSessionDeckView
-                    moduleId={$UserSettings.last_module_id}
-                    bind:userSelectedDecks
-                    createSession={createSession}
-                    selectDeck={selectDeck} />
-            {:else}
-                <p>No module selected.</p>
-            {/if}
+</div>
+
+<div class="row">
+    <div class="col-lg-4 offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvasModuleSelection">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasAddToDeckLabel">Choose subject and module</h5>
+            <button
+                type="button"
+                class="btn-close text-reset"
+                data-bs-target="#offcanvasModuleSelection"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close" />
         </div>
+        <div class="offcanvas-body">
+            <ul class="list-group w-100">
+                {#each subjects as subject}
+                    <button
+                        on:click|preventDefault={() => selectSubject(subject.id)}
+                        class="list-group-item list-group-item-action {$UserSettings.last_subject_id ===
+                        subject.id
+                            ? 'list-group-item-dark'
+                            : 'list-group-item-light'}">{subject.name}</button>
+                    {#if $UserSettings.last_subject_id === subject.id}
+                        <ul class="list-group m-2 me-0">
+                            {#each selectedModules as module}
+                                <button
+                                    on:click|preventDefault={() => selectModule(module.id)}
+                                    data-bs-target="#offcanvasModuleSelection"
+                                    data-bs-dismiss="offcanvas"
+                                    class="list-group-item list-group-item-action {$UserSettings.last_module_id ===
+                                    module.id
+                                        ? 'list-group-item-secondary'
+                                        : 'list-group-item-light'}"
+                                    >{module.name}</button>
+                            {/each}
+                        </ul>
+                    {/if}
+                {/each}
+            </ul>
+        </div>
+    </div>
+    <div class="col-12 col-lg-8">
+        <NewSessionSuperDeckView bind:selectedDecks />
+        {#if $UserSettings.last_module_id}
+            <NewSessionDecksView
+                moduleId={$UserSettings.last_module_id}
+                bind:selectedDecks
+                selectDeck={selectDeck} />
+        {:else}
+            <p>No module selected.</p>
+        {/if}
     </div>
 </div>
