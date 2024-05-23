@@ -262,7 +262,7 @@
         }
 
         answerChoice = data.session.answer_choices.find(e => e.question_id === currentQuestionId);
-        if (!answerChoices) {
+        if (!answerChoice) {
             return;
         }
 
