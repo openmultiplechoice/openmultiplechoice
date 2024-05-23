@@ -163,6 +163,19 @@
                 alert(error);
             });
     }
+
+    function toggleQuestionNeedsReview() {
+        axios
+            .put("/api/questions/" + question.id, {
+                needs_review: !question.needs_review,
+            })
+            .then(function (response) {
+                question.needs_review = !question.needs_review;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+        }
 </script>
 
 <div class="mt-1 mb-1">
@@ -200,6 +213,13 @@
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="checkInvalidQuestion" bind:checked={question.is_invalid} on:click|preventDefault={toggleQuestionValid}>
                     <label class="form-check-label" for="checkInvalidQuestion"><i class="bi bi-cone-striped" /> <strong>Invalid question</strong> - Is the answer unknown or disputed? Invalid questions remain in deck but are not counted into results.</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="checkNeedsReview" bind:checked={question.needs_review} on:click|preventDefault={toggleQuestionNeedsReview}>
+                    <label class="form-check-label" for="checkNeedsReview"><i class="bi bi-eraser-fill" /> <strong>Needs review</strong> - Does this questions need to be reviewed and improved? Questions marked for review remain in deck and are counted into results.</label>
                 </div>
             </div>
         {/key}
