@@ -104,6 +104,15 @@
                     </div>
                 </div>
             {/if}
+            {#if question.needs_review}
+                <div class="row">
+                    <div class="col">
+                        <div class="alert alert-light" role="alert">
+                            <i class="bi bi-eraser-fill" /> <strong>Question needs review</strong> - Please review the question and answer choices and make sure they are correct and clear. Afterwards, remove the "Needs review" flag.
+                        </div>
+                    </div>
+                </div>
+            {/if}
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
                 {#if question.text}
                     <div class="col-lg">
