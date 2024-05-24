@@ -20,18 +20,17 @@ class DeckController extends Controller
 
         if ($request->module) {
             // Return all public decks for the given module
-            return response()->json(
-                Deck::where([
-                    ['module_id', '=', $request->module],
-                    ['access', '=', 'public-rw-listed'],
-                ])
-                ->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')
-                ->with(['sessions' => function ($query) {
-                    $query->where('user_id', '=', Auth::id());
-                }])
-                ->with('sessions.answerChoices')
-                ->get()
-            );
+            $decks = Deck::where([
+                ['module_id', '=', $request->module],
+                ['access', '=', 'public-rw-listed'],
+            ])
+            ->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')
+            ->with(['sessions' => function ($query) {
+                $query->where('user_id', '=', Auth::id())->with('answerChoices');
+            }])
+            ->get();
+
+            return response()->json($decks);
         }
         if ($request->decks) {
             // Return the decks with the given IDs; this endpoint

@@ -1,6 +1,4 @@
 <script>
-    import { onMount } from "svelte";
-
     import NewSessionDeckStats from "./NewSessionDeckStats.svelte";
     import NewSessionDeckView from "./NewSessionDeckView.svelte";
 
@@ -10,7 +8,9 @@
 
     let decks = [];
 
-    onMount(() => {
+    $: moduleId, fetchDecks();
+
+    function fetchDecks() {
         if (!moduleId) {
             // No module selected yet
             decks = [];
@@ -35,13 +35,13 @@
             .catch(function (error) {
                 alert(error);
             });
-    });
+    };
 </script>
 
 <NewSessionDeckStats bind:decks bind:moduleId />
 
 <div class="row">
-    {#each decks as deck}
+    {#each decks as deck (deck.id)}
         <NewSessionDeckView bind:deck {selectDeck} bind:selectedDecks />
     {:else}
         <p>Loading ...</p>
