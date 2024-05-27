@@ -207,7 +207,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-D1diCuwq.js",
+    "file": "assets/SessionView--YwgpTYA.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -227,7 +227,7 @@
       "_QuestionForm-DffaaQhq.js"
     ],
     "css": [
-      "assets/SessionView-Dnm9XGGV.css"
+      "assets/SessionView-BkBDZwAN.css"
     ]
   },
   "resources/js/UserSettingsView.js": {
