@@ -4,8 +4,8 @@
 
 @section('content')
 
-<div class="row">
-    <div class="col-md mb-3">
+<div class="row mb-3">
+    <div class="col-md">
         <h4>Create new deck</h4>
         <form method="post">
             @csrf
@@ -22,44 +22,36 @@
     </div>
 </div>
 
-@if ($decks->count() > 0)
 <div class="row">
     <div class="col-md">
         <h4>Your decks</h4>
     </div>
 </div>
 
-<div class="row">
-    @forelse ($decks as $deck)
-        <div class="col-md-4 mb-1">
-            <div class="card">
-                <div class="card-header">
-                    <span class="badge text-bg-light">
-                        @if ($deck->exam_at)
-                            {{ $deck->exam_at->format('d/m/Y') }}
-                        @else
-                            {{ $deck->created_at->format('d/m/Y') }}
-                        @endif
-                    </span>
-                    <span class="badge text-bg-light" title="Number of questions">
-                        <i class="bi bi-collection"></i> {{ sizeof($deck->questions) }}
-                    </span>
-                </div>
-                <div class="card-body">
-                    <h6 class="card-title text-nowrap overflow-hidden" title="{{ $deck->name }}">
-                        {{ $deck->name }}
-                    </h6>
-
-                    <a class="btn btn-sm btn-primary" href="{{ url('decks', $deck->id) }}" role="button"><i class="bi bi-collection-fill"></i> Open</a>
-                </div>
-            </div>
-        </div>
+<div class="row mb-3">
+    @forelse ($decks->filter(function ($d) { return !$d->is_archived; }) as $deck)
+        @include('deck-col-element')
     @empty
         <div class="col-md">
             <p>No decks yet</p>
         </div>
     @endforelse
 </div>
-@endif
+
+<div class="row">
+    <div class="col-md">
+        <h4>Archived decks</h4>
+    </div>
+</div>
+
+<div class="row mb-3">
+    @forelse ($decks->filter(function ($d) { return $d->is_archived; }) as $deck)
+        @include('deck-col-element')
+    @empty
+        <div class="col-md">
+            <p>No archived decks</p>
+        </div>
+    @endforelse
+</div>
 
 @endsection
