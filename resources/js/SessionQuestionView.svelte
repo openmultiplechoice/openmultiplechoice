@@ -141,7 +141,7 @@
                 {/if}
             {/if}
             {#if question.type === "mc"}
-                {#each question.answers as answer, index}
+                {#each question.answers as answer, index (answer.id)}
                     <SessionAnswerView
                         bind:answer
                         bind:examMode={examMode}
