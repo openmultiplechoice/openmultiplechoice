@@ -61,8 +61,8 @@
 </div>
 
 @if ($deck->access != 'public-rw-listed' && ($deck->user_id == Auth::id() || Auth::user()->is_admin))
-    <h2 class="h4">Danger Zone</h2>
-    <div class="m-1 p-3 border border-primary-subtle rounded">
+    <h2 class="h4">Settings</h2>
+    <div class="mt-1">
         <div class="row">
             <div class="col-md">
                 <p>
@@ -82,7 +82,7 @@
             </div>
         </div>
     </div>
-    <div class="m-1 p-3 border border-danger rounded">
+    <div class="mt-1">
         <div class="row">
             <div class="col-md">
                 <p>
@@ -96,7 +96,7 @@
                     @csrf
 
                     <input type="hidden" name="is_archived" value="{{ $deck->is_archived ? 0 : 1 }}" />
-                    <button class="btn btn-sm {{ $deck->is_archived ? 'btn-outline-danger' : 'btn-danger' }}" type="submit">
+                    <button class="btn btn-sm {{ $deck->is_archived ? 'btn-outline-primary' : 'btn-primary' }}" type="submit">
                         {{ $deck->is_archived ?  "Unarchive deck" : "Archive this deck" }}
                     </button>
                 </form>
