@@ -138,9 +138,9 @@
 </script>
 
 {#if statsDecksNew && statsDecksPopular}
-    <div class="row mt-3">
+    <div class="row">
         {#if statsDecksNew.length > 0}
-            <div class="col-md-6">
+            <div class="col-md-6 mt-3">
                 <h6>New decks</h6>
                 {#each statsDecksNew as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
@@ -157,7 +157,7 @@
             </div>
         {/if}
         {#if statsDecksPopular.length > 0}
-            <div class="col-md-6">
+            <div class="col-md-6 mt-3">
                 <h6>Popular decks</h6>
                 {#each statsDecksPopular as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
