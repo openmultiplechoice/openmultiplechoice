@@ -17,7 +17,7 @@
 
 <style>
     .img-fullscreen {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         width: 100%;
@@ -27,7 +27,6 @@
         background: linear-gradient(-45deg, #ff00ff, #ff0080, #0080ff, #80ff00);
         background-size: 400% 400%;
         animation: gradient 15s ease infinite;
-        height: 100vh;
     }
 
     @keyframes gradient {
