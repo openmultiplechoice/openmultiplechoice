@@ -12,13 +12,13 @@
         {progressPercentage.correct > 5 ? progressPercentage.correct + "%" : ""}
     </div>
     <div
-        class="progress-bar bg-warning text-dark fw-bold"
+        class="progress-bar progress-bar-striped bg-warning text-dark fw-bold"
         role="progressbar"
         style="width: {progressPercentage.correctWithHelp}%">
         {progressPercentage.correctWithHelp > 5 ? progressPercentage.correctWithHelp + "%" : ""}
     </div>
     <div
-        class="progress-bar bg-danger text-dark fw-bold"
+        class="progress-bar progress-bar-striped bg-danger text-dark fw-bold"
         role="progressbar"
         style="width: {progressPercentage.incorrect}%">
         {progressPercentage.incorrect > 5 ? progressPercentage.incorrect + "%" : ""}
