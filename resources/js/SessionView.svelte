@@ -1,7 +1,7 @@
 <script>
     import debounce from "lodash/debounce";
 
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
 
     import MagicGifView from "./MagicGIFView.svelte";
     import Messages from "./Messages.svelte";
@@ -16,6 +16,7 @@
 
     export let id;
 
+    var currentQuestionContext;
     var data;
     var helpUsed = false;
     var magicGIFPath = '';
@@ -24,6 +25,7 @@
     $: settingsShowSidebar = $UserSettings.session_show_sidebar;
     $: settingsExamMode = $UserSettings.session_exam_mode;
     $: settingsShuffleAnswers = $UserSettings.session_shuffle_answers;
+    $: settingsMultipleAnswerTries = $UserSettings.session_multiple_answer_tries;
 
     $: settingsShowSidebar,
         (()=> {
@@ -87,13 +89,47 @@
         examMode = false;
     }
     // editorconfig-checker-enable
-    $: currentQuestionId = data ? data.session.current_question_id : -1;
+    $: currentQuestionId = data ? data.session.current_question_id : null;
 
     // Whenever the current question gets changed, we want to update
     // the session to remember the current question.
     $: currentQuestionId, updateSession();
 
     $: currentQuestionAnswered = data ? !!answerChoice : false;
+
+    $: if (currentQuestionId) {
+        // Current question changed, update the question context
+        currentQuestionContext = updateCurrentQuestionContext();
+    }
+
+    // The question context is a helper object that holds the
+    // current state of the question:
+    //
+    // - Is the question answered and should we reveal all
+    //   answers etc.? (isAnswered)
+    // - Which answers are correct, submitted or selected?
+    //   (answerContext)
+    //
+    // The context is updated whenever the current question
+    // changes or when the user resets their answer.
+    function updateCurrentQuestionContext() {
+        const context = {
+            // If the current question is answered already, we
+            // can reveal answers, hints and comments right away
+            isAnswered: !!currentQuestionAnswered,
+
+            answerContext: currentQuestion.answers.reduce((acc, obj) => {
+                acc[obj.id] = {
+                    isCorrectAnswer: obj.id === currentQuestion.correct_answer_id,
+                    isSubmittedAnswer: answerChoice ? obj.id === answerChoice.answer_id : false,
+                    isSelectedAnswer: answerChoice ? obj.id === answerChoice.answer_id : false,
+                };
+                return acc;
+            }, {}),
+        };
+
+        return context;
+    }
 
     // Whenever the number of questions or the given answers change,
     // recalculate the progress of the user in percent
@@ -218,11 +254,31 @@
     }
 
     function submitAnswer(answerId) {
-        if (currentQuestionAnswered) {
+        if (answerId) {
+            // Mark clicked answer as selected for it to reveal
+            // its status and render accordingly
+            currentQuestionContext.answerContext[answerId].isSelectedAnswer = true;
+        } else {
+            // If no answer ID is given, the user clicked the
+            // "show answer" button or it's a card question,
+            // so we want to reveal all answers
+            currentQuestionContext.isAnswered = true;
+        }
+
+        if (currentQuestionAnswered && answerId && answerId === currentQuestion.correct_answer_id) {
+            // The user already answered the question and now clicked
+            // the correct answer, reveal all answers
+            currentQuestionContext.isAnswered = true;
+            return;
+        } else if (currentQuestionAnswered) {
+            // The user already answered the question and now clicked
+            // another wrong answer, let them try again
             return;
         }
 
-        var is_correct = false;
+        // No answer was submitted yet, submit given answer
+
+        var isCorrect = false;
         if (currentQuestion.type === "card") {
             // This is a bit of a hack..
             // If we don't get an answerId, count it as "wrong"
@@ -231,15 +287,15 @@
             // This way we can store results for 'card' questions
             // without special code and without the need for a more
             // complex data model.
-            is_correct = !!answerId;
+            isCorrect = !!answerId;
         } else {
-            is_correct = currentQuestion.correct_answer_id === answerId;
+            isCorrect = currentQuestion.correct_answer_id === answerId;
         }
 
         var answerChoice = {
             question_id: currentQuestionId,
             answer_id: answerId,
-            is_correct: is_correct,
+            is_correct: isCorrect,
             help_used: helpUsed,
         };
 
@@ -250,6 +306,21 @@
                     ...data.session.answer_choices,
                     response.data,
                 ];
+
+
+                if (isCorrect || examMode || !settingsMultipleAnswerTries) {
+                    // With the correct answer or with exam mode enabled
+                    // or if the user has disabled multiple answer tries,
+                    // the question is considered answered and we want to
+                    // reveal all answers etc.
+                    currentQuestionContext.isAnswered = true;
+                }
+
+                if (answerId) {
+                    // Update context of selected answer
+                    currentQuestionContext.answerContext[answerId].isSubmittedAnswer = true;
+                    currentQuestionContext.answerContext[answerId].isCorrectAnswer = isCorrect;
+                }
             })
             .catch(function (error) {
                 alert(error);
@@ -270,6 +341,12 @@
             .delete("/api/sessions/" + id + "/answerchoices/" + answerChoice.id)
             .then(function (response) {
                 data.session.answer_choices = [...data.session.answer_choices.filter(e => e.question_id !== currentQuestionId)];
+
+                // Await the next tick to ensure the answer choice is deleted
+                // before we update the current question context
+                tick().then(() => {
+                    currentQuestionContext = updateCurrentQuestionContext();
+                });
             })
             .catch(function (error) {
                 alert(error);
@@ -322,11 +399,11 @@
     </div>
     <div class="row">
         <div class="col mb-1">
-            {#if !examMode && !sessionComplete}
+            {#if !examMode && !sessionComplete || !currentQuestionContext.isAnswered}
                 <SessionProgressBar
                     bind:progressPercentage />
             {/if}
-            {#if sessionComplete}
+            {#if sessionComplete && currentQuestionContext.isAnswered}
                 <SessionOutro bind:progressPercentage sessionId={data.session.id} />
             {/if}
         </div>
@@ -345,11 +422,11 @@
             <SessionQuestionNav
                 bind:data
                 bind:currentQuestionId={data.session.current_question_id}
-                bind:currentQuestionAnswered />
+                bind:currentQuestionContext />
             {#if currentQuestion}
                 <SessionQuestionView
                     bind:question={currentQuestion}
-                    bind:questionAnswered={currentQuestionAnswered}
+                    bind:questionContext={currentQuestionContext}
                     bind:helpUsed
                     bind:answerChoice
                     bind:examMode={examMode}
@@ -357,7 +434,7 @@
                     {submitAnswer}
                     {deleteAnswer}
                     {updateCurrentQuestionData} />
-                {#if !examMode && currentQuestionAnswered}
+                {#if !examMode && currentQuestionContext.isAnswered}
                     <Messages bind:questionId={currentQuestion.id} />
                 {/if}
             {/if}

@@ -2,10 +2,9 @@
     import DOMPurify from "dompurify";
 
     export let answer;
+    export let answerContext;
     export let badgeText;
-    export let hasAnswer;
-    export let isChosenAnswer;
-    export let isCorrectAnswer;
+    export let questionIsAnswered;
     export let submitAnswer;
     export let examMode;
 
@@ -16,10 +15,14 @@
         cancelled = false;
         answerStatusIndicator = "border-secondary";
 
-        if (!examMode && hasAnswer) {
-            if (isCorrectAnswer) {
-                answerStatusIndicator = "border-success";
-            } else if (isChosenAnswer) {
+        if (!examMode) {
+            if (questionIsAnswered) {
+                if (answerContext.isCorrectAnswer) {
+                    answerStatusIndicator = "border-success";
+                } else if (answerContext.isSubmittedAnswer) {
+                    answerStatusIndicator = "border-danger";
+                }
+            } else if (answerContext.isSelectedAnswer) {
                 answerStatusIndicator = "border-danger";
             }
         }
@@ -30,14 +33,14 @@
     id="answer{answer.id}"
     class="row border-start border-3 m-1 pt-2 {answerStatusIndicator}"
     class:bg-light={
-        (!hasAnswer && !cancelled && !isChosenAnswer) ||
-        (hasAnswer && !isCorrectAnswer && !isChosenAnswer) ||
-        examMode
+        examMode ||
+        (!questionIsAnswered && !answerContext.isSelectedAnswer && !answerContext.isSubmittedAnswer) ||
+        (questionIsAnswered && !answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer)
     }
-    class:text-bg-success={!cancelled && !examMode && hasAnswer && isCorrectAnswer}
-    class:text-bg-danger={!cancelled && !examMode && hasAnswer && !isCorrectAnswer && isChosenAnswer}
+    class:text-bg-success={!cancelled && !examMode && questionIsAnswered && answerContext.isCorrectAnswer}
+    class:text-bg-danger={!cancelled && !examMode && answerContext.isSelectedAnswer && !answerContext.isCorrectAnswer}
     class:bg-cancelled={cancelled}>
-    {#if !hasAnswer}
+    {#if !questionIsAnswered && !answerContext.isSubmittedAnswer}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
             on:click={() => submitAnswer(answer.id)}
@@ -50,7 +53,7 @@
         </div>
     {/if}
 
-    {#if !hasAnswer}
+    {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
             on:click={() => submitAnswer(answer.id)}
@@ -64,25 +67,25 @@
     {/if}
 
     <div class="col-1 ps-1">
-        {#if !hasAnswer}
+        {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
             <button
                 on:click|preventDefault={() => (cancelled = !cancelled)}
                 type="button"
                 class="btn-close" />
-        {:else if !examMode && isCorrectAnswer && isChosenAnswer}
+        {:else if !examMode && answerContext.isCorrectAnswer && answerContext.isSubmittedAnswer}
             <span class="text-success-dark fw-bold fs-3">&check;</span>
-        {:else if !examMode && isCorrectAnswer && !isChosenAnswer}
+        {:else if !examMode && answerContext.isCorrectAnswer && !answerContext.isSubmittedAnswer && questionIsAnswered}
             <span class="text-success-dark fw-bold fs-3">&#8672;</span>
-        {:else if !examMode && isChosenAnswer}
+        {:else if !examMode && answerContext.isSubmittedAnswer}
             <span class="text-danger-dark fw-bold fs-3">&cross;</span>
-        {:else if examMode && isChosenAnswer}
+        {:else if examMode && answerContext.isSubmittedAnswer}
             <span class="text-secondary fw-bold fs-3">&check;</span>
         {/if}
     </div>
 </div>
 
 <div class="row ms-1 mb-2 me-1">
-    {#if !examMode && hasAnswer && answer.hint}
+    {#if !examMode && answer.hint && (questionIsAnswered || answerContext.isSelectedAnswer)}
         <div class="col-1 border-3 border-start border-secondary-subtle" />
         <div class="col-11">
             <p class="p-1">{@html DOMPurify.sanitize(answer.hint)}</p>

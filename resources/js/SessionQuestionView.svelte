@@ -11,22 +11,22 @@
     import AddToDeckDialog from "./AddToDeckDialog.svelte";
 
     export let question;
-    export let questionAnswered;
+    export let questionContext;
     export let helpUsed;
     export let answerChoice;
     export let submitAnswer;
     export let deleteAnswer;
     export let examMode;
     export let updateCurrentQuestionData;
-    export let settingsShuffleAnswers
+    export let settingsShuffleAnswers;
 
     var showEditor = false;
-    var showHint = questionAnswered;
+    var showHint = questionContext.isAnswered;
 
     $: question,
         (() => {
-            showHint = questionAnswered;
-            helpUsed = questionAnswered;
+            showHint = questionContext.isAnswered;
+            helpUsed = questionContext.isAnswered;
         })();
 
     // For all list elements in the question text, add an event handler
@@ -44,7 +44,8 @@
         // Only shuffle if answer shuffling is enabled and if the question
         // is not already answered, otherwise the answers would be shuffled
         // a second time after the answer was submitted.
-        if (question && question.type === 'mc' && settingsShuffleAnswers && !questionAnswered) {
+        if (question && question.type === 'mc' && settingsShuffleAnswers
+            && !Object.values(questionContext.answerContext).some(ac => ac.isSelectedAnswer)) {
             question.answers = _.shuffle(question.answers);
         }
     })();
@@ -144,14 +145,11 @@
                 {#each question.answers as answer, index (answer.id)}
                     <SessionAnswerView
                         bind:answer
+                        bind:answerContext={questionContext.answerContext[answer.id]}
                         bind:examMode={examMode}
                         {submitAnswer}
-                        badgeText={"ABCDEFGHIJKLMN".charAt(index)}
-                        isCorrectAnswer={question.correct_answer_id ===
-                            answer.id}
-                        hasAnswer={!!answerChoice}
-                        isChosenAnswer={answerChoice &&
-                            answerChoice.answer_id === answer.id} />
+                        questionIsAnswered={questionContext.isAnswered}
+                        badgeText={"ABCDEFGHIJKLMN".charAt(index)} />
                 {/each}
             {:else}
                 {#if question.answers.length === 0}
@@ -165,7 +163,7 @@
                         hasAnswer={!!answerChoice} />
                 {/if}
             {/if}
-            {#if !examMode && questionAnswered && question.comment}
+            {#if !examMode && questionContext.isAnswered && question.comment}
                 <div class="row">
                     <div class="col">
                         <div class="alert alert-light" role="alert">
@@ -176,7 +174,7 @@
             {/if}
             <div class="row mt-1 mb-1 pt-2">
                 <div class="d-flex justify-content-end">
-                    {#if questionAnswered && answerChoice !== -1}
+                    {#if questionContext.isAnswered}
                     <button
                         type="button"
                         class="btn btn-outline-secondary btn-sm me-1"
@@ -197,7 +195,7 @@
         </div>
     {/if}
 
-    {#if !questionAnswered && !examMode && !(question.type === 'card')}
+    {#if !questionContext.isAnswered && !examMode && !(question.type === 'card')}
         <div class="mt-3">
             <button
                 on:click|preventDefault={() => submitAnswer("")}
