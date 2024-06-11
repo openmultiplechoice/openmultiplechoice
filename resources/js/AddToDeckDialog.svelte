@@ -119,7 +119,7 @@
         {#each decksOther as deck}
             <div class="row mb-1">
                 <div class="col-9 text-overflow">
-                    <a href="/decks/{deck.id}">{deck.name}</a>
+                    <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
                 </div>
                 <div class="col-3 d-grid gap-4">
                     <button
@@ -135,13 +135,13 @@
         {#each decksAdded as deck}
             <div class="row mb-1">
                 <div class="col-9 text-overflow">
-                    <a href="/decks/{deck.id}">{deck.name}</a>
+                    <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
                 </div>
                 <div class="col-3 d-grid gap-4">
                     <button
                         on:click|preventDefault={() =>
                             removeQuestionFromDeck(deck.id)}
-                        class="btn btn-sm btn-outline-dark float-end">Remove</button>
+                        class="btn btn-sm btn-outline-secondary float-end">Remove</button>
                 </div>
             </div>
         {/each}
