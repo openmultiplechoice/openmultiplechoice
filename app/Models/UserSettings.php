@@ -15,6 +15,7 @@ class UserSettings extends Model
         'session_show_sidebar',
         'session_exam_mode',
         'session_shuffle_answers',
+        'session_multiple_answer_tries',
     ];
 
     public function user()

@@ -4,7 +4,7 @@
 
     export let data;
     export let currentQuestionId;
-    export let currentQuestionAnswered;
+    export let currentQuestionContext;
 
     onMount(() => {
         hotkeys('left', 'questions', function (event, handler) {
@@ -42,7 +42,8 @@
 <div class="row mb-3 pt-1 pb-1 sticky-top bg-white">
     {#if data.session.current_question_id && data.session.current_question_id != data.deck.questions[0].id }
         <div class="col-6">
-            <button on:click|preventDefault={handleBack} class="btn btn-sm btn-light w-100"><span class="fw-bold">&leftarrow;</span> Previous</button>
+            <button on:click|preventDefault={handleBack} class="btn btn-sm btn-light w-100">
+                <span class="fw-bold">&leftarrow;</span> Previous</button>
         </div>
     {:else}
         <div class="col-6">
@@ -50,7 +51,12 @@
     {/if}
     {#if data.session.current_question_id != data.deck.questions[data.deck.questions.length-1].id }
         <div class="col-6">
-            <button on:click|preventDefault={handleNext} class="btn btn-sm {currentQuestionAnswered ? 'btn-warning' : 'btn-light'} w-100">Next <span class="fw-bold">&rightarrow;</span></button>
+            <button on:click|preventDefault={handleNext}
+            class="btn btn-sm w-100"
+            class:btn-warning={currentQuestionContext.isAnswered}
+            class:btn-light={!currentQuestionContext.isAnswered}>
+            Next <span class="fw-bold">&rightarrow;</span>
+        </button>
         </div>
     {:else}
         <div class="col-6">
