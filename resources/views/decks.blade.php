@@ -38,20 +38,20 @@
     @endforelse
 </div>
 
-<div class="row">
-    <div class="col-md">
-        <h4>Archived decks</h4>
-    </div>
-</div>
+@php($archived_decks = $decks->filter(function ($d) { return $d->is_archived; }))
 
-<div class="row mb-3">
-    @forelse ($decks->filter(function ($d) { return $d->is_archived; }) as $deck)
-        @include('deck-col-element')
-    @empty
+@if ($archived_decks->count() > 0)
+    <div class="row">
         <div class="col-md">
-            <p>No archived decks</p>
+            <h4>Archived decks</h4>
         </div>
-    @endforelse
-</div>
+    </div>
+
+    <div class="row mb-3">
+        @foreach ($decks->filter(function ($d) { return $d->is_archived; }) as $deck)
+            @include('deck-col-element')
+        @endforeach
+    </div>
+@endif
 
 @endsection
