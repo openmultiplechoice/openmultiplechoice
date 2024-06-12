@@ -399,7 +399,7 @@
     </div>
     <div class="row">
         <div class="col mb-1">
-            {#if !examMode && !sessionComplete || !currentQuestionContext.isAnswered}
+            {#if !examMode && (!sessionComplete || !currentQuestionContext.isAnswered)}
                 <SessionProgressBar
                     bind:progressPercentage />
             {/if}
