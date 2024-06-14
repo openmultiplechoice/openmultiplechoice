@@ -1,0 +1,1 @@
+import{M as t}from"./Messages-VwBtlm0h.js";import"./index-QDwHr63R.js";import"./each-Co9F6xS6.js";import"./purify.es-FL75tu_8.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./UserSettingsStore-krxhNGvx.js";import"./parseISO-Ds5nI7_t.js";const e=document.getElementById("MessagesView");new t({target:e,props:{questionId:e.dataset.questionId}});

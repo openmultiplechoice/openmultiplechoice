@@ -65,17 +65,31 @@
                 return;
             }
 
-            var parentID = m.parent_message_id
-                ? m.parent_message_id
-                : m.legacy_parent_message_id;
+            // This message has a parent, i.e. it is a child of a
+            // previous message. Add it to the list of childs for
+            // said message
+
+            var parentID = m.parent_message_id;
+            if (!parentID) {
+                // For legacy messages, the parent is identified by
+                // the legacy_parent_message_id field. But we want
+                // to use parent_message_id, i.e. the ID of the parent
+                // message in the current data and not the imported
+                // legacy ID
+                parentID = messages.find((otherm) => otherm.id === m.legacy_parent_message_id).id;
+            }
+
             if (!childs[parentID]) {
                 childs[parentID] = [];
             }
             childs[parentID].push(m);
         });
 
+        // Now that we have a list of childs for each message,
+        // add them to their respective parent message objects
+
         function addChilds(m) {
-            var parentID = m.legacy_message_id ? m.legacy_message_id : m.id;
+            var parentID = m.id;
             if (childs[parentID]) {
                 m.childs = childs[parentID];
                 m.childs.forEach((m) => {
