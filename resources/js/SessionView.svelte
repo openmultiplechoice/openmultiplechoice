@@ -292,6 +292,29 @@
             isCorrect = currentQuestion.correct_answer_id === answerId;
         }
 
+        // Optimistically update the question context: we assume we
+        // will successfully submit the answer choice. The previous
+        // version of the code did the update after the API call in
+        // the `then` promise handler, but this causes a `TypeError`
+        // if the user changes to the next question before the promise
+        // resolves (quick user or slow network).
+        // The optimistic update will lead to an inconsistent state
+        // if the API call fails, but this should be rare and the
+        // user can always reload the page to get back to a consistent
+        // state.
+        if (isCorrect || examMode || !settingsMultipleAnswerTries) {
+            // With the correct answer or with exam mode enabled
+            // or if the user has disabled multiple answer tries,
+            // the question is considered answered and we want to
+            // reveal all answers etc.
+            currentQuestionContext.isAnswered = true;
+        }
+        if (answerId) {
+            // Update context of given selected answer
+            currentQuestionContext.answerContext[answerId].isSubmittedAnswer = true;
+            currentQuestionContext.answerContext[answerId].isCorrectAnswer = isCorrect;
+        }
+
         var answerChoice = {
             question_id: currentQuestionId,
             answer_id: answerId,
@@ -306,21 +329,6 @@
                     ...data.session.answer_choices,
                     response.data,
                 ];
-
-
-                if (isCorrect || examMode || !settingsMultipleAnswerTries) {
-                    // With the correct answer or with exam mode enabled
-                    // or if the user has disabled multiple answer tries,
-                    // the question is considered answered and we want to
-                    // reveal all answers etc.
-                    currentQuestionContext.isAnswered = true;
-                }
-
-                if (answerId) {
-                    // Update context of selected answer
-                    currentQuestionContext.answerContext[answerId].isSubmittedAnswer = true;
-                    currentQuestionContext.answerContext[answerId].isCorrectAnswer = isCorrect;
-                }
             })
             .catch(function (error) {
                 alert(error);
