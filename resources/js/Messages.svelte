@@ -76,7 +76,15 @@
                 // to use parent_message_id, i.e. the ID of the parent
                 // message in the current data and not the imported
                 // legacy ID
-                parentID = messages.find((otherm) => otherm.id === m.legacy_parent_message_id).id;
+                const parentMessage = messages.find((otherm) => otherm.legacy_message_id === m.legacy_parent_message_id);
+                if (parentMessage) {
+                    parentID = parentMessage.id;
+                } else {
+                    // This should not happen as we filter out root
+                    // messages above, i.e. all messages should have
+                    // a parent
+                    console.error("Parent message not found for message", m);
+                }
             }
 
             if (!childs[parentID]) {
