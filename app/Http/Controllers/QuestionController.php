@@ -9,7 +9,7 @@ class QuestionController extends Controller
 {
     public function show(Question $question)
     {
-        $question->load('answers', 'images');
+        $question->load('answers', 'images', 'case');
 
         $decks = $question->decks()->where('access', '=', 'public-rw-listed')->get();
 

@@ -21,6 +21,11 @@ class Question extends Model
         return $this->belongsToMany(Deck::class);
     }
 
+    public function case()
+    {
+        return $this->belongsTo(QuestionCase::class);
+    }
+
     public function images()
     {
         return $this->hasMany(Image::class);

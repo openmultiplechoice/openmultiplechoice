@@ -32,7 +32,7 @@ class QuestionController extends Controller
 
     public function show($id)
     {
-        $question = Question::with('answers', 'images')->find($id);
+        $question = Question::with('answers', 'images', 'case')->find($id);
         return response()->json($question);
     }
 
