@@ -1,6 +1,6 @@
 {
-  "_Messages-VwBtlm0h.js": {
-    "file": "assets/Messages-VwBtlm0h.js",
+  "_Messages-C5SEQT9t.js": {
+    "file": "assets/Messages-C5SEQT9t.js",
     "name": "Messages",
     "imports": [
       "_index-QDwHr63R.js",
@@ -162,12 +162,12 @@
     ]
   },
   "resources/js/Messages.js": {
-    "file": "assets/Messages-CIAZsDca.js",
+    "file": "assets/Messages-BtJvt66w.js",
     "name": "Messages",
     "src": "resources/js/Messages.js",
     "isEntry": true,
     "imports": [
-      "_Messages-VwBtlm0h.js",
+      "_Messages-C5SEQT9t.js",
       "_index-QDwHr63R.js",
       "_each-Co9F6xS6.js",
       "_purify.es-FL75tu_8.js",
@@ -207,14 +207,14 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-D78ZQoyC.js",
+    "file": "assets/SessionView-CHyPAYeu.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
     "imports": [
       "_index-QDwHr63R.js",
       "_purify.es-FL75tu_8.js",
-      "_Messages-VwBtlm0h.js",
+      "_Messages-C5SEQT9t.js",
       "_auto-BMMVTEYX.js",
       "_SessionProgressBar-E33GXL2C.js",
       "_each-Co9F6xS6.js",
