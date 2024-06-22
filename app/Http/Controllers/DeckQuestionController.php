@@ -17,7 +17,7 @@ class DeckQuestionController extends Controller
 
         $questions = $deck->questions()->orderBy('id', 'asc')->get();
 
-        $question->load('answers', 'images');
+        $question->load('answers', 'images', 'case');
 
         if (!$questions->contains('id', $question->id)) {
             abort(404);

@@ -20,6 +20,11 @@ class Deck extends Model
         return $this->belongsToMany(Question::class);
     }
 
+    public function cases()
+    {
+        return $this->belongsToMany(QuestionCase::class, 'deck_case', 'deck_id', 'case_id');
+    }
+
     public function sessions()
     {
         return $this->hasMany(Session::class);

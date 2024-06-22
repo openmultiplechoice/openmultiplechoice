@@ -121,7 +121,7 @@ class SessionController extends Controller
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
-        $deck = Deck::with('questions', 'questions.images', 'questions.answers')->find($session->deck_id);
+        $deck = Deck::with('questions', 'cases', 'questions.images', 'questions.answers', 'questions.case')->find($session->deck_id);
         $session = $session->load('answerChoices');
 
         // If all questions have been removed from the

@@ -37,6 +37,7 @@ class DeckQuestionController extends Controller
         $question->text = $request->text;
         $question->hint = $request->hint;
         $question->comment = $request->comment;
+        $question->case_id = $request->case_id;
         $question->correct_answer_id = $request->correct_answer_id;
         $question->legacy_question_id = $request->legacy_question_id;
         $question->answers()->saveMany($request->answers);

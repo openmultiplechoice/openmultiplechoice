@@ -122,6 +122,12 @@
                     </div>
                 </div>
             {/if}
+            {#if question.case}
+                <div class="row border-start border-3 border-dark m-1 mb-3 pt-2 bg-info-subtle">
+                    <p class="small fw-bold"><i class="bi bi-clipboard2-pulse"></i> CASE</p>
+                    <p>{@html DOMPurify.sanitize(question.case.text)}</p>
+                </div>
+            {/if}
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
                 {#if question.text}
                     <div class="col-lg">
