@@ -1,22 +1,31 @@
 <script>
     import { onMount } from "svelte";
+    import CaseForm from "./CaseForm.svelte";
     import QuestionForm from "./QuestionForm.svelte";
-    import DeckFormQuestionIndex from "./DeckFormQuestionIndex.svelte";
+    import DeckFormIndex from "./DeckFormIndex.svelte";
 
     export let id;
     export let name;
 
-    let data = { questions: [] };
+    let data = {
+        cases: [],
+        questions: []
+    };
 
     $: currentQuestion = data
         ? data.questions.find((q) => q.id === data.current_question_id)
         : null;
 
+    $: currentCase = data
+        ? data.cases.find((c) => c.id === data.current_case_id)
+        : null;
+
     onMount(() => {
         axios
-            .get("/api/decks/" + id + "/questions")
+            .get("/api/decks/" + id)
             .then(function (response) {
-                data.questions = response.data;
+                data = response.data;
+
                 if (data.questions.length > 0) {
                     data.current_question_id =
                         data.questions[data.questions.length - 1].id;
@@ -49,12 +58,46 @@
             });
     }
 
+    function addNewCase() {
+        var newCase = {
+            deck_id: id,
+        };
+
+        axios
+            .post("/api/cases", newCase)
+            .then(function (response) {
+                data.cases = [...data.cases, response.data];
+                data.current_case_id = response.data.id;
+                data.current_question_id = null;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    }
+
     function handleQuestionRemove(questionId) {
         axios
             .delete("/api/decks/" + id + "/questions/" + questionId)
             .then(function (response) {
                 data.questions = data.questions.filter(
                     (q) => q.id !== questionId
+                );
+                if (data.questions.length > 0) {
+                    data.current_question_id =
+                        data.questions[data.questions.length - 1].id;
+                }
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    }
+
+    function handleCaseRemove(caseId) {
+        axios
+            .delete("/api/decks/" + id + "/cases/" + caseId)
+            .then(function (response) {
+                data.cases = data.cases.filter(
+                    (c) => c.id !== caseId
                 );
                 if (data.questions.length > 0) {
                     data.current_question_id =
@@ -74,9 +117,10 @@
 </div>
 
 <div class="row">
-    <div class="col">
+    <div class="col d-grid d-sm-block gap-2">
         <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("mc"); }}>Add MC question</button>
         <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("card"); }}>Add card question</button>
+        <button type="button" class="btn btn-sm btn-light" on:click={addNewCase}><i class="bi bi-clipboard2-pulse"></i> Add case</button>
     </div>
 </div>
 
@@ -89,18 +133,22 @@
 
 <div class="row">
     <div class="col-md-4">
-        <DeckFormQuestionIndex bind:data {handleQuestionRemove} />
-        <div
-            class="btn-group-vertical btn-group-sm"
-            style="width: 100%;"
-            role="group"
-            aria-label="Vertical button group" />
+        <DeckFormIndex bind:data />
     </div>
     <div class="col-md-8">
         {#if currentQuestion}
-            <div class="mt-2 p-3">
-                <QuestionForm bind:question={currentQuestion} />
-            </div>
+            <QuestionForm
+                bind:question={currentQuestion}
+                bind:cases={data.cases}
+                showConfigEditor=true
+                showCaseSelector=true
+                {handleQuestionRemove} />
+        {/if}
+        {#if currentCase}
+            <CaseForm
+                bind:kase={currentCase}
+                bind:cases={data.cases}
+                {handleCaseRemove} />
         {/if}
     </div>
 </div>

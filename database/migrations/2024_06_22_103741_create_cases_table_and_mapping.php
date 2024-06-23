@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->timestamps();
 
-            $table->string('text', 4000);
+            $table->string('text', 4000)->nullable();
 
             $table->bigInteger('legacy_case_id')->unsigned()->nullable();
         });

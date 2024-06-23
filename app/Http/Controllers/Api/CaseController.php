@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\QuestionCase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\QuestionCase;
 
 class CaseController extends Controller
 {
@@ -28,6 +30,15 @@ class CaseController extends Controller
         $case = QuestionCase::where('legacy_case_id', '=', $legacy_case_id)->first();
 
         abort_unless($case, 404);
+
+        return response()->json($case);
+    }
+
+    public function update(Request $request, QuestionCase $case)
+    {
+        $case->text = $request->text;
+
+        $case->save();
 
         return response()->json($case);
     }

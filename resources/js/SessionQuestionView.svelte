@@ -99,7 +99,7 @@
 
 {#if question}
     {#if showEditor}
-        <div class="pt-1 pb-3 border-dark" style="border-top: dotted; border-bottom: dotted; border-width: 1px;">
+        <div class="my-5 pt-1 pb-3 border-dark" style="border-top: dotted; border-bottom: dotted; border-width: 1px;">
             <QuestionForm bind:question {toggleEditor} />
         </div>
     {:else}
@@ -123,7 +123,7 @@
                 </div>
             {/if}
             {#if question.case}
-                <div class="row border-start border-3 border-dark m-1 mb-3 pt-2 bg-info-subtle">
+                <div class="alert alert-light" role="alert">
                     <p class="small fw-bold"><i class="bi bi-clipboard2-pulse"></i> CASE</p>
                     <p>{@html DOMPurify.sanitize(question.case.text)}</p>
                 </div>

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\ModuleController;
 
 use App\Http\Controllers\Api\DeckController;
+use App\Http\Controllers\Api\DeckCaseController;
 use App\Http\Controllers\Api\DeckQuestionController;
 
 use App\Http\Controllers\Api\CaseController;
@@ -56,6 +57,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::post('decks/{deck}/addquestion', [DeckController::class, 'addQuestionById']);
     Route::post('decks/{deck}/removequestion', [DeckController::class, 'removeQuestionById']);
     Route::resource('decks', DeckController::class);
+    Route::resource('decks.cases', DeckCaseController::class);
     Route::resource('decks.questions', DeckQuestionController::class);
 
     Route::get('cases/showbylegacyid', [CaseController::class, 'showByLegacyId']);
