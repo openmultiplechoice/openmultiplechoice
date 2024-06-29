@@ -420,7 +420,8 @@
                     class:text-bg-light={!answerChoice || examMode}
                     class:bg-success={!examMode && !currentQuestion.is_invalid && answerChoice && answerChoice.is_correct}
                     class:bg-danger={!examMode && !currentQuestion.is_invalid && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
-                <strong>{data.deck.name}</strong>
+
+                <a href="/decks/{data.deck.id}" class="text-reset text-decoration-none"><strong>{data.deck.name}</strong></a>
             </p>
         </div>
     </div>
