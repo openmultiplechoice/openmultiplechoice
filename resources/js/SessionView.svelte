@@ -254,7 +254,17 @@
     }
 
     function submitAnswer(answerId) {
-        if (answerId) {
+        // `answerId` can fall into one of the following categories:
+        //
+        // - a valid answer ID: the user clicked an answer choice
+        //
+        // - `undefined`: the user clicked the "show answer" button
+        //    or it's a card question and the user clicked "ask me again"
+        //
+        // - '-1': the user clicked "I got it!" for a card question
+        //    which doesn't have an answer (a bit of a hack, see below)
+
+        if (answerId && answerId !== -1) {
             // Mark clicked answer as selected for it to reveal
             // its status and render accordingly
             currentQuestionContext.answerContext[answerId].isSelectedAnswer = true;
@@ -288,6 +298,15 @@
             // without special code and without the need for a more
             // complex data model.
             isCorrect = !!answerId;
+
+            if (answerId === -1) {
+                // '-1' means the user clicked "I got it!" for a card;
+                // we don't want to store this as an answer choice (and
+                // we can't store it, as the column is a foreign key),
+                // merely want to mark the card as learned
+                // (`isCorrect = true` above)
+                answerId = null;
+            }
         } else {
             isCorrect = currentQuestion.correct_answer_id === answerId;
         }
@@ -309,7 +328,7 @@
             // reveal all answers etc.
             currentQuestionContext.isAnswered = true;
         }
-        if (answerId) {
+        if (answerId && answerId !== -1) {
             // Update context of given selected answer
             currentQuestionContext.answerContext[answerId].isSubmittedAnswer = true;
             currentQuestionContext.answerContext[answerId].isCorrectAnswer = isCorrect;
@@ -401,7 +420,8 @@
                     class:text-bg-light={!answerChoice || examMode}
                     class:bg-success={!examMode && !currentQuestion.is_invalid && answerChoice && answerChoice.is_correct}
                     class:bg-danger={!examMode && !currentQuestion.is_invalid && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
-                <strong>{data.deck.name}</strong>
+
+                <a href="/decks/{data.deck.id}" class="text-reset text-decoration-none"><strong>{data.deck.name}</strong></a>
             </p>
         </div>
     </div>

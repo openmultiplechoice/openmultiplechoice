@@ -6,6 +6,7 @@
 
     import SessionAnswerView from "./SessionAnswerView.svelte";
     import SessionCardAnswerView from "./SessionCardAnswerView.svelte";
+    import SessionNoAnswerView from "./SessionNoAnswerView.svelte";
     import SessionImageView from "./SessionImageView.svelte";
     import QuestionForm from "./QuestionForm.svelte";
     import AddToDeckDialog from "./AddToDeckDialog.svelte";
@@ -153,9 +154,7 @@
                 {/each}
             {:else}
                 {#if question.answers.length === 0}
-                    <div class="alert alert-light" role="alert">
-                        This questions doesn't have any answer.
-                    </div>
+                    <SessionNoAnswerView {submitAnswer} hasAnswer={!!answerChoice} />
                 {:else}
                     <SessionCardAnswerView
                         bind:answer={question.answers[0]}
@@ -198,7 +197,7 @@
     {#if !questionContext.isAnswered && !examMode && !(question.type === 'card')}
         <div class="mt-3">
             <button
-                on:click|preventDefault={() => submitAnswer("")}
+                on:click|preventDefault={() => submitAnswer()}
                 type="button"
                 class="btn btn-outline-secondary btn-sm">&rightarrow; Show answer</button>
         </div>
