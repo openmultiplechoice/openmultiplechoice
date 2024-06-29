@@ -34,7 +34,7 @@
     {/if}
 {:else}
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md">
             <button type="button" class="btn btn-warning btn-sm w-100" on:click|preventDefault={toggleShowAnswer} >Show answer</button>
         </div>
     </div>
