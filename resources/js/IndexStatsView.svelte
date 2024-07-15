@@ -164,8 +164,8 @@
                         {#if deck.questions.length > 0}
                             <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
                         {/if}
-                        {#if deck.sessions.length > 0}
-                            <span class="badge text-bg-light" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions.length}</span>
+                        {#if deck.sessions_count}
+                            <span class="badge text-bg-light" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions_count}</span>
                         {/if}
                         <button on:click|preventDefault={() => createSession(deck.id)}
                             type="button" class="btn btn-sm btn-primary">

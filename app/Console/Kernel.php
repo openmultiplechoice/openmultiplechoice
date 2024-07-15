@@ -66,19 +66,18 @@ class Kernel extends ConsoleKernel
 
             Cache::put('stats/decks/new', $newDecks);
 
-            // Get the 6 most popular decks of the last 7 days
-            $sessionDecks = Session::where('created_at', '>=', Carbon::now()->subDays(7))
-                ->selectRaw('count(id) as session_count, deck_id')
-                ->with('deck:id,name,access', 'deck.questions:id', 'deck.sessions:id,deck_id')
-                ->groupBy('deck_id')
-                ->orderBy('session_count', 'desc')
-                ->get()
-                ->map(function ($s) { return $s->deck;});
-
-            // Filter out private decks
-            $popularDecks = $sessionDecks
-                ->where('access', '=', 'public-rw-listed')
-                ->take(6)->values();
+            // Get the 6 most popular (public) decks of the last 7 days
+            $popularDecks = Deck::where('access', '=', 'public-rw-listed')
+                ->whereHas('sessions', function ($query) {
+                    $query->where('created_at', '>=', Carbon::now()->subDays(7));
+                })
+                ->withCount(['sessions' => function ($query) {
+                    $query->where('created_at', '>=', Carbon::now()->subDays(7));
+                }])
+                ->with('questions:id')
+                ->orderBy('sessions_count', 'desc')
+                ->take(6)
+                ->get();
 
             Cache::put('stats/decks/popular', $popularDecks);
         })->everyTwoMinutes();
