@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Cache;
 
 use App\Models\AnswerChoice;
 use App\Models\Deck;
-use App\Models\Session;
 use App\Models\RegistrationToken;
 
 class Kernel extends ConsoleKernel
@@ -66,19 +65,25 @@ class Kernel extends ConsoleKernel
 
             Cache::put('stats/decks/new', $newDecks);
 
-            // Get the 6 most popular (public) decks of the last 7 days
-            $popularDecks = Deck::where('access', '=', 'public-rw-listed')
-                ->whereHas('sessions', function ($query) {
-                    $query->where('created_at', '>=', Carbon::now()->subDays(7));
-                })
-                ->withCount(['sessions' => function ($query) {
-                    $query->where('created_at', '>=', Carbon::now()->subDays(7));
-                }])
-                ->with('questions:id')
-                ->orderBy('sessions_count', 'desc')
-                ->take(6)
-                ->get();
-
+            // Get the 6 most popular (public) decks of the last x days. x is increased until 6 decks are found.
+            foreach ([2, 4, 8, 16, 32, 64] as $subDays) {
+                $popularDecksTimespan = $subDays;
+                $popularDecks = Deck::where('access', '=', 'public-rw-listed')
+                    ->whereHas('sessions', function ($query) use ($subDays) {
+                        $query->where('created_at', '>=', Carbon::now()->subDays($subDays));
+                    })
+                    ->withCount(['sessions' => function ($query) use ($subDays) {
+                        $query->where('created_at', '>=', Carbon::now()->subDays($subDays));
+                    }])
+                    ->with('questions:id')
+                    ->orderBy('sessions_count', 'desc')
+                    ->take(6)
+                    ->get();
+                if ($popularDecks->count() == 6) {
+                    break;
+                }
+            }
+            Cache::put('stats/decks/popular_timespan', $popularDecksTimespan);
             Cache::put('stats/decks/popular', $popularDecks);
         })->everyTwoMinutes();
 

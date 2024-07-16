@@ -11,6 +11,7 @@
     let statsUsersByHour = {};
     let statsDecksNew = [];
     let statsDecksPopular = [];
+    let statsDecksPopularTimespan = 0;
 
     onMount(() => {
         axios
@@ -22,6 +23,7 @@
                 statsUsersByHour = stats.users_byhour;
                 statsDecksNew = stats.decks_new;
                 statsDecksPopular = stats.decks_popular;
+                statsDecksPopularTimespan = stats.decks_popular_timespan;
             })
             .catch(function (error) {
                 console.log(error);
@@ -158,7 +160,7 @@
         {/if}
         {#if statsDecksPopular.length > 0}
             <div class="col-md-6 mt-3">
-                <h6>Popular decks</h6>
+                <h6>Popular decks (last {statsDecksPopularTimespan} days)</h6>
                 {#each statsDecksPopular as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
                         {#if deck.questions.length > 0}
