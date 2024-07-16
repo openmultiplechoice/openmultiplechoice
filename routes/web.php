@@ -188,6 +188,9 @@ Route::get('/auth/keycloak/callback', function (Request $request) {
         $request->session()->regenerate();
     }
 
+    Auth::user()->last_login_at = Carbon::now();
+    Auth::user()->save();
+
     return redirect()->intended('/');
 });
 
