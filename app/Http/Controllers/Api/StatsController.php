@@ -19,6 +19,7 @@ class StatsController extends Controller
             'decks_new' => Cache::get('stats/decks/new'),
             'decks_popular' => Cache::get('stats/decks/popular'),
             'decks_popular_timespan' => Cache::get('stats/decks/popular_timespan'),
+            'decks_last_used' => Cache::get('stats/decks/last_used'),
         ];
 
         return response()->json($stats);

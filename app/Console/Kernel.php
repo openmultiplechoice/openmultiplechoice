@@ -85,6 +85,23 @@ class Kernel extends ConsoleKernel
             }
             Cache::put('stats/decks/popular_timespan', $popularDecksTimespan);
             Cache::put('stats/decks/popular', $popularDecks);
+
+            // Get the 6 most recently used decks that are publicly available
+            $lastUsedDecks = Deck::has('sessions')
+                ->whereIn('access', ['public-rw-listed', 'public-rw', 'public-ro'])
+                ->with('sessions:id,deck_id,created_at', 'questions:id')
+                ->orderBy(
+                    Deck::select('created_at')
+                        ->from('sessions')
+                        ->whereColumn('sessions.deck_id', 'decks.id')
+                        ->orderByDesc('created_at')
+                        ->limit(1),
+                    'desc'
+                )
+                ->limit(6)
+                ->get();
+
+            Cache::put('stats/decks/last_used', $lastUsedDecks);
         })->everyTwoMinutes();
 
         // Clear expired password reset tokens every 15 minutes
