@@ -11,6 +11,7 @@
     let statsUsersByHour = {};
     let statsDecksNew = [];
     let statsDecksPopular = [];
+    let statsDecksPopularTimespan = 0;
 
     onMount(() => {
         axios
@@ -22,6 +23,7 @@
                 statsUsersByHour = stats.users_byhour;
                 statsDecksNew = stats.decks_new;
                 statsDecksPopular = stats.decks_popular;
+                statsDecksPopularTimespan = stats.decks_popular_timespan;
             })
             .catch(function (error) {
                 console.log(error);
@@ -158,14 +160,14 @@
         {/if}
         {#if statsDecksPopular.length > 0}
             <div class="col-md-6 mt-3">
-                <h6>Popular decks</h6>
+                <h6>Popular decks (last {statsDecksPopularTimespan} days)</h6>
                 {#each statsDecksPopular as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
                         {#if deck.questions.length > 0}
                             <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
                         {/if}
-                        {#if deck.sessions.length > 0}
-                            <span class="badge text-bg-light" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions.length}</span>
+                        {#if deck.sessions_count}
+                            <span class="badge text-bg-light" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions_count}</span>
                         {/if}
                         <button on:click|preventDefault={() => createSession(deck.id)}
                             type="button" class="btn btn-sm btn-primary">
