@@ -12,6 +12,7 @@
     let statsDecksNew = [];
     let statsDecksPopular = [];
     let statsDecksPopularTimespan = 0;
+    let statsDecksLastUsed = [];
 
     onMount(() => {
         axios
@@ -24,6 +25,7 @@
                 statsDecksNew = stats.decks_new;
                 statsDecksPopular = stats.decks_popular;
                 statsDecksPopularTimespan = stats.decks_popular_timespan;
+                statsDecksLastUsed = stats.decks_last_used
             })
             .catch(function (error) {
                 console.log(error);
@@ -139,10 +141,10 @@
     };
 </script>
 
-{#if statsDecksNew && statsDecksPopular}
+{#if statsDecksNew && statsDecksPopular && statsDecksLastUsed}
     <div class="row">
         {#if statsDecksNew.length > 0}
-            <div class="col-md-6 mt-3">
+            <div class="col-md mt-3">
                 <h6>New decks</h6>
                 {#each statsDecksNew as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
@@ -158,8 +160,8 @@
                 {/each}
             </div>
         {/if}
-        {#if statsDecksPopular.length > 0}
-            <div class="col-md-6 mt-3">
+        {#if statsDecksPopular.length > 0 && statsDecksPopularTimespan}
+            <div class="col-md mt-3">
                 <h6>Popular decks (last {statsDecksPopularTimespan} days)</h6>
                 {#each statsDecksPopular as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
@@ -172,6 +174,23 @@
                         <button on:click|preventDefault={() => createSession(deck.id)}
                             type="button" class="btn btn-sm btn-primary">
                                 <i class="bi bi-rocket-takeoff" />
+                        </button>
+                        <a href="/decks/{deck.id}" class="alert-link">{deck.name}</a>
+                    </div>
+                {/each}
+            </div>
+        {/if}
+        {#if statsDecksLastUsed.length > 0}
+            <div class="col-md mt-3">
+                <h6>Last used decks</h6>
+                {#each statsDecksLastUsed as deck}
+                    <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
+                        {#if deck.questions.length > 0}
+                            <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
+                        {/if}
+                        <button on:click|preventDefault={() => createSession(deck.id)}
+                                type="button" class="btn btn-sm btn-primary">
+                            <i class="bi bi-rocket-takeoff" />
                         </button>
                         <a href="/decks/{deck.id}" class="alert-link">{deck.name}</a>
                     </div>
