@@ -42,6 +42,12 @@
     })();
 
     $: question, (() => {
+        // Give each answer a label starting from `A`. Since we want answers
+        // to always get the same label, we do this here before we shuffle
+        // the answers (if shuffling is enabled).
+        question.answers.forEach((answer, index) => {
+            answer.badgeText = "ABCDEFGHIJKLMN".charAt(index);
+        });
         // Only shuffle if answer shuffling is enabled and if the question
         // is not already answered, otherwise the answers would be shuffled
         // a second time after the answer was submitted.
@@ -149,8 +155,7 @@
                         bind:answerContext={questionContext.answerContext[answer.id]}
                         bind:examMode={examMode}
                         {submitAnswer}
-                        questionIsAnswered={questionContext.isAnswered}
-                        badgeText={"ABCDEFGHIJKLMN".charAt(index)} />
+                        questionIsAnswered={questionContext.isAnswered} />
                 {/each}
             {:else}
                 {#if question.answers.length === 0}
