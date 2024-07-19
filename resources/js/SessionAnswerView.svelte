@@ -1,5 +1,6 @@
 <script>
     import DOMPurify from "dompurify";
+    import hotkeys from "hotkeys-js";
 
     export let answer;
     export let answerContext;
@@ -12,6 +13,14 @@
     var cancelled;
 
     var badgeText = answer.badgeText;
+
+    $: {
+        hotkeys.unbind(`${badgeText}, ${answerNumber}`, 'questions')
+        hotkeys(`${badgeText}, ${answerNumber}`, 'questions', function () {
+            submitAnswer(answer.id);
+        });
+    }
+
     $: if (answer) {
         cancelled = false;
         answerStatusIndicator = "border-secondary";
