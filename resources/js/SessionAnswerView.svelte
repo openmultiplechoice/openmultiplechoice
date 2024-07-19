@@ -3,14 +3,15 @@
 
     export let answer;
     export let answerContext;
-    export let badgeText;
     export let questionIsAnswered;
     export let submitAnswer;
     export let examMode;
+    export let answerNumber;
 
     var answerStatusIndicator;
     var cancelled;
 
+    var badgeText = answer.badgeText;
     $: if (answer) {
         cancelled = false;
         answerStatusIndicator = "border-secondary";

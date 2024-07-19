@@ -42,6 +42,11 @@
     })();
 
     $: question, (() => {
+        // Add a badge text to each answer to display before the answers are
+        // potentially shuffled to make it easier to identify the answers.
+        question.answers.forEach((answer, index) => {
+            answer.badgeText = "ABCDEFGHIJKLMN".charAt(index);
+        });
         // Only shuffle if answer shuffling is enabled and if the question
         // is not already answered, otherwise the answers would be shuffled
         // a second time after the answer was submitted.
@@ -150,7 +155,7 @@
                         bind:examMode={examMode}
                         {submitAnswer}
                         questionIsAnswered={questionContext.isAnswered}
-                        badgeText={"ABCDEFGHIJKLMN".charAt(index)} />
+                        answerNumber={index+1} />
                 {/each}
             {:else}
                 {#if question.answers.length === 0}
