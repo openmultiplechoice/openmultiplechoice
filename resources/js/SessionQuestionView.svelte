@@ -155,7 +155,8 @@
                         bind:answerContext={questionContext.answerContext[answer.id]}
                         bind:examMode={examMode}
                         {submitAnswer}
-                        questionIsAnswered={questionContext.isAnswered} />
+                        questionIsAnswered={questionContext.isAnswered}
+                        answerNumber={index+1} />
                 {/each}
             {:else}
                 {#if question.answers.length === 0}
