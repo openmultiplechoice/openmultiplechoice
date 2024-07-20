@@ -1,15 +1,24 @@
 <script>
     import DOMPurify from "dompurify";
+    import hotkeys from "hotkeys-js";
 
     export let answer;
     export let answerContext;
-    export let badgeText;
+    export let answerNumber;
     export let questionIsAnswered;
     export let submitAnswer;
     export let examMode;
 
     var answerStatusIndicator;
     var cancelled;
+    var badgeText = answer.badgeText;
+
+    $: {
+        hotkeys.unbind(`${badgeText}, ${answerNumber}`, 'questions')
+        hotkeys(`${badgeText}, ${answerNumber}`, 'questions', function () {
+            submitAnswer(answer.id);
+        });
+    }
 
     $: if (answer) {
         cancelled = false;
