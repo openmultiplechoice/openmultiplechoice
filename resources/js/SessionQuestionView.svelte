@@ -52,6 +52,7 @@
         // is not already answered, otherwise the answers would be shuffled
         // a second time after the answer was submitted.
         if (question && question.type === 'mc' && settingsShuffleAnswers
+            && !questionContext.isAnswered
             && !Object.values(questionContext.answerContext).some(ac => ac.isSelectedAnswer)) {
             question.answers = _.shuffle(question.answers);
         }
