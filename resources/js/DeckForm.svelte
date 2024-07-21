@@ -26,7 +26,10 @@
             .then(function (response) {
                 data = response.data;
 
-                if (data.questions.length > 0) {
+                const questionId = getQuestionIdParam();
+                if (questionId && data.questions.some(q => q.id === parseInt(questionId))) {
+                    data.current_question_id = parseInt(questionId);
+                } else if (data.questions.length > 0) {
                     data.current_question_id =
                         data.questions[data.questions.length - 1].id;
                 }
@@ -35,6 +38,10 @@
                 alert(error);
             });
     });
+
+    function getQuestionIdParam() {
+        return new URLSearchParams(window.location.search).get("question_id");
+    }
 
     function addNewQuestion(type) {
         var newQuestion = {
