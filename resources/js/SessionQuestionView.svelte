@@ -192,7 +192,7 @@
                             More
                         </button>
                         <ul class="dropdown-menu">
-                            {#if questionContext.isAnswered}
+                            {#if questionContext.isAnswered && answerChoice !== -1}
                                 <li>
                                     <button type="button" class="dropdown-item btn btn-sm"
                                         on:click|preventDefault={deleteAnswer}>
