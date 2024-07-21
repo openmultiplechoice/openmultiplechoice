@@ -341,7 +341,9 @@
                 <div class="card-header bg-transparent">
                     <button
                         on:click|preventDefault={() => {
-                            handleImageRemove(image.id);
+                            if (confirm("Are you sure you want to delete this image?")) {
+                                handleImageRemove(image.id);
+                            }
                         }}
                         type="button"
                         class="btn btn-sm btn-light"><i class="bi bi-trash" /></button>
@@ -377,11 +379,12 @@
         {/if}
         <button
             on:click|preventDefault={() => {
-                handleAnswerRemove(answer.id);
+                if (confirm("Are you sure you want to delete this answer?")) {
+                    handleAnswerRemove(answer.id);
+                }
             }}
-            type="button"
-            class="btn btn-sm btn-light"
-            title="Remove answer"><i class="bi bi-trash" /></button>
+            type="button" class="btn btn-sm btn-light"
+            title="Delete answer"><i class="bi bi-trash" /></button>
     </div>
 {/each}
 
@@ -422,8 +425,8 @@
             </div>
             <div class="col-auto">
                 <span id="questionTypeHelp" class="form-text">
-                    Can be either multiple choice (MC) or card (CARD). Card Questions
-                    can have only one or no answer.
+                    Can be either multiple choice (MC) or card (CARD). <strong>Card Questions
+                    can have only one or no answer.</strong>
                 </span>
             </div>
         </div>
@@ -435,7 +438,11 @@
                 <strong>Delete question?</strong> Deleting a question will also delete all associated answers and images.
             </p>
             <button
-                on:click|preventDefault={() => { handleQuestionRemove(question.id); }}
+                on:click|preventDefault={() => {
+                    if (confirm("Are you sure you want to delete this question?")) {
+                        handleQuestionRemove(question.id);
+                    }
+                }}
                 type="button" class="btn btn-sm btn-danger">
                     <i class="bi bi-trash" /> Delete question
             </button>

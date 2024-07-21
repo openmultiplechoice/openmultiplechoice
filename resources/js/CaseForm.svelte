@@ -77,7 +77,11 @@
             <strong>Delete case?</strong> A case can only be deleted if it's not associated with any question.
         </p>
         <button type="button" class="btn btn-sm btn-danger"
-            on:click|preventDefault={() => { handleCaseRemove(kase.id); }}
+            on:click|preventDefault={() => {
+                if (confirm("Are you sure you want to delete this case?")) {
+                    handleCaseRemove(kase.id);
+                }
+            }}
             disabled={cases.some(c => c.questions ? c.questions.some(q => q.case_id === kase.id) : false)}>
                 <i class="bi bi-trash" /> Delete case
         </button>
