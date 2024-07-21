@@ -453,6 +453,7 @@
                 bind:currentQuestionContext />
             {#if currentQuestion}
                 <SessionQuestionView
+                    deckId={data.deck.id}
                     bind:question={currentQuestion}
                     bind:questionContext={currentQuestionContext}
                     bind:helpUsed
