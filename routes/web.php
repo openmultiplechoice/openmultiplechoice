@@ -59,6 +59,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/decks/{deck}/questions/edit', [DeckQuestionController::class, 'edit']); // This route must be before the next one
     Route::get('/decks/{deck}/questions/{question}', [DeckQuestionController::class, 'show']);
 
+    Route::get('/questions/reviewable', [QuestionController::class, 'indexReviewable']);
     Route::resource('/questions', QuestionController::class);
 
     Route::resource('/submissions', DeckSubmissionController::class);

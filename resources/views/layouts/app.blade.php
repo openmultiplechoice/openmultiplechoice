@@ -37,6 +37,9 @@
                             <a class="dropdown-item" href="{{ url('messages') }}">Your comments</a>
                             <hr class="dropdown-divider">
                             <a class="dropdown-item" href="{{ url('info') }}">Info</a>
+                            <hr class="dropdown-divider">
+                            <h6 class="dropdown-header">Contribute</h6>
+                            <a class="dropdown-item" href="{{ url('questions/reviewable') }}">Review questions</a>
                         </div>
                     </li>
                     @if (Auth::user()->is_admin || Auth::user()->is_moderator)
