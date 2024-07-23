@@ -8,6 +8,7 @@
     export let questionIsAnswered;
     export let submitAnswer;
     export let examMode;
+    export let settingsShowAnswerStats;
 
     var answerStatusIndicator;
     var cancelled;
@@ -55,6 +56,11 @@
             on:click={() => submitAnswer(answer.id)}
             class="col-1 border-start-3 cursor-pointer">
             <p class="badge text-dark">{badgeText}</p>
+        </div>
+    {:else if questionIsAnswered && !examMode && settingsShowAnswerStats && answer.answer_percentage != null}
+        <div class="col-1 border-start-3">
+            <p class="badge text-dark">{badgeText}</p>
+            <p class="badge bg-secondary" title="Percentage of users who chose this answer">{answer.answer_percentage}%</p>
         </div>
     {:else}
         <div class="col-1 border-start-3">
