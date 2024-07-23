@@ -77,8 +77,8 @@
                             <a class="dropdown-item" href="/logout">Log out</a>
                         </div>
                     </li>
-                </ul>
-            @endif
+                @endif
+            </ul>
         </div>
     </div>
 </nav>
