@@ -11,6 +11,7 @@
     import QuestionForm from "./QuestionForm.svelte";
     import AddToDeckDialog from "./AddToDeckDialog.svelte";
 
+    export let deckId;
     export let question;
     export let questionContext;
     export let helpUsed;
@@ -99,7 +100,7 @@
 
 {#if question}
     {#if showEditor}
-        <div class="pt-1 pb-3 border-dark" style="border-top: dotted; border-bottom: dotted; border-width: 1px;">
+        <div class="my-5 pt-1 pb-3 border-dark" style="border-top: dotted; border-bottom: dotted; border-width: 1px;">
             <QuestionForm bind:question {toggleEditor} />
         </div>
     {:else}
@@ -120,6 +121,12 @@
                             <i class="bi bi-eraser-fill" /> <strong>Question needs review</strong> - Please review the question and answer choices and make sure they are correct and clear. Afterwards, remove the "Needs review" flag.
                         </div>
                     </div>
+                </div>
+            {/if}
+            {#if question.case}
+                <div class="alert alert-light" role="alert">
+                    <p class="small fw-bold"><i class="bi bi-clipboard2-pulse"></i> CASE</p>
+                    <p>{@html DOMPurify.sanitize(question.case.text)}</p>
                 </div>
             {/if}
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
@@ -180,22 +187,42 @@
             {/if}
             <div class="row mt-1 mb-1 pt-2">
                 <div class="d-flex justify-content-end">
-                    {#if questionContext.isAnswered}
-                    <button
-                        type="button"
-                        class="btn btn-outline-secondary btn-sm me-1"
-                        on:click|preventDefault={deleteAnswer}>
-                            <i class="bi bi-arrow-counterclockwise" /> Reset</button>
-                    {/if}
+                    <div class="btn-group me-1">
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            More
+                        </button>
+                        <ul class="dropdown-menu">
+                            {#if questionContext.isAnswered && answerChoice !== -1}
+                                <li>
+                                    <button type="button" class="dropdown-item btn btn-sm"
+                                        on:click|preventDefault={deleteAnswer}>
+                                        <i class="bi bi-arrow-counterclockwise" /> Reset answer
+                                    </button>
+                                </li>
+                            {/if}
+                            <li>
+                                <a class="dropdown-item btn btn-sm" href="/questions/{question.id}" target="_blank" role="button">
+                                    <i class="bi bi-box-arrow-up-right"/> Open in new tab
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <button type="button" class="dropdown-item btn btn-sm"
+                                    on:click|preventDefault={toggleEditor}>
+                                    <i class="bi bi-pencil" /> Edit question
+                                </button>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item btn btn-sm" href="/decks/{deckId}/questions/edit?question_id={question.id}" role="button">
+                                    <i class="bi bi-collection" /> Open in deck editor
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     {#key question.id}
                         <AddToDeckDialog questionId={question.id} />
                     {/key}
-                    <button
-                        type="button"
-                        class="btn btn-outline-secondary btn-sm ms-1"
-                        on:click|preventDefault={toggleEditor}
-                        ><i class="bi bi-pencil" /> Edit</button>
-                    <a class="btn btn-sm btn-outline-secondary ms-1" href="/questions/{question.id}" target="_blank" role="button">Link <i class="bi bi-box-arrow-up-right"/></a>
                 </div>
             </div>
         </div>

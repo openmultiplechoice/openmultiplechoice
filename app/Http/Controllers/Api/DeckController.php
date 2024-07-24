@@ -64,6 +64,12 @@ class DeckController extends Controller
         return response()->json($decks);
     }
 
+    public function show($id)
+    {
+        $question = Deck::with('cases', 'cases.questions:id,case_id', 'questions.answers', 'questions.images', 'questions.case')->find($id);
+        return response()->json($question);
+    }
+
     public function store(Request $request)
     {
         abort_if($request->access == "public-rw-listed" && !Auth::user()->is_admin, 403);

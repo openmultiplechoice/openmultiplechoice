@@ -1,24 +1,21 @@
 <script>
     import debounce from "lodash/debounce";
 
-    export let answer;
+    export let kase;
+    export let cases;
+    export let handleCaseRemove;
 
-    let editorAnswer;
-    let editorHint;
+    let editorCase;
 
     let savingStatus = "";
 
-    $: if (editorAnswer) {
-        configureEditorEventListener(editorAnswer);
-    }
-    $: if (editorHint) {
-        configureEditorEventListener(editorHint);
+    $: if (editorCase) {
+        configureEditorEventListener(editorCase);
     }
 
     function configureEditorEventListener(editor) {
         editor.addEventListener("trix-change", function () {
-                answer.text = document.getElementById("answerText" + answer.id).value;
-                answer.hint = document.getElementById("answerHint" + answer.id).value;
+                kase.text = document.getElementById("caseText" + kase.id).value;
                 savingStatus = '<p class="text-end">Saving ...</p>';
                 handleChange();
             });
@@ -46,7 +43,7 @@
         debounced = debounce(
             () => {
                 axios
-                    .put("/api/answers/" + answer.id, answer)
+                    .put("/api/cases/" + kase.id, kase)
                     .then(function (response) {
                         savingStatus = '<p class="text-end">Saved <span class="text-success-dark">&check;</span></p>';
                     })
@@ -63,21 +60,30 @@
     }
 </script>
 
-<form action="#" class="mt-3 mb-1 p-3 bg-light-subtle rounded">
-    <div class="mb-3">
-        <label for="answerText{answer.id}" class="form-label">Answer text</label>
-        <input id="answerText{answer.id}" type="hidden" bind:value={answer.text} />
-        <trix-editor id="editor-answer{answer.id}" class="bg-light" bind:this={editorAnswer} input="answerText{answer.id}" />
-        {@html savingStatus}
-    </div>
-
-    <div class="mb-3">
-        <label for="answerHint{answer.id}t" class="form-label">Answer hint (optional)</label>
-        <input id="answerHint{answer.id}" type="hidden" bind:value={answer.hint} />
-        <trix-editor id="editor-answerHint{answer.id}" class="bg-light" bind:this={editorHint} input="answerHint{answer.id}" />
-        {@html savingStatus}
-        <div id="answerHint{answer.id}" class="form-text">
-            A hint that will be shown once the user has answered the question.
+{#key kase.id}
+    <form action="#" class="mt-3">
+        <div class="mb-3">
+            <label for="caseText{kase.id}" class="form-label">Case text</label>
+            <input id="caseText{kase.id}" type="hidden" bind:value={kase.text} />
+            <trix-editor id="editor-case{kase.id}" class="bg-light" bind:this={editorCase} input="caseText{kase.id}" />
+            {@html savingStatus}
         </div>
+    </form>
+{/key}
+
+{#if handleCaseRemove}
+    <div class="alert alert-light mt-5" role="alert">
+        <p>
+            <strong>Delete case?</strong> A case can only be deleted if it's not associated with any question.
+        </p>
+        <button type="button" class="btn btn-sm btn-danger"
+            on:click|preventDefault={() => {
+                if (confirm("Are you sure you want to delete this case?")) {
+                    handleCaseRemove(kase.id);
+                }
+            }}
+            disabled={cases.some(c => c.questions ? c.questions.some(q => q.case_id === kase.id) : false)}>
+                <i class="bi bi-trash" /> Delete case
+        </button>
     </div>
-</form>
+{/if}

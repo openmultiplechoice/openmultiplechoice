@@ -9,7 +9,7 @@ class Question extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['text', 'hint', 'comment', 'correct_answer_id', 'type', 'is_invalid', 'needs_review'];
+    protected $fillable = ['text', 'hint', 'comment', 'correct_answer_id', 'type', 'is_invalid', 'needs_review', 'case_id'];
 
     public function answers()
     {
@@ -19,6 +19,11 @@ class Question extends Model
     public function decks()
     {
         return $this->belongsToMany(Deck::class);
+    }
+
+    public function case()
+    {
+        return $this->belongsTo(QuestionCase::class);
     }
 
     public function images()
