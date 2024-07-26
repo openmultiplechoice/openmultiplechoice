@@ -13,6 +13,7 @@ class UserSettings extends Model
         'last_subject_id',
         'last_module_id',
         'session_show_sidebar',
+        'session_show_progress_bar',
         'session_exam_mode',
         'session_shuffle_answers',
         'session_multiple_answer_tries',

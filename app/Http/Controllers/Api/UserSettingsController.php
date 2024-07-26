@@ -25,6 +25,7 @@ class UserSettingsController extends Controller
             'last_module_id' => $user->settings->last_module_id,
 
             'session_show_sidebar' => $user->settings->session_show_sidebar,
+            'session_show_progress_bar' => $user->settings->session_show_progress_bar,
             'session_exam_mode' => $user->settings->session_exam_mode,
             'session_shuffle_answers' => $user->settings->session_shuffle_answers,
             'session_multiple_answer_tries' => $user->settings->session_multiple_answer_tries,

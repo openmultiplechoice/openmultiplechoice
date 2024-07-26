@@ -36,6 +36,10 @@
         <label class="form-check-label" for="flexSwitchCheckDefault">Show sidebar</label>
     </div>
     <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.session_show_progress_bar}>
+        <label class="form-check-label" for="flexSwitchCheckDefault">Show progress bar</label>
+    </div>
+    <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.session_exam_mode}>
         <label class="form-check-label" for="flexSwitchCheckDefault">Use "exam mode": answers and comments remain hidden until all questions are answered</label>
     </div>
