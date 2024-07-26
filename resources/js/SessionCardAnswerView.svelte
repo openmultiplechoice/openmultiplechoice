@@ -4,6 +4,7 @@
     export let answer;
     export let hasAnswer;
     export let submitAnswer;
+    export let settingsShowAnswerStats;
 
     var showAnswer = false;
 
@@ -22,6 +23,9 @@
     <div class="row border-light border-start border-3 m-1 p-2">
         <p class="p-1">{@html DOMPurify.sanitize(answer.text)}</p>
     </div>
+    {#if settingsShowAnswerStats}
+        <p class="mt-2 badge bg-secondary" title="Percentage of users who knew this answer">{answer.answer_percentage}%</p>
+    {/if}
     {#if !hasAnswer}
         <div class="row">
             <div class="col-md-6 mb-1">

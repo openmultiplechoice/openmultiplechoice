@@ -43,6 +43,10 @@
         <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.session_multiple_answer_tries}>
         <label class="form-check-label" for="flexSwitchCheckDefault">Allow selecting multiple answers: the correct answer remains hidden until it is selected</label>
     </div>
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.session_show_answer_stats}>
+        <label class="form-check-label" for="flexSwitchCheckDefault">Show statistics about answer choice frequency by previous users</label>
+    </div>
 {:else}
     <p>Loading ...</p>
 {/if}

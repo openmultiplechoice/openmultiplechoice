@@ -36,6 +36,11 @@ class Question extends Model
         return $this->hasMany(Message::class);
     }
 
+    public function answer_choices()
+    {
+        return $this->hasMany(AnswerChoice::class);
+    }
+
     // Images should be soft deleted, hence we can't just cascade
     // on delete but need this custom handler.
     protected static function boot()

@@ -26,6 +26,7 @@
     $: settingsExamMode = $UserSettings.session_exam_mode;
     $: settingsShuffleAnswers = $UserSettings.session_shuffle_answers;
     $: settingsMultipleAnswerTries = $UserSettings.session_multiple_answer_tries;
+    $: settingsShowAnswerStats = $UserSettings.session_show_answer_stats;
 
     $: settingsShowSidebar,
         (()=> {
@@ -460,6 +461,7 @@
                     bind:answerChoice
                     bind:examMode={examMode}
                     bind:settingsShuffleAnswers
+                    bind:settingsShowAnswerStats
                     {submitAnswer}
                     {deleteAnswer}
                     {updateCurrentQuestionData} />
