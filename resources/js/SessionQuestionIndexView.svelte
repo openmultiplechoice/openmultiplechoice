@@ -4,10 +4,12 @@
     export let data;
     export let examMode;
 
-    $: data.session.current_question_id,
+    $: currentQuestionId = data.session.current_question_id;
+
+    $: currentQuestionId,
         (() => {
             var e = document.getElementById(
-                "question" + data.session.current_question_id
+                "question" + currentQuestionId
             );
             if (e) {
                 e.scrollIntoView({
