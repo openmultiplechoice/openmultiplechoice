@@ -26,6 +26,7 @@
     $: settingsExamMode = $UserSettings.session_exam_mode;
     $: settingsShuffleAnswers = $UserSettings.session_shuffle_answers;
     $: settingsMultipleAnswerTries = $UserSettings.session_multiple_answer_tries;
+    $: settingsShowProgressBar = $UserSettings.session_show_progress_bar;
 
     $: settingsShowSidebar,
         (()=> {
@@ -427,7 +428,7 @@
     </div>
     <div class="row">
         <div class="col mb-1">
-            {#if !examMode && (!sessionComplete || !currentQuestionContext.isAnswered)}
+            {#if !examMode && settingsShowProgressBar && (!sessionComplete || !currentQuestionContext.isAnswered)}
                 <SessionProgressBar
                     bind:progressPercentage />
             {/if}
