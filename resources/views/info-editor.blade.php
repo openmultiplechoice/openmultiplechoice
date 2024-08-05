@@ -28,4 +28,23 @@
     </div>
 </div>
 
+@isset($info)
+    <div class="row">
+        <div class="col-md">
+            <div class="alert alert-light mt-5" role="alert">
+                <p>
+                    <strong>Delete posting?</strong>
+                </p>
+                <form action="{{ url('info', $info->id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this posting?');">
+                    @isset($info)
+                        @method('DELETE')
+                    @endisset
+                    @csrf
+                    <button class="btn btn-sm btn-danger" type="submit"><i class="bi bi-trash"></i> Delete posting</button>
+                </form>
+            </div>
+        </div>
+    </div>
+@endisset
+
 @endsection
