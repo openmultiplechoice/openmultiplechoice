@@ -4,16 +4,17 @@
 
 ![](https://github.com/openmultiplechoice/openmultiplechoice/workflows/CI/badge.svg)
 
-Status: early access alpha
+Status: alpha
 
-OpenMultipleChoice is an open source web application for multiple choice
+OpenMultipleChoice is an **open source web application for multiple choice
 question ([MCQ](https://en.wikipedia.org/wiki/Multiple_choice)) and flashcard
-decks.
+decks**. Built for medical students, OMC is for anyone who learns from decks of
+MCQs and flashcards.
 
 ![](docs/images/omc-screenshot.png)
 
-**Please note**: OpenMultipleChoice is currently under active development and
-does not yet accept pull requests.
+> [!NOTE]
+> Please keep in mind that OpenMultipleChoice is still under active development.
 
 For news and updates, join the Discord server or watch the repository here on
 GitHub.
@@ -29,12 +30,32 @@ GitHub.
 
 ## Security
 
-For security issues, please send a private mail to `security@openmultiplechoice.de`
-and do not open an issue.
+For security issues, please send a private mail to the address below and do not
+open an issue.
+
+```
+security@openmultiplechoice.de
+```
+
+## Contributing
+
+Pull requests for bug fixes, code optimizations and documentation improvements
+are very welcome.
+
+Please discuss potential new features and their implementation details first.
+
+While we appreciate all contributions, please understand that we may not be
+able to merge every pull request, even those of high quality, due to project
+direction, maintenance considerations, or other factors.
 
 ## Contact
 
-`mail@openmultiplechoice.de`
+For questions, bug reports, etc., please use the above-mentioned channels. For
+private inquiries, the following email address can be used:
+
+```
+mail@openmultiplechoice.de
+```
 
 ## License
 
