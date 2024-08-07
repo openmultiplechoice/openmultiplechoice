@@ -1,47 +1,81 @@
 # Installation
 
-**Please note**: it is recommended to install OMC on a separate virtual machine
-or LXD system container.
+This guide outlines an installation on Ubuntu LTS but is mostly OS-agnostic.
+Regardless of your operating system, it should give you an idea about the
+required steps to install OMC.
 
-A guided install guide for Ubuntu LTS can be found below.
-
-## Requirements
+In a nutshell, the requirements are:
 
 * PHP with php-fpm
 * A webserver, for example Nginx with FastCGI
 * A supported database, for example MariaDB
 * (optional) Memcached
 
-## Ubuntu LTS (virtual machine or LXD container)
-
-Prepare a new Ubuntu virtual machine or LXD container. For example:
+## Install dependencies
 
 ```
-lxc launch ubuntu:22.04 omc
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    composer \
+    nginx \
+    mariadb-server \
+    php-curl \
+    php-fpm \
+    php-memcached \
+    php-mysql \
+    php-xml
 ```
 
-Download the install script:
+## Create directory
 
 ```
-curl -LO https://raw.githubusercontent.com/openmultiplechoice/openmultiplechoice/master/tools/omc-install
+sudo mkdir -p /var/www/openmultiplechoice
+sudo chown www-data: /var/www/openmultiplechoice
 ```
 
-Execute the install script:
+## Get OpenMultipleChoice
 
 ```
-bash ./omc-install
+sudo -u www-data git clone https://github.com/openmultiplechoice/openmultiplechoice /var/www/openmultiplechoice
 ```
 
-Adjust the server name in `/etc/nginx/sites-enabled/omc.conf`.
+## Install PHP dependencies
+
+```
+cd /var/www/openmultiplechoice
+sudo -u www-data composer install
+```
+
+## Configure webserver
+
+### Nginx
+
+Example Nginx configuration can be found under [`contrib/nginx/omc.conf`](../contrib/nginx/omc.conf).
+
+Make sure to adjust the server name, for example:
 
 ```
 server {
         ...
         server_name omc.example.com;
-
         ...
 }
 ```
+
+### Caddy
+
+Example Caddy configuration:
+
+```
+omc.example.com {
+	root * /var/www/openmultiplechoice/public
+
+	php_fastcgi unix//run/php/php-fpm.sock
+
+	file_server
+}
+```
+
+## Setup database
 
 Create a MySQL (MariaDB) user. Make sure to replace `TODO` with a strong
 and unique passphrase.
@@ -52,23 +86,25 @@ CREATE USER 'omc'@'localhost' IDENTIFIED BY 'TODO';
 
 Create a database and grant all privileges to `'omc'@'localhost'`:
 
-
 ```
 CREATE DATABASE omc;
 GRANT ALL PRIVILEGES ON omc.* TO 'omc'@'localhost';
 ```
 
-Change to the `omc` user:
+## Configure OpenMultipleChoice
+
+Create the `.env` configuration file from the example:
 
 ```
-sudo su - omc
+cd /var/www/openmultiplechoice
+
+sudo -u www-data cp .env.example .env
 ```
 
-Copy the `.env.example` file and create a unique and secret application key:
+Create a unique and secret application key:
 
 ```
-cp .env.example .env
-php artisan key:generate
+sudo -u www-data php artisan key:generate
 ```
 
 Adjust the settings in `.env` according to your setup. At the very least,
@@ -90,26 +126,27 @@ DB_PASSWORD
 Cache the config for better performance:
 
 ```
-php artisan config:cache
+sudo -u www-data php artisan config:cache
 ```
 
 Run the database migrations:
 
 ```
-php artisan migrate
+sudo -u www-data php artisan migrate
 ```
 
-Change back to the administrative user and reload nginx to enable
-`/etc/nginx/sites-enabled/omc.conf`:
+After a reload of the webserver, OMC should be reachable under your server name.
 
-```
-sudo systemctl restart nginx
-```
+## Create user
 
-OMC should now be reachable under your server name.
+Info on how to create a first user can be found in [`docs/tinker.md`](./tinker.md).
+
+## Configure scheduler
+
+### Cron
 
 Configure the [scheduler](https://laravel.com/docs/10.x/scheduling#running-the-scheduler)
-to run scheduled tasks with the following cron job for the OMC user
+to run scheduled tasks with the following cron job for the www-data user
 (`crontab -e`):
 
 ```

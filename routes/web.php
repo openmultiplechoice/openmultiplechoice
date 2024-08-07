@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/modules/{module}', [ModuleController::class, 'show'])->name('show.module');
 
     Route::resource('/info', InfoController::class);
+    Route::get('/info', [InfoController::class, 'index'])->name('index.info');
     Route::get('/info/{info}', [InfoController::class, 'show'])->name('show.info');
 
     Route::resource('/sessions', SessionController::class);

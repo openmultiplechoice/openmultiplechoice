@@ -69,8 +69,14 @@ class InfoController extends Controller
         ]);
     }
 
-    public function destroy(Info $info)
+    public function destroy(Request $request, Info $info)
     {
-        //
+        if (!$request->user()->is_admin) {
+            abort(403, 'Unauthorized');
+        }
+
+        $info->delete();
+
+        return redirect()->route('index.info')->with('msg-success', 'Posting deleted.');
     }
 }
