@@ -25,6 +25,9 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php-xml
 ```
 
+For an installation with PostgreSQL as database, install `postgresql` and
+`php-pgsql` instead of `mariadb-server` and `php-mysql`.
+
 ## Create directory
 
 ```
