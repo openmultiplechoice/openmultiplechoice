@@ -7,7 +7,12 @@
 
 <div class="row mb-3">
     <div class="col">
-        <h1 class="h4">{{ $deck->name }}</h1>
+        <div class="mb-2 d-flex gap-1">
+            <h1 class="h4 mb-1">{{ $deck->name }}</h1>
+            @if($deck->submission)
+                <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Submitted</span>
+            @endif
+        </div>
         <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
             @csrf
             <input type="hidden" name="deck_id" value="{{ $deck->id }}" />

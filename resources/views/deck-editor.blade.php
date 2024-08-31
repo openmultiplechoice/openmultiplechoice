@@ -6,7 +6,14 @@
 
 <div class="row">
     <div class="col-md">
-        <h1 class="h4"><a href="{{ url('decks', $deck->id) }}" class="text-reset text-decoration-none">{{ $deck->name }}</a></h1>
+        <div class="mb-2 d-flex gap-1">
+            <h1 class="h4 mb-1">
+                <a href="{{ url('decks', $deck->id) }}" class="text-reset text-decoration-none">{{ $deck->name }}</a>
+            </h1>
+            @if($deck->submission)
+                <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Submitted</span>
+            @endif
+        </div>
         <form action="/decks/{{ isset($deck) ? $deck->id : '' }}" method="post" class="mt-3 mb-3">
             @isset($deck)
                 @method('PUT')
