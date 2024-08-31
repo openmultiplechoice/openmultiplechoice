@@ -62,45 +62,41 @@
 
 @if ($deck->access != 'public-rw-listed' && ($deck->user_id == Auth::id() || Auth::user()->is_admin))
     <h2 class="h4">Settings</h2>
-    <div class="mt-1">
-        <div class="row">
-            <div class="col-md">
-                <p>
-                    <strong>Submit this deck for listing</strong><br>
-                    Submit this deck for listing in the public deck directory for other users to use.
-                </p>
-            </div>
-            <div class="col-md">
-                <form action="/submissions{{ $deck->submission ? '/'.$deck->submission->id : '' }}" method="post">
-                    @method($deck->submission ? 'delete' : 'post')
-                    @csrf
-                    <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
-                    <button class="btn btn-sm {{ $deck->submission ? 'btn-outline-primary' : 'btn-primary' }}" type="submit">
-                        {{ $deck->submission ? "Retract submission" : "Submit this deck" }}
-                    </button>
-                </form>
-            </div>
+    <div class="row mt-1 mb-3">
+        <div class="col-md">
+            <p>
+                <strong>Submit this deck for listing</strong><br>
+                Submit this deck for listing in the public deck directory for other users to use.
+            </p>
+        </div>
+        <div class="col-md">
+            <form action="/submissions{{ $deck->submission ? '/'.$deck->submission->id : '' }}" method="post">
+                @method($deck->submission ? 'delete' : 'post')
+                @csrf
+                <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
+                <button class="btn btn-sm {{ $deck->submission ? 'btn-outline-primary' : 'btn-primary' }}" type="submit">
+                    {{ $deck->submission ? "Retract submission" : "Submit this deck" }}
+                </button>
+            </form>
         </div>
     </div>
-    <div class="mt-1">
-        <div class="row">
-            <div class="col-md">
-                <p>
-                    <strong>Archive this deck</strong><br>
-                    Archived decks are not listed but can be unarchived.
-                </p>
-            </div>
-            <div class="col-md">
-                <form action="/decks/{{ $deck->id }}" method="post">
-                    @method('PUT')
-                    @csrf
+    <div class="row mb-3">
+        <div class="col-md">
+            <p>
+                <strong>Archive this deck</strong><br>
+                Archived decks are not listed but can be unarchived.
+            </p>
+        </div>
+        <div class="col-md">
+            <form action="/decks/{{ $deck->id }}" method="post">
+                @method('PUT')
+                @csrf
 
-                    <input type="hidden" name="is_archived" value="{{ $deck->is_archived ? 0 : 1 }}" />
-                    <button class="btn btn-sm {{ $deck->is_archived ? 'btn-outline-primary' : 'btn-primary' }}" type="submit">
-                        {{ $deck->is_archived ?  "Unarchive deck" : "Archive this deck" }}
-                    </button>
-                </form>
-            </div>
+                <input type="hidden" name="is_archived" value="{{ $deck->is_archived ? 0 : 1 }}" />
+                <button class="btn btn-sm {{ $deck->is_archived ? 'btn-outline-primary' : 'btn-primary' }}" type="submit">
+                    {{ $deck->is_archived ?  "Unarchive deck" : "Archive this deck" }}
+                </button>
+            </form>
         </div>
     </div>
 @endif
