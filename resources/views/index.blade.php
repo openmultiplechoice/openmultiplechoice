@@ -15,7 +15,7 @@
         <div class="col-lg-4">
             <h4><a class="text-reset text-decoration-none" href="{{ url('info') }}">Info</a></h4>
             @foreach ($info as $entry)
-                <div class="alert alert-light" role="alert">
+                <div class="alert alert-light card-highlight" role="alert">
                     <h6 class="alert-heading"><a class="link-dark alert-link stretched-link" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
                     <p>
                         <small>

@@ -13,7 +13,7 @@
 <div class="row">
     @foreach ($info as $entry)
         <div class="col-lg-4">
-            <div class="alert alert-light" role="alert">
+            <div class="alert alert-light card-highlight" role="alert">
                 <h6 class="alert-heading"><a class="link-dark alert-link stretched-link" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
                 <p>
                     <small>
