@@ -21,6 +21,7 @@
     export let examMode;
     export let updateCurrentQuestionData;
     export let settingsShuffleAnswers;
+    export let settingsShowAnswerStats;
 
     var showEditor = false;
     var showHint = questionContext.isAnswered;
@@ -162,6 +163,7 @@
                         bind:answer
                         bind:answerContext={questionContext.answerContext[answer.id]}
                         bind:examMode={examMode}
+                        bind:settingsShowAnswerStats={settingsShowAnswerStats}
                         {submitAnswer}
                         questionIsAnswered={questionContext.isAnswered}
                         answerNumber={index+1} />

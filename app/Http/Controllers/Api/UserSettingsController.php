@@ -29,6 +29,7 @@ class UserSettingsController extends Controller
             'session_exam_mode' => $user->settings->session_exam_mode,
             'session_shuffle_answers' => $user->settings->session_shuffle_answers,
             'session_multiple_answer_tries' => $user->settings->session_multiple_answer_tries,
+            'session_show_answer_stats' => $user->settings->session_show_answer_stats,
         ];
 
         return response()->json($userSettings);

@@ -8,6 +8,7 @@
     export let questionIsAnswered;
     export let submitAnswer;
     export let examMode;
+    export let settingsShowAnswerStats;
 
     var answerStatusIndicator;
     var cancelled;
@@ -40,7 +41,8 @@
 
 <div
     id="answer{answer.id}"
-    class="row border-start border-3 m-1 pt-2 {answerStatusIndicator}"
+    style="min-height: 3rem;"
+    class="row border-start border-3 m-1 py-2 d-flex align-items-center {answerStatusIndicator}"
     class:bg-light={
         examMode ||
         (!questionIsAnswered && !answerContext.isSelectedAnswer && !answerContext.isSubmittedAnswer) ||
@@ -54,11 +56,11 @@
         <div
             on:click={() => submitAnswer(answer.id)}
             class="col-1 border-start-3 cursor-pointer">
-            <p class="badge text-dark">{badgeText}</p>
+            <p class="badge text-dark my-0">{badgeText}</p>
         </div>
     {:else}
         <div class="col-1 border-start-3">
-            <p class="badge text-dark">{badgeText}</p>
+            <p class="badge text-dark my-0">{badgeText}</p>
         </div>
     {/if}
 
@@ -66,30 +68,39 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
             on:click={() => submitAnswer(answer.id)}
-            class="col-10 cursor-pointer">
-            <p class="p-1">{@html DOMPurify.sanitize(answer.text)}</p>
+            class="col-9 cursor-pointer">
+            <p class="px-1 my-0">{@html DOMPurify.sanitize(answer.text)}</p>
         </div>
     {:else}
-        <div class="col-10">
-            <p class="p-1">{@html DOMPurify.sanitize(answer.text)}</p>
+        <div class="col-9">
+            <p class="px-1 my-0">{@html DOMPurify.sanitize(answer.text)}</p>
         </div>
     {/if}
 
-    <div class="col-1 ps-1">
-        {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
-            <button
-                on:click|preventDefault={() => (cancelled = !cancelled)}
-                type="button"
-                class="btn-close" />
-        {:else if !examMode && answerContext.isCorrectAnswer && answerContext.isSubmittedAnswer}
-            <span class="text-success-dark fw-bold fs-3">&check;</span>
-        {:else if !examMode && answerContext.isCorrectAnswer && !answerContext.isSubmittedAnswer && questionIsAnswered}
-            <span class="text-success-dark fw-bold fs-3">&#8672;</span>
-        {:else if !examMode && answerContext.isSubmittedAnswer}
-            <span class="text-danger-dark fw-bold fs-3">&cross;</span>
-        {:else if examMode && answerContext.isSubmittedAnswer}
-            <span class="text-secondary fw-bold fs-3">&check;</span>
-        {/if}
+    <div class="col-2">
+        <div class="row text-end d-flex align-items-center">
+            <div class="col">
+                {#if questionIsAnswered && !examMode && settingsShowAnswerStats && answer.answer_percentage != null}
+                    <span class="badge text-muted" title="Percentage of users who chose this answer">{answer.answer_percentage}%</span>
+                {/if}
+            </div>
+            <div class="col">
+                {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
+                    <button
+                        on:click|preventDefault={() => (cancelled = !cancelled)}
+                        type="button"
+                        class="btn-close" />
+                {:else if !examMode && answerContext.isCorrectAnswer && answerContext.isSubmittedAnswer}
+                    <span class="text-success-dark fw-bold fs-3">&check;</span>
+                {:else if !examMode && answerContext.isCorrectAnswer && !answerContext.isSubmittedAnswer && questionIsAnswered}
+                    <span class="text-success-dark fw-bold fs-3">&#8672;</span>
+                {:else if !examMode && answerContext.isSubmittedAnswer}
+                    <span class="text-danger-dark fw-bold fs-3">&cross;</span>
+                {:else if examMode && answerContext.isSubmittedAnswer}
+                    <span class="text-secondary fw-bold fs-3">&check;</span>
+                {/if}
+            </div>
+        </div>
     </div>
 </div>
 
