@@ -141,10 +141,16 @@
     };
 </script>
 
+<div class="row">
+    <div class="col-md">
+        <h4>Stats</h4>
+    </div>
+</div>
+
 {#if statsDecksNew && statsDecksPopular && statsDecksLastUsed}
     <div class="row">
         {#if statsDecksNew.length > 0}
-            <div class="col-md mt-3">
+            <div class="col-lg mt-3 text-overflow">
                 <h6>New decks</h6>
                 {#each statsDecksNew as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
@@ -161,7 +167,7 @@
             </div>
         {/if}
         {#if statsDecksPopular.length > 0 && statsDecksPopularTimespan}
-            <div class="col-md mt-3">
+            <div class="col-lg mt-3 text-overflow">
                 <h6>Popular decks (last {statsDecksPopularTimespan} days)</h6>
                 {#each statsDecksPopular as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
@@ -181,7 +187,7 @@
             </div>
         {/if}
         {#if statsDecksLastUsed.length > 0}
-            <div class="col-md mt-3">
+            <div class="col-lg mt-3 text-overflow">
                 <h6>Last used decks</h6>
                 {#each statsDecksLastUsed as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
