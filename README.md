@@ -26,6 +26,7 @@ GitHub.
 ## Documentation
 
 * [Installation](docs/installation.md)
+* [Maintenance](docs/maintenance.md)
 * [Development](docs/development.md)
 
 ## Security
