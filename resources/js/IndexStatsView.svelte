@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import { createSession } from "./NewSessionHelper.js";
 
     import Chart from 'chart.js/auto';
@@ -7,6 +7,8 @@
 
     let canvasAnswers;
     let chart;
+    let statsUpdateInterval;
+    let statsLastUpdatedAt;
     let statsAnswersByHour = {};
     let statsUsersByHour = {};
     let statsDecksNew = [];
@@ -15,6 +17,15 @@
     let statsDecksLastUsed = [];
 
     onMount(() => {
+        loadStats();
+        statsUpdateInterval = setInterval(loadStats, 2 * 60 * 1000 /* every 2 minutes */);
+    });
+
+    onDestroy(() => {
+        clearInterval(statsUpdateInterval);
+    });
+
+    function loadStats() {
         axios
             .get("/api/stats/activity")
             .then(function (response) {
@@ -26,11 +37,13 @@
                 statsDecksPopular = stats.decks_popular;
                 statsDecksPopularTimespan = stats.decks_popular_timespan;
                 statsDecksLastUsed = stats.decks_last_used
+
+                statsLastUpdatedAt = new Date();
             })
             .catch(function (error) {
                 console.log(error);
             });
-    });
+    }
 
     $: if (canvasAnswers && statsAnswersByHour && statsUsersByHour) {
         (() => {
@@ -211,6 +224,12 @@
 <div class="row mt-3 p-3">
     <div class="col-md">
         <canvas bind:this={canvasAnswers} style="max-height: 300px;"></canvas>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md">
+        <span class="badge text-bg-light text-muted">Last updated: {statsLastUpdatedAt ? format(statsLastUpdatedAt, "HH:mm") : "unknown"}</span>
     </div>
 </div>
 
