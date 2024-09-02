@@ -25,12 +25,7 @@
     @endif
 </div>
 
-<div class="row">
-    <div class="col-md">
-        <h4>Stats</h4>
-        <div id="IndexStatsView"></div>
-        @vite(['resources/js/IndexStatsView.js'])
-    </div>
-</div>
+<div id="IndexStatsView"></div>
+@vite(['resources/js/IndexStatsView.js'])
 
 @endsection
