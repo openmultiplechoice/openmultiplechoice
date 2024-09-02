@@ -212,12 +212,14 @@
                                     <i class="bi bi-pencil" /> Edit question
                                 </button>
                             </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item btn btn-sm" href="/decks/{deckId}/questions/edit?question_id={question.id}" role="button">
-                                    <i class="bi bi-collection" /> Open in deck editor
-                                </a>
-                            </li>
+                            {#if deckId}
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item btn btn-sm" href="/decks/{deckId}/questions/edit?question_id={question.id}" role="button">
+                                        <i class="bi bi-collection" /> Open in deck editor
+                                    </a>
+                                </li>
+                            {/if}
                         </ul>
                     </div>
                     {#key question.id}
