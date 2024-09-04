@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\AnswerChoice;
 use App\Models\Deck;
 use App\Models\RegistrationToken;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -103,6 +104,78 @@ class Kernel extends ConsoleKernel
 
             Cache::put('stats/decks/last_used', $lastUsedDecks);
         })->everyTwoMinutes();
+
+        $schedule->call(function () {
+            // Calculate answer percentages for multiple choice questions
+
+            // - If the last answer_choice ID is not in the cache, start the
+            //   queue by processing the last 100 answer_choices
+            // - If the last answer_choice ID is in the cache, get the next 10
+            //   answer_choices since the last answer_choice that was processed
+
+            // - For each answer_choice, get the related question and all answers,
+            //   plus a calculated answer_choices_count for both the question and
+            //   the answers (to avoid excessive queries below)
+
+            $lastAnswerChoiceID = Cache::get('internal/last_answer_percentage_calculation');
+
+            if ($lastAnswerChoiceID) {
+                $answerChoices = AnswerChoice::select('id', 'question_id', 'answer_id')
+                    ->where('id', '>', $lastAnswerChoiceID)
+                    ->with(['question' => function ($query) {
+                        $query->select('id')
+                            ->where('type', 'mc')
+                            ->withCount('answer_choices')
+                            ->with(['answers' => function ($query) {
+                                $query->select('id', 'question_id', 'answer_percentage')->withCount('answer_choices');
+                            }]);
+                    }])
+                    ->get()->unique('question_id')->take(10)->sortBy('id');
+            } else {
+                $answerChoices = AnswerChoice::select('id', 'question_id', 'answer_id')
+                    ->orderBy('id', 'desc')->limit(100)
+                    ->with(['question' => function ($query) {
+                        $query->select('id')
+                            ->where('type', 'mc')
+                            ->withCount('answer_choices')
+                            ->with(['answers' => function ($query) {
+                                $query->select('id', 'question_id', 'answer_percentage')->withCount('answer_choices');
+                            }]);
+                    }])
+                    ->get()->unique('question_id')->take(-10)->sortBy('id');
+            }
+
+            // Calculate the answer percentages for each answer of each question
+            foreach ($answerChoices as $answerChoice) {
+                $question = $answerChoice->question;
+                $questionAnswerChoicesCount = $question->answer_choices_count;
+                $totalPercentage = 0;
+                $totalRoundedPercentage = 0;
+
+                foreach ($question->answers as $answer) {
+                    $answerChoicesCount = $answer->answer_choices_count;
+                    $answerPercentage = $answerChoicesCount / $questionAnswerChoicesCount * 100;
+                    $roundedPercentage = round($answerPercentage);
+                    $answer->answer_percentage = $roundedPercentage;
+                    $totalPercentage += $answerPercentage;
+                    $totalRoundedPercentage += $roundedPercentage;
+
+                    // If we have reached the last answer (`round($totalPercentage) == 100` is true)
+                    // and the total rounded percentage is not 100, adjust the last answer to make
+                    // the total rounded percentage 100
+                    if (round($totalPercentage) == 100 && $totalRoundedPercentage != 100) {
+                        $difference = 100 - $totalRoundedPercentage;
+                        $answer->answer_percentage += $difference;
+                        $totalRoundedPercentage += $difference;
+                    }
+                    $answer->save();
+                }
+                $lastAnswerChoiceID = $answerChoice->id;
+            }
+
+            // Cache the last answer_choice ID for the next run
+            Cache::put('internal/last_answer_percentage_calculation', $lastAnswerChoiceID);
+        })->everyThirtySeconds();
 
         // Clear expired password reset tokens every 15 minutes
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
