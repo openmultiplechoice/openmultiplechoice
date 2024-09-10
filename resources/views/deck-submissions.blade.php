@@ -60,7 +60,7 @@
                             <a class="card-link" href="{{ url('decks', $submission->deck->id) }}">Browse</a>
                         </div>
                         <div class="col-md-3 py-1">
-                            <form action="/submissions/{{ $submission->id }}" method="post">
+                            <form action="/submissions/{{ $submission->id }}" method="post" onsubmit="return confirm('Are you sure you want to delete this submission?');">
                                 @method('DELETE')
                                 @csrf
 

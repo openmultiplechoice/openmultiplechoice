@@ -35,6 +35,7 @@
             .then(function (response) {
                 toggleEditor();
                 message.text = response.data.text;
+                message.is_anonymous = response.data.is_anonymous;
                 updateMessage(message);
             })
             .catch(function (error) {
@@ -60,6 +61,9 @@
     }
 
     function handleDelete() {
+        if (!confirm("Are you sure you want to delete this message?")) {
+            return;
+        }
         axios
             .delete("/api/messages/" + message.id)
             .then(function (response) {
@@ -172,8 +176,12 @@
                                 parseISO(message.created_at),
                                 "dd.MM.yyyy HH:mm"
                             )}
-                            {#if message.author && !message.is_deleted}
-                                {message.author.public_name ? message.author.public_name : message.author.name}
+                            {#if message.is_anonymous}
+                                <i class="bi bi-incognito" title="anonymous"></i>
+                            {:else if message.author && !message.is_deleted}
+                                <strong>
+                                    {message.author.public_name ? message.author.public_name : message.author.name}
+                                </strong>
                             {/if}
                         </small>
                     </p>

@@ -76,3 +76,7 @@ trix-toolbar .trix-button--icon-heading-1 {
 .border-danger {
     border-color: $danger !important;
 }
+
+.card-highlight:hover {
+    filter: brightness(97%);
+};
