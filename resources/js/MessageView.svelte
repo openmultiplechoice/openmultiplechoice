@@ -35,6 +35,7 @@
             .then(function (response) {
                 toggleEditor();
                 message.text = response.data.text;
+                message.is_anonymous = response.data.is_anonymous;
                 updateMessage(message);
             })
             .catch(function (error) {
