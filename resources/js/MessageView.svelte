@@ -60,6 +60,9 @@
     }
 
     function handleDelete() {
+        if (!confirm("Are you sure you want to delete this message?")) {
+            return;
+        }
         axios
             .delete("/api/messages/" + message.id)
             .then(function (response) {
