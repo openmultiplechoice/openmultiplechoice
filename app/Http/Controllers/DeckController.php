@@ -23,9 +23,15 @@ class DeckController extends Controller
 
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => 'required|max:500',
+            'description' => 'max:5000',
+            'access' => 'in:private,public-ro,public-rw',
+        ]);
+
         $deck = new Deck();
 
-        $deck->fill($request->all());
+        $deck->fill($validated);
         $deck->user_id = Auth::id();
 
         $deck->save();
