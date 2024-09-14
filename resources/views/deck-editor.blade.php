@@ -21,7 +21,12 @@
             @csrf
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input id="name" type="text" name="name" class="form-control" value="{{ $deck->name ?? '' }}">
+                <input id="name" type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $deck->name) }}">
+                @error('name')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
             <div class="mb-3">
                 <label for="module_id" class="form-label">Module (optional)</label>
@@ -59,8 +64,13 @@
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description (optional)</label>
-                <input type="hidden" id="description" name="description" value="{{ $deck->description ?? '' }}">
-                <trix-editor input="description"></trix-editor>
+                <input type="hidden" id="description" name="description" value="{{ old('description', $deck->description) }}">
+                <trix-editor input="description" class="form-control @error('description') is-invalid @enderror"></trix-editor>
+                @error('description')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
             <button class="btn btn-sm btn-primary" type="submit">Save</button>
         </form>

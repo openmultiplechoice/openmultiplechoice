@@ -91,7 +91,7 @@ class DeckController extends Controller
         // You should not be able to change the access level to "public-rw-listed" here
         abort_if($deck->access != "public-rw-listed" && $request->access == "public-rw-listed", 403);
 
-        // You should not be able to change the access level to "public-rw-listed" here
+        // ... and not be able to change it from "public-rw-listed" to something else
         abort_if($deck->access == "public-rw-listed" && $request->access && $request->access != "public-rw-listed", 403);
 
         // You should not be able to archive the deck if it was submitted or listed
@@ -100,7 +100,16 @@ class DeckController extends Controller
             return back()->with('msg-error', 'You cannot archive a deck that was submitted or is publicly listed!');
         }
 
-        $deck->update($request->all());
+        $validated = $request->validate([
+            'name' => 'sometimes|required|max:500',
+            'description' => 'max:5000',
+            'access' => 'in:private,public-ro,public-rw,public-rw-listed',
+            'is_archived' => 'boolean',
+            'exam_at' => 'nullable|date',
+            'module_id' => 'nullable|exists:modules,id',
+        ]);
+
+        $deck->update($validated);
         $deck->access = $request->input('access', 'private');
 
         $deck->save();
