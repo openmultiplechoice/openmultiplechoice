@@ -36,26 +36,39 @@
         </div>
     </div>
     <div class="col-lg-9 col-md-12">
-        <div class="row mb-3 pt-1 pb-1 bg-white">
-            @if ($urlPrev)
-                <div class="col-6">
-                    <a href="{{ url($urlPrev) }}" class="btn btn-sm btn-light w-100"><span class="fw-bold">&leftarrow;</span> Previous</a>
+        @if (count($questions) > 0)
+            <div class="row mb-3 pt-1 pb-1 bg-white">
+                @if ($urlPrev)
+                    <div class="col-6">
+                        <a href="{{ url($urlPrev) }}" class="btn btn-sm btn-light w-100"><span class="fw-bold">&leftarrow;</span> Previous</a>
+                    </div>
+                @else
+                    <div class="col-6">
+                        <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-light w-100">Overview</a>
+                    </div>
+                @endif
+                @if ($urlNext)
+                    <div class="col-6">
+                        <a href="{{ url($urlNext) }}" class="btn btn-sm btn-light w-100">Next <span class="fw-bold">&rightarrow;</span></a>
+                    </div>
+                @else
+                    <div class="col-6">
+                        <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-light w-100">Overview</a>
+                    </div>
+                @endif
+            </div>
+        @endif
+
+        @if (Auth::user()->is_admin || $deck->user_id == Auth::id() || $deck->access == "public-rw" || $deck->access == "public-rw-listed")
+            <div class="row mb-3">
+                <div class="col-md mb-3">
+                    <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-light w-100"><i class="bi bi-gear"></i> Settings</a>
                 </div>
-            @else
-                <div class="col-6">
-                    <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-light w-100">Overview</a>
+                <div class="col-md">
+                    <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-light w-100"><i class="bi bi-collection"></i> Add / remove questions</a>
                 </div>
-            @endif
-            @if ($urlNext)
-                <div class="col-6">
-                    <a href="{{ url($urlNext) }}" class="btn btn-sm btn-light w-100">Next <span class="fw-bold">&rightarrow;</span></a>
-                </div>
-            @else
-                <div class="col-6">
-                    <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-light w-100">Overview</a>
-                </div>
-            @endif
-        </div>
+            </div>
+        @endif
 
         <p>Number of questions in this deck: <span class="badge text-bg-light"><i class="bi bi-collection"></i> {{ count($questions) }}</span></p>
 
@@ -63,17 +76,6 @@
             <h2 class="h4">Description</h2>
             <div class="mb-3">
                 {!! Purify::clean($deck->description) !!}
-            </div>
-        @endif
-
-        @if (Auth::user()->is_admin || $deck->user_id == Auth::id() || $deck->access == "public-rw" || $deck->access == "public-rw-listed")
-            <div class="row mb-3">
-                <div class="col-md mb-3">
-                    <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-pencil"></i> Edit deck</a>
-                </div>
-                <div class="col-md">
-                    <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-pencil"></i> Add / remove questions</a>
-                </div>
             </div>
         @endif
 
