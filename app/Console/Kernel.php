@@ -122,9 +122,11 @@ class Kernel extends ConsoleKernel
             if ($lastAnswerChoiceID) {
                 $answerChoices = AnswerChoice::select('id', 'question_id', 'answer_id')
                     ->where('id', '>', $lastAnswerChoiceID)
+                    ->whereHas('question', function ($query) {
+                        $query->where('type', 'mc');
+                    })
                     ->with(['question' => function ($query) {
                         $query->select('id')
-                            ->where('type', 'mc')
                             ->withCount('answer_choices')
                             ->with(['answers' => function ($query) {
                                 $query->select('id', 'question_id', 'answer_percentage')->withCount('answer_choices');
@@ -134,9 +136,11 @@ class Kernel extends ConsoleKernel
             } else {
                 $answerChoices = AnswerChoice::select('id', 'question_id', 'answer_id')
                     ->orderBy('id', 'desc')->limit(100)
+                    ->whereHas('question', function ($query) {
+                        $query->where('type', 'mc');
+                    })
                     ->with(['question' => function ($query) {
                         $query->select('id')
-                            ->where('type', 'mc')
                             ->withCount('answer_choices')
                             ->with(['answers' => function ($query) {
                                 $query->select('id', 'question_id', 'answer_percentage')->withCount('answer_choices');
