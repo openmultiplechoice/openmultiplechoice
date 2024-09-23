@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
+use App\Models\Question;
 
 class DeckController extends Controller
 {
@@ -139,8 +140,12 @@ class DeckController extends Controller
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
         abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
 
-        $question_id = $request->question_id;
-        $deck->questions()->attach($question_id);
+        $question = Question::findOrFail($request->question_id);
+        $deck->questions()->attach($question->id);
+
+        if ($question->case_id) {
+            $deck->cases()->syncWithoutDetaching($question->case_id);
+        }
 
         return response()->noContent();
     }
