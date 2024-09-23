@@ -35,6 +35,20 @@
     @endif
 </div>
 
+@if (sizeof($submissions) > 0)
+    <div class="row">
+        <div class="col-lg">
+            <div class="alert alert-warning d-flex align-items-center">
+                <i class="bi bi-info-circle flex-shrink-0 me-2"></i>
+                <div>
+                    <a href="{{ url('submissions') }}" class="alert-link stretched-link">
+                        {{ sizeof($submissions) }} pending submission{{ sizeof($submissions) > 1 ? 's' : '' }}</a> to review.
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 <div id="IndexStatsView"></div>
 @vite(['resources/js/IndexStatsView.js'])
 
