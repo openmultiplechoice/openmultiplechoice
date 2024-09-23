@@ -22,7 +22,7 @@
         "lodash": "^4.17.21",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.69.5",
-        "sass-loader": "^16.0.1",
+        "sass-loader": "^16.0.2",
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
         "svelte": "^4.2.9",
