@@ -29,6 +29,7 @@ use App\Http\Controllers\AdminSettingsSignupController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RegistrationTokenController;
 
+use App\Models\DeckSubmission;
 use App\Models\Info;
 use App\Models\User;
 
@@ -46,8 +47,14 @@ use App\Models\User;
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/', function () {
         $info = Info::where('is_pinned', '=', true)->orderByDesc('id')->get();
+
+        if (Auth::user()->is_admin) {
+            $submissions = DeckSubmission::all();
+        }
+
         return view('index', [
             'info' => $info,
+            'submissions' => $submissions ?? [],
         ]);
     })->name('index');
 
