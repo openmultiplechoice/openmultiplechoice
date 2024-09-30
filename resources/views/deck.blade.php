@@ -16,7 +16,7 @@
             <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
                 @csrf
                 <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
-                <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> New session</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> Start session</button>
             </form>
         @endif
     </div>

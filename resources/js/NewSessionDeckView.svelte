@@ -79,7 +79,7 @@
             <button type="button" class="btn btn-sm btn-primary"
                 on:click|preventDefault={() => createSession(deck.id)}>
 
-                <i class="bi bi-rocket-takeoff" /> New session
+                <i class="bi bi-rocket-takeoff" /> Start session
             </button>
             <a href="/decks/{deck.id}" class="card-link">Browse deck</a>
         </div>
