@@ -70,7 +70,7 @@
             </div>
         @endif
 
-        <p>Number of questions in this deck: <span class="badge text-bg-light"><i class="bi bi-collection"></i> {{ count($questions) }}</span></p>
+        <p>Number of questions in this deck: <span class="badge text-bg-light font-monospace"><i class="bi bi-collection"></i> {{ count($questions) }}</span></p>
 
         @if ($deck->description)
             <h2 class="h4">Description</h2>

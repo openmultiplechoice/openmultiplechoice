@@ -60,9 +60,9 @@
                     )}
                 </span>
             {/if}
-            <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
+            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
             {#if deck.sessions}
-                <span class="badge text-bg-light" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions.length}</span>
+                <span class="badge text-bg-light font-monospace" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions.length}</span>
             {/if}
             {#if progressIndicator}
                 {@html progressIndicator}
