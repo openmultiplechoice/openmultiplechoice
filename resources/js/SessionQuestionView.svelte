@@ -44,6 +44,8 @@
     })();
 
     $: question, (() => {
+        // Sort answers by ID to ensure consistent order
+        question.answers.sort((a, b) => a.id - b.id);
         // Give each answer a label starting from `A`. Since we want answers
         // to always get the same label, we do this here before we shuffle
         // the answers (if shuffling is enabled).
