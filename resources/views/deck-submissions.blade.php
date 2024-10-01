@@ -24,7 +24,7 @@
                         @endif
                     </span>
                     <span class="badge text-bg-light" title="Number of questions">
-                        {{ sizeof($submission->deck->questions) }}
+                        <i class="bi bi-collection"></i> {{ sizeof($submission->deck->questions) }}
                     </span>
                 </div>
                 <div class="card-body">
