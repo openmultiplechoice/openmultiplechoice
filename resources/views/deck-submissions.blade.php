@@ -47,7 +47,7 @@
                     <hr>
                     <div class="row pb-0 pt-2">
                         <div class="col-md-4 py-1">
-                            <form action="/submissions/{{ $submission->id }}/approve" method="post">
+                            <form action="/submissions/{{ $submission->id }}/approve" method="post" onsubmit="return confirm('Are you sure you want to approve this submission?');">
                                 @method('PUT')
                                 @csrf
 
