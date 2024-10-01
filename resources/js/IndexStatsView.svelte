@@ -53,8 +53,11 @@
             const sum = dataset.reduce((a, b) => a + b, 0);
             if (sum === 0) {
                 // No data to display
+                document.getElementById('stats').style.display = 'none';
                 return;
             }
+
+            document.getElementById('stats').style.display = 'block';
 
             const config = {
                 type: 'line',
@@ -221,7 +224,7 @@
     <p>No stats available yet</p>
 {/if}
 
-<div class="row mt-3 p-3">
+<div id="stats" class="row mt-3 p-3">
     <div class="col-md">
         <canvas bind:this={canvasAnswers} style="max-height: 300px;"></canvas>
     </div>
