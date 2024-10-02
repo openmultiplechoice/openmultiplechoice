@@ -53,8 +53,11 @@
             const sum = dataset.reduce((a, b) => a + b, 0);
             if (sum === 0) {
                 // No data to display
+                document.getElementById('stats').style.display = 'none';
                 return;
             }
+
+            document.getElementById('stats').style.display = 'block';
 
             const config = {
                 type: 'line',
@@ -168,7 +171,7 @@
                 {#each statsDecksNew as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
                         {#if deck.questions.length > 0}
-                            <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
+                            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection" /> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
                         <button on:click|preventDefault={() => createSession(deck.id)}
                             type="button" class="btn btn-sm btn-primary">
@@ -185,10 +188,10 @@
                 {#each statsDecksPopular as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
                         {#if deck.questions.length > 0}
-                            <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
+                            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection" /> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
                         {#if deck.sessions_count}
-                            <span class="badge text-bg-light" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions_count}</span>
+                            <span class="badge text-bg-light font-monospace" title="Number of sessions"><i class="bi bi-rocket" /> {@html deck.sessions_count.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
                         <button on:click|preventDefault={() => createSession(deck.id)}
                             type="button" class="btn btn-sm btn-primary">
@@ -205,7 +208,7 @@
                 {#each statsDecksLastUsed as deck}
                     <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
                         {#if deck.questions.length > 0}
-                            <span class="badge text-bg-light" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
+                            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection" /> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
                         <button on:click|preventDefault={() => createSession(deck.id)}
                                 type="button" class="btn btn-sm btn-primary">
@@ -221,7 +224,7 @@
     <p>No stats available yet</p>
 {/if}
 
-<div class="row mt-3 p-3">
+<div id="stats" class="row mt-3 p-3">
     <div class="col-md">
         <canvas bind:this={canvasAnswers} style="max-height: 300px;"></canvas>
     </div>

@@ -23,8 +23,8 @@
                             {{ $submission->deck->created_at->format('d.m.Y') }}
                         @endif
                     </span>
-                    <span class="badge text-bg-light" title="Number of questions">
-                        {{ sizeof($submission->deck->questions) }}
+                    <span class="badge text-bg-light font-monospace" title="Number of questions">
+                        <i class="bi bi-collection"></i> {{ sizeof($submission->deck->questions) }}
                     </span>
                 </div>
                 <div class="card-body">
@@ -47,7 +47,7 @@
                     <hr>
                     <div class="row pb-0 pt-2">
                         <div class="col-md-4 py-1">
-                            <form action="/submissions/{{ $submission->id }}/approve" method="post">
+                            <form action="/submissions/{{ $submission->id }}/approve" method="post" onsubmit="return confirm('Are you sure you want to approve this submission?');">
                                 @method('PUT')
                                 @csrf
 

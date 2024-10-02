@@ -12,7 +12,7 @@
         @vite(['resources/js/UserSettingsView.js'])
 
         <h4 class="mt-3">User</h4>
-        <h6>Profile name</h6>
+        <h6>Public name</h6>
         @error('public_name')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
