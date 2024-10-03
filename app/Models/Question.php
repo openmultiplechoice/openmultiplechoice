@@ -13,7 +13,7 @@ class Question extends Model
 
     public function answers()
     {
-        return $this->hasMany(Answer::class);
+        return $this->hasMany(Answer::class)->orderBy('id', 'asc');
     }
 
     public function decks()
