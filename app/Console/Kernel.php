@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\AnswerChoice;
 use App\Models\Deck;
 use App\Models\RegistrationToken;
-use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -108,46 +107,37 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             // Calculate answer percentages for multiple choice questions
 
-            // - If the last answer_choice ID is not in the cache, start the
-            //   queue by processing the last 100 answer_choices
+            // - If the last answer_choice ID is not in the cache, assume the
+            //   last 100 answer_choices should be processed
             // - If the last answer_choice ID is in the cache, get the next 10
             //   answer_choices since the last answer_choice that was processed
 
             // - For each answer_choice, get the related question and all answers,
             //   plus a calculated answer_choices_count for both the question and
             //   the answers (to avoid excessive queries below)
+            // - The query contains two ORDER BY clauses because the DISTINCT ON
+            //   PostgreSQL clause requires that the expressions match the initial
+            //   ORDER BY expression (while we actually want to order by id before we LIMIT)
 
-            $lastAnswerChoiceID = Cache::get('internal/last_answer_percentage_calculation');
+            $lastAnswerChoiceID = Cache::get('internal/last_answer_percentage_calculation', AnswerChoice::max('id') - 100);
 
-            if ($lastAnswerChoiceID) {
-                $answerChoices = AnswerChoice::select('id', 'question_id', 'answer_id')
-                    ->where('id', '>', $lastAnswerChoiceID)
-                    ->whereHas('question', function ($query) {
-                        $query->where('type', 'mc');
-                    })
-                    ->with(['question' => function ($query) {
-                        $query->select('id')
-                            ->withCount('answer_choices')
-                            ->with(['answers' => function ($query) {
-                                $query->select('id', 'question_id', 'answer_percentage')->withCount('answer_choices');
-                            }]);
-                    }])
-                    ->get()->unique('question_id')->take(10)->sortBy('id');
-            } else {
-                $answerChoices = AnswerChoice::select('id', 'question_id', 'answer_id')
-                    ->orderBy('id', 'desc')->limit(100)
-                    ->whereHas('question', function ($query) {
-                        $query->where('type', 'mc');
-                    })
-                    ->with(['question' => function ($query) {
-                        $query->select('id')
-                            ->withCount('answer_choices')
-                            ->with(['answers' => function ($query) {
-                                $query->select('id', 'question_id', 'answer_percentage')->withCount('answer_choices');
-                            }]);
-                    }])
-                    ->get()->unique('question_id')->take(-10)->sortBy('id');
-            }
+            $answerChoices = AnswerChoice::select('id', 'question_id', 'answer_id')
+                ->where('id', '>', $lastAnswerChoiceID)
+                ->whereHas('question', function ($query) {
+                    $query->where('type', 'mc');
+                })
+                ->distinct('question_id')
+                ->orderBy('question_id')
+                ->orderBy('id')
+                ->limit(10)
+                ->with(['question' => function ($query) {
+                    $query->select('id')
+                        ->withCount('answer_choices')
+                        ->with(['answers' => function ($query) {
+                            $query->select('id', 'question_id', 'answer_percentage')->withCount('answer_choices');
+                        }]);
+                }])
+                ->get();
 
             // Calculate the answer percentages for each answer of each question
             foreach ($answerChoices as $answerChoice) {
