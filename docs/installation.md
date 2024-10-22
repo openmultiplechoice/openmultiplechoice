@@ -8,27 +8,27 @@ In a nutshell, the requirements are:
 
 * PHP with php-fpm
 * A webserver, for example Nginx with FastCGI
-* A supported database, for example MariaDB
+* A supported database, for example PostgreSQL
 * (optional) Memcached
 
-## Install dependencies
+## Install the OS dependencies
 
 ```
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
     composer \
     nginx \
-    mariadb-server \
     php-curl \
     php-fpm \
     php-memcached \
-    php-mysql \
-    php-xml
+    php-pgsql \
+    php-xml \
+    postgresql
 ```
 
-For an installation with PostgreSQL as database, install `postgresql` and
-`php-pgsql` instead of `mariadb-server` and `php-mysql`.
+For an installation with MariaDB as database, install `mariadb-server` and
+`php-mysql` instead of `postgresql` and `php-pgsql`.
 
-## Create directory
+## Create the installation directory
 
 ```
 sudo mkdir -p /var/www/openmultiplechoice
@@ -41,14 +41,14 @@ sudo chown www-data: /var/www/openmultiplechoice
 sudo -u www-data git clone https://github.com/openmultiplechoice/openmultiplechoice /var/www/openmultiplechoice
 ```
 
-## Install PHP dependencies
+## Install the PHP dependencies
 
 ```
 cd /var/www/openmultiplechoice
 sudo -u www-data composer install
 ```
 
-## Configure webserver
+## Configure the webserver
 
 ### Nginx
 
@@ -78,10 +78,25 @@ omc.example.com {
 }
 ```
 
-## Setup database
+## Set up the database
 
-Create a MySQL (MariaDB) user. Make sure to replace `TODO` with a strong
-and unique passphrase.
+### PostgreSQL
+
+Create a user:
+
+```
+createuser -P omc
+```
+
+Create a database:
+
+```
+createdb -O omc omc
+```
+
+### MariaDB (MySQL)
+
+Create a user. Make sure to replace `TODO` with a strong and unique passphrase.
 
 ```
 CREATE USER 'omc'@'localhost' IDENTIFIED BY 'TODO';
@@ -140,11 +155,11 @@ sudo -u www-data php artisan migrate
 
 After a reload of the webserver, OMC should be reachable under your server name.
 
-## Create user
+## Create the first OMC user
 
 Info on how to create a first user can be found in [`docs/tinker.md`](./tinker.md).
 
-## Configure scheduler
+## Set up the Laravel scheduler
 
 ### Cron
 
