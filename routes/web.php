@@ -91,8 +91,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me/settings', [UserSettingsController::class, 'show']);
     Route::put('/me', [UserController::class, 'update']);
 
-    Route::get('/admin/users', [UserManagementController::class, 'index']);
-    Route::put('/admin/users/{user}', [UserManagementController::class, 'update']);
+    Route::resource('/admin/users', UserManagementController::class);
+    Route::post('/admin/users/{user}/reset-password', [UserManagementController::class, 'reset_password']);
 
     Route::get('/admin/settings/signup', [AdminSettingsSignupController::class, 'show']);
     Route::put('/admin/settings/signup', [AdminSettingsSignupController::class, 'update']);
