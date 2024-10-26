@@ -8,7 +8,7 @@
     <div class="col-md">
         <h4>Your comments</h4>
         @forelse($messages as $message)
-            <div class="rounded-2 bg-light p-2 mb-0">
+            <div class="rounded-2 bg-light p-2 mb-0 text-break">
                 {!! Purify::clean($message->text) !!}
             </div>
             <p class="text-muted text-end">

@@ -130,7 +130,7 @@
             {#if !showEditor}
                 <div class="col-md offset-md-{indent}">
                     {#if !message.is_deleted}
-                        <p class="rounded-2 bg-light p-2 mb-0">
+                        <p class="rounded-2 bg-light p-2 mb-0 text-break">
                             {#if message.text}
                                 {@html DOMPurify.sanitize(message.text)}
                             {/if}
