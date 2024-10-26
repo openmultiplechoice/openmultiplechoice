@@ -1,6 +1,8 @@
 <script>
     import debounce from "lodash/debounce";
 
+    import { Confetti } from "svelte-confetti"
+
     import { onMount, tick } from "svelte";
 
     import MagicGifView from "./MagicGIFView.svelte";
@@ -20,6 +22,9 @@
     var data;
     var helpUsed = false;
     var magicGIFPath = '';
+    var confetti = 0;
+
+    const appConfig = document.getElementById("appconfig").dataset;
 
     $: examMode = !sessionComplete ? $UserSettings.session_exam_mode : false;
     $: settingsShowSidebar = $UserSettings.session_show_sidebar;
@@ -181,6 +186,14 @@
                     .catch(function (error) {
                         // Ignore errors
                     });
+            }
+            if (appConfig.magic === "1" && // If magic is enabled..
+                progressPercentageCorrect === 100 && // If this session is complete.. (all questions answered correctly)
+                previousProgressPercentageCorrect < 100 && // ..and if it wasn't complete before (not a reopend complete session)
+                numberQuestions >= 10 && // If the deck has 10 or more question (don't make it too easy)
+                data.session.parent_session_id === null // If this is not a child session (i.e. not a repetition of questions of a previous session)
+            ) {
+                confetti = 1;
             }
         })();
 
@@ -478,6 +491,21 @@
 
 {#if !examMode}
     <MagicGifView bind:magicGIFPath />
+{/if}
+
+{#if confetti}
+    <div style="
+            position: fixed;
+            top: -50px;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            pointer-events: none;">
+    <Confetti x={[-5, 5]} y={[0, 0.1]} delay={[100, 3000]} infinite duration=5000 amount=200 fallDistance="100vh" />
+    </div>
 {/if}
 
 <style>
