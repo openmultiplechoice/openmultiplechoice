@@ -160,7 +160,7 @@
                 action="#"
                 on:submit|preventDefault={handleSubmit}
                 class="mt-3 mb-3">
-                <div class="mb-3">
+                <div class="mb-3 text-break">
                     <input id="message" type="hidden" name="message" value="" />
                     <trix-editor input="message" />
                 </div>
