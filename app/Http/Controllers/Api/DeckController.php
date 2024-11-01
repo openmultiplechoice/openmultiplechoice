@@ -141,7 +141,7 @@ class DeckController extends Controller
         abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
 
         $question = Question::findOrFail($request->question_id);
-        $deck->questions()->attach($question->id);
+        $deck->questions()->syncWithoutDetaching($question->id);
 
         if ($question->case_id) {
             $deck->cases()->syncWithoutDetaching($question->case_id);
