@@ -8,7 +8,10 @@
             <h4>User management</h4>
         </div>
     </div>
-    <div class="row justify-content-end">
+    <div class="row justify-content-around">
+        <div class="col-md mb-3">
+            <a class="btn btn-primary" href="/admin/users/create" role="button"><i class="bi-plus-circle-fill"></i> New user</a>
+        </div>
         <div class="col-md-4">
             <form action="/admin/users" method="get">
                 <div class="input-group mb-3">
@@ -43,16 +46,7 @@
                     <td>{{ $user->created_at->format('d.m.Y H:i:s') }}</td>
                     <td>{{ optional($user->last_login_at)->format('d.m.Y H:i:s') ?? 'n/a' }}</td>
                     <td>{{ $user->is_enabled ? 'y' : 'n' }}</td>
-                    <td>
-                        <form action="/admin/users/{{ $user->id }}" method="post">
-                            @method('put')
-                            @csrf
-                            <input type="hidden" name="is_enabled" value="{{ $user->is_enabled ? 0 : 1 }}" />
-                            <button class="btn btn-sm {{ $user->is_enabled ? 'btn-outline-primary' : 'btn-primary' }}" type="submit">
-                                {{ $user->is_enabled ? "Disable" : "Enable" }}
-                            </button>
-                        </form>
-                    </td>
+                    <td class="text-end"><a class="btn btn-primary btn-sm" href="/admin/users/{{ $user->id }}/edit" role="button"><i class="bi-pencil-square"></i></a></td>
                 </tr>
             @endforeach
         </tbody>
