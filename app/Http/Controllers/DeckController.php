@@ -91,8 +91,8 @@ class DeckController extends Controller
         // You should not be able to change the access level to "public-rw-listed" here
         abort_if($deck->access != "public-rw-listed" && $request->access == "public-rw-listed", 403);
 
-        // ... and not be able to change it from "public-rw-listed" to something else
-        abort_if($deck->access == "public-rw-listed" && $request->access && $request->access != "public-rw-listed", 403);
+        // Only admins and moderators should be able to edit "public-rw-listed" decks
+        abort_if($deck->access == "public-rw-listed" && !Auth::user()->is_admin && !Auth::user()->is_moderator, 403);
 
         // You should not be able to archive the deck if it was submitted or listed
         $is_submitted_or_listed = ($deck->submission()->exists() || $deck->access == 'public-rw-listed');
