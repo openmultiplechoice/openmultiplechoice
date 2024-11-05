@@ -247,7 +247,7 @@
 
     {#key question.id}
         {#if showCaseSelector && question.case_id}
-            <div class="alert alert-light m-1" role="alert">
+            <div class="alert alert-primary m-1" role="alert">
                 <p class="small fw-bold"><i class="bi bi-clipboard2-pulse"></i> CASE</p>
                 <p class="trix-content">{@html DOMPurify.sanitize(cases.find(c => c.id === question.case_id).text)}</p>
             </div>

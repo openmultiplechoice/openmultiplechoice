@@ -19,16 +19,17 @@
 </script>
 
 {#if showAnswer}
-    <div class="row border-light border-start border-3 m-1 p-2">
+    <div style="box-shadow: 4px 4px rgba(0,0,0,.2);"
+        class="row border-start border-3 rounded bg-secondary-subtle m-1 mb-3 p-2">
         <p class="p-1">{@html DOMPurify.sanitize(answer.text)}</p>
     </div>
     {#if !hasAnswer}
         <div class="row">
             <div class="col-md-6 mb-1">
-                <button type="button" class="btn btn-danger btn-sm w-100" on:click|preventDefault={() => submitAnswer()} >Ask me again</button>
+                <button type="button" class="btn btn-danger btn-sm w-100" on:click|preventDefault={() => submitAnswer()}>&cross; Ask me again</button>
             </div>
             <div class="col-md-6 mb-1">
-                <button type="button" class="btn btn-success btn-sm w-100" on:click|preventDefault={() => submitAnswer(answer.id)} >I got it!</button>
+                <button type="button" class="btn btn-success btn-sm w-100" on:click|preventDefault={() => submitAnswer(answer.id)}>&check; OK</button>
             </div>
         </div>
     {/if}
