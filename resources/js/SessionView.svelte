@@ -431,7 +431,7 @@
                     <i class="bi bi-exclamation-square" />
                 </button>
 
-                <span class="ms-1 float-end fw-bold font-monospace badge text-dark"
+                <span class="ms-1 float-end fw-bold font-monospace badge"
                     class:text-bg-light={!answerChoice || examMode}
                     class:bg-success={!examMode && !currentQuestion.is_invalid && answerChoice && answerChoice.is_correct}
                     class:bg-danger={!examMode && !currentQuestion.is_invalid && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
@@ -461,7 +461,9 @@
             class:col-lg-9={settingsShowSidebar}
             class:col-lg-10={!settingsShowSidebar}
             class:offset-lg-1={!settingsShowSidebar}
-            class="col-md-12">
+            class:offset-xxl-2={!settingsShowSidebar}
+            class="col-md-12 col-xxl-8">
+
             <SessionQuestionNav
                 bind:data
                 bind:currentQuestionId={data.session.current_question_id}
