@@ -32,8 +32,11 @@
                 <label for="module_id" class="form-label">Module (optional)</label>
                 <select id="module_id" name="module_id" class="form-select">
                     <option value="" selected>Select a module ...</option>
-                    @foreach ($modules as $module)
-                        <option value="{{ $module->id }}" {{ ($module->id == $deck->module_id) ? 'selected' : '' }}>{{ $module->name }}</option>
+                    @foreach ($subjects as $subject)
+                        <optgroup label="{{ $subject->name }}">
+                        @foreach ($subject->modules->sortBy('name') as $module)
+                            <option value="{{ $module->id }}" {{ ($module->id == $deck->module_id) ? 'selected' : '' }}>{{ $module->name }}</option>
+                        @endforeach
                     @endforeach
                 </select>
             </div>
