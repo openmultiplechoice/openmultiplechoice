@@ -4,6 +4,7 @@
 
 @section('content')
 
+@php($editallowed = $deck->access != 'public-rw-listed' || Auth::user()->is_admin || Auth::user()->is_moderator)
 <div class="row">
     <div class="col-md">
         <div class="mb-2 d-flex gap-1">
@@ -21,7 +22,7 @@
             @csrf
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input id="name" type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $deck->name) }}">
+                <input id="name" type="text" name="name" class="form-control @error('name') is-invalid @enderror" {{ !$editallowed ? 'disabled' : '' }} value="{{ old('name', $deck->name) }}">
                 @error('name')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -30,7 +31,7 @@
             </div>
             <div class="mb-3">
                 <label for="module_id" class="form-label">Module (optional)</label>
-                <select id="module_id" name="module_id" class="form-select">
+                <select id="module_id" name="module_id" class="form-select" {{ !$editallowed ? 'disabled' : '' }}>
                     <option value="" selected>Select a module ...</option>
                     @foreach ($modules as $module)
                         <option value="{{ $module->id }}" {{ ($module->id == $deck->module_id) ? 'selected' : '' }}>{{ $module->name }}</option>
@@ -39,14 +40,15 @@
             </div>
             <div class="mb-3">
                 <label for="exam_at" class="form-label">Exam date (optional)</label>
-                <input id="exam_at" type="date" name="exam_at" class="form-control" value="{{ optional($deck->exam_at)->format('Y-m-d') ?? '' }}">
+                <input id="exam_at" type="date" name="exam_at" class="form-control" {{ !$editallowed ? 'disabled' : '' }} value="{{ optional($deck->exam_at)->format('Y-m-d') ?? '' }}">
             </div>
             <div class="mb-3">
                 <label for="access" class="form-label">Access</label>
                 @if ($deck->access == 'public-rw-listed')
-                    <input type="hidden" id="access" name="access" value="public-rw-listed">
-                    <select id="access" name="access" class="form-select" disabled>
-                        <option value="public-rw-listed" selected>public-rw-listed</option>
+                    <select id="access" name="access" class="form-select" {{ !$editallowed ? 'disabled' : '' }}>
+                        @foreach (['private', 'public-ro', 'public-rw', 'public-rw-listed'] as $access)
+                            <option value="{{ $access }}" {{ ($deck->access == $access) ? 'selected' : '' }}>{{ $access }}</option>
+                        @endforeach
                     </select>
                 @else
                     <select id="access" name="access" class="form-select">
@@ -62,20 +64,31 @@
                         <li><i>public-ro</i> (anyone can see this deck, but only you can edit it) or</li>
                         <li><i>public-rw</i> (anyone can see and edit this deck).</li>
                     </ul>
-                    If a deck is <i>public-rw-listed</i>, access cannot be changed.
                 </div>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description (optional)</label>
-                <input type="hidden" id="description" name="description" value="{{ old('description', $deck->description) }}">
-                <trix-editor input="description" class="form-control @error('description') is-invalid @enderror"></trix-editor>
+                @if($editallowed)
+                    <input type="hidden" id="description" name="description" value="{{ old('description', $deck->description) }}">
+                    <trix-editor input="description" class="form-control @error('description') is-invalid @enderror"></trix-editor>
+                @else
+                    <div class="mb-3 form-control bg-body-secondary">
+                        {!! Purify::clean($deck->description) !!}
+                    </div>
+                @endif
                 @error('description')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                 @enderror
             </div>
-            <button class="btn btn-sm btn-primary" type="submit">Save</button>
+            <button class="btn btn-sm btn-primary" type="submit" {{ !$editallowed ? 'disabled' : '' }}>Save</button>
+            @if(!$editallowed)
+                <div class="form-text">
+                    You cannot edit the metadata of this deck because it is <i>public-rw-listed</i>.<br>
+                    You can still edit the questions in this deck or add new questions.
+                </div>
+            @endif
         </form>
     </div>
 </div>
