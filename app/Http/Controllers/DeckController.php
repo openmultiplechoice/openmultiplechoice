@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
-use App\Models\Module;
+use App\Models\Subject;
 
 class DeckController extends Controller
 {
@@ -71,13 +71,13 @@ class DeckController extends Controller
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
         abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
 
-        $modules = Module::orderBy('name')->get();
+        $subjects = Subject::orderBy('name')->with('modules')->get();
         // Load the submission relationship to check if the deck has been submitted (used in template)
         $deck->load('submission');
 
         return view('deck-editor', [
             'deck' => $deck,
-            'modules' => $modules,
+            'subjects' => $subjects,
         ]);
     }
 
