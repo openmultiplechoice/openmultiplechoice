@@ -60,7 +60,7 @@ mail@openmultiplechoice.de
 
 ## License
 
-Copyright (C) 2020 Michael Schubert and [contributors](https://github.com/openmultiplechoice/openmultiplechoice/graphs/contributors).
+Copyright (C) 2020 The OpenMultipleChoice project and [contributors](https://github.com/openmultiplechoice/openmultiplechoice/graphs/contributors).
 
 OpenMultipleChoice is free to use under the terms of AGPL v3:
 
