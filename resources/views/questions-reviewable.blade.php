@@ -5,8 +5,9 @@
 @section('content')
     <div class="row">
         <div class="col-md">
-            <div class="alert alert-secondary">
-                <p>The following questions need review or are marked invalid. Contributions are welcome!</p>
+            <div class="alert alert-warning d-flex align-items-center">
+                <i class="bi bi-info-circle me-2"></i>
+                The following questions need review or are marked invalid. Contributions are welcome!
             </div>
         </div>
     </div>
