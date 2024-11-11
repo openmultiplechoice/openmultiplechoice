@@ -170,3 +170,18 @@ to run scheduled tasks with the following cron job for the www-data user
 ```
 * * * * * cd /var/www/openmultiplechoice && php artisan schedule:run >> /dev/null 2>&1
 ```
+
+## Configure php-fpm
+
+POST request and file upload limits are configured through the webserver
+and php-fpm.
+
+Example `/etc/php/8.3/fpm/conf.d/99-custom-php.ini`:
+
+```
+upload_max_filesize = 8M
+post_max_size = 8M
+```
+
+Caddy's `request_body` `max_size` and Nginx's `client_max_body_size` have
+to be set accordingly.
