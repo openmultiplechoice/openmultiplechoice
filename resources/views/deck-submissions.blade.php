@@ -39,10 +39,10 @@
                         @else
                             <strong>No module</strong>
                         @endif
-                    <br>
-                    <i class="bi bi-person"></i> {{ $submission->user->name ?? 'No user' }}
-                    <br>
-                    <i class="bi bi-clock"></i> {{ $submission->created_at->format('d.m.y H:i') }}
+                        <br>
+                        <i class="bi bi-person"></i> <a href="{{ url('admin/users/' . $submission->user->id . '/edit') }}">{{ $submission->user->name ?? 'No user' }}</a>
+                        <br>
+                        <i class="bi bi-clock"></i> {{ $submission->created_at->format('d.m.y H:i') }}
                     </p>
                     <hr>
                     <div class="row pb-0 pt-2">
