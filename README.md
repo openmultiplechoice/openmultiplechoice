@@ -40,14 +40,7 @@ security@openmultiplechoice.de
 
 ## Contributing
 
-Pull requests for bug fixes, code optimizations and documentation improvements
-are very welcome.
-
-Please discuss potential new features and their implementation details first.
-
-While we appreciate all contributions, please understand that we may not be
-able to merge every pull request, even those of high quality, due to project
-direction, maintenance considerations, or other factors.
+See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Contact
 
