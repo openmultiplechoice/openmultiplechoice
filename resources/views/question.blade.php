@@ -11,7 +11,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeckList">
-                        Decks with this question
+                        <i class="bi bi-info-circle me-2"></i>Included in {{ count($decks) }} public deck{{ count($decks) > 1 ? 's' : '' }}
                     </button>
                 </h2>
                 <div id="collapseDeckList" class="accordion-collapse collapse" data-bs-parent="#accordionDecks">
