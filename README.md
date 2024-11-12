@@ -40,14 +40,7 @@ security@openmultiplechoice.de
 
 ## Contributing
 
-Pull requests for bug fixes, code optimizations and documentation improvements
-are very welcome.
-
-Please discuss potential new features and their implementation details first.
-
-While we appreciate all contributions, please understand that we may not be
-able to merge every pull request, even those of high quality, due to project
-direction, maintenance considerations, or other factors.
+See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Contact
 
@@ -60,7 +53,7 @@ mail@openmultiplechoice.de
 
 ## License
 
-Copyright (C) 2020 Michael Schubert and [contributors](https://github.com/openmultiplechoice/openmultiplechoice/graphs/contributors).
+Copyright (C) 2020 The OpenMultipleChoice project and [contributors](https://github.com/openmultiplechoice/openmultiplechoice/graphs/contributors).
 
 OpenMultipleChoice is free to use under the terms of AGPL v3:
 
