@@ -4,6 +4,8 @@
 
 @section('content')
 
+<div id="appconfig" data-magic="{{ config('app.magic') }}" ></div>
+
 <div id="SessionView" data-session-id="{{ $session->id }}" ></div>
 @vite(['resources/js/SessionView.js'])
 

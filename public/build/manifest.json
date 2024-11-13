@@ -209,17 +209,17 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-D4wrz55_.js",
+    "file": "assets/SessionView-DsEzbQQb.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
     "imports": [
       "_index-Cm33_cbi.js",
       "_purify.es-DjnBrbT_.js",
+      "_each-C5IGOPsu.js",
       "_Messages-uZrIB6So.js",
       "_auto-Bx38Jeax.js",
       "_SessionProgressBar-r3MVSEP2.js",
-      "_each-C5IGOPsu.js",
       "_SessionQuestionView-SAo7Cj3V.js",
       "_StatsHelper-B91isISU.js",
       "_UserSettingsStore-Csk5U10K.js",
@@ -229,7 +229,7 @@
       "_QuestionForm-D3_WQwaJ.js"
     ],
     "css": [
-      "assets/SessionView-un_GImKP.css"
+      "assets/SessionView-BV06LSri.css"
     ]
   },
   "resources/js/UserSettingsView.js": {
