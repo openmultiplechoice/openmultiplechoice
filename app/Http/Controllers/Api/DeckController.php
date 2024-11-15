@@ -11,6 +11,8 @@ use App\Models\Question;
 
 class DeckController extends Controller
 {
+    private const PAGE_SIZE = 50;
+
     public function index(Request $request)
     {
         // TODO(schu): decide about the request params and what
@@ -20,26 +22,44 @@ class DeckController extends Controller
         // etc.
 
         if ($request->module) {
-            // Return all public decks for the given module
-            $decks = Deck::where([
+            $decksQuery = Deck::where([
                 ['module_id', '=', $request->module],
-                ['access', '=', 'public-rw-listed'],
-            ])
-            ->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')
-            ->with(['sessions' => function ($query) {
-                $query->where('user_id', '=', Auth::id())->with('answerChoices');
-            }])
-            ->get();
+                ['is_archived', '=', false],
+                ['is_ephemeral', '=', false]
+            ]);
+
+            if ($request->kind == 'public') {
+                $decksQuery = $decksQuery
+                    ->where('access', '=', 'public-ro')
+                    ->orWhere('access', '=', 'public-rw');
+            } elseif ($request->kind == 'user') {
+                $decksQuery = $decksQuery->where('user_id', '=', Auth::id());
+            } elseif ($request->kind == 'public-rw-listed') {
+                $decksQuery = $decksQuery->where('access', '=', 'public-rw-listed');
+            } else {
+                abort(400, 'Invalid value for "kind" parameter');
+            }
+
+            $decks = $decksQuery
+                ->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')
+                ->with(['sessions' => function ($query) {
+                    $query->where('user_id', '=', Auth::id())->with('answerChoices');
+                }])
+                ->paginate(self::PAGE_SIZE)->withQueryString();
 
             return response()->json($decks);
         }
+
         if ($request->decks) {
             // Return the decks with the given IDs; this endpoint
             // is used by the superdeck creation form to get the
             // number of questions and images in each deck
             return response()->json(
                 Deck::whereIn('id', $request->decks)
-                    ->where('access', '=', 'public-rw-listed')
+                    ->where(function ($query) {
+                        $query->where('access', '!=', 'private')
+                            ->orWhere('user_id', '=', Auth::id());
+                    })
                     ->with('questions:id', 'questions.images:id,question_id')->get()
             );
         }
