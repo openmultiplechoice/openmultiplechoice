@@ -15,20 +15,8 @@ class SessionController extends Controller
         //
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        if ($request->has('module')) {
-            // If a specific module is requested (`?module=...` parameter in
-            // URL), it should take precedence over the last selected module;
-            // save it in the user's settings as the new `last_module_id`.
-
-            $validated = $request->validate([
-                'module' => 'nullable|integer|exists:modules,id',
-            ]);
-
-            Auth::user()->settings->last_module_id = $validated['module'];
-            Auth::user()->settings->save();
-        }
         return view('sessions');
     }
 
