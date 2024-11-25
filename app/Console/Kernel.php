@@ -132,7 +132,9 @@ class Kernel extends ConsoleKernel
                 ->limit(10)
                 ->with(['question' => function ($query) {
                     $query->select('id')
-                        ->withCount('answer_choices')
+                        ->withCount(['answer_choices' => function ($query) {
+                            $query->where('answer_id', '!=', null);
+                        }])
                         ->with(['answers' => function ($query) {
                             $query->select('id', 'question_id', 'answer_percentage')->withCount('answer_choices');
                         }]);
