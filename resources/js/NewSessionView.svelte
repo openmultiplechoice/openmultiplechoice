@@ -75,6 +75,11 @@
             .then(function (response) {
                 $UserSettings.last_subject_id = subjectId;
                 $UserSettings.last_module_id = 0;
+
+                const url = new URL(window.location);
+                url.searchParams.delete('module');
+                url.searchParams.delete('page');
+                window.history.replaceState({}, '', url);
             })
             .catch(function (error) {
                 alert(error);
@@ -89,6 +94,11 @@
             .put("/api/users/me/settings", data)
             .then(function (response) {
                 $UserSettings.last_module_id = moduleId;
+
+                const url = new URL(window.location);
+                url.searchParams.set('module', moduleId);
+                url.searchParams.set('page', 1);
+                window.history.replaceState({}, '', url);
             })
             .catch(function (error) {
                 alert(error);
@@ -106,7 +116,7 @@
 </script>
 
 <div class="row">
-    <div class="col-12 d-grid mb-3">
+    <div class="col-12 d-grid mb-2">
         <button
             type="button"
             class="btn btn-sm btn-primary d-lg-none my-2"

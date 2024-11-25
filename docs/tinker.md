@@ -31,6 +31,16 @@ $u->save();
 App\Models\Module::where('name', 'Demo')->first()->decks()->get();
 ```
 
+### Creating 50 test decks for the demo admin user
+
+```
+Deck::factory()->count(50)->create([
+    'access' =>  'public-rw-listed',
+    'module_id' => 1,
+    'user_id' => User::where('email', 'demoadmin@example.com')->first()
+]);
+```
+
 ## Files
 
 ### Putting a file
