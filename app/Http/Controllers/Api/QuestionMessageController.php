@@ -55,7 +55,7 @@ class QuestionMessageController extends Controller
         $question->messages()->save($message);
 
         // Frontend expects author info in the message object
-        $message->load('author:id,name');
+        $message->load('author:id,name,public_name');
 
         // Load anonymized thumbs for this message to include in the response
         $message->thumbsAnonymized();
