@@ -2,11 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+
+use App\Models\User;
 
 class UserManagementTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testAdminAuthn()
     {
         $this->get('/admin/users')->assertRedirect('/login');
