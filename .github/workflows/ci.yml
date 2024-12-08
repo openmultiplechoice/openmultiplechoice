@@ -34,7 +34,7 @@ jobs:
         run: ec
 
       - name: Run php-cs-fixer
-        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff .
+        run: ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --verbose --dry-run --diff .
 
   tests:
     runs-on: ubuntu-22.04
