@@ -209,11 +209,13 @@ Route::get('/auth/keycloak/backchannel-logout', function () {
 });
 
 Route::get('signup', [RegistrationController::class, 'create'])->middleware('guest')->name('signup');
+
 Route::post('signup', [RegistrationController::class, 'store'])->middleware('guest');
 
 Route::get('/resend-verification', function () {
     return view('resend-verification');
 })->name('verification.resend');
+
 Route::get('/email/verify/{id}/{hash}', function (Request $request) {
     // You might wonder why we implement our own email verification handler
     // instead of using the approach described in Laravel's documentation:
@@ -233,6 +235,7 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request) {
     }
     return redirect('/');
 })->middleware(['signed'])->name('verification.verify');
+
 Route::post('/email/verification-notification', function (Request $request) {
     $data = $request->validate(['email' => 'required|email']);
     $user = User::where('email', $data['email'])->first();
@@ -245,19 +248,22 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/forgot-password', function () {
     return view('forgot-password');
 })->middleware('guest')->name('password.request');
+
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
     $user = User::where('email', $request->email)->first();
     // Users without a password (e.g. from OIDC) should not be able to reset their password here
-    if($user && $user->hasPasswordSet()) {
+    if ($user && $user->hasPasswordSet()) {
         // TODO(levinuss) extract this to a asynchronous queue job to avoid different response times when the email exists?
         Password::sendResetLink($request->only('email'));
     }
     return back()->with('msg-success', 'We have sent a reset link to "'.$request->email.'".');
 })->middleware('guest')->name('password.email');
+
 Route::get('/reset-password/{token}', function ($token) {
     return view('reset-password', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
+
 Route::post('/reset-password', function (Request $request) {
     $request->validate([
         'token' => 'required',

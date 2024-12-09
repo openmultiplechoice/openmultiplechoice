@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
             // For each hour, count the number of answers and users
             $answersByHour = [];
             $usersByHour = [];
-            foreach($range as $hour) {
+            foreach ($range as $hour) {
                 $hourString = $hour->format('Y-m-d H:i:s');
                 $hourStringISO8601 = $hour->format('Y-m-d\TH:i:s\Z');
                 $answersByHour[$hourStringISO8601] = isset($answerChoicesByHour[$hourString]) ? count($answerChoicesByHour[$hourString]) : 0;
