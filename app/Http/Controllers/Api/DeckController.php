@@ -30,10 +30,14 @@ class DeckController extends Controller
 
             if ($request->kind == 'public') {
                 $decksQuery = $decksQuery
-                    ->where('access', '=', 'public-ro')
-                    ->orWhere('access', '=', 'public-rw');
+                    ->where(function ($query) {
+                        $query->where('access', '=', 'public-ro')
+                            ->orWhere('access', '=', 'public-rw');
+                    });
             } elseif ($request->kind == 'user') {
-                $decksQuery = $decksQuery->where('user_id', '=', Auth::id());
+                $decksQuery = $decksQuery
+                    ->where('user_id', '=', Auth::id())
+                    ->where('access', '!=', 'public-rw-listed');
             } elseif ($request->kind == 'public-rw-listed') {
                 $decksQuery = $decksQuery->where('access', '=', 'public-rw-listed');
             } else {

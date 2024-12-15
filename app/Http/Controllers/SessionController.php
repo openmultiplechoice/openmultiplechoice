@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Deck;
+use App\Models\Module;
 use App\Models\Session;
 
 class SessionController extends Controller
@@ -26,7 +27,10 @@ class SessionController extends Controller
                 'module' => 'nullable|integer|exists:modules,id',
             ]);
 
-            Auth::user()->settings->last_module_id = $validated['module'];
+            $module = Module::findOrFail($validated['module']);
+
+            Auth::user()->settings->last_subject_id = $module->subject_id;
+            Auth::user()->settings->last_module_id = $module->id;
             Auth::user()->settings->save();
         }
         return view('sessions');
