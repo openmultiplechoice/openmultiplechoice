@@ -11,6 +11,8 @@
 
     let progressIndicator = undefined;
 
+    let isBookmarked = deck.bookmarks.length > 0;
+
     onMount(() => {
         const validQuestions = deck.questions.filter(q => !q.is_invalid);
 
@@ -40,6 +42,33 @@
                 " %</span>";
         }
     });
+
+    function toggleBookmark() {
+        if (isBookmarked) {
+            axios
+                .delete("/api/decks/" + deck.id + "/bookmark/" + deck.bookmarks[0].id)
+                .then(function (response) {
+                    if (response.status === 204) {
+                        isBookmarked = false;
+                    }
+                })
+                .catch(function (error) {
+                    alert(error);
+                });
+        } else {
+            axios
+                .post("/api/decks/" + deck.id + "/bookmark")
+                .then(function (response) {
+                    if (response.status === 200) {
+                        isBookmarked = true;
+                        deck.bookmarks = [response.data];
+                    }
+                })
+                .catch(function (error) {
+                    alert(error);
+                });
+        }
+    }
 </script>
 
 <div class="col-lg-6 mb-1">
@@ -67,6 +96,13 @@
             {#if progressIndicator}
                 {@html progressIndicator}
             {/if}
+            <button
+                class="btn btn-sm btn-link"
+                on:click={toggleBookmark}>
+                <i class:bi-bookmark-check-fill={isBookmarked}
+                    class:bi-bookmark={!isBookmarked}>
+                </i>
+            </button>
             <input type="checkbox" class="form-check-input float-end" value="" id="selected{deck.id}"
                 on:click={() => selectDeck(deck.id)}
                 checked={selectedDecks.has(deck.id)} />

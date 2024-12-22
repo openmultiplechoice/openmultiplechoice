@@ -11,6 +11,15 @@
             <span class="badge text-bg-light font-monospace" title="Number of questions">
                 <i class="bi bi-collection"></i> {{ sizeof($deck->questions) }}
             </span>
+            <form method="post" action="/decks/{{ $deck->id }}/bookmark" style="display: inline-block;">
+                @csrf
+                @if(count($deck->bookmarks)>0)
+                    @method('delete')
+                @endif
+                <button class="btn btn-sm btn-link" type="submit">
+                    <i class="@if(count($deck->bookmarks)>0) bi-bookmark-check-fill @else bi-bookmark @endif"> </i>
+                </button>
+            </form>
         </div>
         <div class="card-body">
             <h6 class="card-title text-nowrap overflow-hidden" title="{{ $deck->name }}">
