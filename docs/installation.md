@@ -157,7 +157,7 @@ After a reload of the webserver, OMC should be reachable under your server name.
 
 ## Create the first OMC user
 
-Info on how to create a first user can be found in [`docs/tinker.md`](./tinker.md).
+Info on how to create a first user can be found in [`docs/tinker.md`](./tinker.md#add-user).
 
 ## Set up the Laravel scheduler
 
