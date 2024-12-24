@@ -19,6 +19,15 @@
                 <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> Start session</button>
             </form>
         @endif
+        <form method="post" action="/decks/{{ $deck->id }}/bookmark" style="display: inline-block;">
+            @csrf
+            @if(count($deck->bookmarks)>0)
+                @method('delete')
+            @endif
+            <button class="btn btn-sm btn-outline-primary" type="submit">
+                <i class="@if(count($deck->bookmarks)>0) bi-bookmark-check-fill @else bi-bookmark @endif"> </i> @if(count($deck->bookmarks)>0) Bookmarked @else Bookmark @endif
+            </button>
+        </form>
     </div>
 </div>
 

@@ -28,6 +28,7 @@ use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\AdminSettingsSignupController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RegistrationTokenController;
+use App\Http\Controllers\DeckBookmarkController;
 
 use App\Models\DeckSubmission;
 use App\Models\Info;
@@ -60,6 +61,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::resource('/decks', DeckController::class);
     Route::get('/decks/{deck}', [DeckController::class, 'show'])->name('show.deck');
+
+    Route::get('/bookmarks', [DeckBookmarkController::class, 'index']);
+    Route::post('/decks/{deck}/bookmark', [DeckBookmarkController::class, 'store']);
+    Route::delete('/decks/{deck}/bookmark', [DeckBookmarkController::class, 'destroy']);
 
     Route::get('/messages', [MessageController::class, 'index']);
 

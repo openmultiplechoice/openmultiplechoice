@@ -35,8 +35,8 @@
     "file": "assets/SessionQuestionView-B0Qf9_nB.css",
     "src": "_SessionQuestionView-!~{00q}~.js"
   },
-  "_SessionQuestionView-B4P__C07.js": {
-    "file": "assets/SessionQuestionView-B4P__C07.js",
+  "_SessionQuestionView-D38kh_xU.js": {
+    "file": "assets/SessionQuestionView-D38kh_xU.js",
     "name": "SessionQuestionView",
     "imports": [
       "_index-CW_84yAU.js",
@@ -179,7 +179,7 @@
     ]
   },
   "resources/js/NewSessionView.js": {
-    "file": "assets/NewSessionView-UMhScarm.js",
+    "file": "assets/NewSessionView-BnMU0aJO.js",
     "name": "NewSessionView",
     "src": "resources/js/NewSessionView.js",
     "isEntry": true,
@@ -194,12 +194,12 @@
     ]
   },
   "resources/js/QuestionView.js": {
-    "file": "assets/QuestionView-B-7MSb3K.js",
+    "file": "assets/QuestionView-mWFIlHMg.js",
     "name": "QuestionView",
     "src": "resources/js/QuestionView.js",
     "isEntry": true,
     "imports": [
-      "_SessionQuestionView-B4P__C07.js",
+      "_SessionQuestionView-D38kh_xU.js",
       "_index-CW_84yAU.js",
       "_each-23V_io8F.js",
       "_purify.es-DijXz2a1.js",
@@ -209,7 +209,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-DmBm3mK1.js",
+    "file": "assets/SessionView-CFVfPRPd.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -220,7 +220,7 @@
       "_Messages-C9-i67Fx.js",
       "_auto-TbvzFur0.js",
       "_SessionProgressBar-BE59Qe1D.js",
-      "_SessionQuestionView-B4P__C07.js",
+      "_SessionQuestionView-D38kh_xU.js",
       "_StatsHelper-B91isISU.js",
       "_UserSettingsStore-D7Gisc9d.js",
       "__commonjsHelpers-Cpj98o6Y.js",
