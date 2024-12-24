@@ -59,7 +59,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     })->name('index');
 
     Route::resource('/decks', DeckController::class);
-    Route::get('/decks/{deck}', [DeckController::class, 'show'])->name('show.deck');
 
     Route::get('/messages', [MessageController::class, 'index']);
 

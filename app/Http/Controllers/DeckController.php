@@ -114,9 +114,6 @@ class DeckController extends Controller
 
         $deck->save();
 
-        return redirect()->route(
-            'show.deck',
-            ['deck' => $deck->id]
-        );
+        return back()->with('msg-success', 'Settings updated');
     }
 }

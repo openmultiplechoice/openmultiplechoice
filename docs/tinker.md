@@ -12,7 +12,7 @@ php artisan tinker
 
 ## Users
 
-### Adding a user
+### Add user
 
 ```
 $u = User::create(['name' => 'some', 'email' => 'some@example.com']);
@@ -25,13 +25,13 @@ $u->save();
 
 ## Decks
 
-### Lising all decks of a particular module
+### List all decks of a particular module
 
 ```
 App\Models\Module::where('name', 'Demo')->first()->decks()->get();
 ```
 
-### Creating 50 test decks for the demo admin user
+### Create `N` test decks for the demo admin user (here `50`)
 
 ```
 Deck::factory()->count(50)->create([
@@ -43,7 +43,7 @@ Deck::factory()->count(50)->create([
 
 ## Files
 
-### Putting a file
+### Put a file
 
 Put a file (e.g. an image) from disk into storage (below the storage
 path is `<PROJECT_ROOT>/storage/app/images'`):
