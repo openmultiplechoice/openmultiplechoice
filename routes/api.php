@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ModuleController;
 use App\Http\Controllers\Api\DeckController;
 use App\Http\Controllers\Api\DeckCaseController;
 use App\Http\Controllers\Api\DeckQuestionController;
+use App\Http\Controllers\Api\DeckBookmarkController;
 
 use App\Http\Controllers\Api\CaseController;
 
@@ -59,6 +60,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('decks', DeckController::class);
     Route::resource('decks.cases', DeckCaseController::class);
     Route::resource('decks.questions', DeckQuestionController::class);
+    Route::resource('decks.bookmark', DeckBookmarkController::class);
 
     Route::get('cases/showbylegacyid', [CaseController::class, 'showByLegacyId']);
     Route::resource('cases', CaseController::class);

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -94,5 +95,13 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     public function message_ratings()
     {
         return $this->hasMany(Thumb::class);
+    }
+
+    public function bookmarkedDecks(): BelongsToMany
+    {
+        return $this->belongsToMany(Deck::class, 'deck_bookmark')
+            ->where('access', '!=', 'private')
+            ->orWhere('decks.user_id', $this->id)
+            ->withTimestamps();
     }
 }

@@ -17,7 +17,11 @@ class DeckController extends Controller
                 ['user_id', '=', Auth::id()],
                 ['access', '!=', 'public-rw-listed'],
                 ['is_ephemeral', '=', false],
-            ])->get();
+            ])
+            ->with(['bookmarks' => function ($query) {
+                $query->select('id', 'user_id')
+                    ->where('user_id', '=', Auth::id());
+            }])->get();
         return view('decks', ['decks' => $decks]);
     }
 
@@ -47,8 +51,9 @@ class DeckController extends Controller
 
         $nextQuestion = $questions->first();
 
-        // Load the submission relationship to check if the deck has been submitted (used in template)
+        // Load the submission relationship to check if the deck has been submitted and count bookmarks (used in template)
         $deck->load('submission');
+        $deck->loadCount('bookmarks');
 
         $urlPrev = null;
         $urlNext = null;
