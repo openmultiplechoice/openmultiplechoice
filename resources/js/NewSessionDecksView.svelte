@@ -11,7 +11,10 @@
     let pageNum = getURLParam("page") ?? 1;
     let pageData;
 
-    $: moduleId, fetchDecks();
+    $: moduleId, (() => {
+        pageNum = getURLParam("page") ?? 1;
+        fetchDecks();
+    })();
 
     function getURLParam(p) {
         return new URLSearchParams(window.location.search).get(p);
