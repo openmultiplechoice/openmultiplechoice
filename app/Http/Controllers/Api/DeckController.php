@@ -49,6 +49,8 @@ class DeckController extends Controller
                 ->with(['sessions' => function ($query) {
                     $query->where('user_id', '=', Auth::id())->with('answerChoices');
                 }])
+                ->orderBy('exam_at', 'desc')
+                ->orderBy('id', 'desc')
                 ->paginate(self::PAGE_SIZE)->withQueryString();
 
             return response()->json($decks);
