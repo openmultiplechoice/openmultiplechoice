@@ -17,7 +17,8 @@ class Deck extends Model
 
     public function questions()
     {
-        return $this->belongsToMany(Question::class);
+        return $this->belongsToMany(Question::class)
+                    ->orderByPivot('id');
     }
 
     public function cases()
