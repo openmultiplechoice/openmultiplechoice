@@ -2,7 +2,7 @@
 
 # OpenMultipleChoice
 
-![](https://github.com/openmultiplechoice/openmultiplechoice/workflows/CI/badge.svg?branch=master)
+![](https://github.com/openmultiplechoice/openmultiplechoice/actions/workflows/ci.yml/badge.svg?branch=master)
 
 Status: alpha
 
