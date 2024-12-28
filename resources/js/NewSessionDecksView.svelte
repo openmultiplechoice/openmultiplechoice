@@ -11,7 +11,10 @@
     let pageNum = getURLParam("page") ?? 1;
     let pageData;
 
-    $: moduleId, fetchDecks();
+    $: moduleId, (() => {
+        pageNum = getURLParam("page") ?? 1;
+        fetchDecks();
+    })();
 
     function getURLParam(p) {
         return new URLSearchParams(window.location.search).get(p);
@@ -39,11 +42,10 @@
                 pageData = response.data;
                 decks = pageData.data;
                 decks.sort(function (a, b) {
-                    if (a.exam_at === null) {
-                        return 1;
-                    }
-                    if (b.exam_at === null) {
-                        return -1;
+                    if (a.exam_at === null || b.exam_at === null) {
+                        if (a.id < b.id) return 1;
+                        if (a.id > b.id) return -1;
+                        return 0;
                     }
                     if (a.exam_at < b.exam_at) return 1;
                     if (a.exam_at > b.exam_at) return -1;
