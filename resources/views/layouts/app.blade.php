@@ -34,6 +34,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url('decks') }}">Your decks</a>
+                            <a class="dropdown-item" href="{{ url('bookmarks') }}">Your bookmarks</a>
                             <a class="dropdown-item" href="{{ url('messages') }}">Your comments</a>
                             <hr class="dropdown-divider">
                             <a class="dropdown-item" href="{{ url('info') }}">Info</a>

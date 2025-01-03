@@ -50,4 +50,9 @@ class Deck extends Model
     {
         return $this->belongsTo(Session::class, 'parent_session_id');
     }
+
+    public function bookmarks()
+    {
+        return $this->belongsToMany(User::class, 'deck_bookmark')->withTimestamps();
+    }
 }

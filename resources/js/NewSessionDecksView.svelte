@@ -71,6 +71,7 @@
                 <option value="public-rw-listed" selected={deckKind === 'public-rw-listed'}>Main decks</option>
                 <option value="user" selected={deckKind === 'user'}>Your decks</option>
                 <option value="public" selected={deckKind === 'public'}>User decks</option>
+                <option value="bookmarked" selected={deckKind === 'bookmarked'}>Bookmarked decks</option>
             </select>
         </div>
     </div>
