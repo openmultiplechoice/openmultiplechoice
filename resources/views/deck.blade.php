@@ -19,6 +19,15 @@
                 <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> Start session</button>
             </form>
         @endif
+        <form method="post" action="/decks/{{ $deck->id }}/bookmark" style="display: inline-block;">
+            @csrf
+            @if(count($deck->bookmarks)>0)
+                @method('delete')
+            @endif
+            <button class="btn btn-sm btn-outline-primary" type="submit">
+                <i class="@if(count($deck->bookmarks)>0) bi-bookmark-check-fill @else bi-bookmark @endif"> </i> @if(count($deck->bookmarks)>0) Bookmarked @else Bookmark @endif
+            </button>
+        </form>
     </div>
 </div>
 
@@ -71,9 +80,10 @@
         @endif
 
         <div class="mb-3">
-            <span class="badge text-bg-light font-monospace"><i class="bi bi-collection"></i> {{ count($questions) }}</span>
-            <span class="badge text-bg-light font-monospace"><i class="bi bi-rocket-takeoff"></i> {{ count($deck->sessions) }}</span>
-            <span class="badge text-bg-light font-monospace">{{ $deck->access }}</span>
+            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {{ count($questions) }}</span>
+            <span class="badge text-bg-light font-monospace" title="Number of sessions"><i class="bi bi-rocket-takeoff"></i> {{ count($deck->sessions) }}</span>
+            <span class="badge text-bg-light font-monospace" title="Number of bookmarks"><i class="bi bi-bookmark"></i> {{ $deck->bookmarks_count }}</span>
+            <span class="badge text-bg-light font-monospace" title="Access level">{{ $deck->access }}</span>
         </div>
 
         @if ($deck->description)

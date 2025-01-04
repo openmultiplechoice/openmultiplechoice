@@ -40,6 +40,14 @@ class DeckController extends Controller
                     ->where('access', '!=', 'public-rw-listed');
             } elseif ($request->kind == 'public-rw-listed') {
                 $decksQuery = $decksQuery->where('access', '=', 'public-rw-listed');
+            } elseif ($request->kind == 'bookmarked') {
+                $decksQuery = $decksQuery->whereHas('bookmarks', function ($query) {
+                    $query->where('user_id', '=', Auth::id())
+                        ->where(function ($query) {
+                            $query->where('decks.access', '!=', 'private')
+                                ->orWhere('decks.user_id', '=', Auth::id());
+                        });
+                });
             } else {
                 abort(400, 'Invalid value for "kind" parameter');
             }
@@ -48,6 +56,10 @@ class DeckController extends Controller
                 ->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')
                 ->with(['sessions' => function ($query) {
                     $query->where('user_id', '=', Auth::id())->with('answerChoices');
+                }])
+                ->with(['bookmarks' => function ($query) {
+                    $query->select('id', 'user_id')
+                        ->where('user_id', '=', Auth::id());
                 }])
                 ->orderBy('exam_at', 'desc')
                 ->orderBy('id', 'desc')
@@ -86,14 +98,23 @@ class DeckController extends Controller
                 ['access', '!=', 'public-rw-listed'],
                 ['is_ephemeral', '=', false],
                 ['is_archived', '=', false],
-            ])->with('questions:id')->get();
+            ])
+            ->orWhereHas('bookmarks', function ($query) {
+                $query->where('user_id', '=', Auth::id())
+                    ->where('access', '=', 'public-rw');
+            })
+            ->with('questions:id')->get();
 
         return response()->json($decks);
     }
 
     public function show($id)
     {
-        $question = Deck::with('cases', 'cases.questions:id,case_id', 'questions.answers', 'questions.images', 'questions.case')->find($id);
+        $question = Deck::with('cases', 'cases.questions:id,case_id', 'questions.answers', 'questions.images', 'questions.case')
+                        ->with(['bookmarks' => function ($query) {
+                            $query->select('id', 'user_id')
+                                ->where('user_id', '=', Auth::id());
+                        }])->find($id);
         return response()->json($question);
     }
 

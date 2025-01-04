@@ -6,15 +6,23 @@
     let decksAdded = [];
     let decksOther = [];
     let deckName = '';
+    let filterElement;
+    let filterText = '';
+    let filteredDecksOther = [];
+    let filteredDecksAdded = [];
 
     onMount(() => {
         const c = document.getElementById('offcanvasAddToDeck');
         c.addEventListener('show.bs.offcanvas', event => {
             fetchDecks();
         })
+        c.addEventListener('shown.bs.offcanvas', event => {
+            focusFilter();
+        })
         c.addEventListener('hidden.bs.offcanvas', event => {
             decksAdded = [];
             decksOther = [];
+            filterText = '';
         })
     });
 
@@ -92,6 +100,17 @@
                 alert(error);
             });
     }
+
+    function focusFilter() {
+        if (filterElement) {
+            filterElement.focus();
+        }
+    }
+
+    $: filteredDecksOther = decksOther.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase()));
+    $: filteredDecksAdded = decksAdded.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase()));
+
+    $: filteredDecksAdded, focusFilter();
 </script>
 
 <button
@@ -115,24 +134,16 @@
             data-bs-dismiss="offcanvas"
             aria-label="Close" />
     </div>
-    <div class="offcanvas-body">
-        {#each decksOther as deck}
-            <div class="row mb-1">
-                <div class="col-9 text-overflow">
-                    <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
-                </div>
-                <div class="col-3 d-grid gap-4">
-                    <button
-                        on:click|preventDefault={() =>
-                            addQuestionToDeck(deck.id)}
-                        class="btn btn-sm btn-primary float-end">Add</button>
-                </div>
-            </div>
-        {/each}
-        {#if decksOther.length > 0 && decksAdded.length > 0}
-            <hr />
+    <div class="offcanvas-body pb-0">
+        {#if decksAdded.length + decksOther.length > 10}
+            <input
+                bind:this={filterElement}
+                bind:value={filterText}
+                type="text"
+                class="form-control mb-3"
+                placeholder="Filter decks ..."/>
         {/if}
-        {#each decksAdded as deck}
+        {#each filteredDecksAdded as deck}
             <div class="row mb-1">
                 <div class="col-9 text-overflow">
                     <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
@@ -145,18 +156,34 @@
                 </div>
             </div>
         {/each}
-        {#if decksOther.length === 0 && decksAdded.length === 0}
-            <p>You don't have any decks yet.</p>
+        {#if filteredDecksOther.length > 0 && filteredDecksAdded.length > 0}
+            <hr />
+        {/if}
+        {#each filteredDecksOther as deck}
+            <div class="row mb-1">
+                <div class="col-9 text-overflow">
+                    <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
+                </div>
+                <div class="col-3 d-grid gap-4">
+                    <button
+                        on:click|preventDefault={() =>
+                            addQuestionToDeck(deck.id)}
+                        class="btn btn-sm btn-primary float-end">Add</button>
+                </div>
+            </div>
+        {/each}
+        {#if filteredDecksOther.length === 0 && filteredDecksAdded.length === 0}
+            <p>No decks found.</p>
         {/if}
         <hr />
-        <div class="row">
+        <div class="row sticky-bottom bg-white mt-3">
             <div class="col">
                 <p>Create new deck:</p>
-                <div class="mb-3">
+                <div class="mb-2">
                     <input bind:value={deckName} type="text" class="form-control" id="name" name="name" placeholder="My new deck ...">
                 </div>
                 <button on:click|preventDefault={() => createDeck()}
-                        class="btn btn-sm btn-primary">Create deck and add question</button>
+                        class="btn btn-sm btn-primary mb-3">Create deck and add question</button>
             </div>
         </div>
     </div>
