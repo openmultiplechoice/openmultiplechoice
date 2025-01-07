@@ -65,9 +65,13 @@ trix-toolbar .trix-button--icon-heading-1 {
 .bg-danger-dark {
     background-color: $danger;
 }
-.bg-cancelled {
+.bg-incorrect {
     color: #495057 !important;
     background: #f8d7da !important;
+}
+.bg-correct {
+    color: #495057 !important;
+    background: #d4edda !important;
 }
 
 .border-success {
