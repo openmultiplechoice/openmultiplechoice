@@ -11,7 +11,7 @@
     export let settingsShowAnswerStats;
 
     var answerStatusIndicator;
-    var cancelled;
+    var markedAs;
     var badgeText = answer.badgeText;
 
     $: {
@@ -22,7 +22,7 @@
     }
 
     $: if (answer) {
-        cancelled = false;
+        markedAs = '';
         answerStatusIndicator = "border-secondary";
 
         if (!examMode) {
@@ -48,9 +48,10 @@
         (!questionIsAnswered && !answerContext.isSelectedAnswer && !answerContext.isSubmittedAnswer) ||
         (questionIsAnswered && !answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer)
     }
-    class:text-bg-success={!cancelled && !examMode && questionIsAnswered && answerContext.isCorrectAnswer}
-    class:text-bg-danger={!cancelled && !examMode && answerContext.isSelectedAnswer && !answerContext.isCorrectAnswer}
-    class:bg-cancelled={cancelled}>
+    class:text-bg-success={!examMode && questionIsAnswered && answerContext.isCorrectAnswer}
+    class:text-bg-danger={!examMode && answerContext.isSelectedAnswer && !answerContext.isCorrectAnswer}
+    class:bg-incorrect={markedAs === 'incorrect'}
+    class:bg-correct={markedAs === 'correct'}>
     {#if !questionIsAnswered && !answerContext.isSubmittedAnswer}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
@@ -86,10 +87,21 @@
             </div>
             <div class="col">
                 {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
-                    <button
-                        on:click|preventDefault={() => (cancelled = !cancelled)}
-                        type="button"
-                        class="btn-close" />
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button
+                            on:click|preventDefault={() => (markedAs = markedAs === 'incorrect' ? '' : 'incorrect')}
+                            type="button"
+                            class="btn btn-sm p-0">
+                            <span class="text-secondary">&cross;</span>
+                        </button>
+                        <div class="vr mx-1"></div>
+                        <button
+                            on:click|preventDefault={() => (markedAs = markedAs === 'correct' ? '' : 'correct')}
+                            type="button"
+                            class="btn btn-sm p-0">
+                            <span class="text-secondary">&check;</span>
+                        </button>
+                    </div>
                 {:else if !examMode && answerContext.isCorrectAnswer && answerContext.isSubmittedAnswer}
                     <span class="text-success-dark fw-bold fs-3">&check;</span>
                 {:else if !examMode && answerContext.isCorrectAnswer && !answerContext.isSubmittedAnswer && questionIsAnswered}
