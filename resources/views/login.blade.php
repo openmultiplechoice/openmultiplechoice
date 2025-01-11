@@ -56,7 +56,7 @@
                     <label for="keycloak_remain_logged_in" class="form-label">Remain logged in on this device</label>
                 </div>
                 <button type="submit" class="btn btn-primary">Log in</button>
-            <form>
+            </form>
         </div>
 @endif
     </div>
