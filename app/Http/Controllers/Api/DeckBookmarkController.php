@@ -9,14 +9,6 @@ use App\Models\Deck;
 
 class DeckBookmarkController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::user();
-        $bookmarkedDecks = $user->bookmarkedDecks();
-
-        return response()->json($bookmarkedDecks);
-    }
-
     public function store(Deck $deck)
     {
         $user = Auth::user();

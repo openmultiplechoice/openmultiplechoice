@@ -110,12 +110,8 @@ class DeckController extends Controller
 
     public function show($id)
     {
-        $question = Deck::with('cases', 'cases.questions:id,case_id', 'questions.answers', 'questions.images', 'questions.case')
-                        ->with(['bookmarks' => function ($query) {
-                            $query->select('id', 'user_id')
-                                ->where('user_id', '=', Auth::id());
-                        }])->find($id);
-        return response()->json($question);
+        $deck = Deck::with('cases', 'cases.questions:id,case_id', 'questions.answers', 'questions.images', 'questions.case')->find($id);
+        return response()->json($deck);
     }
 
     public function store(Request $request)
