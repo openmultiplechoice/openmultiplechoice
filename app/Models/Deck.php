@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Deck extends Model
 {
@@ -54,5 +55,10 @@ class Deck extends Model
     public function bookmarks()
     {
         return $this->belongsToMany(User::class, 'deck_bookmark')->withTimestamps();
+    }
+
+    public function bookmarked()
+    {
+        return $this->bookmarks()->where('user_id', Auth::id())->exists();
     }
 }

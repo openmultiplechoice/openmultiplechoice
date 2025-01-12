@@ -17,11 +17,7 @@ class DeckController extends Controller
                 ['user_id', '=', Auth::id()],
                 ['access', '!=', 'public-rw-listed'],
                 ['is_ephemeral', '=', false],
-            ])
-            ->with(['bookmarks' => function ($query) {
-                $query->select('id', 'user_id')
-                    ->where('user_id', '=', Auth::id());
-            }])->get();
+            ])->get();
         return view('decks', ['decks' => $decks]);
     }
 

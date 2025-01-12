@@ -13,11 +13,12 @@
             </span>
             <form method="post" action="/decks/{{ $deck->id }}/bookmark" style="display: inline-block;">
                 @csrf
-                @if(count($deck->bookmarks)>0)
+                @php($is_bookmarked = $deck->bookmarked())
+                @if($is_bookmarked)
                     @method('delete')
                 @endif
                 <button class="btn btn-sm btn-link" type="submit">
-                    <i class="@if(count($deck->bookmarks)>0) bi-bookmark-check-fill @else bi-bookmark @endif"> </i>
+                    <i class="@if($is_bookmarked) bi-bookmark-check-fill @else bi-bookmark @endif"> </i>
                 </button>
             </form>
         </div>

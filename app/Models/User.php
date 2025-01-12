@@ -100,8 +100,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     public function bookmarkedDecks(): BelongsToMany
     {
         return $this->belongsToMany(Deck::class, 'deck_bookmark')
-            ->where('access', '!=', 'private')
-            ->orWhere('decks.user_id', $this->id)
+            ->where(function ($query) {
+                $query->where('access', '!=', 'private')
+                    ->orWhere('decks.user_id', $this->id);
+            })
             ->withTimestamps();
     }
 }
