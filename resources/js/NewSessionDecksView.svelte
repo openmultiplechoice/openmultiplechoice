@@ -91,7 +91,7 @@
     {/each}
 </div>
 
-{#if pageData && pageData.total > 1}
+{#if pageData}
     <div class="row sticky-bottom bg-white mt-3 pt-3">
         <div class="col">
             <p class="small text-muted">
@@ -100,28 +100,30 @@
                 of <span class="fw-semibold">{pageData.total}</span> decks
             </p>
         </div>
-        <div class="col">
-            <nav>
-                <ul class="pagination">
-                    <li class="page-item" class:disabled={pageData.prev_page_url === null}>
-                        <button class="page-link" on:click|preventDefault={()=> {
-                            pageData.prev_page_url && loadPage(pageData.current_page - 1);
-                        }}>‹</button>
-                    </li>
-                    {#each pageData.links.slice(1, pageData.links.length - 1) as link}
-                        <li class="page-item d-none d-sm-block" class:disabled={link.active || !link.url}>
+        {#if pageData.last_page > 1}
+            <div class="col">
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item" class:disabled={pageData.prev_page_url === null}>
                             <button class="page-link" on:click|preventDefault={()=> {
-                                link.url && loadPage(link.label);
-                            }}>{link.label}</button>
+                                pageData.prev_page_url && loadPage(pageData.current_page - 1);
+                            }}>‹</button>
                         </li>
-                    {/each}
-                    <li class="page-item" class:disabled={pageData.next_page_url === null}>
-                        <button class="page-link" on:click|preventDefault={()=> {
-                            pageData.next_page_url && loadPage(pageData.current_page + 1);
-                        }}>›</button>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+                        {#each pageData.links.slice(1, pageData.links.length - 1) as link}
+                            <li class="page-item d-none d-sm-block" class:disabled={link.active || !link.url}>
+                                <button class="page-link" on:click|preventDefault={()=> {
+                                    link.url && loadPage(link.label);
+                                }}>{link.label}</button>
+                            </li>
+                        {/each}
+                        <li class="page-item" class:disabled={pageData.next_page_url === null}>
+                            <button class="page-link" on:click|preventDefault={()=> {
+                                pageData.next_page_url && loadPage(pageData.current_page + 1);
+                            }}>›</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        {/if}
     </div>
 {/if}
