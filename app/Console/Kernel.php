@@ -123,6 +123,7 @@ class Kernel extends ConsoleKernel
 
             $answerChoices = AnswerChoice::select('id', 'question_id', 'answer_id')
                 ->where('id', '>', $lastAnswerChoiceID)
+                ->where('answer_id', '!=', null)
                 ->whereHas('question', function ($query) {
                     $query->where('type', 'mc');
                 })
