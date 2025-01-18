@@ -111,6 +111,9 @@ class DeckController extends Controller
     public function show($id)
     {
         $deck = Deck::with('cases', 'cases.questions:id,case_id', 'questions.answers', 'questions.images', 'questions.case')->find($id);
+
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
+
         return response()->json($deck);
     }
 
