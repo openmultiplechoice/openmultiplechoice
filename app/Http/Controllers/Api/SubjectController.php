@@ -19,6 +19,8 @@ class SubjectController extends Controller
 
     public function store(Request $request)
     {
+        abort_if(!$request->user()->is_admin && !$request->user()->is_moderator, 403);
+
         $subject = new Subject();
 
         $subject->name = $request->name;
