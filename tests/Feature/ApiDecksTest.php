@@ -96,4 +96,20 @@ class ApiDecksTest extends TestCase
             ->assertOk()
             ->assertJsonCount(1, 'data');
     }
+
+    public function testAuthz(): void
+    {
+        $this->actingAs($this->userA)
+            ->getJson('/api/decks/' . $this->deckByAPrivate->id)
+            ->assertOk()
+            ->assertJsonPath('id', $this->deckByAPrivate->id);
+
+        $this->actingAs($this->userB)
+            ->getJson('/api/decks/' . $this->deckByAPublic->id)
+            ->assertStatus(200);
+
+        $this->actingAs($this->userB)
+            ->getJson('/api/decks/' . $this->deckByAPrivate->id)
+            ->assertStatus(404);
+    }
 }

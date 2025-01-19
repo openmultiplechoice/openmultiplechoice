@@ -59,8 +59,9 @@ class SessionController extends Controller
 
     public function show(Session $session)
     {
-        if (Auth::id() != $session->user_id) {
-            abort(404);
+        abort_if($session->user_id != Auth::id(), 404);
+        if ($session->deck->access == "private" && $session->deck->user_id != Auth::id()) {
+            return back()->with('msg-error', "Sorry, can't open this session since it links a private deck.");
         }
         return view('session', [
             'session' => $session,

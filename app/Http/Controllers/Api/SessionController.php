@@ -122,6 +122,8 @@ class SessionController extends Controller
         }
 
         $deck = Deck::with('questions', 'cases', 'questions.images', 'questions.answers', 'questions.case')->find($session->deck_id);
+        abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 400);
+
         $session = $session->load('answerChoices');
 
         // If all questions have been removed from the

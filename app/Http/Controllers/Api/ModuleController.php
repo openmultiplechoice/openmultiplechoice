@@ -17,7 +17,8 @@ class ModuleController extends Controller
 
     public function store(Request $request)
     {
-        // TODO(schu): check if user is moderator or admin
+        abort_if(!$request->user()->is_admin && !$request->user()->is_moderator, 403);
+
         $module = new Module();
 
         $module->name = $request->name;
