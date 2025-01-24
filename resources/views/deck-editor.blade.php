@@ -96,6 +96,23 @@
     </div>
 </div>
 
+<div class="row mt-3">
+    <div class="col-md">
+        <div class="alert alert-light">
+            <i class="bi bi-info-circle me-2"></i>
+            @if ($deck->access == "private")
+                Set access to <i>public-ro</i> or <i>public-rw</i> to share this deck with others.
+            @elseif (!$deck->module)
+                Add this deck to a module to make it easier to find.
+            @elseif ($deck->access == "public-ro" || $deck->access == "public-rw")
+                This deck is listed under <i>user decks</i> <a href="/sessions/create?module={{ $deck->module->id }}&kind=user">here</a>.
+            @else
+                This deck is listed under <i>main decks</i> <a href="/sessions/create?module={{ $deck->module->id }}&kind=public-rw-listed">here</a>.
+            @endif
+        </div>
+    </div>
+</div>
+
 @if ($deck->access != 'public-rw-listed' && ($deck->user_id == Auth::id() || Auth::user()->is_admin))
     <h2 class="h4 mt-3">Actions</h2>
     <div class="row mt-1 mb-3">
