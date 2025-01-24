@@ -97,12 +97,20 @@
 </div>
 
 @if ($deck->access != 'public-rw-listed' && ($deck->user_id == Auth::id() || Auth::user()->is_admin))
-    <h2 class="h4">Settings</h2>
+    <h2 class="h4 mt-3">Actions</h2>
     <div class="row mt-1 mb-3">
         <div class="col-md">
             <p>
                 <strong>Submit this deck for listing</strong><br>
-                Submit this deck for listing in the public deck directory for other users to use.
+                Submit this deck for listing under <i>main decks</i>.
+                <ul>
+                    @if (!$deck->module)
+                        <li><i class="bi bi-exclamation-triangle"></i> No module set</li>
+                    @endif
+                    @if (!$deck->exam_at)
+                        <li><i class="bi bi-exclamation-triangle"></i> No exam date set</li>
+                    @endif
+                </ul>
             </p>
         </div>
         <div class="col-md">
