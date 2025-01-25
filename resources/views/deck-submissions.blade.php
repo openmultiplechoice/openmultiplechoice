@@ -7,7 +7,7 @@
 <div class="row">
     <div class="col-md">
         <h4>Submissions</h4>
-        Decks submitted to be released to the public deck directory and shown to all users in the respective module.
+        Decks submitted for the <i>main decks</i> category.
     </div>
 </div>
 

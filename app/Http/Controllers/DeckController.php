@@ -36,7 +36,9 @@ class DeckController extends Controller
 
         $deck->save();
 
-        return back()->with('msg-success', 'New deck "'. $deck->name .'" created!');
+        return redirect()->route('edit.deck', [
+            'deck' => $deck->id,
+        ])->with('msg-success', 'Successfully created deck');
     }
 
     public function show(Deck $deck)
