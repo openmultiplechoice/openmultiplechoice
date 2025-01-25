@@ -10,9 +10,7 @@
     export let updateMessage;
     export let questionId;
 
-    $: num_upvotes = message.thumbs.filter((vote) => vote.thumb === "up").length ?? 0
-    $: num_downvotes = message.thumbs.filter((vote) => vote.thumb === "down").length ?? 0
-    $: user_vote = message.thumbs.find((entry) => entry.user_id !== undefined) ?? null
+    $: userThumb = message.thumbs.find((entry) => entry.user_id !== undefined) ?? null
 
     var showEditor = false;
     var showEditorReply = false;
@@ -77,44 +75,61 @@
     }
 
     function handleThumb(type) {
-        // If the user already voted on the message:
-        if (user_vote !== null) {
-            // and the vote is the same as the one they clicked, delete the vote
-            if (user_vote.thumb === type) {
+        // If the user already clicked thumb up/down on the message..
+        if (userThumb !== null) {
+            // ..and the thumb is the same as the previous one, delete the thumb up/down:
+            if (userThumb.type === type) {
                 axios
-                    .delete("/api/messages/" + message.id + "/thumbs/" + user_vote.id)
+                    .delete("/api/messages/" + message.id + "/thumbs/" + userThumb.id)
                     .then(function(response) {
-                        // update the thumbs array to remove the user's vote in the local copy
+                        // Remove the thumb from the thumbs array in the local copy
                         message.thumbs = message.thumbs.filter((entry) => entry.user_id === undefined);
+                        if (type === "up") {
+                            message.thumbs_up_count -= 1;
+                        } else {
+                            message.thumbs_down_count -= 1;
+                        }
                         updateMessage(message);
                     })
                     .catch(function(error) {
                         alert(error);
                     });
-            // if the vote is different, update the vote
+            // ..and the thumb is different from the previous one, update the thumb up/down:
             } else {
                 axios
-                    .put("/api/messages/" + message.id + "/thumbs/" + user_vote.id, { type: type })
+                    .put("/api/messages/" + message.id + "/thumbs/" + userThumb.id, { type: type })
                     .then(function(response) {
-                        // update the thumbs array to update the user's vote in the local copy
-                        message.thumbs.find((entry) => entry.user_id !== undefined).thumb = type;
+                        // Persist the new thumb in the thumbs array in the local copy
+                        message.thumbs.find((entry) => entry.user_id !== undefined).type = type;
+                        if (type === "up") {
+                            message.thumbs_up_count += 1;
+                            message.thumbs_down_count -= 1;
+                        } else {
+                            message.thumbs_down_count += 1;
+                            message.thumbs_up_count -= 1;
+                        }
                         updateMessage(message);
                     })
                     .catch(function(error) {
                         alert(error);
                     });
             }
-        // If the user hasn't voted on the message yet, create a new vote
+        // If the user has not clicked thumb up/down on the message yet, add the thumb up/down:
         } else {
             axios
                 .post("/api/messages/" + message.id + "/thumbs", { type: type })
                 .then(function(response) {
-                    // add the new vote to the thumbs array in the local copy
+                    // Persist the new thumb in the thumbs array in the local copy
                     message.thumbs.push({
-                        "thumb": response.data.type,
+                        "type": response.data.type,
                         "user_id": response.data.user_id,
                         "id": response.data.id
                     });
+                    if (type === "up") {
+                        message.thumbs_up_count += 1;
+                    } else {
+                        message.thumbs_down_count += 1;
+                    }
                     updateMessage(message);
                 })
                 .catch(function(error) {
@@ -142,47 +157,52 @@
                     {/if}
                     <p class="text-muted text-end mb-0">
                         <small>
-                            {#if !message.is_deleted}
-                                {num_upvotes}
-                                <button class="btn"
-                                        on:click|preventDefault={() => handleThumb("up")}>
-                                        <i class="bi"
-                                            class:bi-hand-thumbs-up-fill={user_vote?.thumb === "up"}
-                                            class:bi-hand-thumbs-up={!(user_vote?.thumb === "up")}></i>
-                                </button>
-                                {num_downvotes}
-                                <button class="btn"
-                                        on:click|preventDefault={() => handleThumb("down")}>
-                                        <i class="bi"
-                                            class:bi-hand-thumbs-down-fill={user_vote?.thumb === "down"}
-                                            class:bi-hand-thumbs-down={!(user_vote?.thumb === "down")}></i>
-                                </button>
-                                {#if $UserSettings.id === message.author_id}
+                            <div class="d-flex align-items-center py-1">
+                                {#if !message.is_deleted}
+                                    <div class="d-flex rounded-4 align-items-center bg-light ms-auto px-2">
+                                        <button class="btn mx-0 ps-0 pe-1"
+                                                on:click|preventDefault={() => handleThumb("up")}>
+                                                <i class="bi"
+                                                    class:bi-hand-thumbs-up-fill={userThumb?.type === "up"}
+                                                    class:bi-hand-thumbs-up={!(userThumb?.type === "up")}></i>
+                                        </button>
+                                        <span class="pe-1 font-monospace">{message.thumbs_up_count}</span>
+                                        <span class="px-1">|</span>
+                                        <button class="btn mx-0 px-1"
+                                                on:click|preventDefault={() => handleThumb("down")}>
+                                                <i class="bi"
+                                                    class:bi-hand-thumbs-down-fill={userThumb?.type === "down"}
+                                                    class:bi-hand-thumbs-down={!(userThumb?.type === "down")}></i>
+                                        </button>
+                                        <span class="pe-1 font-monospace">{message.thumbs_down_count}</span>
+                                    </div>
+                                    {#if $UserSettings.id === message.author_id}
+                                        <button
+                                            class="btn btn-sm btn-link link-dark"
+                                            on:click|preventDefault={toggleEditor}
+                                            >Edit</button>
+                                        <button
+                                            class="btn btn-sm btn-link link-dark"
+                                            on:click|preventDefault={handleDelete}
+                                            >Delete</button>
+                                    {/if}
                                     <button
                                         class="btn btn-sm btn-link link-dark"
-                                        on:click|preventDefault={toggleEditor}
-                                        >Edit</button>
-                                    <button
-                                        class="btn btn-sm btn-link link-dark"
-                                        on:click|preventDefault={handleDelete}
-                                        >Delete</button>
+                                        on:click|preventDefault={toggleEditorReply}
+                                        >Reply</button>
                                 {/if}
-                                <button
-                                    class="btn btn-sm btn-link link-dark"
-                                    on:click|preventDefault={toggleEditorReply}
-                                    >Reply</button>
-                            {/if}
-                            {format(
-                                parseISO(message.created_at),
-                                "dd.MM.yyyy HH:mm"
-                            )}
-                            {#if message.is_anonymous}
-                                <i class="bi bi-incognito" title="anonymous"></i>
-                            {:else if message.author && !message.is_deleted}
-                                <strong>
-                                    {message.author.public_name ? message.author.public_name : message.author.name}
-                                </strong>
-                            {/if}
+                                {format(
+                                    parseISO(message.created_at),
+                                    "dd.MM.yyyy HH:mm"
+                                )}
+                                {#if message.is_anonymous}
+                                    <i class="bi bi-incognito ps-2" title="anonymous"></i>
+                                {:else if message.author && !message.is_deleted}
+                                    <strong>
+                                        <span class="ps-2"> {message.author.public_name ? message.author.public_name : message.author.name}</span>
+                                    </strong>
+                                {/if}
+                            </div>
                         </small>
                     </p>
                 </div>

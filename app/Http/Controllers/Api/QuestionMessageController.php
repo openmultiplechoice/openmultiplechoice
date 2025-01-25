@@ -16,32 +16,45 @@ class QuestionMessageController extends Controller
         // TODO: is it possible to load the `author_id`
         // (to later load author info) only for messages
         // which are not anonymous?
-        $messages = $question->messages()->with('thumbs')->get();
+        $messages = $question->messages()
+            ->with('thumbs', function ($query) {
+                $query->select('id', 'thumbable_id', 'type', 'user_id')
+                    ->where('user_id', Auth::id());
+            })
+            ->withCount(['thumbs as thumbs_up_count' => function ($query) {
+                $query->where('type', 'up');
+            }, 'thumbs as thumbs_down_count' => function ($query) {
+                $query->where('type', 'down');
+            }])
+            ->get();
+
         // Load author info for messages which are
         // not anonymous and for messages of the
         // current user
+        $messages->filter(function ($m) {
+            return !$m->is_anonymous || $m->author_id == Auth::id();
+        })->load('author:id,name,public_name');
+
         $messages->each(function ($m) {
-            if (!$m->is_anonymous || $m->author_id == Auth::id()) {
-                $m->load('author:id,name,public_name');
+            // - For non-anyonymous messages (author relation loaded),
+            //   set the author name to public_name, if set
+            // - For anonymous messages, set author_id to null to make
+            //   sure we don't leak the author's ID
+            if ($m->relationLoaded('author')) {
                 if ($m->author->public_name) {
-                    // This user has set a "public name" to be
-                    // displayed instead of their username, so
-                    // overwrite the `name` attribute with it
                     $m->author->name = $m->author->public_name;
                 }
             } else {
-                // Null the `author_id` for messages
-                // which are anonymous to avoid nosy
-                // users..
                 $m->author_id = null;
             }
-            // Load anonymized thumbs for this message to include in the response
-            $m->thumbsAnonymized();
 
+            // If the message is soft deleted, set the text to an empty
+            // string to avoid leaking the message content
             if ($m->is_deleted) {
                 $m->text = '';
             }
         });
+
         return response()->json($messages);
     }
 
@@ -57,8 +70,9 @@ class QuestionMessageController extends Controller
         // Frontend expects author info in the message object
         $message->load('author:id,name,public_name');
 
-        // Load anonymized thumbs for this message to include in the response
-        $message->thumbsAnonymized();
+        $message->thumbs = [];
+        $message->thumbs_up_count = 0;
+        $message->thumbs_down_count = 0;
 
         return response()->json($message);
     }
