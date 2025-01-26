@@ -38,14 +38,15 @@ class QuestionMessageController extends Controller
         $messages->each(function ($m) {
             // - For non-anyonymous messages (author relation loaded),
             //   set the author name to public_name, if set
-            // - For anonymous messages, set author_id to null to make
-            //   sure we don't leak the author's ID
+            // - For anonymous messages, set author_id and legacy_author_name
+            //   to null to make sure we don't leak the author's ID
             if ($m->relationLoaded('author')) {
                 if ($m->author->public_name) {
                     $m->author->name = $m->author->public_name;
                 }
             } else {
                 $m->author_id = null;
+                $m->legacy_author_name = null;
             }
 
             // If the message is soft deleted, set the text to an empty
