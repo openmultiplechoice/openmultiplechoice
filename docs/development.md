@@ -2,19 +2,64 @@
 
 ## Requirements
 
+* PHP
+* Node.js and npm
+* A PostgreSQL (preferred) or MariaDB database
+
+If you want to use a virtual machine for the development environment,
+Homestead can be used:
+
 * [Vagrant](https://www.vagrantup.com/) with VirtualBox or Parallels as provider
 * [Homestead](https://laravel.com/docs/homestead)
-* Node.js + nvm (https://brew.sh or https://github.com/nvm-sh/nvm is recommended for the installation)
 
 ## Setting up the environment
 
-The easiest way to set up a local development environment for OMC is
-Laravel's [Homestead](https://laravel.com/docs/8.x/homestead) Vagrant
-setup.
+### Local
 
-To run and work with the virtual machine, a separate terminal window is
-recommended. This way switching between managing the virtual machine
-and actual work (e.g. your code editor) is easy.
+Once you have PHP and Node.js installed and a local clone of the OMC
+repository, `cd` into the directory:
+
+```
+cd openmultiplechoice
+```
+
+... and create an `.env` file from the template:
+
+```
+cp .env.example .env
+```
+
+Use `php artisan key:generate` to create an app key:
+
+```
+php artisan key:generate # --> automatically updates your .env file
+```
+
+Adjust the `.env` file to work with your setup, for example:
+
+```
+...
+APP_URL=http://127.0.0.1:8000
+ASSET_URL=http://127.0.0.1:8000
+...
+```
+
+Install the required PHP packages:
+
+```
+composer install
+```
+
+Run the PHP development server via `artisan`:
+
+```
+php artisan serve
+```
+
+Your local installation should now be reachable.
+
+Instructions on how to build and run the frontend code can be found
+under "Development workflow" [here](#development-workflow).
 
 ### Homestead
 
@@ -40,7 +85,7 @@ Above `omc.test` is used as the domain. The domain needs to be configured
 in the `hosts` file of the host system. On Linux / macOS the file is located
 at `/etc/hosts`, on Windows at `C:\Windows\System32\drivers\etc\hosts`.
 
-### Starting and connecting to the VM
+#### Starting and connecting to the VM
 
 `vagrant up` starts the VM:
 
@@ -59,7 +104,7 @@ cd code/openmultiplechoice/
 Note: don't forget to update the base image from time to time, e.g. after
 a Homestead update: `vagrant box update`.
 
-### OMC configuration
+#### OMC configuration
 
 First install the requirements:
 
@@ -109,19 +154,6 @@ OMC should now be running and reachable in your browser at http://omc.test
 
 * `demo@example.com` with password `demo` and
 * `demoadmin@example.com` with password `demoadmin`.
-
-## Environment without Homestead
-
-If you don't want to or can't use Homestead, `php artisan serve` is an alternative.
-For this to work, both `APP_URL` and `ASSET_URL` have to be set to the right
-IP address and port:
-
-```
-...
-APP_URL=http://127.0.0.1:8000
-ASSET_URL=http://127.0.0.1:8000
-...
-```
 
 ## Testing scheduled jobs
 
