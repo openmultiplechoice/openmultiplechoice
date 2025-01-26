@@ -6,9 +6,9 @@
 
 <div class="row">
     <div class="col-md">
-        <h1 class="h4"><a class="text-reset text-decoration-none" href="{{ url('info') }}">Info</a></h1>
+        <h1 class="h4"><a class="text-reset text-decoration-none" href="{{ url('info') }}"><i class="bi bi-arrow-left me-2"></i> Info</a></h1>
 
-        <h2 class="h5">{{ $info->title }}</h2>
+        <h2 class="h4">{{ $info->title }}</h2>
         <p>
             <small>
                 <span class="font-monospace">

@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md">
-        <h1 class="h4">Info</h1>
+        <h1 class="h4"><a class="text-reset text-decoration-none" href="/"><i class="bi bi-arrow-left me-2"></i> Info</a></h1>
     </div>
 </div>
 
