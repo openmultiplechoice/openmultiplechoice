@@ -3,8 +3,8 @@
 
     export let questionId;
 
-    let decksAdded = [];
-    let decksOther = [];
+    let decksAdded = undefined;
+    let decksOther = undefined;
     let deckName = '';
     let filterElement;
     let filterText = '';
@@ -20,8 +20,8 @@
             focusFilter();
         })
         c.addEventListener('hidden.bs.offcanvas', event => {
-            decksAdded = [];
-            decksOther = [];
+            decksAdded = undefined;
+            decksOther = undefined;
             filterText = '';
         })
     });
@@ -31,6 +31,8 @@
             .get("/api/decks/withquestionids")
             .then(function (response) {
                 var decks = response.data;
+                decksAdded = [];
+                decksOther = [];
                 decks.forEach((deck) => {
                     if (deck.questions.some((q) => q.id === questionId)) {
                         decksAdded = [
@@ -107,8 +109,8 @@
         }
     }
 
-    $: filteredDecksOther = decksOther.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase()));
-    $: filteredDecksAdded = decksAdded.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase()));
+    $: filteredDecksOther = decksOther?.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase()));
+    $: filteredDecksAdded = decksAdded?.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase()));
 
     $: filteredDecksAdded, focusFilter();
 </script>
@@ -135,45 +137,55 @@
             aria-label="Close" />
     </div>
     <div class="offcanvas-body pb-0">
-        {#if decksAdded.length + decksOther.length > 10}
-            <input
-                bind:this={filterElement}
-                bind:value={filterText}
-                type="text"
-                class="form-control mb-3"
-                placeholder="Filter decks ..."/>
-        {/if}
-        {#each filteredDecksAdded as deck}
-            <div class="row mb-1">
-                <div class="col-9 text-overflow">
-                    <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
+        {#if decksAdded}
+            {#if decksAdded.length + decksOther.length > 10}
+                <input
+                    bind:this={filterElement}
+                    bind:value={filterText}
+                    type="text"
+                    class="form-control mb-3"
+                    placeholder="Filter decks ..."/>
+            {/if}
+            {#each filteredDecksAdded as deck}
+                <div class="row mb-1">
+                    <div class="col-9 text-overflow">
+                        <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
+                    </div>
+                    <div class="col-3 d-grid gap-4">
+                        <button
+                            on:click|preventDefault={() =>
+                                removeQuestionFromDeck(deck.id)}
+                            class="btn btn-sm btn-outline-secondary float-end">Remove</button>
+                    </div>
                 </div>
-                <div class="col-3 d-grid gap-4">
-                    <button
-                        on:click|preventDefault={() =>
-                            removeQuestionFromDeck(deck.id)}
-                        class="btn btn-sm btn-outline-secondary float-end">Remove</button>
+            {/each}
+            {#if filteredDecksOther.length > 0 && filteredDecksAdded.length > 0}
+                <hr />
+            {/if}
+            {#each filteredDecksOther as deck}
+                <div class="row mb-1">
+                    <div class="col-9 text-overflow">
+                        <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
+                    </div>
+                    <div class="col-3 d-grid gap-4">
+                        <button
+                            on:click|preventDefault={() =>
+                                addQuestionToDeck(deck.id)}
+                            class="btn btn-sm btn-primary float-end">Add</button>
+                    </div>
+                </div>
+            {/each}
+            {#if filteredDecksOther.length === 0 && filteredDecksAdded.length === 0}
+                <div class="alert alert-light text-center" role="alert">
+                    No decks found
+                </div>
+            {/if}
+        {:else}
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border text-secondary" role="status">
+                    <span class="visually-hidden">Loading decks ...</span>
                 </div>
             </div>
-        {/each}
-        {#if filteredDecksOther.length > 0 && filteredDecksAdded.length > 0}
-            <hr />
-        {/if}
-        {#each filteredDecksOther as deck}
-            <div class="row mb-1">
-                <div class="col-9 text-overflow">
-                    <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
-                </div>
-                <div class="col-3 d-grid gap-4">
-                    <button
-                        on:click|preventDefault={() =>
-                            addQuestionToDeck(deck.id)}
-                        class="btn btn-sm btn-primary float-end">Add</button>
-                </div>
-            </div>
-        {/each}
-        {#if filteredDecksOther.length === 0 && filteredDecksAdded.length === 0}
-            <p>No decks found.</p>
         {/if}
         <hr />
         <div class="row sticky-bottom bg-white mt-3">
