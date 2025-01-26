@@ -91,7 +91,7 @@
     {/each}
 </div>
 
-{#if pageData}
+{#if pageData && pageData.total > 0}
     <div class="row sticky-bottom bg-white mt-3 pt-3">
         <div class="col">
             <p class="small text-muted">
