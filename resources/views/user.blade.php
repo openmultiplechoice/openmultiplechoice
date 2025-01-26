@@ -12,9 +12,9 @@
 <div class="row">
     <div class="col-md">
         @if(isset($user))
-            <h4>User #{{ $user->id }}</h4>
+            <h4><a class="text-reset text-decoration-none" href="/admin/users"><i class="bi bi-arrow-left me-2"></i> User #{{ $user->id }}</a></h4>
         @else
-            <h4>New user</h4>
+            <h4><a class="text-reset text-decoration-none" href="/admin/users"><i class="bi bi-arrow-left me-2"></i> New user</a></h4>
         @endif
     </div>
 </div>
