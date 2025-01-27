@@ -6,7 +6,7 @@
     export let selectDeck;
     export let selectedDecks;
 
-    let decks = [];
+    let decks = undefined;
     let deckKind = getURLParam("kind") ?? "public-rw-listed";
     let pageNum = getURLParam("page") ?? 1;
     let pageData;
@@ -26,6 +26,8 @@
             decks = [];
             return;
         }
+
+        decks = undefined; // Show loading spinner
 
         const url = new URL(window.location);
         url.searchParams.set('module', moduleId);
@@ -80,15 +82,23 @@
 <NewSessionDeckStats bind:decks bind:moduleId />
 
 <div class="row">
-    {#each decks as deck (deck.id)}
-        <NewSessionDeckView bind:deck {selectDeck} bind:selectedDecks />
+    {#if decks}
+        {#each decks as deck (deck.id)}
+            <NewSessionDeckView bind:deck {selectDeck} bind:selectedDecks />
+        {:else}
+            <div class="col">
+                <div class="alert alert-light">
+                    No decks found! Create a new deck <a href="/decks" class="alert-link">here</a>.
+                </div>
+            </div>
+        {/each}
     {:else}
-        <div class="col">
-            <div class="alert alert-light">
-                No decks found! Create a new deck <a href="/decks" class="alert-link">here</a>.
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-secondary" role="status">
+                <span class="visually-hidden">Loading decks ...</span>
             </div>
         </div>
-    {/each}
+    {/if}
 </div>
 
 {#if pageData && pageData.total > 0}
