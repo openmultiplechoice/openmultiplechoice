@@ -11,6 +11,11 @@
     let canvasAnsweredQuestions;
 
     $: decks, (() => {
+        if (!decks) {
+            // No decks loaded yet
+            return;
+        }
+
         const questionsInModule = decks.map(d => d.questions).flat();
 
         validQuestionsInModule = questionsInModule.filter(q => !q.is_invalid);
@@ -113,13 +118,13 @@
     }
 </script>
 
-{#if numQuestionsInModule === numUnansweredQuestions}
+{#if decks && numQuestionsInModule === numUnansweredQuestions}
     <div class="row">
         <div class="col-md">
             <p>Number of questions (duplicates included): <span class="badge text-bg-light font-monospace"><i class="bi bi-collection" /> {numQuestionsInModule}</span></p>
         </div>
     </div>
-{:else}
+{:else if decks}
     <div class="row mb-5">
         <div class="col-md-5">
             <canvas bind:this={canvasAnsweredQuestions}></canvas>

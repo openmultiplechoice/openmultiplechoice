@@ -11,10 +11,10 @@
     let statsLastUpdatedAt;
     let statsAnswersByHour = {};
     let statsUsersByHour = {};
-    let statsDecksNew = [];
-    let statsDecksPopular = [];
+    let statsDecksNew = undefined;
+    let statsDecksPopular = undefined;
     let statsDecksPopularTimespan = 0;
-    let statsDecksLastUsed = [];
+    let statsDecksLastUsed = undefined;
 
     onMount(() => {
         loadStats();
@@ -163,7 +163,9 @@
     </div>
 </div>
 
-{#if statsDecksNew && statsDecksPopular && statsDecksLastUsed}
+{#if statsDecksNew && statsDecksPopular && statsDecksLastUsed
+    && (statsDecksNew.length > 0 || statsDecksPopular.length > 0 || statsDecksLastUsed.length > 0)}
+
     <div class="row">
         {#if statsDecksNew.length > 0}
             <div class="col-lg mt-3 text-overflow">
@@ -220,8 +222,16 @@
             </div>
         {/if}
     </div>
+{:else if !statsDecksNew && !statsDecksPopular && !statsDecksLastUsed}
+    <div class="d-flex justify-content-center mt-3 mb-3">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading stats ...</span>
+        </div>
+    </div>
 {:else}
-    <p>No stats available yet</p>
+    <div class="alert alert-light text-center" role="alert">
+        No stats available yet <i class="bi bi-heartbreak-fill"></i>
+    </div>
 {/if}
 
 <div id="stats" class="row mt-3 p-3">

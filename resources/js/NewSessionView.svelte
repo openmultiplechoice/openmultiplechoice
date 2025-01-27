@@ -173,7 +173,9 @@
                 bind:selectedDecks
                 selectDeck={selectDeck} />
         {:else}
-            <p>No module selected.</p>
+            <div class="alert alert-light text-center" role="alert">
+                No module selected
+            </div>
         {/if}
     </div>
 </div>

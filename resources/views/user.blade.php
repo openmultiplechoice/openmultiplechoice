@@ -12,9 +12,9 @@
 <div class="row">
     <div class="col-md">
         @if(isset($user))
-            <h4>User #{{ $user->id }}</h4>
+            <h4><a class="text-reset text-decoration-none" href="/admin/users"><i class="bi bi-arrow-left me-2"></i> User #{{ $user->id }}</a></h4>
         @else
-            <h4>New user</h4>
+            <h4><a class="text-reset text-decoration-none" href="/admin/users"><i class="bi bi-arrow-left me-2"></i> New user</a></h4>
         @endif
     </div>
 </div>
@@ -70,17 +70,21 @@
 </div>
 @isset($user)
     <div class="row">
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
             <label for="created_at" class="form-label">Created</label>
-            <input id="created_at" class="form-control" type="text" placeholder="{{ $user->created_at }}" disabled>
+            <input id="created_at" class="form-control" type="text" placeholder="{{ optional($user->created_at)->format('d.m.Y H:i:s') }}" disabled>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
             <label for="updated_at" class="form-label">Updated</label>
-            <input id="updated_at" class="form-control" type="text" placeholder="{{ $user->updated_at }}" disabled>
+            <input id="updated_at" class="form-control" type="text" placeholder="{{ optional($user->updated_at)->format('d.m.Y H:i:s') }}" disabled>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
             <label for="email_verified_at" class="form-label">Email verified</label>
-            <input id="email_verified_at" class="form-control" type="text" placeholder="{{ $user->email_verified_at ?? 'n/a' }}" disabled>
+            <input id="email_verified_at" class="form-control" type="text" placeholder="{{ optional($user->email_verified_at)->format('d.m.Y H:i:s') ?? 'n/a' }}" disabled>
+        </div>
+        <div class="col-md-3 mb-3">
+            <label for="last_login" class="form-label">Last login</label>
+            <input id="last_login" class="form-control" type="text" placeholder="{{ optional($user->last_login_at)->format('d.m.Y H:i:s') ?? 'n/a' }}" disabled>
         </div>
     </div>
 @endisset

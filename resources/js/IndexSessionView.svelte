@@ -5,7 +5,7 @@
 
     export let userId;
 
-    var sessions = [];
+    var sessions = undefined;
 
     onMount(() => {
         axios
@@ -19,8 +19,18 @@
     });
 </script>
 
-{#each sessions as session}
-    <IndexSessionSingleView bind:session />
+{#if sessions}
+    {#each sessions as session}
+        <IndexSessionSingleView bind:session />
+    {:else}
+        <div class="alert alert-light text-center" role="alert">
+            No sessions yet <i class="bi bi-rocket"></i>
+        </div>
+    {/each}
 {:else}
-    <p>No sessions yet</p>
-{/each}
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading sessions ...</span>
+        </div>
+    </div>
+{/if}
