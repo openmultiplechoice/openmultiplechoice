@@ -52,7 +52,7 @@ class Kernel extends ConsoleKernel
 
             Cache::put('stats/answers/byhour', $answersByHour);
             Cache::put('stats/users/byhour', $usersByHour);
-        })->everyTwoMinutes();
+        })->name('updateActivityStats')->everyTwoMinutes()->withoutOverlapping();
 
         $schedule->call(function () {
             // Get the 6 newest decks
@@ -102,7 +102,7 @@ class Kernel extends ConsoleKernel
                 ->get();
 
             Cache::put('stats/decks/last_used', $lastUsedDecks);
-        })->everyTwoMinutes();
+        })->name('updateDeckStats')->everyTwoMinutes()->withoutOverlapping();
 
         $schedule->call(function () {
             // Calculate answer percentages for multiple choice questions
@@ -172,7 +172,7 @@ class Kernel extends ConsoleKernel
 
             // Cache the last answer_choice ID for the next run
             Cache::put('internal/last_answer_percentage_calculation', $lastAnswerChoiceID);
-        })->everyThirtySeconds();
+        })->name('updateAnswerDistributionStats')->everyThirtySeconds()->withoutOverlapping();
 
         // Clear expired password reset tokens every 15 minutes
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
