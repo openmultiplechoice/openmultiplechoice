@@ -105,7 +105,7 @@
             @elseif (!$deck->module)
                 Add this deck to a module to make it easier to find.
             @elseif ($deck->access == "public-ro" || $deck->access == "public-rw")
-                This deck is listed under <i>user decks</i> <a href="/sessions/create?module={{ $deck->module->id }}&kind=user">here</a>.
+                This deck is listed under <i>user decks</i> <a href="/sessions/create?module={{ $deck->module->id }}&kind=public">here</a>.
             @else
                 This deck is listed under <i>main decks</i> <a href="/sessions/create?module={{ $deck->module->id }}&kind=public-rw-listed">here</a>.
             @endif
