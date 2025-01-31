@@ -115,6 +115,12 @@
 
 @if ($deck->access != 'public-rw-listed' && ($deck->user_id == Auth::id() || Auth::user()->is_admin))
     <h2 class="h4 mt-3">Actions</h2>
+    @if($deck->submission)
+        <div class="alert alert-warning">
+            <i class="bi bi-info-circle me-2"></i>
+            Submission pending. A human has been notified and will review your submission shortly.
+        </div>
+    @endif
     <div class="row mt-1 mb-3">
         <div class="col-md">
             <p>
