@@ -109,7 +109,7 @@
         </div>
 
         <div class="card-body">
-            <h6 class="card-title">
+            <h6 class="card-title text-truncate" title="{deck.name}">
                 {deck.name}
             </h6>
             <button type="button" class="btn btn-sm btn-primary"

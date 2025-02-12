@@ -148,7 +148,7 @@
             {/if}
             {#each filteredDecksAdded as deck}
                 <div class="row mb-1">
-                    <div class="col-9 text-overflow">
+                    <div class="col-9 text-truncate">
                         <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
                     </div>
                     <div class="col-3 d-grid gap-4">
@@ -164,7 +164,7 @@
             {/if}
             {#each filteredDecksOther as deck}
                 <div class="row mb-1">
-                    <div class="col-9 text-overflow">
+                    <div class="col-9 text-truncate">
                         <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
                     </div>
                     <div class="col-3 d-grid gap-4">
@@ -200,11 +200,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .text-overflow {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-</style>

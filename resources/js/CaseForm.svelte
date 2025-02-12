@@ -65,7 +65,7 @@
         <div class="mb-3">
             <label for="caseText{kase.id}" class="form-label">Case text</label>
             <input id="caseText{kase.id}" type="hidden" bind:value={kase.text} />
-            <trix-editor id="editor-case{kase.id}" class="bg-light" bind:this={editorCase} input="caseText{kase.id}" />
+            <trix-editor id="editor-case{kase.id}" class="bg-light trix-content" bind:this={editorCase} input="caseText{kase.id}" />
             {@html savingStatus}
         </div>
     </form>

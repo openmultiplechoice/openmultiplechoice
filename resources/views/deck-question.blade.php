@@ -8,7 +8,9 @@
 <div class="row mb-3">
     <div class="col">
         <div class="mb-2 d-flex gap-1">
-            <h1 class="h4 mb-1">{{ $deck->name }}</h1>
+            <h1 class="h4 mb-1 text-truncate" title="{{ $deck->name }}">
+                <a href="{{ url('decks', $deck->id) }}" class="text-reset text-decoration-none">{{ $deck->name }}</a>
+            </h1>
             @if($deck->submission)
                 <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Submitted</span>
             @endif

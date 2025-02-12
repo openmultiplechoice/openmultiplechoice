@@ -70,11 +70,11 @@
         <div
             on:click={() => submitAnswer(answer.id)}
             class="col-9 cursor-pointer">
-            <p class="px-1 my-0">{@html DOMPurify.sanitize(answer.text)}</p>
+            <p class="px-1 my-0 trix-content">{@html DOMPurify.sanitize(answer.text)}</p>
         </div>
     {:else}
         <div class="col-9">
-            <p class="px-1 my-0">{@html DOMPurify.sanitize(answer.text)}</p>
+            <p class="px-1 my-0 trix-content">{@html DOMPurify.sanitize(answer.text)}</p>
         </div>
     {/if}
 
@@ -120,7 +120,7 @@
     {#if !examMode && answer.hint && (questionIsAnswered || answerContext.isSelectedAnswer)}
         <div class="col-1 border-3 border-start border-secondary-subtle" />
         <div class="col-11">
-            <p class="p-1">{@html DOMPurify.sanitize(answer.hint)}</p>
+            <p class="p-1 trix-content">{@html DOMPurify.sanitize(answer.hint)}</p>
         </div>
     {/if}
 </div>

@@ -127,13 +127,13 @@
             {#if question.case}
                 <div class="alert alert-light" role="alert">
                     <p class="small fw-bold"><i class="bi bi-clipboard2-pulse"></i> CASE</p>
-                    <p>{@html DOMPurify.sanitize(question.case.text)}</p>
+                    <p class="trix-content">{@html DOMPurify.sanitize(question.case.text)}</p>
                 </div>
             {/if}
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
                 {#if question.text}
                     <div class="col-lg">
-                        <p id="questionText">{@html DOMPurify.sanitize(question.text)}</p>
+                        <p id="questionText" class="trix-content">{@html DOMPurify.sanitize(question.text)}</p>
                     </div>
                 {/if}
                 {#if question.images && question.images.length > 0}
@@ -181,7 +181,7 @@
             {#if !examMode && questionContext.isAnswered && question.comment}
                 <div class="row">
                     <div class="col">
-                        <div class="alert alert-light" role="alert">
+                        <div class="alert alert-light trix-content" role="alert">
                             {@html DOMPurify.sanitize(question.comment)}
                         </div>
                     </div>

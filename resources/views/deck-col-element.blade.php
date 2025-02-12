@@ -23,7 +23,7 @@
             </form>
         </div>
         <div class="card-body">
-            <h6 class="card-title text-nowrap overflow-hidden" title="{{ $deck->name }}">
+            <h6 class="card-title text-truncate" title="{{ $deck->name }}">
                 {{ $deck->name }}
             </h6>
 

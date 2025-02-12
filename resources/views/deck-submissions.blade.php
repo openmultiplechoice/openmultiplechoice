@@ -28,7 +28,7 @@
                     </span>
                 </div>
                 <div class="card-body">
-                    <h6 class="card-title text-nowrap overflow-hidden" title="Name">
+                    <h6 class="card-title text-truncate" title="{{ $submission->deck->name }}">
                         {{ $submission->deck->name }}
                     </h6>
                     <hr>
