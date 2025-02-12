@@ -17,7 +17,7 @@
                     data.current_question_id = question.id;
                     data.current_case_id = null;
                 }}
-                class="list-group-item list-group-item-action text-overflow"
+                class="list-group-item list-group-item-action text-truncate"
                 class:list-group-item-dark={question.id === data.current_question_id}
                 class:list-group-item-light={!(question.id === data.current_question_id)}
                 class:bg-warning-subtle={data.current_case_id && question.case_id === data.current_case_id}
@@ -43,7 +43,7 @@
                     data.current_case_id = kase.id;
                     data.current_question_id = null;
                 }}
-                class="list-group-item list-group-item-action text-overflow"
+                class="list-group-item list-group-item-action text-truncate"
                 class:list-group-item-dark={kase.id === data.current_case_id}
                 class:list-group-item-info={!(kase.id === data.current_case_id) && !(currentQuestion && currentQuestion.case_id === kase.id)}
                 class:list-group-item-warning={currentQuestion && currentQuestion.case_id === kase.id}
@@ -65,11 +65,3 @@
 {:else}
     <p>Loading ...</p>
 {/if}
-
-<style>
-    .text-overflow {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-</style>
