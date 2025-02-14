@@ -321,8 +321,12 @@
             on:input={handleImageAdd}
             class="form-control"
             type="file"
+            accept="image/jpeg, image/png, image/webp"
             id="imageInput{question.id}"
             name="image" />
+        <div id="imageHelp" class="form-text">
+            Supported formats are JPEG, PNG, and WebP.
+        </div>
     </div>
 </form>
 
