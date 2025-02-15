@@ -59,6 +59,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         ]);
     })->name('index');
 
+    Route::get('/decks/archived', [DeckController::class, 'indexArchived']);
     Route::resource('/decks', DeckController::class);
     Route::get('/decks/{deck}/edit', [DeckController::class, 'edit'])->name('edit.deck');
 

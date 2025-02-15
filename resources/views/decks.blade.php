@@ -40,7 +40,7 @@
 </div>
 
 <div class="row mb-3">
-    @forelse ($decks->filter(function ($d) { return !$d->is_archived; }) as $deck)
+    @forelse ($decks as $deck)
         @include('deck-col-element')
     @empty
         <div class="col-md">
@@ -49,20 +49,14 @@
     @endforelse
 </div>
 
-@php($archived_decks = $decks->filter(function ($d) { return $d->is_archived; }))
+<div class="row">
+    <div class="col-md">
+        <p>{{ $decks->links() }}</p>
 
-@if ($archived_decks->count() > 0)
-    <div class="row">
-        <div class="col-md">
-            <h4>Archived decks</h4>
+        <div class="alert alert-light">
+            You can find your archived decks <a href="/decks/archived" class="alert-link">here</a>.
         </div>
     </div>
-
-    <div class="row mb-3">
-        @foreach ($decks->filter(function ($d) { return $d->is_archived; }) as $deck)
-            @include('deck-col-element')
-        @endforeach
-    </div>
-@endif
+</div>
 
 @endsection
