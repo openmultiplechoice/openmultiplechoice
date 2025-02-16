@@ -49,7 +49,7 @@
             <li
                 on:click={() =>
                     (data.session.current_question_id = question.id)}
-                class="list-group-item list-group-item-action text-overflow {question.id ===
+                class="list-group-item list-group-item-action text-truncate {question.id ===
                 data.session.current_question_id
                     ? 'list-group-item-dark'
                     : 'list-group-item-light'}"
@@ -75,10 +75,5 @@
 <style>
     li:hover {
         cursor: pointer;
-    }
-    .text-overflow {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
     }
 </style>
