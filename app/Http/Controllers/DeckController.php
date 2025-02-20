@@ -11,14 +11,30 @@ use App\Models\Subject;
 
 class DeckController extends Controller
 {
+    private const PAGE_SIZE = 30;
+
     public function index(Request $request)
     {
         $decks = Deck::where([
                 ['user_id', '=', Auth::id()],
                 ['access', '!=', 'public-rw-listed'],
                 ['is_ephemeral', '=', false],
-            ])->get();
+                ['is_archived', '=', false],
+            ])->orderBy('id', 'desc')->paginate(self::PAGE_SIZE);
+
         return view('decks', ['decks' => $decks]);
+    }
+
+    public function indexArchived(Request $request)
+    {
+        $decks = Deck::where([
+                ['user_id', '=', Auth::id()],
+                ['access', '!=', 'public-rw-listed'],
+                ['is_ephemeral', '=', false],
+                ['is_archived', '=', true],
+            ])->orderBy('id', 'desc')->paginate(self::PAGE_SIZE);
+
+        return view('decks-archived', ['decks' => $decks]);
     }
 
     public function store(Request $request)

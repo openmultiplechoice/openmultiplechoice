@@ -8,10 +8,12 @@ use App\Models\Deck;
 
 class DeckBookmarkController extends Controller
 {
+    private const PAGE_SIZE = 30;
+
     public function index()
     {
         $user = Auth::user();
-        $bookmarkedDecks = $user->bookmarkedDecks()->paginate(10);
+        $bookmarkedDecks = $user->bookmarkedDecks()->paginate(self::PAGE_SIZE);
 
         return view('decks-bookmarks', ['bookmarked_decks' => $bookmarkedDecks]);
     }
