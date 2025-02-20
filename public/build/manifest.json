@@ -14,8 +14,8 @@
     "file": "assets/NewSessionHelper-Ba9jtPTo.js",
     "name": "NewSessionHelper"
   },
-  "_QuestionForm-CUQMn4Dj.js": {
-    "file": "assets/QuestionForm-CUQMn4Dj.js",
+  "_QuestionForm-LRPWcbwj.js": {
+    "file": "assets/QuestionForm-LRPWcbwj.js",
     "name": "QuestionForm",
     "imports": [
       "_index-C5hKwDc9.js",
@@ -35,15 +35,15 @@
     "file": "assets/SessionQuestionView-B0Qf9_nB.css",
     "src": "_SessionQuestionView-!~{00q}~.js"
   },
-  "_SessionQuestionView-Cj9zLAiN.js": {
-    "file": "assets/SessionQuestionView-Cj9zLAiN.js",
+  "_SessionQuestionView-DioQisgK.js": {
+    "file": "assets/SessionQuestionView-DioQisgK.js",
     "name": "SessionQuestionView",
     "imports": [
       "_index-C5hKwDc9.js",
       "_each-JoEH9o9l.js",
       "_purify.es-CzHI0FGf.js",
       "_lodash-DBMh2b1a.js",
-      "_QuestionForm-CUQMn4Dj.js"
+      "_QuestionForm-LRPWcbwj.js"
     ],
     "css": [
       "assets/SessionQuestionView-B0Qf9_nB.css"
@@ -118,14 +118,14 @@
     "isEntry": true
   },
   "resources/js/DeckForm.js": {
-    "file": "assets/DeckForm-DBp61iJ0.js",
+    "file": "assets/DeckForm-B-eU7jwm.js",
     "name": "DeckForm",
     "src": "resources/js/DeckForm.js",
     "isEntry": true,
     "imports": [
       "_index-C5hKwDc9.js",
       "_purify.es-CzHI0FGf.js",
-      "_QuestionForm-CUQMn4Dj.js",
+      "_QuestionForm-LRPWcbwj.js",
       "_each-JoEH9o9l.js",
       "__commonjsHelpers-Cpj98o6Y.js",
       "_lodash-DBMh2b1a.js"
@@ -194,22 +194,22 @@
     ]
   },
   "resources/js/QuestionView.js": {
-    "file": "assets/QuestionView-Ce4r0R-G.js",
+    "file": "assets/QuestionView-DVjrGcLm.js",
     "name": "QuestionView",
     "src": "resources/js/QuestionView.js",
     "isEntry": true,
     "imports": [
-      "_SessionQuestionView-Cj9zLAiN.js",
+      "_SessionQuestionView-DioQisgK.js",
       "_index-C5hKwDc9.js",
       "_each-JoEH9o9l.js",
       "_purify.es-CzHI0FGf.js",
       "__commonjsHelpers-Cpj98o6Y.js",
       "_lodash-DBMh2b1a.js",
-      "_QuestionForm-CUQMn4Dj.js"
+      "_QuestionForm-LRPWcbwj.js"
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-E7RcNBd9.js",
+    "file": "assets/SessionView-1JwzUPRO.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -220,13 +220,13 @@
       "_Messages-D80vYOi0.js",
       "_auto-tSUxE9xa.js",
       "_SessionProgressBar-D35tF687.js",
-      "_SessionQuestionView-Cj9zLAiN.js",
+      "_SessionQuestionView-DioQisgK.js",
       "_StatsHelper-B91isISU.js",
       "_UserSettingsStore-DIGhToub.js",
       "__commonjsHelpers-Cpj98o6Y.js",
       "_parseISO-nqt9u7wd.js",
       "_lodash-DBMh2b1a.js",
-      "_QuestionForm-CUQMn4Dj.js"
+      "_QuestionForm-LRPWcbwj.js"
     ],
     "css": [
       "assets/SessionView-BV06LSri.css"
