@@ -71,7 +71,7 @@
     }
 </script>
 
-<div class="col-lg-6 mb-1">
+<div class="col-md-6 mb-3">
     <div class="card">
         <div class="card-header">
             {#if deck.exam_at}
