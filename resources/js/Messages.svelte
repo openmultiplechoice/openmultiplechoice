@@ -106,6 +106,18 @@
             childs[parentID].push(m);
         });
 
+        // Sort child arrays by thumbs count
+        Object.values(childs).forEach(childArray => {
+            childArray.sort((a, b) =>
+                (b.thumbs_up_count - b.thumbs_down_count) - (a.thumbs_up_count - a.thumbs_down_count)
+            );
+        });
+
+        // Sort root messages by thumbs count
+        root.sort((a, b) =>
+            (b.thumbs_up_count - b.thumbs_down_count) - (a.thumbs_up_count - a.thumbs_down_count)
+        );
+
         // Now that we have a list of childs for each message,
         // add them to their respective parent message objects
 
@@ -128,6 +140,7 @@
 
     function addMessage(message) {
         messages.push(message);
+        // TODO a newly submitted message isn't necessarily placed at the bottom of the page anymore (out of users view, bad UX)
         nestedMessages = generateMessageTree(messages);
     }
 
@@ -135,7 +148,20 @@
         // Find the specified message in the list and replace it
         const index = messages.findIndex(obj => obj.id === message.id);
         messages[index] = message;
-        nestedMessages = generateMessageTree(messages);
+        // Only update the message but not re-generated the tree to prevent re-ordering and the message jumping somewhere
+        nestedMessages = updateMessageInTree(nestedMessages, message);
+    }
+
+    function updateMessageInTree(messageList, updatedMessage) {
+        return messageList.map(message => {
+            if (message.id === updatedMessage.id) {
+                return { ...updatedMessage, childs: message.childs };
+            }
+            if (message.childs) {
+                return { ...message, childs: updateMessageInTree(message.childs, updatedMessage) };
+            }
+            return message;
+        });
     }
 
     function handleSubmit() {
