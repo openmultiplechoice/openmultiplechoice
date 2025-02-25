@@ -8,7 +8,12 @@
     var showEditor = false;
     var messages = [];
     var nestedMessages = [];
-    var messageInfo = "Loading comments ...";
+    var loadingStatus;
+
+    const Status = {
+        LOADING: "loading",
+        EMPTY: "empty"
+    };
 
     $: questionId,
         (() => {
@@ -21,7 +26,7 @@
 
     function loadMessages() {
         messages = [];
-        messageInfo = "Loading comments ...";
+        loadingStatus = Status.LOADING;
 
         if (debounced) {
             debounced.cancel();
@@ -46,7 +51,7 @@
                         messages = response.data;
                         if (messages.length === 0) {
                             nestedMessages = [];
-                            messageInfo = "No comments yet";
+                            loadingStatus = Status.EMPTY;
                             return;
                         }
                         nestedMessages = generateMessageTree(messages);
@@ -148,7 +153,7 @@
         // Find the specified message in the list and replace it
         const index = messages.findIndex(obj => obj.id === message.id);
         messages[index] = message;
-        // Only update the message but not re-generated the tree to prevent re-ordering and the message jumping somewhere
+        // Only update the message but don't regenerate the tree to not confuse the user with reordering and jumping messages
         nestedMessages = updateMessageInTree(nestedMessages, message);
     }
 
@@ -187,40 +192,43 @@
 </script>
 
 {#if questionContext.isAnswered}
-    <div class="mt-3 mb-3">
+    <div class="mt-4 mb-3 px-2 py-2 border rounded-3 shadow-sm bg-white">
         {#each nestedMessages as message (message.id)}
             <MessageView bind:message bind:questionId indent={0} {addMessage} {updateMessage} />
         {:else}
-            <p>{messageInfo}</p>
+            <div class="mb-3 d-flex justify-content-center">
+                {#if loadingStatus === Status.LOADING}
+                    <div class="spinner-border text-secondary" role="status">
+                        <span class="visually-hidden">Loading messages ...</span>
+                    </div>
+                {:else if loadingStatus === Status.EMPTY}
+                    <div class="text-muted">
+                        No comments yet. Be the first to leave a comment!
+                    </div>
+                {/if}
+            </div>
         {/each}
 
         {#if showEditor}
-            <div class="mt-3">
-                <form
-                    action="#"
-                    on:submit|preventDefault={handleSubmit}
-                    class="mt-3 mb-3">
-                    <div class="mb-3 text-break">
-                        <input id="message" type="hidden" name="message" value="" />
-                        <trix-editor input="message" />
-                    </div>
-                    <div class="mb-3 form-check">
+            <div class="mt-3 border-top border-2 pt-3">
+                <input id="message" type="hidden" name="message" value="" />
+                <trix-editor input="message" class="trix-content form-control mb-2" style="min-height: 4rem;" />
+                <div class="d-flex justify-content-between pb-1">
+                    <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="anonymous" checked>
-                        <label class="form-check-label" for="anonymous">Anonymous</label>
+                        <label class="form-check-label small" for="anonymous">Anonymous</label>
                     </div>
-                    <input class="btn btn-sm btn-primary" type="submit" value="Send" />
-                    <button
-                        on:click|preventDefault={toggleEditor}
-                        class="btn btn-link mr-0">
-                            Cancel
-                    </button>
-                </form>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-link btn-sm text-muted text-decoration-none p-0" on:click={toggleEditor}>Cancel</button>
+                        <button class="btn btn-primary btn-sm py-0" on:click={handleSubmit}>Save</button>
+                    </div>
+                </div>
             </div>
         {:else}
             <button
                 on:click|preventDefault={toggleEditor}
                 class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-chat-square-dots" /> Add comment
+                    <i class="bi bi-chat-square-text" /> Add comment
             </button>
         {/if}
     </div>
