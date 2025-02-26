@@ -479,8 +479,10 @@
                     {submitAnswer}
                     {deleteAnswer}
                     {updateCurrentQuestionData} />
-                {#if !examMode && currentQuestionContext.isAnswered}
-                    <Messages bind:questionId={currentQuestion.id} />
+                {#if !examMode}
+                    <Messages
+                        bind:questionId={currentQuestion.id}
+                        bind:questionContext={currentQuestionContext} />
                 {/if}
             {/if}
         </div>

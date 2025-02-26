@@ -3,6 +3,7 @@
     import MessageView from "./MessageView.svelte";
 
     export let questionId;
+    export let questionContext;
 
     var showEditor = false;
     var messages = [];
@@ -147,40 +148,42 @@
     }
 </script>
 
-<div class="mt-3 mb-3">
-    {#each nestedMessages as message (message.id)}
-        <MessageView bind:message bind:questionId indent={0} {addMessage} {updateMessage} />
-    {:else}
-        <p>{messageInfo}</p>
-    {/each}
+{#if questionContext.isAnswered}
+    <div class="mt-3 mb-3">
+        {#each nestedMessages as message (message.id)}
+            <MessageView bind:message bind:questionId indent={0} {addMessage} {updateMessage} />
+        {:else}
+            <p>{messageInfo}</p>
+        {/each}
 
-    {#if showEditor}
-        <div class="mt-3">
-            <form
-                action="#"
-                on:submit|preventDefault={handleSubmit}
-                class="mt-3 mb-3">
-                <div class="mb-3 text-break">
-                    <input id="message" type="hidden" name="message" value="" />
-                    <trix-editor input="message" />
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="anonymous" checked>
-                    <label class="form-check-label" for="anonymous">Anonymous</label>
-                </div>
-                <input class="btn btn-sm btn-primary" type="submit" value="Send" />
-                <button
-                    on:click|preventDefault={toggleEditor}
-                    class="btn btn-link mr-0">
-                        Cancel
-                </button>
-            </form>
-        </div>
-    {:else}
-        <button
-            on:click|preventDefault={toggleEditor}
-            class="btn btn-sm btn-outline-secondary">
-                <i class="bi bi-chat-square-dots" /> Add comment
-        </button>
-    {/if}
-</div>
+        {#if showEditor}
+            <div class="mt-3">
+                <form
+                    action="#"
+                    on:submit|preventDefault={handleSubmit}
+                    class="mt-3 mb-3">
+                    <div class="mb-3 text-break">
+                        <input id="message" type="hidden" name="message" value="" />
+                        <trix-editor input="message" />
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="anonymous" checked>
+                        <label class="form-check-label" for="anonymous">Anonymous</label>
+                    </div>
+                    <input class="btn btn-sm btn-primary" type="submit" value="Send" />
+                    <button
+                        on:click|preventDefault={toggleEditor}
+                        class="btn btn-link mr-0">
+                            Cancel
+                    </button>
+                </form>
+            </div>
+        {:else}
+            <button
+                on:click|preventDefault={toggleEditor}
+                class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-chat-square-dots" /> Add comment
+            </button>
+        {/if}
+    </div>
+{/if}
