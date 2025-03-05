@@ -461,8 +461,9 @@
             class:col-lg-9={settingsShowSidebar}
             class:col-lg-10={!settingsShowSidebar}
             class:offset-lg-1={!settingsShowSidebar}
-            class:offset-xxl-2={!settingsShowSidebar}
-            class="col-md-12 col-xxl-8">
+            class:offset-xl-2={!settingsShowSidebar}
+            class:offset-xxl-3={!settingsShowSidebar}
+            class="col-md-12 col-xl-8 col-xxl-6">
 
             <SessionQuestionNav
                 bind:data
