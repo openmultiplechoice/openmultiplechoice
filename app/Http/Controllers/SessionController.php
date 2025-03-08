@@ -11,11 +11,6 @@ use App\Models\Session;
 
 class SessionController extends Controller
 {
-    public function index()
-    {
-        //
-    }
-
     public function create(Request $request)
     {
         if ($request->has('module')) {
@@ -70,16 +65,33 @@ class SessionController extends Controller
 
     public function edit(Session $session)
     {
-        //
+        abort_if($session->user_id != Auth::id(), 404);
+
+        return view('session-editor', [
+            'session' => $session,
+        ]);
     }
 
     public function update(Request $request, Session $session)
     {
-        //
+        abort_if($session->user_id != Auth::id(), 404);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+        ]);
+
+        $session->name = $validated['name'];
+        $session->save();
+
+        return redirect()->back()->with('msg-success', 'Session updated successfully');
     }
 
     public function destroy(Session $session)
     {
-        //
+        abort_if($session->user_id != Auth::id(), 404);
+
+        $session->delete();
+
+        return redirect()->route('index')->with('msg-success', 'Session deleted successfully');
     }
 }

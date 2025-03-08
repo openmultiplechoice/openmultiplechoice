@@ -119,7 +119,9 @@
 
 <div class="row">
     <div class="col">
-        <h4><a href="/decks/{id}" class="text-reset text-decoration-none">{name}</a></h4>
+        <h4 class="text-truncate" title="{name}">
+            <a href="/decks/{id}" class="text-reset text-decoration-none">{name}</a>
+        </h4>
     </div>
 </div>
 

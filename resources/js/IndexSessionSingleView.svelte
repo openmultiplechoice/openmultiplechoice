@@ -36,7 +36,7 @@
     <SessionProgressBar
         bind:progressPercentage />
     <div class="row mt-1">
-        <div class="col-md-4">
+        <div class="col-md-4 text-truncate" title="{session.name}">
             <strong>{session.name}</strong>
         </div>
         <div class="col-md-4">
@@ -53,6 +53,10 @@
                         <i class="bi bi-repeat" /> Repeat incorrect
                 </button>
             {/if}
+            <a href="/sessions/{session.id}/edit" class="btn btn-sm btn-outline-secondary"
+                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                    <i class="bi bi-three-dots-vertical" />
+            </a>
         </div>
         <div class="col-md-4" title="{sessionAt}">
             <span class="float-end d-none d-sm-none d-md-inline">
@@ -64,4 +68,3 @@
         </div>
     </div>
 </div>
-

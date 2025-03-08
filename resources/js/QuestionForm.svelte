@@ -249,7 +249,7 @@
         {#if showCaseSelector && question.case_id}
             <div class="alert alert-light m-1" role="alert">
                 <p class="small fw-bold"><i class="bi bi-clipboard2-pulse"></i> CASE</p>
-                <p>{@html DOMPurify.sanitize(cases.find(c => c.id === question.case_id).text)}</p>
+                <p class="trix-content">{@html DOMPurify.sanitize(cases.find(c => c.id === question.case_id).text)}</p>
             </div>
             <div class="text-end m-1">
                 <button type="button" class="btn btn-sm btn-light" title="Remove case"
@@ -276,14 +276,14 @@
         <div class="mt-3 mb-3">
             <label for="questionText" class="form-label">Question text</label>
             <input id="questionText" type="hidden" bind:value={question.text} />
-            <trix-editor id="editor-questionText" class="bg-light" bind:this={editorQuestion} input="questionText" />
+            <trix-editor id="editor-questionText" class="bg-light trix-content" bind:this={editorQuestion} input="questionText" />
             {@html savingStatus}
         </div>
 
         <div class="mt-3 mb-3">
             <label for="questionHint" class="form-label">Question hint (optional)</label>
             <input id="questionHint" type="hidden" bind:value={question.hint} />
-            <trix-editor id="editor-questionHint" class="bg-light" bind:this={editorHint} input="questionHint" />
+            <trix-editor id="editor-questionHint" class="bg-light trix-content" bind:this={editorHint} input="questionHint" />
             {@html savingStatus}
             <div id="questionHint" class="form-text">
                 A hint that can be shown to the user if they are stuck.
@@ -293,7 +293,7 @@
         <div class="mt-3 mb-3">
             <label for="questionComment" class="form-label">Question comment (optional)</label>
             <input id="questionComment" type="hidden" bind:value={question.comment} />
-            <trix-editor id="editor-questionComment" class="bg-light" bind:this={editorComment} input="questionComment" />
+            <trix-editor id="editor-questionComment" class="bg-light trix-content" bind:this={editorComment} input="questionComment" />
             {@html savingStatus}
             <div id="questionHint" class="form-text">
                 A comment that will be shown once the user has answered the question.

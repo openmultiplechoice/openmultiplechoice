@@ -168,10 +168,10 @@
 
     <div class="row">
         {#if statsDecksNew.length > 0}
-            <div class="col-lg mt-3 text-overflow">
+            <div class="col-lg mt-3 text-truncate">
                 <h6>New decks</h6>
                 {#each statsDecksNew as deck}
-                    <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
+                    <div class="alert alert-light m-1 p-2 text-truncate" role="alert">
                         {#if deck.questions.length > 0}
                             <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection" /> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
@@ -179,16 +179,16 @@
                             type="button" class="btn btn-sm btn-primary">
                                 <i class="bi bi-rocket-takeoff" />
                         </button>
-                        <a href="/decks/{deck.id}" class="alert-link text-overflow">{deck.name}</a>
+                        <a href="/decks/{deck.id}" class="alert-link text-truncate">{deck.name}</a>
                     </div>
                 {/each}
             </div>
         {/if}
         {#if statsDecksPopular.length > 0 && statsDecksPopularTimespan}
-            <div class="col-lg mt-3 text-overflow">
+            <div class="col-lg mt-3 text-truncate">
                 <h6>Popular decks (last {statsDecksPopularTimespan} days)</h6>
                 {#each statsDecksPopular as deck}
-                    <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
+                    <div class="alert alert-light m-1 p-2 text-truncate" role="alert">
                         {#if deck.questions.length > 0}
                             <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection" /> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
@@ -205,10 +205,10 @@
             </div>
         {/if}
         {#if statsDecksLastUsed.length > 0}
-            <div class="col-lg mt-3 text-overflow">
+            <div class="col-lg mt-3 text-truncate">
                 <h6>Last used decks</h6>
                 {#each statsDecksLastUsed as deck}
-                    <div class="alert alert-light m-1 p-2 text-overflow" role="alert">
+                    <div class="alert alert-light m-1 p-2 text-truncate" role="alert">
                         {#if deck.questions.length > 0}
                             <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection" /> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
@@ -245,11 +245,3 @@
         <span class="badge text-bg-light text-muted">Last updated: {statsLastUpdatedAt ? format(statsLastUpdatedAt, "HH:mm") : "unknown"}</span>
     </div>
 </div>
-
-<style>
-    .text-overflow {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-</style>

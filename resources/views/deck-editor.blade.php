@@ -7,15 +7,15 @@
 @php($editallowed = $deck->access != 'public-rw-listed' || Auth::user()->is_admin || Auth::user()->is_moderator)
 <div class="row">
     <div class="col-md">
-        <div class="mb-2 d-flex gap-1">
-            <h1 class="h4 mb-1">
+        <div class="d-flex gap-1">
+            <h1 class="h4 text-truncate" title="{{ $deck->name }}">
                 <a href="{{ url('decks', $deck->id) }}" class="text-reset text-decoration-none"><i class="bi bi-arrow-left me-2"></i>{{ $deck->name }}</a>
             </h1>
             @if($deck->submission)
                 <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Submitted</span>
             @endif
         </div>
-        <form action="/decks/{{ isset($deck) ? $deck->id : '' }}" method="post" class="mt-3 mb-3">
+        <form action="/decks/{{ isset($deck) ? $deck->id : '' }}" method="post" class="mb-3">
             @isset($deck)
                 @method('PUT')
             @endisset

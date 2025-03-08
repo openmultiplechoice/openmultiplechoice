@@ -399,7 +399,7 @@
 {#if data}
     <div class="row">
         <div class="col mb-1">
-            <p class="text-overflow">
+            <p class="text-truncate">
                 <button
                     class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline"
                     class:bg-light={!settingsShowSidebar}
@@ -436,7 +436,7 @@
                     class:bg-success={!examMode && !currentQuestion.is_invalid && answerChoice && answerChoice.is_correct}
                     class:bg-danger={!examMode && !currentQuestion.is_invalid && answerChoice && !answerChoice.is_correct}>{indexCurrentQuestion}/{numberQuestions}</span>
 
-                <a href="/decks/{data.deck.id}" class="text-reset text-decoration-none"><strong>{data.deck.name}</strong></a>
+                <a href="/sessions/{data.session.id}/edit" class="text-reset text-decoration-none"><strong>{data.session.name}</strong></a>
             </p>
         </div>
     </div>
@@ -509,11 +509,3 @@
     <Confetti x={[-5, 5]} y={[0, 0.1]} delay={[100, 3000]} infinite duration=5000 amount=200 fallDistance="100vh" />
     </div>
 {/if}
-
-<style>
-    .text-overflow {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-</style>
