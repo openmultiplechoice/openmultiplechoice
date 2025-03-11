@@ -44,7 +44,7 @@
             @endforelse
         </div>
     </div>
-    <div class="row">
+    <div class="sticky-bottom bg-white mt-3 pt-3">
         {{ $questions->links() }}
     </div>
 @endsection
