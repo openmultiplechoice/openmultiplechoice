@@ -19,7 +19,8 @@
             </div>
         @endforelse
     </div>
-    <div class="row">
+    
+    <div class="sticky-bottom bg-white mt-3 pt-3">
         {{ $bookmarked_decks->links() }}
     </div>
 
