@@ -1,6 +1,10 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
   linter:
@@ -87,3 +91,20 @@ jobs:
         run: |
           git add .
           git diff --staged --exit-code
+
+  verify-git-diff-check:
+    runs-on: ubuntu-latest
+
+    # Run job only if the workflow run was triggered by the pull_request event,
+    # as we need a base commit to diff against
+    if: ${{ github.event_name == 'pull_request' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: git diff check
+        run: |
+          git diff --check ${{ github.event.pull_request.base.sha }}
