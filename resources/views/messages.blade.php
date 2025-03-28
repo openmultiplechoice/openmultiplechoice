@@ -21,7 +21,9 @@
             <p>No comments yet</p>
         @endforelse
 
-        <p>{{ $messages->links() }}</p>
+        <div class="sticky-bottom bg-white mt-3 pt-3">
+            {{ $messages->links() }}
+        </div>
     </div>
 </div>
 

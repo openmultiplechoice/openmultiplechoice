@@ -51,5 +51,8 @@
             @endforeach
         </tbody>
     </table>
-    {{ $users->links() }}
+
+    <div class="sticky-bottom bg-white mt-3 pt-3">
+        {{ $users->links() }}
+    </div>
 @endsection

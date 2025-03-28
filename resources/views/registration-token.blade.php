@@ -90,10 +90,9 @@
         </table>
     </div>
 </div>
-<div class="row">
-    <div class="col">
-        {{ $tokens->links() }}
-    </div>
+
+<div class="sticky-bottom bg-white mt-3 pt-3">
+    {{ $tokens->links() }}
 </div>
 
 @endsection
