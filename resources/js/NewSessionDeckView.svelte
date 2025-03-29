@@ -1,17 +1,17 @@
 <script>
+    import { preventDefault } from 'svelte/legacy';
+
     import { onMount } from "svelte";
     import { format, parseISO } from "date-fns";
 
     import { sessionProgressPercentage } from "./StatsHelper.js";
     import { createSession } from "./NewSessionHelper.js";
 
-    export let deck;
-    export let selectDeck;
-    export let selectedDecks;
+    let { deck = $bindable(), selectDeck, selectedDecks = $bindable() } = $props();
 
-    let progressIndicator = undefined;
+    let progressIndicator = $state(undefined);
 
-    let isBookmarked = deck.bookmarks.length > 0;
+    let isBookmarked = $state(deck.bookmarks.length > 0);
 
     onMount(() => {
         const validQuestions = deck.questions.filter(q => !q.is_invalid);
@@ -89,22 +89,22 @@
                     )}
                 </span>
             {/if}
-            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection" /> {deck.questions.length}</span>
+            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {deck.questions.length}</span>
             {#if deck.sessions}
-                <span class="badge text-bg-light font-monospace" title="Number of sessions"><i class="bi bi-rocket" /> {deck.sessions.length}</span>
+                <span class="badge text-bg-light font-monospace" title="Number of sessions"><i class="bi bi-rocket"></i> {deck.sessions.length}</span>
             {/if}
             {#if progressIndicator}
                 {@html progressIndicator}
             {/if}
             <button
                 class="btn btn-sm btn-link"
-                on:click={toggleBookmark}>
+                onclick={toggleBookmark}>
                 <i class:bi-bookmark-check-fill={isBookmarked}
                     class:bi-bookmark={!isBookmarked}>
                 </i>
             </button>
             <input type="checkbox" class="form-check-input float-end" value="" id="selected{deck.id}"
-                on:click={() => selectDeck(deck.id)}
+                onclick={() => selectDeck(deck.id)}
                 checked={selectedDecks.has(deck.id)} />
         </div>
 
@@ -113,9 +113,9 @@
                 {deck.name}
             </h6>
             <button type="button" class="btn btn-sm btn-primary"
-                on:click|preventDefault={() => createSession(deck.id)}>
+                onclick={preventDefault(() => createSession(deck.id))}>
 
-                <i class="bi bi-rocket-takeoff" /> Start session
+                <i class="bi bi-rocket-takeoff"></i> Start session
             </button>
             <a href="/decks/{deck.id}" class="card-link">Browse deck</a>
         </div>

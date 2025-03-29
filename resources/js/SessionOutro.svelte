@@ -1,65 +1,68 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import Chart from 'chart.js/auto';
 
-    export let progressPercentage;
-    export let sessionId;
+    let { progressPercentage = $bindable(), sessionId } = $props();
 
-    let canvas;
-    let chart;
+    let canvas = $state();
+    let chart = $state();
 
-    $: if (canvas) {
-        (() => {
-            if (chart) {
-                // The chart was drawn already and we don't expect the session
-                // to change after it was completed. Nothing to do, I guess?
-                return;
-            }
-            const config = {
-                type: 'doughnut',
-                data: {
-                    labels: [
-                        'Correct',
-                        'Correct with help',
-                        'Incorrect'
-                    ],
-                    datasets: [
-                        {
-                            label: '%',
-                            data: [
-                                progressPercentage.correct,
-                                progressPercentage.correctWithHelp,
-                                progressPercentage.incorrect
-                            ],
-                            backgroundColor: [
-                                '#198754',
-                                '#ffc107',
-                                '#dc3545'
-                            ],
-                            hoverOffet: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    hover: {
-                        mode: null
+    run(() => {
+        if (canvas) {
+            (() => {
+                if (chart) {
+                    // The chart was drawn already and we don't expect the session
+                    // to change after it was completed. Nothing to do, I guess?
+                    return;
+                }
+                const config = {
+                    type: 'doughnut',
+                    data: {
+                        labels: [
+                            'Correct',
+                            'Correct with help',
+                            'Incorrect'
+                        ],
+                        datasets: [
+                            {
+                                label: '%',
+                                data: [
+                                    progressPercentage.correct,
+                                    progressPercentage.correctWithHelp,
+                                    progressPercentage.incorrect
+                                ],
+                                backgroundColor: [
+                                    '#198754',
+                                    '#ffc107',
+                                    '#dc3545'
+                                ],
+                                hoverOffet: 4
+                            }
+                        ]
                     },
-                    plugins: {
-                        legend: {
-                            display: false
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        hover: {
+                            mode: null
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
                         }
                     }
-                }
-            };
+                };
 
-            if (chart) {
-                chart.destroy();
-            }
-            var ctx = canvas.getContext('2d');
-            chart = new Chart(ctx, config);
-        })();
-    };
+                if (chart) {
+                    chart.destroy();
+                }
+                var ctx = canvas.getContext('2d');
+                chart = new Chart(ctx, config);
+            })();
+        }
+    });;
 
     function createSession(sessionId) {
         axios
@@ -86,9 +89,9 @@
             <a href="/sessions/create" class="btn btn-sm btn-primary">
                 <i class="bi bi-rocket-takeoff"></i> New session</a>
             {#if progressPercentage.incorrect > 0}
-                <button on:click|preventDefault={() => createSession(sessionId)}
+                <button onclick={preventDefault(() => createSession(sessionId))}
                     class="btn btn-sm btn-outline-secondary" type="button">
-                        <i class="bi bi-repeat" /> Repeat incorrect
+                        <i class="bi bi-repeat"></i> Repeat incorrect
                 </button>
             {/if}
             <a href="/" class="btn btn-sm btn-outline-secondary">Home</a>

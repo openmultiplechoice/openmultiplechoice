@@ -1,7 +1,9 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { onMount } from "svelte";
 
-    var settings;
+    var settings = $state();
 
     onMount(() => {
         axios
@@ -15,14 +17,16 @@
             });
     });
 
-    $: if (settings) {
-            axios
-                .put("/api/users/me/settings", settings)
-                .then(function (response) {})
-                .catch(function (error) {
-                    alert(error);
-                });
-        };
+    run(() => {
+        if (settings) {
+                axios
+                    .put("/api/users/me/settings", settings)
+                    .then(function (response) {})
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            }
+    });;
 </script>
 
 {#if settings}

@@ -1,26 +1,29 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import DOMPurify from "dompurify";
 
-    export let data;
-    export let examMode;
+    let { data = $bindable(), examMode } = $props();
 
-    $: currentQuestionId = data.session.current_question_id;
+    let currentQuestionId = $derived(data.session.current_question_id);
 
-    $: currentQuestionId,
-        (() => {
-            var e = document.getElementById(
-                "question" + currentQuestionId
-            );
-            if (e) {
-                e.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "center",
-                });
-            }
-        })();
+    run(() => {
+        currentQuestionId,
+            (() => {
+                var e = document.getElementById(
+                    "question" + currentQuestionId
+                );
+                if (e) {
+                    e.scrollIntoView({
+                        behavior: "smooth",
+                        block: "nearest",
+                        inline: "center",
+                    });
+                }
+            })();
+    });
 
-    $: answerChoiceIndicator = function (question) {
+    let answerChoiceIndicator = $derived(function (question) {
         var answerChoice = data.session.answer_choices.find(
             (e) => e.question_id === question.id
         );
@@ -39,15 +42,15 @@
         } else {
             return '<span class="text-danger-dark fw-bold">&cross;</span>';
         }
-    };
+    });
 </script>
 
 <div class="overflow-scroll" style="max-height: 85vh;">
     <ul class="list-group">
         {#each data.deck.questions as question, index}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
             <li
-                on:click={() =>
+                onclick={() =>
                     (data.session.current_question_id = question.id)}
                 class="list-group-item list-group-item-action text-truncate {question.id ===
                 data.session.current_question_id
