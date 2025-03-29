@@ -1,42 +1,65 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import _ from 'lodash';
     import debounce from "lodash/debounce";
     import DOMPurify from "dompurify";
 
     import AnswerForm from "./AnswerForm.svelte";
 
-    export let question;
-    export let cases;
-    export let toggleEditor;
-    export let handleQuestionRemove;
-    // For inline editing from the session or question
-    // view, we don't want to show all config options
-    export let showConfigEditor = false;
-    export let showCaseSelector = false;
+    /**
+     * @typedef {Object} Props
+     * @property {any} question
+     * @property {any} cases
+     * @property {any} toggleEditor
+     * @property {any} handleQuestionRemove
+     * @property {boolean} [showConfigEditor]
+     * @property {boolean} [showCaseSelector]
+     */
 
-    let editorQuestion;
-    let editorComment;
-    let editorHint;
-    let selectedCase;
+    /** @type {Props} */
+    let {
+        question = $bindable(),
+        cases = $bindable(),
+        toggleEditor,
+        handleQuestionRemove,
+        // For inline editing from the session or question
+        // view, we don't want to show all config options
+        showConfigEditor = false,
+        showCaseSelector = false
+    } = $props();
 
-    let savingStatus = "";
+    let editorQuestion = $state();
+    let editorComment = $state();
+    let editorHint = $state();
+    let selectedCase = $state();
 
-    $: correctAnswerId = question.correct_answer_id;
-    $: if (editorQuestion) {
-        configureEditorEventListener(editorQuestion);
-    }
-    $: if (editorComment) {
-        configureEditorEventListener(editorComment);
-    }
-    $: if (editorHint) {
-        configureEditorEventListener(editorHint);
-    }
+    let savingStatus = $state("");
 
-    $: if (question.case) {
-        selectedCase = question.case.id;
-    } else {
-        selectedCase = "";
-    }
+    let correctAnswerId = $derived(question.correct_answer_id);
+
+    run(() => {
+        if (editorQuestion) {
+            configureEditorEventListener(editorQuestion);
+        }
+    });
+    run(() => {
+        if (editorComment) {
+            configureEditorEventListener(editorComment);
+        }
+    });
+    run(() => {
+        if (editorHint) {
+            configureEditorEventListener(editorHint);
+        }
+    });
+    run(() => {
+        if (question.case) {
+            selectedCase = question.case.id;
+        } else {
+            selectedCase = "";
+        }
+    });
 
     function configureEditorEventListener(editor) {
         editor.addEventListener("trix-change", function () {
@@ -237,11 +260,11 @@
         }
 </script>
 
-<form action="#" on:submit|preventDefault={handleChange} class="mt-3">
+<form action="#" onsubmit={preventDefault(handleChange)} class="mt-3">
     {#if toggleEditor}
         <button
             type="button"
-            on:click|preventDefault={toggleEditor}
+            onclick={preventDefault(toggleEditor)}
             class="btn btn-outline-secondary btn-sm">Close editor</button>
     {/if}
 
@@ -253,7 +276,7 @@
             </div>
             <div class="text-end m-1">
                 <button type="button" class="btn btn-sm btn-light" title="Remove case"
-                    on:click|preventDefault={handleRemoveCase}><i class="bi bi-trash" /> Remove case</button>
+                    onclick={preventDefault(handleRemoveCase)}><i class="bi bi-trash"></i> Remove case</button>
             </div>
         {:else if showCaseSelector && cases && cases.length > 0}
             <div class="alert alert-light" role="alert">
@@ -262,7 +285,7 @@
                         <label for="case" class="col-form-label small fw-bold"><i class="bi bi-clipboard2-pulse"></i> CASE</label>
                     </div>
                     <div class="col-auto">
-                        <select id="case" class="form-select" bind:value={selectedCase} on:change={handleQuestionCaseChange}>
+                        <select id="case" class="form-select" bind:value={selectedCase} onchange={handleQuestionCaseChange}>
                             <option value="">Select case</option>
                             {#each cases as c}
                                 <option value={c.id} selected={question.case_id == c.id}>{_.truncate(DOMPurify.sanitize(c.text, {ALLOWED_TAGS: []}), {'length': 30})}</option>
@@ -276,14 +299,14 @@
         <div class="mt-3 mb-3">
             <label for="questionText" class="form-label">Question text</label>
             <input id="questionText" type="hidden" bind:value={question.text} />
-            <trix-editor id="editor-questionText" class="bg-light trix-content" bind:this={editorQuestion} input="questionText" />
+            <trix-editor id="editor-questionText" class="bg-light trix-content" bind:this={editorQuestion} input="questionText"></trix-editor>
             {@html savingStatus}
         </div>
 
         <div class="mt-3 mb-3">
             <label for="questionHint" class="form-label">Question hint (optional)</label>
             <input id="questionHint" type="hidden" bind:value={question.hint} />
-            <trix-editor id="editor-questionHint" class="bg-light trix-content" bind:this={editorHint} input="questionHint" />
+            <trix-editor id="editor-questionHint" class="bg-light trix-content" bind:this={editorHint} input="questionHint"></trix-editor>
             {@html savingStatus}
             <div id="questionHint" class="form-text">
                 A hint that can be shown to the user if they are stuck.
@@ -293,7 +316,7 @@
         <div class="mt-3 mb-3">
             <label for="questionComment" class="form-label">Question comment (optional)</label>
             <input id="questionComment" type="hidden" bind:value={question.comment} />
-            <trix-editor id="editor-questionComment" class="bg-light trix-content" bind:this={editorComment} input="questionComment" />
+            <trix-editor id="editor-questionComment" class="bg-light trix-content" bind:this={editorComment} input="questionComment"></trix-editor>
             {@html savingStatus}
             <div id="questionHint" class="form-text">
                 A comment that will be shown once the user has answered the question.
@@ -304,13 +327,13 @@
 
         <div class="mb-3 p-3 bg-light rounded">
             <div class="form-check mb-3">
-                <input type="checkbox" class="form-check-input" id="checkInvalidQuestion" bind:checked={question.is_invalid} on:click|preventDefault={toggleQuestionValid}>
-                <label class="form-check-label" for="checkInvalidQuestion"><i class="bi bi-cone-striped" /> <strong>Invalid question</strong> - Is the answer unknown or disputed? Invalid questions remain in deck but are not counted into results.</label>
+                <input type="checkbox" class="form-check-input" id="checkInvalidQuestion" bind:checked={question.is_invalid} onclick={preventDefault(toggleQuestionValid)}>
+                <label class="form-check-label" for="checkInvalidQuestion"><i class="bi bi-cone-striped"></i> <strong>Invalid question</strong> - Is the answer unknown or disputed? Invalid questions remain in deck but are not counted into results.</label>
             </div>
 
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="checkNeedsReview" bind:checked={question.needs_review} on:click|preventDefault={toggleQuestionNeedsReview}>
-                <label class="form-check-label" for="checkNeedsReview"><i class="bi bi-eraser-fill" /> <strong>Needs review</strong> - Does this question need to be reviewed and improved? Questions marked for review remain in deck and are counted into results.</label>
+                <input type="checkbox" class="form-check-input" id="checkNeedsReview" bind:checked={question.needs_review} onclick={preventDefault(toggleQuestionNeedsReview)}>
+                <label class="form-check-label" for="checkNeedsReview"><i class="bi bi-eraser-fill"></i> <strong>Needs review</strong> - Does this question need to be reviewed and improved? Questions marked for review remain in deck and are counted into results.</label>
             </div>
         </div>
     {/key}
@@ -318,7 +341,7 @@
     <div class="mb-3">
         <label for="image" class="form-label">Add image</label>
         <input
-            on:input={handleImageAdd}
+            oninput={handleImageAdd}
             class="form-control"
             type="file"
             accept="image/jpeg, image/png, image/webp"
@@ -344,13 +367,13 @@
             <div class="card" style="width: 18rem">
                 <div class="card-header bg-transparent">
                     <button
-                        on:click|preventDefault={() => {
+                        onclick={preventDefault(() => {
                             if (confirm("Are you sure you want to delete this image?")) {
                                 handleImageRemove(image.id);
                             }
-                        }}
+                        })}
                         type="button"
-                        class="btn btn-sm btn-light"><i class="bi bi-trash" /></button>
+                        class="btn btn-sm btn-light"><i class="bi bi-trash"></i></button>
                 </div>
                 <img src="/{image.path}" class="card-img-top" alt="" />
                 {#if image.comment}
@@ -365,35 +388,35 @@
     {/each}
 </div>
 
-{#each question.answers as answer (answer.id)}
-    <AnswerForm bind:answer />
+{#each question.answers as answer, i (answer.id)}
+    <AnswerForm bind:answer={question.answers[i]} />
     <div class="text-end mb-2">
         {#if question.type === "mc"}
             <button
-                on:click|preventDefault={() => {
+                onclick={preventDefault(() => {
                     updateCorrectAnswer(answer.id);
-                }}
+                })}
                 type="button"
                 class="btn btn-sm {correctAnswerId ===
                 answer.id
                     ? 'btn-success'
                     : 'btn-light'}"
                 title="Set as correct answer"
-                ><i class="bi bi-check-lg" /></button>
+                ><i class="bi bi-check-lg"></i></button>
         {/if}
         <button
-            on:click|preventDefault={() => {
+            onclick={preventDefault(() => {
                 if (confirm("Are you sure you want to delete this answer?")) {
                     handleAnswerRemove(answer.id);
                 }
-            }}
+            })}
             type="button" class="btn btn-sm btn-light"
-            title="Delete answer"><i class="bi bi-trash" /></button>
+            title="Delete answer"><i class="bi bi-trash"></i></button>
     </div>
 {/each}
 
 {#if question.type === "mc" || question.answers.length === 0}
-    <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary"
+    <button onclick={handleAnswerAdd} class="btn btn-sm btn-primary"
         >Add answer</button>
 {/if}
 
@@ -419,7 +442,7 @@
             <div class="col-auto">
                 <select id="questionType" class="form-select font-monospace text-uppercase"
                     disabled={question.answers.length > 1}
-                    bind:value={question.type} on:change={handleQuestionTypeChange}>
+                    bind:value={question.type} onchange={handleQuestionTypeChange}>
 
                     {#if question.answers.length <= 1 || question.type === "card"}
                         <option value="card" selected={question.type == "card"}>card</option>
@@ -442,13 +465,13 @@
                 <strong>Delete question?</strong> Deleting a question will also delete all associated answers and images.
             </p>
             <button
-                on:click|preventDefault={() => {
+                onclick={preventDefault(() => {
                     if (confirm("Are you sure you want to delete this question?")) {
                         handleQuestionRemove(question.id);
                     }
-                }}
+                })}
                 type="button" class="btn btn-sm btn-danger">
-                    <i class="bi bi-trash" /> Delete question
+                    <i class="bi bi-trash"></i> Delete question
             </button>
         </div>
     {/if}

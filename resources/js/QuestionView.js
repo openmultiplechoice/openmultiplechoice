@@ -1,10 +1,11 @@
 import SessionQuestionView from './SessionQuestionView.svelte';
+import { mount } from "svelte";
 
 const questionViewEl = document.getElementById('QuestionView');
 
 const question = JSON.parse(questionViewEl.dataset.question);
 
-const f = new SessionQuestionView({
+const f = mount(SessionQuestionView, {
     target: questionViewEl,
     props: {
         question: question,
