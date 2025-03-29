@@ -112,7 +112,7 @@
     "isEntry": true
   },
   "node_modules/trix/dist/trix.esm.js": {
-    "file": "assets/trix.esm-CDCBv0ph.js",
+    "file": "assets/trix.esm-Di7LRUto.js",
     "name": "trix.esm",
     "src": "node_modules/trix/dist/trix.esm.js",
     "isEntry": true
@@ -236,7 +236,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-AgtD44OO.js",
+    "file": "assets/app-BEjI8a3U.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
