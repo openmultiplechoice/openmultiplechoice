@@ -1,11 +1,13 @@
 <script>
+    import { preventDefault } from 'svelte/legacy';
+
     import DOMPurify from "dompurify";
 
-    export let data;
+    let { data = $bindable() } = $props();
 
-    $: currentQuestion = data
+    let currentQuestion = $derived(data
         ? data.questions.find((q) => q.id === data.current_question_id)
-        : null;
+        : null);
 </script>
 
 {#if data}
@@ -13,10 +15,10 @@
         {#each data.questions as question, index}
             <button
                 type="button"
-                on:click|preventDefault={() => {
+                onclick={preventDefault(() => {
                     data.current_question_id = question.id;
                     data.current_case_id = null;
-                }}
+                })}
                 class="list-group-item list-group-item-action text-truncate"
                 class:list-group-item-dark={question.id === data.current_question_id}
                 class:list-group-item-light={!(question.id === data.current_question_id)}
@@ -39,10 +41,10 @@
         {#each data.cases as kase, index}
             <button
                 type="button"
-                on:click|preventDefault={() => {
+                onclick={preventDefault(() => {
                     data.current_case_id = kase.id;
                     data.current_question_id = null;
-                }}
+                })}
                 class="list-group-item list-group-item-action text-truncate"
                 class:list-group-item-dark={kase.id === data.current_case_id}
                 class:list-group-item-info={!(kase.id === data.current_case_id) && !(currentQuestion && currentQuestion.case_id === kase.id)}

@@ -1,19 +1,23 @@
 <script>
+    import { preventDefault } from 'svelte/legacy';
+
     import DOMPurify from "dompurify";
     import { format, parseISO } from "date-fns";
     import MessageView from "./MessageView.svelte";
     import { UserSettings } from "./UserSettingsStore.js";
 
-    export let message;
-    export let indent;
-    export let addMessage;
-    export let updateMessage;
-    export let questionId;
+    let {
+        message = $bindable(),
+        indent,
+        addMessage,
+        updateMessage,
+        questionId = $bindable(),
+    } = $props();
 
-    $: userThumb = message.thumbs.find((entry) => entry.user_id !== undefined) ?? null
+    let userThumb = $derived(message.thumbs.find((entry) => entry.user_id !== undefined) ?? null)
 
-    var showEditor = false;
-    var showEditorReply = false;
+    var showEditor = $state(false);
+    var showEditorReply = $state(false);
 
     function toggleEditor() {
         showEditor = !showEditor;
@@ -155,13 +159,13 @@
                             <small><i>deleted</i></small>
                         </p>
                     {/if}
-                    <p class="text-muted text-end mb-0">
+
                         <small>
-                            <div class="d-flex align-items-center py-1">
+                            <div class="d-flex align-items-center py-1 text-muted text-end mb-0">
                                 {#if !message.is_deleted}
                                     <div class="d-flex rounded-4 align-items-center bg-light ms-auto px-2">
                                         <button class="btn mx-0 ps-0 pe-1"
-                                                on:click|preventDefault={() => handleThumb("up")}>
+                                                onclick={preventDefault(() => handleThumb("up"))}>
                                                 <i class="bi"
                                                     class:bi-hand-thumbs-up-fill={userThumb?.type === "up"}
                                                     class:bi-hand-thumbs-up={!(userThumb?.type === "up")}></i>
@@ -169,7 +173,7 @@
                                         <span class="pe-1 font-monospace">{message.thumbs_up_count}</span>
                                         <span class="px-1">|</span>
                                         <button class="btn mx-0 px-1"
-                                                on:click|preventDefault={() => handleThumb("down")}>
+                                                onclick={preventDefault(() => handleThumb("down"))}>
                                                 <i class="bi"
                                                     class:bi-hand-thumbs-down-fill={userThumb?.type === "down"}
                                                     class:bi-hand-thumbs-down={!(userThumb?.type === "down")}></i>
@@ -179,16 +183,16 @@
                                     {#if $UserSettings.id === message.author_id}
                                         <button
                                             class="btn btn-sm btn-link link-dark"
-                                            on:click|preventDefault={toggleEditor}
+                                            onclick={preventDefault(toggleEditor)}
                                             >Edit</button>
                                         <button
                                             class="btn btn-sm btn-link link-dark"
-                                            on:click|preventDefault={handleDelete}
+                                            onclick={preventDefault(handleDelete)}
                                             >Delete</button>
                                     {/if}
                                     <button
                                         class="btn btn-sm btn-link link-dark"
-                                        on:click|preventDefault={toggleEditorReply}
+                                        onclick={preventDefault(toggleEditorReply)}
                                         >Reply</button>
                                 {/if}
                                 {format(
@@ -204,14 +208,14 @@
                                 {/if}
                             </div>
                         </small>
-                    </p>
+
                 </div>
             {:else}
                 <div class="col-md">
-                    <form on:submit|preventDefault={handleSubmit} class="mt-3 mb-3">
+                    <form onsubmit={preventDefault(handleSubmit)} class="mt-3 mb-3">
                         <div class="mb-3">
                             <input id="message" type="hidden" name="message" value={message.text} />
-                            <trix-editor input="message" />
+                            <trix-editor input="message"></trix-editor>
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="anonymous" checked={message.is_anonymous}>
@@ -222,7 +226,7 @@
                             type="submit"
                             value="Save" />
                         <button
-                            on:click|preventDefault={toggleEditor}
+                            onclick={preventDefault(toggleEditor)}
                             class="btn btn-link mr-0">
                                 Cancel
                         </button>
@@ -234,11 +238,11 @@
         {#if showEditorReply}
             <div class="row">
                 <div class="col-md">
-                    <form on:submit|preventDefault={handleReply} class="mt-3 mb-3">
+                    <form onsubmit={preventDefault(handleReply)} class="mt-3 mb-3">
                         <input id="parentMessageId" type="hidden" value={message.id} />
                         <div class="mb-3">
                             <input id="replyMessage" type="hidden" name="replyMessage" value="" />
-                            <trix-editor input="replyMessage" />
+                            <trix-editor input="replyMessage"></trix-editor>
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="replyAnonymous" checked>
@@ -249,7 +253,7 @@
                             type="submit"
                             value="Send reply" />
                         <button
-                            on:click|preventDefault={toggleEditorReply}
+                            onclick={preventDefault(toggleEditorReply)}
                             class="btn btn-link mr-0">
                                 Cancel
                         </button>
@@ -261,9 +265,9 @@
 {/if}
 
 {#if message.childs}
-    {#each message.childs as child}
+    {#each message.childs as child, i}
         <MessageView
-            bind:message={child}
+            bind:message={message.childs[i]}
             indent={indent + 1}
             {addMessage}
             {updateMessage}
