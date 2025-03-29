@@ -1,15 +1,15 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import { onMount } from "svelte";
 
-    export let questionId;
+    let { questionId } = $props();
 
-    let decksAdded = undefined;
-    let decksOther = undefined;
-    let deckName = '';
-    let filterElement;
-    let filterText = '';
-    let filteredDecksOther = [];
-    let filteredDecksAdded = [];
+    let decksAdded = $state(undefined);
+    let decksOther = $state(undefined);
+    let deckName = $state('');
+    let filterElement = $state();
+    let filterText = $state('');
 
     onMount(() => {
         const c = document.getElementById('offcanvasAddToDeck');
@@ -109,10 +109,12 @@
         }
     }
 
-    $: filteredDecksOther = decksOther?.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase()));
-    $: filteredDecksAdded = decksAdded?.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase()));
+    let filteredDecksOther = $derived(decksOther?.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase())));
+    let filteredDecksAdded = $derived(decksAdded?.filter(deck => deck.name.toLowerCase().includes(filterText.toLowerCase())));
 
-    $: filteredDecksAdded, focusFilter();
+    run(() => {
+        filteredDecksAdded, focusFilter();
+    });
 </script>
 
 <button
@@ -121,7 +123,7 @@
     data-bs-toggle="offcanvas"
     data-bs-target="#offcanvasAddToDeck"
     aria-controls="offcanvasAddToDeck"
-    ><i class="bi bi-collection" /> Add to deck</button>
+    ><i class="bi bi-collection"></i> Add to deck</button>
 
 <div
     class="offcanvas offcanvas-end"
@@ -134,7 +136,7 @@
             type="button"
             class="btn-close text-reset"
             data-bs-dismiss="offcanvas"
-            aria-label="Close" />
+            aria-label="Close"></button>
     </div>
     <div class="offcanvas-body pb-0">
         {#if decksAdded}
@@ -153,8 +155,8 @@
                     </div>
                     <div class="col-3 d-grid gap-4">
                         <button
-                            on:click|preventDefault={() =>
-                                removeQuestionFromDeck(deck.id)}
+                            onclick={preventDefault(() =>
+                                removeQuestionFromDeck(deck.id))}
                             class="btn btn-sm btn-outline-secondary float-end">Remove</button>
                     </div>
                 </div>
@@ -169,8 +171,8 @@
                     </div>
                     <div class="col-3 d-grid gap-4">
                         <button
-                            on:click|preventDefault={() =>
-                                addQuestionToDeck(deck.id)}
+                            onclick={preventDefault(() =>
+                                addQuestionToDeck(deck.id))}
                             class="btn btn-sm btn-primary float-end">Add</button>
                     </div>
                 </div>
@@ -194,7 +196,7 @@
                 <div class="mb-2">
                     <input bind:value={deckName} type="text" class="form-control" id="name" name="name" placeholder="My new deck ...">
                 </div>
-                <button on:click|preventDefault={() => createDeck()}
+                <button onclick={preventDefault(() => createDeck())}
                         class="btn btn-sm btn-primary mb-3">Create deck and add question</button>
             </div>
         </div>

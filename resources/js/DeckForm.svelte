@@ -5,24 +5,23 @@
     import DeckFormIndex from "./DeckFormIndex.svelte";
     import hotkeys from "hotkeys-js";
 
-    export let id;
-    export let name;
+    let { id, name } = $props();
 
-    let data = {
+    let data = $state({
         cases: [],
-        questions: []
-    };
+        questions: [],
+    });
     let lastHotkeyTime = 0;
 
     const HOTKEY_DEBOUNCED_DELAY = 1000;
 
-    $: currentQuestion = data
+    let currentQuestion = $derived(data
         ? data.questions.find((q) => q.id === data.current_question_id)
-        : null;
+        : null);
 
-    $: currentCase = data
+    let currentCase = $derived(data
         ? data.cases.find((c) => c.id === data.current_case_id)
-        : null;
+        : null);
 
     onMount(() => {
         hotkeys.filter = function() {
@@ -166,9 +165,9 @@
     <div class="row">
         <div class="col d-grid d-sm-block gap-2 py-3">
             <button type="button" class="btn btn-sm btn-primary" title="Add a new MC question (Shortcut: Alt+Q)"
-                    on:click={() => { addNewQuestion("mc"); }}>Add MC question</button>
-            <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("card"); }}>Add card question</button>
-            <button type="button" class="btn btn-sm btn-light" on:click={addNewCase}><i class="bi bi-clipboard2-pulse"></i> Add case</button>
+                    onclick={() => { addNewQuestion("mc"); }}>Add MC question</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick={() => { addNewQuestion("card"); }}>Add card question</button>
+            <button type="button" class="btn btn-sm btn-light" onclick={addNewCase}><i class="bi bi-clipboard2-pulse"></i> Add case</button>
         </div>
     </div>
 

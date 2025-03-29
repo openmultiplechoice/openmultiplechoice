@@ -1,23 +1,25 @@
 <script>
+    import { preventDefault } from 'svelte/legacy';
+
     import { format, formatDistance, parseISO } from "date-fns";
     import SessionProgressBar from "./SessionProgressBar.svelte";
     import { sessionProgressPercentage } from "./StatsHelper.js";
 
-    export let session;
+    let { session } = $props();
 
-    $: sessionAtPretty = formatDistance(parseISO(session.created_at), new Date());
+    let sessionAtPretty = $derived(formatDistance(parseISO(session.created_at), new Date()));
 
-    $: sessionAt = format(parseISO(session.created_at), "dd.MM.yyyy HH:mm")
+    let sessionAt = $derived(format(parseISO(session.created_at), "dd.MM.yyyy HH:mm"))
 
-    $: validQuestions = session
+    let validQuestions = $derived(session
         ? session.deck.questions.filter((q) => !q.is_invalid)
-        : null;
+        : null);
 
-    $: progressPercentage = session
+    let progressPercentage = $derived(session
         ? sessionProgressPercentage(validQuestions.length, session.answerchoices.filter(
             e => validQuestions.some(({ id }) => id === e.question_id)
         ))
-        : null;
+        : null);
 
     function createSession(sessionId) {
         axios
@@ -44,18 +46,18 @@
                 class:btn-primary={progressPercentage.unanswered}
                 class:btn-outline-secondary={!progressPercentage.unanswered}
                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                    <i class="bi bi-rocket-takeoff" /> Open
+                    <i class="bi bi-rocket-takeoff"></i> Open
             </a>
             {#if progressPercentage.unanswered === 0 && progressPercentage.incorrect > 0}
-                <button on:click|preventDefault={() => createSession(session.id)}
+                <button onclick={preventDefault(() => createSession(session.id))}
                     class="btn btn-sm btn-outline-secondary flex-fill"
                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" type="button">
-                        <i class="bi bi-repeat" /> Repeat incorrect
+                        <i class="bi bi-repeat"></i> Repeat incorrect
                 </button>
             {/if}
             <a href="/sessions/{session.id}/edit" class="btn btn-sm btn-outline-secondary"
                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                    <i class="bi bi-three-dots-vertical" />
+                    <i class="bi bi-three-dots-vertical"></i>
             </a>
         </div>
         <div class="col-md-3 text-muted align-bottom" title="{sessionAt}">
