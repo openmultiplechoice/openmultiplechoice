@@ -1,1 +1,0 @@
-import{K as S,O as h,u as k,P as O,S as T}from"./lifecycle-BwGy4muZ.js";function t(r,i){return r===i||(r==null?void 0:r[T])===i}function x(r={},i,a,c){return S(()=>{var f,s;return h(()=>{f=s,s=[],k(()=>{r!==a(...s)&&(i(r,...s),f&&t(a(...f),r)&&i(null,...f))})}),()=>{O(()=>{s&&t(a(...s),r)&&i(null,...s)})}}),r}export{x as b};

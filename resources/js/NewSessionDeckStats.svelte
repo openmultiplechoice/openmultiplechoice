@@ -1,106 +1,111 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import Chart from 'chart.js/auto';
 
-    export let decks;
-    export let moduleId;
+    let { decks, moduleId } = $props();
 
-    let validQuestionsInModule = [];
-    let validAnswerChoices = [];
+    let validQuestionsInModule = $state([]);
+    let validAnswerChoices = $state([]);
 
-    let chartAnsweredQuestions;
-    let canvasAnsweredQuestions;
+    let chartAnsweredQuestions = $state();
+    let canvasAnsweredQuestions = $state();
 
-    $: decks, (() => {
-        if (!decks) {
-            // No decks loaded yet
-            return;
-        }
-
-        const questionsInModule = decks.map(d => d.questions).flat();
-
-        validQuestionsInModule = questionsInModule.filter(q => !q.is_invalid);
-
-        const answerChoices = [];
-        for (const deck of decks) {
-            // For each deck, get the latest session from the list of sessions
-
-            const sessions = deck.sessions.sort((a, b) => b.id - a.id /* sort by ID desc */);
-            if (sessions.length === 0) {
-                continue;
+    run(() => {
+        decks, (() => {
+            if (!decks) {
+                // No decks loaded yet
+                return;
             }
 
-            const latestSession = sessions[0];
+            const questionsInModule = decks.map(d => d.questions).flat();
 
-            // Take all answer choices from the latest session
-            answerChoices.push(...latestSession.answer_choices);
-        }
+            validQuestionsInModule = questionsInModule.filter(q => !q.is_invalid);
 
-        // Filter out answer choices for questions that are not in the module
-        // or not valid
-        validAnswerChoices = answerChoices.filter(
-            e => validQuestionsInModule.some(({ id }) => id === e.question_id)
-        );
-    })();
+            const answerChoices = [];
+            for (const deck of decks) {
+                // For each deck, get the latest session from the list of sessions
 
-    $: numQuestionsInModule = validQuestionsInModule.length;
-    $: numAnsweredQuestions = validAnswerChoices.length;
-    $: numUnansweredQuestions = numQuestionsInModule - numAnsweredQuestions;
-    $: numCorrectAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct && !a.help_used).length;
-    $: numCorrectWithHelpAnsweredQuestions = validAnswerChoices.filter(a => a.is_correct && a.help_used).length;
-    $: numIncorrectAnsweredQuestions = validAnswerChoices.filter(a => !a.is_correct).length
-    $: incorrectAnsweredQuestionsIds = validAnswerChoices.filter(a => !a.is_correct).map(ac => ac.question_id);
+                const sessions = deck.sessions.sort((a, b) => b.id - a.id /* sort by ID desc */);
+                if (sessions.length === 0) {
+                    continue;
+                }
 
-    $: if (canvasAnsweredQuestions) {
-        (() => {
-            const config = {
-                type: 'doughnut',
-                data: {
-                    labels: [
-                        'Correct',
-                        'Correct with help',
-                        'Incorrect',
-                        'Unanswered'
-                    ],
-                    datasets: [
-                        {
-                            label: 'n',
-                            data: [
-                                numCorrectAnsweredQuestions,
-                                numCorrectWithHelpAnsweredQuestions,
-                                numIncorrectAnsweredQuestions,
-                                numUnansweredQuestions
-                            ],
-                            backgroundColor: [
-                                '#198754',
-                                '#ffc107',
-                                '#dc3545',
-                                '#bbbbbb'
-                            ],
-                            hoverOffet: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    hover: {
-                        mode: null
+                const latestSession = sessions[0];
+
+                // Take all answer choices from the latest session
+                answerChoices.push(...latestSession.answer_choices);
+            }
+
+            // Filter out answer choices for questions that are not in the module
+            // or not valid
+            validAnswerChoices = answerChoices.filter(
+                e => validQuestionsInModule.some(({ id }) => id === e.question_id)
+            );
+        })();
+    });
+
+    let numQuestionsInModule = $derived(validQuestionsInModule.length);
+    let numAnsweredQuestions = $derived(validAnswerChoices.length);
+    let numUnansweredQuestions = $derived(numQuestionsInModule - numAnsweredQuestions);
+    let numCorrectAnsweredQuestions = $derived(validAnswerChoices.filter(a => a.is_correct && !a.help_used).length);
+    let numCorrectWithHelpAnsweredQuestions = $derived(validAnswerChoices.filter(a => a.is_correct && a.help_used).length);
+    let numIncorrectAnsweredQuestions = $derived(validAnswerChoices.filter(a => !a.is_correct).length)
+    let incorrectAnsweredQuestionsIds = $derived(validAnswerChoices.filter(a => !a.is_correct).map(ac => ac.question_id));
+
+    run(() => {
+        if (canvasAnsweredQuestions) {
+            (() => {
+                const config = {
+                    type: 'doughnut',
+                    data: {
+                        labels: [
+                            'Correct',
+                            'Correct with help',
+                            'Incorrect',
+                            'Unanswered'
+                        ],
+                        datasets: [
+                            {
+                                label: 'n',
+                                data: [
+                                    numCorrectAnsweredQuestions,
+                                    numCorrectWithHelpAnsweredQuestions,
+                                    numIncorrectAnsweredQuestions,
+                                    numUnansweredQuestions
+                                ],
+                                backgroundColor: [
+                                    '#198754',
+                                    '#ffc107',
+                                    '#dc3545',
+                                    '#bbbbbb'
+                                ],
+                                hoverOffet: 4
+                            }
+                        ]
                     },
-                    plugins: {
-                        legend: {
-                            display: false
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        hover: {
+                            mode: null
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
                         }
                     }
-                }
-            };
+                };
 
-            if (chartAnsweredQuestions) {
-                chartAnsweredQuestions.destroy();
-            }
-            var ctx = canvasAnsweredQuestions.getContext('2d');
-            chartAnsweredQuestions = new Chart(ctx, config);
-        })();
-    };
+                if (chartAnsweredQuestions) {
+                    chartAnsweredQuestions.destroy();
+                }
+                var ctx = canvasAnsweredQuestions.getContext('2d');
+                chartAnsweredQuestions = new Chart(ctx, config);
+            })();
+        }
+    });;
 
     function createSession(questionIds) {
         const data = {
@@ -121,7 +126,7 @@
 {#if decks && numQuestionsInModule === numUnansweredQuestions}
     <div class="row">
         <div class="col-md">
-            <p>Number of questions (duplicates included): <span class="badge text-bg-light font-monospace"><i class="bi bi-collection" /> {numQuestionsInModule}</span></p>
+            <p>Number of questions (duplicates included): <span class="badge text-bg-light font-monospace"><i class="bi bi-collection"></i> {numQuestionsInModule}</span></p>
         </div>
     </div>
 {:else if decks}
@@ -168,20 +173,20 @@
             {#if numIncorrectAnsweredQuestions > 0}
                 <div class="d-grid gap-2">
                     {#if numIncorrectAnsweredQuestions >= 40}
-                        <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 30))}
+                        <button onclick={preventDefault(() => createSession(incorrectAnsweredQuestionsIds.slice(0, 30)))}
                             class="btn btn-sm btn-outline-secondary" type="button">
-                                <i class="bi bi-repeat" /> Repeat 30 incorrect
+                                <i class="bi bi-repeat"></i> Repeat 30 incorrect
                         </button>
                     {/if}
                     {#if numIncorrectAnsweredQuestions >= 70}
-                        <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 60))}
+                        <button onclick={preventDefault(() => createSession(incorrectAnsweredQuestionsIds.slice(0, 60)))}
                             class="btn btn-sm btn-outline-secondary" type="button">
-                                <i class="bi bi-repeat" /> Repeat 60 incorrect
+                                <i class="bi bi-repeat"></i> Repeat 60 incorrect
                         </button>
                     {/if}
-                    <button on:click|preventDefault={() => createSession(incorrectAnsweredQuestionsIds)}
+                    <button onclick={preventDefault(() => createSession(incorrectAnsweredQuestionsIds))}
                         class="btn btn-sm btn-outline-secondary" type="button">
-                            <i class="bi bi-repeat" /> Repeat {numIncorrectAnsweredQuestions} incorrect
+                            <i class="bi bi-repeat"></i> Repeat {numIncorrectAnsweredQuestions} incorrect
                     </button>
                 </div>
             {/if}
