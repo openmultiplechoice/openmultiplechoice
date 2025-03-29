@@ -1,24 +1,26 @@
 <script>
-    export let selectedDecks;
+    import { run, preventDefault } from 'svelte/legacy';
 
-    let decks = [];
-    let deckName = "My new super deck";
-    let filterOutDuplicates = true;
+    let { selectedDecks = $bindable() } = $props();
 
-    $: selectedDecks, fetchDeckInfo();
+    let decks = $state([]);
+    let deckName = $state("My new super deck");
+    let filterOutDuplicates = $state(true);
 
-    $: questions =
-        (() => {
+    run(() => {
+        selectedDecks, fetchDeckInfo();
+    });
+    let questions =
+        $derived((() => {
             var questions = [];
             decks.forEach((d) => questions.push(...d.questions));
             if (filterOutDuplicates) {
                 return [...new Map(questions.map(q => [q.id, q])).values()]
             }
             return questions;
-        })();
-
-    $: questionsWithImages =
-        (() => {
+        })());
+    let questionsWithImages =
+        $derived((() => {
             var questions = [];
             decks.forEach((d) => {
                 d.questions.forEach((q) => {
@@ -29,7 +31,7 @@
                 return [...new Map(questions.map(q => [q.id, q])).values()]
             }
             return questions;
-        })();
+        })());
 
     function fetchDeckInfo() {
         if (selectedDecks.size === 0) {
@@ -80,7 +82,7 @@
                 </p>
                 <div class="mb-3">
                     <label for="name" class="form-label">Deck Name</label>
-                    <input type="text" class="form-control" id="name" bind:value={deckName} on:focus={event => event.target.select()}>
+                    <input type="text" class="form-control" id="name" bind:value={deckName} onfocus={event => event.target.select()}>
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" id="checkboxRemoveDuplicates" bind:checked={filterOutDuplicates}>
@@ -89,17 +91,17 @@
                 <div class="d-grid gap-2 d-md-block">
                 <button
                     class="btn btn-sm btn-primary"
-                    on:click|preventDefault={() => createSuperDeck(deckName, questions.map(q => q.id))}>
+                    onclick={preventDefault(() => createSuperDeck(deckName, questions.map(q => q.id)))}>
                         Create deck ({questions.length} question{questions.length > 1 ? "s" : ""})
                 </button>
                 <button
                     class="btn btn-sm btn-primary"
-                    on:click|preventDefault={() => createSuperDeck(deckName, questionsWithImages.map(q => q.id))}>
+                    onclick={preventDefault(() => createSuperDeck(deckName, questionsWithImages.map(q => q.id)))}>
                         Create deck ({questionsWithImages.length} image question{questionsWithImages.length > 1 ? "s" : ""})
                 </button>
                 <button
                     class="btn btn-sm btn-link"
-                    on:click|preventDefault={() => selectedDecks = new Set()}>
+                    onclick={preventDefault(() => selectedDecks = new Set())}>
                         Cancel
                 </button>
                 </div>

@@ -1,21 +1,24 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import debounce from "lodash/debounce";
     import MessageView from "./MessageView.svelte";
 
-    export let questionId;
-    export let questionContext;
+    let { questionId = $bindable(), questionContext } = $props();
 
-    var showEditor = false;
+    var showEditor = $state(false);
     var messages = [];
-    var nestedMessages = [];
-    var messageInfo = "Loading comments ...";
+    var nestedMessages = $state([]);
+    var messageInfo = $state("Loading comments ...");
 
-    $: questionId,
-        (() => {
-            nestedMessages = [];
-            showEditor = false;
-            loadMessages();
-        })();
+    run(() => {
+        questionId,
+            (() => {
+                nestedMessages = [];
+                showEditor = false;
+                loadMessages();
+            })();
+    });
 
     var debounced;
 
@@ -150,8 +153,8 @@
 
 {#if questionContext.isAnswered}
     <div class="mt-3 mb-3">
-        {#each nestedMessages as message (message.id)}
-            <MessageView bind:message bind:questionId indent={0} {addMessage} {updateMessage} />
+        {#each nestedMessages as message, i (message.id)}
+            <MessageView bind:message={nestedMessages[i]} bind:questionId indent={0} {addMessage} {updateMessage} />
         {:else}
             <p>{messageInfo}</p>
         {/each}
@@ -160,11 +163,11 @@
             <div class="mt-3">
                 <form
                     action="#"
-                    on:submit|preventDefault={handleSubmit}
+                    onsubmit={preventDefault(handleSubmit)}
                     class="mt-3 mb-3">
                     <div class="mb-3 text-break">
                         <input id="message" type="hidden" name="message" value="" />
-                        <trix-editor input="message" />
+                        <trix-editor input="message"></trix-editor>
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="anonymous" checked>
@@ -172,7 +175,7 @@
                     </div>
                     <input class="btn btn-sm btn-primary" type="submit" value="Send" />
                     <button
-                        on:click|preventDefault={toggleEditor}
+                        onclick={preventDefault(toggleEditor)}
                         class="btn btn-link mr-0">
                             Cancel
                     </button>
@@ -180,9 +183,9 @@
             </div>
         {:else}
             <button
-                on:click|preventDefault={toggleEditor}
+                onclick={preventDefault(toggleEditor)}
                 class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-chat-square-dots" /> Add comment
+                    <i class="bi bi-chat-square-dots"></i> Add comment
             </button>
         {/if}
     </div>
