@@ -1,20 +1,22 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import NewSessionDeckStats from "./NewSessionDeckStats.svelte";
     import NewSessionDeckView from "./NewSessionDeckView.svelte";
 
-    export let moduleId;
-    export let selectDeck;
-    export let selectedDecks;
+    let { moduleId = $bindable(), selectDeck, selectedDecks = $bindable() } = $props();
 
-    let decks = undefined;
-    let deckKind = getURLParam("kind") ?? "public-rw-listed";
-    let pageNum = getURLParam("page") ?? 1;
-    let pageData;
+    let decks = $state(undefined);
+    let deckKind = $state(getURLParam("kind") ?? "public-rw-listed");
+    let pageNum = $state(getURLParam("page") ?? 1);
+    let pageData = $state();
 
-    $: moduleId, (() => {
-        pageNum = getURLParam("page") ?? 1;
-        fetchDecks();
-    })();
+    run(() => {
+        moduleId, (() => {
+            pageNum = getURLParam("page") ?? 1;
+            fetchDecks();
+        })();
+    });
 
     function getURLParam(p) {
         return new URLSearchParams(window.location.search).get(p);
@@ -68,8 +70,8 @@
 <div class="row mb-3">
     <div class="col">
         <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-archive" /></span>
-            <select id="kind" class="form-select" bind:value={deckKind} on:change={fetchDecks}>
+            <span class="input-group-text"><i class="bi bi-archive"></i></span>
+            <select id="kind" class="form-select" bind:value={deckKind} onchange={fetchDecks}>
                 <option value="public-rw-listed" selected={deckKind === 'public-rw-listed'}>Main decks</option>
                 <option value="user" selected={deckKind === 'user'}>Your decks</option>
                 <option value="public" selected={deckKind === 'public'}>User decks</option>
@@ -83,8 +85,8 @@
 
 <div class="row">
     {#if decks}
-        {#each decks as deck (deck.id)}
-            <NewSessionDeckView bind:deck {selectDeck} bind:selectedDecks />
+        {#each decks as deck, i (deck.id)}
+            <NewSessionDeckView bind:deck={decks[i]} {selectDeck} bind:selectedDecks />
         {:else}
             <div class="col">
                 <div class="alert alert-light">
@@ -115,21 +117,21 @@
                 <nav>
                     <ul class="pagination">
                         <li class="page-item" class:disabled={pageData.prev_page_url === null}>
-                            <button class="page-link" on:click|preventDefault={()=> {
+                            <button class="page-link" onclick={preventDefault(()=> {
                                 pageData.prev_page_url && loadPage(pageData.current_page - 1);
-                            }}>‹</button>
+                            })}>‹</button>
                         </li>
                         {#each pageData.links.slice(1, pageData.links.length - 1) as link}
                             <li class="page-item d-none d-sm-block" class:disabled={link.active || !link.url}>
-                                <button class="page-link" on:click|preventDefault={()=> {
+                                <button class="page-link" onclick={preventDefault(()=> {
                                     link.url && loadPage(link.label);
-                                }}>{link.label}</button>
+                                })}>{link.label}</button>
                             </li>
                         {/each}
                         <li class="page-item" class:disabled={pageData.next_page_url === null}>
-                            <button class="page-link" on:click|preventDefault={()=> {
+                            <button class="page-link" onclick={preventDefault(()=> {
                                 pageData.next_page_url && loadPage(pageData.current_page + 1);
-                            }}>›</button>
+                            })}>›</button>
                         </li>
                     </ul>
                 </nav>

@@ -1,8 +1,9 @@
 import Messages from './Messages.svelte';
+import { mount } from "svelte";
 
 const messagesViewEl = document.getElementById('MessagesView');
 
-const f = new Messages({
+const f = mount(Messages, {
     target: messagesViewEl,
     props: {
         questionId: messagesViewEl.dataset.questionId,
