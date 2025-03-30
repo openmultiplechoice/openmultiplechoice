@@ -27,13 +27,25 @@
             debounced.cancel();
         }
 
+        // We can encounter a race condition if the axios request for loading
+        // comments is in progress when the question is changed by the user.
+        // Capture the current question ID and drop the loaded comments below
+        // if the question ID has changed since the request was made, otherwise
+        // we update the DOM with wrong data.
+        const requestQuestionId = questionId;
+
         debounced = debounce(
             () => {
                 axios
                     .get("/api/questions/" + questionId + "/messages")
                     .then(function (response) {
+                        if (requestQuestionId !== questionId) {
+                            // Ignore this response, as the questionId has changed
+                            return;
+                        }
                         messages = response.data;
                         if (messages.length === 0) {
+                            nestedMessages = [];
                             messageInfo = "No comments yet";
                             return;
                         }
