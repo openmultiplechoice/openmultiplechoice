@@ -19,7 +19,9 @@
         </div>
     @endforelse
 
-    <p>{{ $decks->links() }}</p>
+    <div class="sticky-bottom bg-white mt-3 pt-3">
+        {{ $decks->links() }}
+    </div>
 </div>
 
 @endsection

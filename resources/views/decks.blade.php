@@ -51,12 +51,14 @@
 
 <div class="row">
     <div class="col-md">
-        <p>{{ $decks->links() }}</p>
-
         <div class="alert alert-light">
             You can find your archived decks <a href="/decks/archived" class="alert-link">here</a>.
         </div>
     </div>
+</div>
+
+<div class="sticky-bottom bg-white mt-3 pt-3">
+    {{ $decks->links() }}
 </div>
 
 @endsection

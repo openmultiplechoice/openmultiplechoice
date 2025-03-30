@@ -53,8 +53,9 @@
                 @endforelse
             </tbody>
         </table>
-
-        <p>{{ $gifs->links() }}
+        <div class="sticky-bottom bg-white mt-3 pt-3">
+            {{ $gifs->links() }}
+        </div>
     </div>
 </div>
 
