@@ -52,6 +52,8 @@ class SessionController extends Controller
 
     public function newFromIncorrect(Request $request, Session $session)
     {
+        abort_if($session->user_id != Auth::id(), 404);
+
         $answerChoices = $session->answerChoices()->where('is_correct', false)->get();
         if (!$answerChoices || $answerChoices->isEmpty()) {
             abort(400, 'No incorrect answers in this session');
@@ -117,9 +119,7 @@ class SessionController extends Controller
 
     public function show(Session $session)
     {
-        if (Auth::id() != $session->user_id) {
-            return response()->json(['error' => 'Forbidden'], 403);
-        }
+        abort_if($session->user_id != Auth::id(), 404);
 
         $deck = Deck::with('questions', 'cases', 'questions.images', 'questions.answers', 'questions.case')->find($session->deck_id);
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 400);
@@ -147,11 +147,10 @@ class SessionController extends Controller
 
     public function update(Request $request, Session $session)
     {
-        if (Auth::id() != $session->user_id) {
-            return response()->json(['error' => 'Forbidden'], 403);
-        }
+        abort_if($session->user_id != Auth::id(), 404);
 
         $session->update($request->all());
+
         return response()->json($session);
     }
 }
