@@ -153,4 +153,13 @@ class SessionController extends Controller
 
         return response()->json($session);
     }
+
+    public function destroy(Session $session)
+    {
+        abort_if($session->user_id != Auth::id(), 404);
+
+        $session->delete();
+
+        return response()->json(['message' => 'Session deleted successfully']);
+    }
 }
