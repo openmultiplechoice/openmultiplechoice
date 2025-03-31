@@ -53,7 +53,7 @@ class SessionController extends Controller
     public function newFromIncorrect(Request $request, Session $session)
     {
         $answerChoices = $session->answerChoices()->where('is_correct', false)->get();
-        if (!$answerChoices) {
+        if (!$answerChoices || $answerChoices->isEmpty()) {
             abort(400, 'No incorrect answers in this session');
         }
 
