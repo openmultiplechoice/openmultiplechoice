@@ -10,6 +10,7 @@ class Session extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         'current_question_id',
     ];
 
