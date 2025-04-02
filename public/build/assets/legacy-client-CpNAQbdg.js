@@ -1,0 +1,1 @@
+import{ap as s,a3 as r,aq as t,ar as c,as as f}from"./if-DJ8jmZGH.js";function _(e){console.warn("https://svelte.dev/e/legacy_recursive_reactive_block")}function n(e){s(()=>{e();var a=r;(a.f&t)!==0&&(_(),c(a,f))})}export{n as r};

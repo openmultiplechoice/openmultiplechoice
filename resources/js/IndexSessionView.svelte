@@ -3,9 +3,9 @@
 
     import IndexSessionSingleView from "./IndexSessionSingleView.svelte";
 
-    export let userId;
+    let { userId } = $props();
 
-    var sessions = undefined;
+    var sessions = $state(undefined);
 
     onMount(() => {
         axios
@@ -20,8 +20,8 @@
 </script>
 
 {#if sessions}
-    {#each sessions as session}
-        <IndexSessionSingleView bind:session />
+    {#each sessions as session, i}
+        <IndexSessionSingleView bind:session={sessions[i]} />
     {:else}
         <div class="alert alert-light text-center" role="alert">
             No sessions yet <i class="bi bi-rocket"></i>

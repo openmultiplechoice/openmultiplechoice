@@ -1,42 +1,48 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import DOMPurify from "dompurify";
     import hotkeys from "hotkeys-js";
 
-    export let answer;
-    export let answerContext;
-    export let answerNumber;
-    export let questionIsAnswered;
-    export let submitAnswer;
-    export let examMode;
-    export let settingsShowAnswerStats;
+    let {
+        answer = $bindable(),
+        answerContext = $bindable(),
+        answerNumber,
+        questionIsAnswered,
+        submitAnswer,
+        examMode = $bindable(),
+        settingsShowAnswerStats = $bindable(),
+    } = $props();
 
-    var answerStatusIndicator;
-    var markedAs;
+    var answerStatusIndicator = $state();
+    var markedAs = $state();
     var badgeText = answer.badgeText;
 
-    $: {
+    run(() => {
         hotkeys.unbind(`${badgeText}, ${answerNumber}`, 'questions')
         hotkeys(`${badgeText}, ${answerNumber}`, 'questions', function () {
             submitAnswer(answer.id);
         });
-    }
+    });
 
-    $: if (answer) {
-        markedAs = '';
-        answerStatusIndicator = "border-secondary";
+    run(() => {
+        if (answer) {
+            markedAs = '';
+            answerStatusIndicator = "border-secondary";
 
-        if (!examMode) {
-            if (questionIsAnswered) {
-                if (answerContext.isCorrectAnswer) {
-                    answerStatusIndicator = "border-success";
-                } else if (answerContext.isSubmittedAnswer) {
+            if (!examMode) {
+                if (questionIsAnswered) {
+                    if (answerContext.isCorrectAnswer) {
+                        answerStatusIndicator = "border-success";
+                    } else if (answerContext.isSubmittedAnswer) {
+                        answerStatusIndicator = "border-danger";
+                    }
+                } else if (answerContext.isSelectedAnswer) {
                     answerStatusIndicator = "border-danger";
                 }
-            } else if (answerContext.isSelectedAnswer) {
-                answerStatusIndicator = "border-danger";
             }
         }
-    }
+    });
 </script>
 
 <div
@@ -53,9 +59,9 @@
     class:bg-incorrect={markedAs === 'incorrect'}
     class:bg-correct={markedAs === 'correct'}>
     {#if !questionIsAnswered && !answerContext.isSubmittedAnswer}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div
-            on:click={() => submitAnswer(answer.id)}
+            onclick={() => submitAnswer(answer.id)}
             class="col-1 border-start-3 cursor-pointer">
             <p class="badge text-dark my-0">{badgeText}</p>
         </div>
@@ -66,9 +72,9 @@
     {/if}
 
     {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div
-            on:click={() => submitAnswer(answer.id)}
+            onclick={() => submitAnswer(answer.id)}
             class="col-9 cursor-pointer">
             <p class="px-1 my-0 trix-content">{@html DOMPurify.sanitize(answer.text)}</p>
         </div>
@@ -89,14 +95,14 @@
                 {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
                     <div class="d-flex justify-content-end align-items-center">
                         <button
-                            on:click|preventDefault={() => (markedAs = markedAs === 'incorrect' ? '' : 'incorrect')}
+                            onclick={preventDefault(() => (markedAs = markedAs === 'incorrect' ? '' : 'incorrect'))}
                             type="button"
                             class="btn btn-sm p-0">
                             <span class="text-secondary">&cross;</span>
                         </button>
                         <div class="vr mx-1"></div>
                         <button
-                            on:click|preventDefault={() => (markedAs = markedAs === 'correct' ? '' : 'correct')}
+                            onclick={preventDefault(() => (markedAs = markedAs === 'correct' ? '' : 'correct'))}
                             type="button"
                             class="btn btn-sm p-0">
                             <span class="text-secondary">&check;</span>
@@ -118,7 +124,7 @@
 
 <div class="row ms-1 mb-2 me-1">
     {#if !examMode && answer.hint && (questionIsAnswered || answerContext.isSelectedAnswer)}
-        <div class="col-1 border-3 border-start border-secondary-subtle" />
+        <div class="col-1 border-3 border-start border-secondary-subtle"></div>
         <div class="col-11">
             <p class="p-1 trix-content">{@html DOMPurify.sanitize(answer.hint)}</p>
         </div>
