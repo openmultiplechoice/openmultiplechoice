@@ -33,7 +33,7 @@
     <div class="col">
         <h4>Decks</h4>
         <ul>
-            @foreach ($module->decks->sortByDesc('name') as $deck)
+            @foreach ($decks as $deck)
                 <li><a href="{{ url('decks/'. $deck->id) }}">{{ $deck->name }}</a></li>
             @endforeach
         </ul>

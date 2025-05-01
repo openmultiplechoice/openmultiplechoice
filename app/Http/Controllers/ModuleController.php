@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Module;
@@ -62,9 +63,22 @@ class ModuleController extends Controller
     {
         $subjects = Subject::orderBy('name')->get();
 
+        $decks = $module->decks
+            ->filter(function ($deck) {
+                return $deck->isPublic() || $deck->isOwnedByUser(Auth::user());
+            })
+            ->sortBy('name')
+            ->map(function ($deck) {
+                return (object) [
+                    'id' => $deck->id,
+                    'name' => $deck->name,
+                ];
+            });
+
         return view('module', [
             'module' => $module,
             'subjects' => $subjects,
+            'decks' => $decks,
         ]);
     }
 
