@@ -61,4 +61,18 @@ class Deck extends Model
     {
         return $this->bookmarks()->where('user_id', Auth::id())->exists();
     }
+
+    public function isPublic()
+    {
+        return in_array($this->access, [
+            'public-rw-listed',
+            'public-rw',
+            'public-ro',
+        ]);
+    }
+
+    public function isOwnedByUser(User $user)
+    {
+        return $this->user_id === $user->id;
+    }
 }
