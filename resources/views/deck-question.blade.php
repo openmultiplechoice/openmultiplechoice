@@ -15,11 +15,13 @@
                 <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Submitted</span>
             @endif
         </div>
-        <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
-            @csrf
-            <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
-            <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> Start session</button>
-        </form>
+        <div class="d-grid gap-2 d-sm-block">
+            <form action="{{ url('sessions') }}" method="POST" class="d-inline-grid">
+                @csrf
+                <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
+                <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> Start session</button>
+            </form>
+        </div>
     </div>
 </div>
 
