@@ -80,11 +80,11 @@
             </div>
         @endif
 
-        <div class="mb-3">
-            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {{ count($questions) }}</span>
-            <span class="badge text-bg-light font-monospace" title="Number of sessions"><i class="bi bi-rocket-takeoff"></i> {{ count($deck->sessions) }}</span>
-            <span class="badge text-bg-light font-monospace" title="Number of bookmarks"><i class="bi bi-bookmark"></i> {{ $deck->bookmarks_count }}</span>
-            <span class="badge text-bg-light font-monospace" title="Access level">{{ $deck->access }}</span>
+        <div class="alert alert-light mb-3 py-2">
+            <span class="badge text-black font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {{ count($questions) }}</span>
+            <span class="badge text-black font-monospace" title="Number of sessions"><i class="bi bi-rocket-takeoff"></i> {{ count($deck->sessions) }}</span>
+            <span class="badge text-black font-monospace" title="Number of bookmarks"><i class="bi bi-bookmark"></i> {{ $deck->bookmarks_count }}</span>
+            <span class="badge text-black font-monospace" title="Access level">{{ $deck->access }}</span>
         </div>
 
         @if ($deck->description)
