@@ -12,23 +12,29 @@
                 <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Submitted</span>
             @endif
         </div>
-        @if (count($questions) > 0)
-            <form action="{{ url('sessions') }}" method="POST" class="float-start me-2">
-                @csrf
-                <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
-                <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> Start session</button>
-            </form>
-        @endif
-        <form method="post" action="/decks/{{ $deck->id }}/bookmark" style="display: inline-block;">
-            @csrf
-            @php($is_bookmarked = $deck->bookmarked())
-            @if($is_bookmarked)
-                @method('delete')
+        <div class="d-grid gap-2 d-sm-block">
+            @if (count($questions) > 0)
+                <form action="{{ url('sessions') }}" method="POST" class="d-inline-grid">
+                    @csrf
+                    <input type="hidden" name="deck_id" value="{{ $deck->id }}" />
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-rocket-takeoff"></i> Start session</button>
+                </form>
             @endif
-            <button class="btn btn-sm btn-outline-primary" type="submit">
-                <i class="@if($is_bookmarked) bi-bookmark-check-fill @else bi-bookmark @endif"> </i> @if($is_bookmarked) Bookmarked @else Bookmark @endif
-            </button>
-        </form>
+            <form method="post" action="/decks/{{ $deck->id }}/bookmark" class="d-inline-grid">
+                @csrf
+                @php($is_bookmarked = $deck->bookmarked())
+                @if($is_bookmarked)
+                    @method('delete')
+                @endif
+                <button class="btn btn-sm btn-outline-primary" type="submit">
+                    <i class="@if($is_bookmarked) bi-bookmark-check-fill @else bi-bookmark @endif"> </i> @if($is_bookmarked) Bookmarked @else Bookmark @endif
+                </button>
+            </form>
+            @if (Auth::user()->is_admin || $deck->user_id == Auth::id() || $deck->access == "public-rw" || $deck->access == "public-rw-listed")
+                <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-collection"></i> Add / Remove questions</a>
+                <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-three-dots"></i> Settings</a>
+            @endif
+        </div>
     </div>
 </div>
 
@@ -69,22 +75,11 @@
             </div>
         @endif
 
-        @if (Auth::user()->is_admin || $deck->user_id == Auth::id() || $deck->access == "public-rw" || $deck->access == "public-rw-listed")
-            <div class="row mb-3">
-                <div class="col-md mb-3">
-                    <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-light w-100"><i class="bi bi-gear"></i> Settings</a>
-                </div>
-                <div class="col-md">
-                    <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-light w-100"><i class="bi bi-collection"></i> Add / remove questions</a>
-                </div>
-            </div>
-        @endif
-
-        <div class="mb-3">
-            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {{ count($questions) }}</span>
-            <span class="badge text-bg-light font-monospace" title="Number of sessions"><i class="bi bi-rocket-takeoff"></i> {{ count($deck->sessions) }}</span>
-            <span class="badge text-bg-light font-monospace" title="Number of bookmarks"><i class="bi bi-bookmark"></i> {{ $deck->bookmarks_count }}</span>
-            <span class="badge text-bg-light font-monospace" title="Access level">{{ $deck->access }}</span>
+        <div class="alert alert-light mb-3 py-2">
+            <span class="badge text-black font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {{ count($questions) }}</span>
+            <span class="badge text-black font-monospace" title="Number of sessions"><i class="bi bi-rocket-takeoff"></i> {{ count($deck->sessions) }}</span>
+            <span class="badge text-black font-monospace" title="Number of bookmarks"><i class="bi bi-bookmark"></i> {{ $deck->bookmarks_count }}</span>
+            <span class="badge text-black font-monospace" title="Access level">{{ $deck->access }}</span>
         </div>
 
         @if ($deck->description)
