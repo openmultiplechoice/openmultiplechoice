@@ -23,7 +23,7 @@
 
     $: if (answer) {
         markedAs = '';
-        answerStatusIndicator = "border-secondary";
+        answerStatusIndicator = "";
 
         if (!examMode) {
             if (questionIsAnswered) {
@@ -41,9 +41,14 @@
 
 <div
     id="answer{answer.id}"
-    style="min-height: 3rem;"
-    class="row border-start border-3 m-1 py-2 d-flex align-items-center {answerStatusIndicator}"
-    class:bg-light={
+    style="min-height: 3.6rem; box-shadow: 4px 4px rgba(0,0,0,.2);"
+    class="row border border-3 rounded m-1 py-2 d-flex align-items-center {answerStatusIndicator}"
+    class:bg-secondary-subtle={
+        examMode ||
+        (!questionIsAnswered && !answerContext.isSelectedAnswer && !answerContext.isSubmittedAnswer) ||
+        (questionIsAnswered && !answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer)
+    }
+    class:text-dark={
         examMode ||
         (!questionIsAnswered && !answerContext.isSelectedAnswer && !answerContext.isSubmittedAnswer) ||
         (questionIsAnswered && !answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer)
@@ -57,11 +62,11 @@
         <div
             on:click={() => submitAnswer(answer.id)}
             class="col-1 border-start-3 cursor-pointer">
-            <p class="badge text-dark my-0">{badgeText}</p>
+            <p class="badge text-bg-light my-0">{badgeText}</p>
         </div>
     {:else}
         <div class="col-1 border-start-3">
-            <p class="badge text-dark my-0">{badgeText}</p>
+            <p class="badge text-bg-light my-0">{badgeText}</p>
         </div>
     {/if}
 
@@ -82,7 +87,9 @@
         <div class="row text-end d-flex align-items-center">
             <div class="col">
                 {#if questionIsAnswered && !examMode && settingsShowAnswerStats && answer.answer_percentage != null}
-                    <span class="badge text-muted" title="Percentage of users who chose this answer">{answer.answer_percentage}%</span>
+                    <span
+                        class:text-dark={!answerContext.isSelectedAnswer && !answerContext.isCorrectAnswer}
+                        class="badge" title="Percentage of users who chose this answer">{answer.answer_percentage}%</span>
                 {/if}
             </div>
             <div class="col">
@@ -103,13 +110,13 @@
                         </button>
                     </div>
                 {:else if !examMode && answerContext.isCorrectAnswer && answerContext.isSubmittedAnswer}
-                    <span class="text-success-dark fw-bold fs-3">&check;</span>
+                    <span class="text-light fw-bold fs-4">&check;</span>
                 {:else if !examMode && answerContext.isCorrectAnswer && !answerContext.isSubmittedAnswer && questionIsAnswered}
-                    <span class="text-success-dark fw-bold fs-3">&#8672;</span>
+                    <span class="text-light fw-bold fs-4">&#8672;</span>
                 {:else if !examMode && answerContext.isSubmittedAnswer}
-                    <span class="text-danger-dark fw-bold fs-3">&cross;</span>
+                    <span class="text-light fw-bold fs-4">&cross;</span>
                 {:else if examMode && answerContext.isSubmittedAnswer}
-                    <span class="text-secondary fw-bold fs-3">&check;</span>
+                    <span class="text-secondary fw-bold fs-4">&check;</span>
                 {/if}
             </div>
         </div>
@@ -118,8 +125,8 @@
 
 <div class="row ms-1 mb-2 me-1">
     {#if !examMode && answer.hint && (questionIsAnswered || answerContext.isSelectedAnswer)}
-        <div class="col-1 border-3 border-start border-secondary-subtle" />
-        <div class="col-11">
+        <div class="col-1 border-3" />
+        <div class="col-9">
             <p class="p-1 trix-content">{@html DOMPurify.sanitize(answer.hint)}</p>
         </div>
     {/if}
