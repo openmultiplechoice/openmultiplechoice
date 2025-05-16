@@ -100,7 +100,9 @@
     <div class="col-md">
         <div class="alert alert-light">
             <i class="bi bi-info-circle me-2"></i>
-            @if ($deck->access == "private")
+            @if ($deck->is_archived)
+                This deck is archived. It is not listed but can be unarchived below.
+            @elseif ($deck->access == "private")
                 Set access to <i>public-ro</i> or <i>public-rw</i> to share this deck with others.
             @elseif (!$deck->module)
                 Add this deck to a module to make it easier to find.
