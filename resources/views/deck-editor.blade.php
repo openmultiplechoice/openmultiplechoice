@@ -14,6 +14,9 @@
             @if($deck->submission)
                 <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Submitted</span>
             @endif
+            @if($deck->is_archived)
+                <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Archived</span>
+            @endif
         </div>
         <form action="/decks/{{ isset($deck) ? $deck->id : '' }}" method="post" class="mb-3">
             @isset($deck)
