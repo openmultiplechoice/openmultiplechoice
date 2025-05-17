@@ -88,7 +88,7 @@
             <div class="col">
                 {#if questionIsAnswered && !examMode && settingsShowAnswerStats && answer.answer_percentage != null}
                     <span
-                        class:text-dark={!answerContext.isSelectedAnswer && !answerContext.isCorrectAnswer}
+                        class:text-dark={!answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer}
                         class="badge" title="Percentage of users who chose this answer">{answer.answer_percentage}%</span>
                 {/if}
             </div>
