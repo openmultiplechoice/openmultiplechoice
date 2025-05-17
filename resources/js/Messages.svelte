@@ -192,7 +192,7 @@
 </script>
 
 {#if questionContext.isAnswered}
-    <div class="mt-4 mb-3 px-2 pt-3 pb-2 border rounded-3 shadow-sm bg-white">
+    <div class="mt-4 mb-3 px-2 py-2 border rounded-3 shadow-sm bg-white">
         {#each nestedMessages as message (message.id)}
             <MessageView bind:message bind:questionId indent={0} {addMessage} {updateMessage} />
         {:else}
