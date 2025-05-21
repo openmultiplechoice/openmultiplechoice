@@ -106,7 +106,7 @@
         </div>
     {:else}
         <div id="question{question.id}"
-            class="px-2 py-3 border rounded-3 shadow-sm bg-light-subtle"
+            class="px-2 py-2 border rounded-3 shadow-sm bg-light-subtle"
             style="">
             {#if question.is_invalid}
                 <div class="row">
