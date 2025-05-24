@@ -227,33 +227,33 @@
                             </div>
                         {/if}
                     </div>
-                    {#if !showEditor}
-                        <div class="d-flex justify-content-end small gap-2 pe-1">
-                            <button class="btn btn-link p-0 text-muted" title="Reply" on:click={toggleEditorReply} class:disabled={showEditorReply}>
-                                <i class="bi bi-reply"></i>
-                            </button>
-                            {#if $UserSettings.id === message.author_id}
-                                <div class="dropdown">
-                                    <button class="btn btn-link p-0 text-muted" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <button class="dropdown-item" on:click={toggleEditor}>
-                                                <i class="bi bi-pencil me-2"></i>Edit
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button class="dropdown-item" on:click={handleDelete}>
-                                                <i class="bi bi-trash me-2"></i>Delete
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            {/if}
-                        </div>
-                    {/if}
                 </div>
+                {#if !showEditor}
+                    <div class="d-flex align-items-end gap-2 pe-1">
+                        <button class="btn btn-link p-0 text-muted me-1" title="Reply" on:click={toggleEditorReply} class:disabled={showEditorReply}>
+                            <i class="bi bi-reply"></i>
+                        </button>
+                        {#if $UserSettings.id === message.author_id}
+                            <div class="dropdown">
+                                <button class="btn btn-link p-0 text-muted me-1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <button class="dropdown-item" on:click={toggleEditor}>
+                                            <i class="bi bi-pencil me-2"></i>Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item" on:click={handleDelete}>
+                                            <i class="bi bi-trash me-2"></i>Delete
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        {/if}
+                    </div>
+                {/if}
             </div>
         {/if}
         {#if showEditorReply}
