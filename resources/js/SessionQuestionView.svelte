@@ -105,7 +105,9 @@
             <QuestionForm bind:question {toggleEditor} />
         </div>
     {:else}
-        <div id="question{question.id}">
+        <div id="question{question.id}"
+            class="px-2 py-2 border rounded-3 shadow-sm bg-light-subtle"
+            style="">
             {#if question.is_invalid}
                 <div class="row">
                     <div class="col">
@@ -125,7 +127,8 @@
                 </div>
             {/if}
             {#if question.case}
-                <div class="alert alert-light" role="alert">
+                <div style="box-shadow: 4px 4px rgba(0,0,0,.2);"
+                    class="alert alert-primary" role="alert">
                     <p class="small fw-bold"><i class="bi bi-clipboard2-pulse"></i> CASE</p>
                     <p class="trix-content">{@html DOMPurify.sanitize(question.case.text)}</p>
                 </div>
@@ -154,7 +157,7 @@
                         }}
                         type="button"
                         class="btn btn-outline-secondary btn-sm mb-3"
-                        ><i class="bi bi-question"></i> Show hint</button>
+                        ><i class="bi bi-question-circle"></i> Show hint</button>
                 {/if}
             {/if}
             {#if question.type === "mc"}
@@ -181,7 +184,7 @@
             {#if !examMode && questionContext.isAnswered && question.comment}
                 <div class="row">
                     <div class="col">
-                        <div class="alert alert-light trix-content" role="alert">
+                        <div class="alert alert-secondary mt-1 trix-content" role="alert">
                             {@html DOMPurify.sanitize(question.comment)}
                         </div>
                     </div>
@@ -229,15 +232,16 @@
                     {/key}
                 </div>
             </div>
-        </div>
-    {/if}
 
-    {#if !questionContext.isAnswered && !examMode && !(question.type === 'card')}
-        <div class="mt-3">
-            <button
-                on:click|preventDefault={() => submitAnswer()}
-                type="button"
-                class="btn btn-outline-secondary btn-sm">&rightarrow; Show answer</button>
+            {#if !questionContext.isAnswered && !examMode && !(question.type === 'card')}
+                <div class="mt-3">
+                    <button
+                        on:click|preventDefault={() => submitAnswer()}
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm">&rightarrow; Show answer</button>
+                </div>
+            {/if}
+
         </div>
     {/if}
 {:else}
