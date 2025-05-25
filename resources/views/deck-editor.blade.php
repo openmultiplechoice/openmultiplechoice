@@ -14,6 +14,9 @@
             @if($deck->submission)
                 <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Submitted</span>
             @endif
+            @if($deck->is_archived)
+                <span class="badge text-rounded-pill text-bg-warning mb-1 align-self-center text-uppercase">Archived</span>
+            @endif
         </div>
         <form action="/decks/{{ isset($deck) ? $deck->id : '' }}" method="post" class="mb-3">
             @isset($deck)
@@ -100,7 +103,9 @@
     <div class="col-md">
         <div class="alert alert-light">
             <i class="bi bi-info-circle me-2"></i>
-            @if ($deck->access == "private")
+            @if ($deck->is_archived)
+                This deck is archived. It is not listed but can be unarchived below.
+            @elseif ($deck->access == "private")
                 Set access to <i>public-ro</i> or <i>public-rw</i> to share this deck with others.
             @elseif (!$deck->module)
                 Add this deck to a module to make it easier to find.
