@@ -31,8 +31,10 @@
                 </button>
             </form>
             @if (Auth::user()->is_admin || $deck->user_id == Auth::id() || $deck->access == "public-rw" || $deck->access == "public-rw-listed")
-                <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-collection"></i> Add / Remove questions</a>
-                <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-three-dots"></i> Settings</a>
+                <span class="float-end d-flex gap-1">
+                    <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-outline-secondary flex-grow-1"><i class="bi bi-collection"></i> Add / Remove questions</a>
+                    <a href="/decks/{{ $deck->id }}/edit" class="btn btn-sm btn-outline-secondary"><i class="bi bi-three-dots-vertical"></i> Settings</a>
+                </span>
             @endif
         </div>
     </div>
@@ -51,7 +53,7 @@
             @endforeach
         </div>
     </div>
-    <div class="col-lg-9 col-md-12">
+    <div class="col-md-12 col-lg-9 col-xl-8 col-xxl-6">
         @if (count($questions) > 0)
             <div class="row mb-3 pt-1 pb-1 bg-white">
                 @if ($urlPrev)

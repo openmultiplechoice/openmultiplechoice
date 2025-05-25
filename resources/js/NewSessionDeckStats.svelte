@@ -71,9 +71,9 @@
                                 numUnansweredQuestions
                             ],
                             backgroundColor: [
-                                '#d4edda',
-                                '#fff3cd',
-                                '#f8d7da',
+                                '#198754',
+                                '#ffc107',
+                                '#dc3545',
                                 '#bbbbbb'
                             ],
                             hoverOffet: 4

@@ -1,7 +1,6 @@
 <script>
     import DOMPurify from "dompurify";
-    import { format, parseISO } from "date-fns";
-    import MessageView from "./MessageView.svelte";
+    import { format, parseISO, formatDistance } from "date-fns";
     import { UserSettings } from "./UserSettingsStore.js";
 
     export let message;
@@ -12,8 +11,12 @@
 
     $: userThumb = message.thumbs.find((entry) => entry.user_id !== undefined) ?? null
 
+    $: hasHighRating = (message.thumbs_up_count - message.thumbs_down_count) > 4;
+    $: hasLowRating = (message.thumbs_up_count - message.thumbs_down_count) < -2;
+
     var showEditor = false;
     var showEditorReply = false;
+    var showLowRated = false;
 
     function toggleEditor() {
         showEditor = !showEditor;
@@ -21,6 +24,10 @@
 
     function toggleEditorReply() {
         showEditorReply = !showEditorReply;
+    }
+
+    function toggleLowRated() {
+        showLowRated = !showLowRated;
     }
 
     function handleSubmit() {
@@ -34,6 +41,7 @@
                 toggleEditor();
                 message.text = response.data.text;
                 message.is_anonymous = response.data.is_anonymous;
+                message.updated_at = response.data.updated_at;
                 updateMessage(message);
             })
             .catch(function (error) {
@@ -137,136 +145,166 @@
                 });
         }
     }
+
+    function hasChildren(message) {
+        // Make sure the message has children and at least one of them in any level is not deleted
+        if (!Array.isArray(message.childs)) return false;
+        return message.childs.some(child =>
+            !child.is_deleted || hasChildren(child)
+        );
+    }
 </script>
 
-{#if !message.is_deleted || (message.is_deleted && message.childs)}
-    <div class="mt-1 mb-1">
-        <div class="row">
-            {#if !showEditor}
-                <div class="col-md offset-md-{indent}">
-                    {#if !message.is_deleted}
-                        <p class="rounded-2 bg-light p-2 mb-0 text-break">
-                            {#if message.text}
-                                {@html DOMPurify.sanitize(message.text)}
+{#if !message.is_deleted || hasChildren(message)}
+    <div class="border-start border-2" class:ms-2={indent > 0} class:mb-3={!indent}>
+        {#if hasLowRating && !showLowRated}
+            <div class="p-2">
+                <button class="btn btn-link btn-sm text-muted p-0" on:click={toggleLowRated}>
+                    <i class="bi bi-eye-slash me-1"></i>Comment hidden due to low rating. Click to show.
+                </button>
+            </div>
+        {:else if message.is_deleted}
+            <div class="p-2">
+                <span class="text-muted small">
+                    <i class="bi bi-trash me-1"></i>This comment has been deleted.
+                </span>
+            </div>
+        {:else}
+            <div class="d-flex gap-1 mb-2 message-content {hasHighRating ? 'bg-light rounded-end-3 shadow-sm py-2 ps-1 pe-2 ms-1' : 'py-1 rounded-end-3'}">
+                <div class="d-flex flex-column gap-1" style="min-width: 2rem">
+                    <button class="btn btn-link p-0 text-muted text-decoration-none" class:disabled={message.is_deleted} on:click={() => handleThumb("up")}>
+                        <i class="bi" class:bi-hand-thumbs-up-fill={userThumb?.type === "up"} class:bi-hand-thumbs-up={!(userThumb?.type === "up")}></i>
+                    </button>
+                    <span class="text-center text-muted small">
+                        {message.thumbs_up_count - message.thumbs_down_count}
+                    </span>
+                    <button class="btn btn-link p-0 text-muted text-decoration-none" class:disabled={message.is_deleted} on:click={() => handleThumb("down")}>
+                        <i class="bi" class:bi-hand-thumbs-down-fill={userThumb?.type === "down"} class:bi-hand-thumbs-down={!(userThumb?.type === "down")}></i>
+                    </button>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex gap-2 text-muted small">
+                        {#if indent > 0}
+                            <i class="bi bi-arrow-return-right" title="Answer" />
+                            <span>•</span>
+                        {/if}
+                        <span>
+                            {#if message.is_anonymous}
+                                <i class="bi bi-incognito" title="Anonymous"></i>
+                            {:else if message.author}
+                                {message.author.public_name || message.author.name}
                             {/if}
-                        </p>
-                    {:else}
-                        <p class="rounded-2 bg-light-subtle p-1 mb-0 text-muted">
-                            <small><i>deleted</i></small>
-                        </p>
-                    {/if}
-                    <p class="text-muted text-end mb-0">
-                        <small>
-                            <div class="d-flex align-items-center py-1">
-                                {#if !message.is_deleted}
-                                    <div class="d-flex rounded-4 align-items-center bg-light ms-auto px-2">
-                                        <button class="btn mx-0 ps-0 pe-1"
-                                                on:click|preventDefault={() => handleThumb("up")}>
-                                                <i class="bi"
-                                                    class:bi-hand-thumbs-up-fill={userThumb?.type === "up"}
-                                                    class:bi-hand-thumbs-up={!(userThumb?.type === "up")}></i>
-                                        </button>
-                                        <span class="pe-1 font-monospace">{message.thumbs_up_count}</span>
-                                        <span class="px-1">|</span>
-                                        <button class="btn mx-0 px-1"
-                                                on:click|preventDefault={() => handleThumb("down")}>
-                                                <i class="bi"
-                                                    class:bi-hand-thumbs-down-fill={userThumb?.type === "down"}
-                                                    class:bi-hand-thumbs-down={!(userThumb?.type === "down")}></i>
-                                        </button>
-                                        <span class="pe-1 font-monospace">{message.thumbs_down_count}</span>
-                                    </div>
-                                    {#if $UserSettings.id === message.author_id}
-                                        <button
-                                            class="btn btn-sm btn-link link-dark"
-                                            on:click|preventDefault={toggleEditor}
-                                            >Edit</button>
-                                        <button
-                                            class="btn btn-sm btn-link link-dark"
-                                            on:click|preventDefault={handleDelete}
-                                            >Delete</button>
-                                    {/if}
-                                    <button
-                                        class="btn btn-sm btn-link link-dark"
-                                        on:click|preventDefault={toggleEditorReply}
-                                        >Reply</button>
-                                {/if}
-                                {format(
-                                    parseISO(message.created_at),
-                                    "dd.MM.yyyy HH:mm"
-                                )}
-                                {#if message.is_anonymous}
-                                    <i class="bi bi-incognito ps-2" title="anonymous"></i>
-                                {:else if message.author && !message.is_deleted}
-                                    <strong>
-                                        <span class="ps-2"> {message.author.public_name ? message.author.public_name : message.author.name}</span>
-                                    </strong>
+                        </span>
+                        <span>•</span>
+                        <span title={format(parseISO(message.created_at), "dd.MM.yyyy HH:mm")}>
+                            {formatDistance(parseISO(message.created_at), new Date(), { addSuffix: true })}
+                            {#if message.updated_at !== message.created_at}
+                                <i class="bi bi-pencil ms-1" title={"Edited " + format(parseISO(message.updated_at), "dd.MM.yyyy HH:mm")}></i>
+                            {/if}
+                        </span>
+                    </div>
+                    <div class="mt-1">
+                        {#if !showEditor}
+                            <div class="trix-content pe-4">
+                                {#if message.text}
+                                    {@html DOMPurify.sanitize(message.text)}
                                 {/if}
                             </div>
-                        </small>
-                    </p>
+                        {:else}
+                            <div class="pe-2">
+                                <input id="message" type="hidden" name="message" value={message.text} />
+                                <trix-editor input="message" class="trix-content form-control mb-2" style="min-height: 4rem;" />
+                                <div class="d-flex justify-content-between pb-1">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="anonymous" checked={message.is_anonymous}>
+                                        <label class="form-check-label small" for="anonymous">Anonymous</label>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-link btn-sm text-muted text-decoration-none p-0" on:click={toggleEditor}>Cancel</button>
+                                        <button class="btn btn-primary btn-sm py-0" on:click={handleSubmit}>Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {/if}
+                    </div>
                 </div>
-            {:else}
-                <div class="col-md">
-                    <form on:submit|preventDefault={handleSubmit} class="mt-3 mb-3">
-                        <div class="mb-3">
-                            <input id="message" type="hidden" name="message" value={message.text} />
-                            <trix-editor input="message" />
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="anonymous" checked={message.is_anonymous}>
-                            <label class="form-check-label" for="anonymous">Anonymous</label>
-                        </div>
-                        <input
-                            class="btn btn-sm btn-primary"
-                            type="submit"
-                            value="Save" />
-                        <button
-                            on:click|preventDefault={toggleEditor}
-                            class="btn btn-link mr-0">
-                                Cancel
+                {#if !showEditor}
+                    <div class="d-flex align-items-end gap-2 pe-1">
+                        <button class="btn btn-link p-0 text-muted me-1" title="Reply" on:click={toggleEditorReply} class:disabled={showEditorReply}>
+                            <i class="bi bi-reply"></i>
                         </button>
-                    </form>
-                </div>
-            {/if}
-        </div>
-
+                        {#if $UserSettings.id === message.author_id}
+                            <div class="dropdown">
+                                <button class="btn btn-link p-0 text-muted me-1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <button class="dropdown-item" on:click={toggleEditor}>
+                                            <i class="bi bi-pencil me-2"></i>Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item" on:click={handleDelete}>
+                                            <i class="bi bi-trash me-2"></i>Delete
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        {/if}
+                    </div>
+                {/if}
+            </div>
+        {/if}
         {#if showEditorReply}
-            <div class="row">
-                <div class="col-md">
-                    <form on:submit|preventDefault={handleReply} class="mt-3 mb-3">
-                        <input id="parentMessageId" type="hidden" value={message.id} />
-                        <div class="mb-3">
-                            <input id="replyMessage" type="hidden" name="replyMessage" value="" />
-                            <trix-editor input="replyMessage" />
-                        </div>
-                        <div class="mb-3 form-check">
+            <div class="border-start border-2 my-2 ms-2 ps-2">
+                <div class="d-flex gap-2 text-muted small mb-2">
+                    <i class="bi bi-arrow-return-right" title="Answer" />
+                    Replying to
+                    {#if message.is_anonymous}
+                        <i class="bi bi-incognito" title="Anonymous"></i>
+                    {:else if message.author}
+                        {message.author.public_name || message.author.name}
+                    {/if}
+                </div>
+                <div>
+                    <input id="replyMessage" type="hidden" name="replyMessage" />
+                    <input id="parentMessageId" type="hidden" name="parentMessageId" value={message.id} />
+                    <trix-editor input="replyMessage" class="trix-content form-control mb-2" style="min-height: 4rem;" />
+                    <div class="d-flex justify-content-between">
+                        <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="replyAnonymous" checked>
-                            <label class="form-check-label" for="replyAnonymous">Anonymous</label>
+                            <label class="form-check-label small" for="replyAnonymous">Anonymous</label>
                         </div>
-                        <input
-                            class="btn btn-sm btn-primary"
-                            type="submit"
-                            value="Send reply" />
-                        <button
-                            on:click|preventDefault={toggleEditorReply}
-                            class="btn btn-link mr-0">
-                                Cancel
-                        </button>
-                    </form>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-link btn-sm text-muted text-decoration-none p-0" on:click={toggleEditorReply}>Cancel</button>
+                            <button class="btn btn-primary btn-sm py-0" on:click={handleReply}>Reply</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+        {/if}
+
+        {#if message.childs}
+            {#each message.childs as child}
+                <svelte:self
+                    message={child}
+                    indent={indent + 1}
+                    {addMessage}
+                    {updateMessage}
+                    {questionId}
+                />
+            {/each}
         {/if}
     </div>
 {/if}
 
-{#if message.childs}
-    {#each message.childs as child}
-        <MessageView
-            bind:message={child}
-            indent={indent + 1}
-            {addMessage}
-            {updateMessage}
-            {questionId} />
-    {/each}
-{/if}
+<style>
+    .message-content:hover:not(.bg-light) {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .message-content {
+        transition: background-color 0.2s ease-in-out;
+    }
+</style>

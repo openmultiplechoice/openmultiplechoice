@@ -6,7 +6,7 @@
 
 <div class="progress" style="height: 20px;" title="{title}">
     <div
-        class="progress-bar bg-success text-dark fw-bold"
+        class="progress-bar bg-success fw-bold"
         role="progressbar"
         style="width: {progressPercentage.correct}%">
         {progressPercentage.correct > 5 ? progressPercentage.correct + "%" : ""}
@@ -18,7 +18,7 @@
         {progressPercentage.correctWithHelp > 5 ? progressPercentage.correctWithHelp + "%" : ""}
     </div>
     <div
-        class="progress-bar bg-danger text-dark fw-bold"
+        class="progress-bar bg-danger fw-bold"
         role="progressbar"
         style="width: {progressPercentage.incorrect}%">
         {progressPercentage.incorrect > 5 ? progressPercentage.incorrect + "%" : ""}

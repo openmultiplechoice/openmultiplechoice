@@ -33,11 +33,11 @@
         );
 
         if (percentage.correct >= 60) {
-            progressIndicator = '<span style="color: #155724; background-color: #d4edda;" class="badge" title="Correct answers in percent">' +
+            progressIndicator = '<span class="badge text-bg-success" title="Correct answers in percent">' +
                 percentage.correct +
                 " %</span>";
         } else {
-            progressIndicator = '<span style="color: #721c24; background-color: #f8d7da;" class="badge" title="Correct answers in percent">' +
+            progressIndicator = '<span class="badge text-bg-danger" title="Correct answers in percent">' +
                 percentage.correct +
                 " %</span>";
         }

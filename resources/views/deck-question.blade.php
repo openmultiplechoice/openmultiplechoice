@@ -38,7 +38,7 @@
             @endforeach
         </div>
     </div>
-    <div class="col-lg-9 col-md-12">
+    <div class="col-lg-9 col-xl-8 col-xxl-6 col-md-12">
         <div class="row mb-3 pt-1 pb-1 bg-white">
             @if ($urlPrev)
                 <div class="col-6">

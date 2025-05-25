@@ -1,17 +1,3 @@
-@import '~bootstrap/scss/_functions.scss';
-@import '~bootstrap/scss/_variables.scss';
-
-$theme-colors: (
-    "primary":    $primary,
-    "secondary":  $secondary,
-    "success":    $success-bg-subtle,
-    "info":       $info-bg-subtle,
-    "warning":    $warning-bg-subtle,
-    "danger":     $danger-bg-subtle,
-    "light":      $light,
-    "dark":       $dark
-);
-
 @import '~bootstrap/scss/bootstrap';
 // Explicity import .css file to avoid the following regression:
 // https://github.com/twbs/icons/issues/1381
@@ -68,10 +54,12 @@ trix-toolbar .trix-button--icon-heading-1 {
 .bg-incorrect {
     color: #495057 !important;
     background: #f8d7da !important;
+    border-color: #f8d7da !important;
 }
 .bg-correct {
     color: #495057 !important;
     background: #d4edda !important;
+    border-color: #d4edda !important;
 }
 
 .border-success {
