@@ -147,7 +147,7 @@
     ]
   },
   "resources/js/IndexSessionView.js": {
-    "file": "assets/IndexSessionView-KG0dtpbs.js",
+    "file": "assets/IndexSessionView-DEYtgls7.js",
     "name": "IndexSessionView",
     "src": "resources/js/IndexSessionView.js",
     "isEntry": true,
@@ -158,6 +158,9 @@
       "_StatsHelper-B91isISU.js",
       "_formatDistance-U_v5DbzH.js",
       "_parseISO-DDcmzaBF.js"
+    ],
+    "css": [
+      "assets/IndexSessionView-9KjUKMDo.css"
     ]
   },
   "resources/js/IndexStatsView.js": {
