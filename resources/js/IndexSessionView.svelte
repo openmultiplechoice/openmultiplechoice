@@ -9,7 +9,7 @@
 
     onMount(() => {
         axios
-            .get("/api/sessions?take=15&user-id=" + userId)
+            .get("/api/sessions?take=10&user-id=" + userId)
             .then(function (response) {
                 sessions = response.data;
             })
