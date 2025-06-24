@@ -6,8 +6,13 @@
 
 <div class="row">
     <div class="{{ $info->isEmpty() ? 'col-lg-12' : 'col-lg-8' }}">
-        <a href="/sessions/create" class="btn btn-primary mb-3"><i class="bi bi-rocket-takeoff"></i> {{ __('omc.newsession') }}</a>
-        <a href="{{ url('decks') }}" class="btn btn-primary mb-3"><i class="bi bi-collection-fill"></i> New deck</a>
+        <div class="row">
+            <div class="col-md-8 col-lg-6 col-xxl-4 d-flex gap-1">
+                <a href="/sessions/create" class="btn btn-primary mb-3 flex-fill"><i class="bi bi-rocket-takeoff"></i> {{ __('omc.newsession') }}</a>
+                <a href="{{ url('decks') }}" class="btn btn-primary mb-3 flex-fill"><i class="bi bi-collection-fill"></i> New deck</a>
+            </div>
+        </div>
+
         <div id="IndexSessionView" data-user-id="{{ Auth::user()->id }}" ></div>
         @vite(['resources/js/IndexSessionView.js'])
     </div>
@@ -16,7 +21,7 @@
             <h4><a class="text-reset text-decoration-none" href="{{ url('info') }}">Info</a></h4>
             @foreach ($info as $entry)
                 <div class="alert alert-light card-highlight" role="alert">
-                    <h6 class="alert-heading"><a class="link-dark alert-link stretched-link" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
+                    <h6 class="alert-heading"><a class="link-dark alert-link stretched-link text-decoration-none" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
                     <p>
                         <small>
                             <span class="font-monospace">

@@ -13,7 +13,7 @@
 
 <div class="row pt-4">
     @forelse ($submissions as $submission)
-        <div class="col-md-6 mb-1">
+        <div class="col-md-6 mb-3">
             <div class="card">
                 <div class="card-header">
                     <span class="badge text-bg-light">

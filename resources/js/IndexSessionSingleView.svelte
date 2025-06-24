@@ -32,15 +32,15 @@
 </script>
 
 
-<div class="mt-3 mb-3">
+<div class="mt-1 mb-2 p-2 rounded-2 border shadow-sm session-hover">
     <SessionProgressBar
         bind:progressPercentage />
     <div class="row mt-1">
-        <div class="col-md-4 text-truncate" title="{session.name}">
+        <div class="col-md-5 text-truncate" title="{session.name}">
             <strong>{session.name}</strong>
         </div>
-        <div class="col-md-4">
-            <a href="/sessions/{session.id}" class="btn btn-sm"
+        <div class="col-md-4 d-flex gap-1">
+            <a href="/sessions/{session.id}" class="btn btn-sm flex-fill"
                 class:btn-primary={progressPercentage.unanswered}
                 class:btn-outline-secondary={!progressPercentage.unanswered}
                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
@@ -48,7 +48,7 @@
             </a>
             {#if progressPercentage.unanswered === 0 && progressPercentage.incorrect > 0}
                 <button on:click|preventDefault={() => createSession(session.id)}
-                    class="btn btn-sm btn-outline-secondary"
+                    class="btn btn-sm btn-outline-secondary flex-fill"
                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" type="button">
                         <i class="bi bi-repeat" /> Repeat incorrect
                 </button>
@@ -58,7 +58,7 @@
                     <i class="bi bi-three-dots-vertical" />
             </a>
         </div>
-        <div class="col-md-4" title="{sessionAt}">
+        <div class="col-md-3 text-muted align-bottom" title="{sessionAt}">
             <span class="float-end d-none d-sm-none d-md-inline">
                 <small>{sessionAtPretty} ago</small>
             </span>
@@ -68,3 +68,9 @@
         </div>
     </div>
 </div>
+
+<style>
+    .session-hover:hover {
+        background-color: var(--bs-tertiary-bg);
+    }
+</style>
