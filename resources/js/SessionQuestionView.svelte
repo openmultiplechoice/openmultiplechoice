@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { run, preventDefault } from 'svelte/legacy';
 
     import DOMPurify from "dompurify";
     import _ from 'lodash';
@@ -11,54 +11,60 @@
     import QuestionForm from "./QuestionForm.svelte";
     import AddToDeckDialog from "./AddToDeckDialog.svelte";
 
-    export let deckId;
-    export let question;
-    export let questionContext;
-    export let helpUsed;
-    export let answerChoice;
-    export let submitAnswer;
-    export let deleteAnswer;
-    export let examMode;
-    export let updateCurrentQuestionData;
-    export let settingsShuffleAnswers;
-    export let settingsShowAnswerStats;
+    let {
+        deckId,
+        question = $bindable(),
+        questionContext = $bindable(),
+        helpUsed = $bindable(),
+        answerChoice = $bindable(),
+        submitAnswer,
+        deleteAnswer,
+        examMode = $bindable(),
+        updateCurrentQuestionData,
+        settingsShuffleAnswers = $bindable(),
+        settingsShowAnswerStats = $bindable()
+    } = $props();
 
-    var showEditor = false;
-    var showHint = questionContext.isAnswered;
+    var showEditor = $state(false);
+    var showHint = $state(questionContext.isAnswered);
 
-    $: question,
-        (() => {
-            showHint = questionContext.isAnswered;
-            helpUsed = questionContext.isAnswered;
-        })();
-
+    run(() => {
+        question,
+            (() => {
+                showHint = questionContext.isAnswered;
+                helpUsed = questionContext.isAnswered;
+            })();
+    });
     // For all list elements in the question text, add an event handler
     // to toggle the background color. This is helpful for multiple
     // choice questions where users have to choose under a variety of
     // answer options.
-    $: question, (() => {
-        var listItems = document.querySelectorAll("#questionText li");
-        [].map.call(listItems, function(item) {
-            item.addEventListener('click', toggleListItemColor, false);
-        });
-    })();
-
-    $: question, (() => {
-        // Give each answer a label starting from `A`. Since we want answers
-        // to always get the same label, we do this here before we shuffle
-        // the answers (if shuffling is enabled).
-        question.answers.forEach((answer, index) => {
-            answer.badgeText = "ABCDEFGHIJKLMN".charAt(index);
-        });
-        // Only shuffle if answer shuffling is enabled and if the question
-        // is not already answered, otherwise the answers would be shuffled
-        // a second time after the answer was submitted.
-        if (question && question.type === 'mc' && settingsShuffleAnswers
-            && !questionContext.isAnswered
-            && !Object.values(questionContext.answerContext).some(ac => ac.isSelectedAnswer)) {
-            question.answers = _.shuffle(question.answers);
-        }
-    })();
+    run(() => {
+        question, (() => {
+            var listItems = document.querySelectorAll("#questionText li");
+            [].map.call(listItems, function(item) {
+                item.addEventListener('click', toggleListItemColor, false);
+            });
+        })();
+    });
+    run(() => {
+        question, (() => {
+            // Give each answer a label starting from `A`. Since we want answers
+            // to always get the same label, we do this here before we shuffle
+            // the answers (if shuffling is enabled).
+            question.answers.forEach((answer, index) => {
+                answer.badgeText = "ABCDEFGHIJKLMN".charAt(index);
+            });
+            // Only shuffle if answer shuffling is enabled and if the question
+            // is not already answered, otherwise the answers would be shuffled
+            // a second time after the answer was submitted.
+            if (question && question.type === 'mc' && settingsShuffleAnswers
+                && !questionContext.isAnswered
+                && !Object.values(questionContext.answerContext).some(ac => ac.isSelectedAnswer)) {
+                question.answers = _.shuffle(question.answers);
+            }
+        })();
+    });
 
     // Toogle none -> red -> yellow -> green -> none
     function toggleListItemColor(event) {
@@ -112,7 +118,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="alert alert-light" role="alert">
-                            <i class="bi bi-cone-striped" /> <strong>Question is marked invalid</strong> and safe to skip!
+                            <i class="bi bi-cone-striped"></i> <strong>Question is marked invalid</strong> and safe to skip!
                         </div>
                     </div>
                 </div>
@@ -121,7 +127,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="alert alert-light" role="alert">
-                            <i class="bi bi-eraser-fill" /> <strong>Question needs review</strong> - Please review the question and answer choices and make sure they are correct and clear. Afterwards, remove the "Needs review" flag.
+                            <i class="bi bi-eraser-fill"></i> <strong>Question needs review</strong> - Please review the question and answer choices and make sure they are correct and clear. Afterwards, remove the "Needs review" flag.
                         </div>
                     </div>
                 </div>
@@ -151,10 +157,10 @@
                     </div>
                 {:else}
                     <button
-                        on:click|preventDefault={() => {
+                        onclick={preventDefault(() => {
                             showHint = true;
                             helpUsed = true;
-                        }}
+                        })}
                         type="button"
                         class="btn btn-outline-secondary btn-sm mb-3"
                         ><i class="bi bi-question-circle"></i> Show hint</button>
@@ -163,12 +169,12 @@
             {#if question.type === "mc"}
                 {#each question.answers as answer, index (answer.id)}
                     <SessionAnswerView
-                        bind:answer
+                        bind:answer={question.answers[index]}
                         bind:answerContext={questionContext.answerContext[answer.id]}
                         bind:examMode={examMode}
                         bind:settingsShowAnswerStats={settingsShowAnswerStats}
                         {submitAnswer}
-                        questionIsAnswered={questionContext.isAnswered}
+                        bind:questionIsAnswered={questionContext.isAnswered}
                         answerNumber={index+1} />
                 {/each}
             {:else}
@@ -200,28 +206,28 @@
                             {#if questionContext.isAnswered && answerChoice !== -1}
                                 <li>
                                     <button type="button" class="dropdown-item btn btn-sm"
-                                        on:click|preventDefault={deleteAnswer}>
-                                        <i class="bi bi-arrow-counterclockwise" /> Reset answer
+                                        onclick={preventDefault(deleteAnswer)}>
+                                        <i class="bi bi-arrow-counterclockwise"></i> Reset answer
                                     </button>
                                 </li>
                             {/if}
                             <li>
                                 <a class="dropdown-item btn btn-sm" href="/questions/{question.id}" target="_blank" role="button">
-                                    <i class="bi bi-box-arrow-up-right"/> Open in new tab
+                                    <i class="bi bi-box-arrow-up-right"></i> Open in new tab
                                 </a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <button type="button" class="dropdown-item btn btn-sm"
-                                    on:click|preventDefault={toggleEditor}>
-                                    <i class="bi bi-pencil" /> Edit question
+                                    onclick={preventDefault(toggleEditor)}>
+                                    <i class="bi bi-pencil"></i> Edit question
                                 </button>
                             </li>
                             {#if deckId}
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item btn btn-sm" href="/decks/{deckId}/questions/edit?question_id={question.id}" role="button">
-                                        <i class="bi bi-collection" /> Open in deck editor
+                                        <i class="bi bi-collection"></i> Open in deck editor
                                     </a>
                                 </li>
                             {/if}
@@ -236,7 +242,7 @@
             {#if !questionContext.isAnswered && !examMode && !(question.type === 'card')}
                 <div class="mt-3">
                     <button
-                        on:click|preventDefault={() => submitAnswer()}
+                        onclick={preventDefault(() => submitAnswer())}
                         type="button"
                         class="btn btn-outline-secondary btn-sm">&rightarrow; Show answer</button>
                 </div>
