@@ -354,7 +354,8 @@
 </div>
 
 {#each question.answers as answer (answer.id)}
-    <AnswerForm bind:answer />
+    <AnswerForm bind:answer
+                bind:correctAnswerId />
     <div class="text-end mb-2">
         {#if question.type === "mc"}
             <button
