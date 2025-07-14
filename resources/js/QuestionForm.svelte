@@ -261,32 +261,56 @@
             </div>
         {/if}
 
-        <div class="mt-3 mb-3">
+        <div class="mt-3 mb-2">
             <label for="questionText" class="form-label">Question text</label>
             <input id="questionText" type="hidden" bind:value={question.text} />
             <trix-editor id="editor-questionText" class="bg-light trix-content" bind:this={editorQuestion} input="questionText" />
             {@html savingStatus}
         </div>
 
-        <div class="mt-3 mb-3">
-            <label for="questionHint" class="form-label">Question hint (optional)</label>
-            <input id="questionHint" type="hidden" bind:value={question.hint} />
-            <trix-editor id="editor-questionHint" class="bg-light trix-content" bind:this={editorHint} input="questionHint" />
-            {@html savingStatus}
-            <div id="questionHint" class="form-text">
-                A hint that can be shown to the user if they are stuck.
+        <div class="accordion my-2 " id="accordionQuestionHint">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button text-black bg-white py-2 px-3 {question.hint ? '' : 'collapsed'}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuestionHint" aria-expanded="false" aria-controls="collapseQuestionHint">
+                        Question hint (optional)
+                    </button>
+                </h2>
+                <div id="collapseQuestionHint" class="accordion-collapse collapse {question.hint ? 'show' : ''}">
+                    <div class="accordion-body">
+                        <div class="mt-3 mb-3">
+                            <input id="questionHint" type="hidden" bind:value={question.hint} />
+                            <trix-editor id="editor-questionHint" class="bg-light trix-content" bind:this={editorHint} input="questionHint" />
+                            {@html savingStatus}
+                            <div id="questionHint" class="form-text">
+                                A hint that can be shown to the user if they are stuck.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="mt-3 mb-3">
-            <label for="questionComment" class="form-label">Question comment (optional)</label>
-            <input id="questionComment" type="hidden" bind:value={question.comment} />
-            <trix-editor id="editor-questionComment" class="bg-light trix-content" bind:this={editorComment} input="questionComment" />
-            {@html savingStatus}
-            <div id="questionHint" class="form-text">
-                A comment that will be shown once the user has answered the question.
-                It can be used to explain the correct answer or provide additional
-                information, for example sources.
+        <div class="accordion my-2" id="accordionQuestionComment">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button text-black bg-white py-2 px-3 {question.comment ? '' : 'collapsed'}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuestionComment" aria-expanded="false" aria-controls="collapseQuestionComment">
+                        Question comment (optional)
+                    </button>
+                </h2>
+                <div id="collapseQuestionComment" class="accordion-collapse collapse {question.comment ? 'show' : ''}">
+                    <div class="accordion-body">
+                        <div class="mt-3 mb-3">
+                            <input id="questionComment" type="hidden" bind:value={question.comment} />
+                            <trix-editor id="editor-questionComment" class="bg-light trix-content" bind:this={editorComment} input="questionComment" />
+                            {@html savingStatus}
+                            <div id="questionHint" class="form-text">
+                                A comment that will be shown once the user has answered the question.
+                                It can be used to explain the correct answer or provide additional
+                                information, for example sources.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
