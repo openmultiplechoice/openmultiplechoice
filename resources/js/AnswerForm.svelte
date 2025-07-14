@@ -51,7 +51,7 @@
     }
 </script>
 
-<form action="#" class="mt-3 mb-1 p-3 bg-light-subtle rounded">
+<form action="#">
     <div class="mb-3">
         <label for="answerText{answer.id}" class="form-label">Answer text</label>
         <input id="answerText{answer.id}" type="hidden" bind:value={answer.text} />

@@ -354,29 +354,32 @@
 </div>
 
 {#each question.answers as answer (answer.id)}
-    <AnswerForm bind:answer />
-    <div class="text-end mb-2">
-        {#if question.type === "mc"}
+    <div style:border={"2px dotted " + (correctAnswerId===answer.id ? "green" : "lightgray")}
+        class="mt-3 mb-1 px-3 pt-2 pb-1 bg-light-subtle rounded">
+        <AnswerForm bind:answer />
+        <div class="text-end mb-2">
+            {#if question.type === "mc"}
+                <button
+                    on:click|preventDefault={() => {
+                        updateCorrectAnswer(answer.id);
+                    }}
+                    type="button"
+                    class="btn btn-sm {correctAnswerId ===
+                    answer.id
+                        ? 'btn-success'
+                        : 'btn-light'}"
+                    title="Set as correct answer"
+                    ><i class="bi bi-check-lg" /></button>
+            {/if}
             <button
                 on:click|preventDefault={() => {
-                    updateCorrectAnswer(answer.id);
+                    if (confirm("Are you sure you want to delete this answer?")) {
+                        handleAnswerRemove(answer.id);
+                    }
                 }}
-                type="button"
-                class="btn btn-sm {correctAnswerId ===
-                answer.id
-                    ? 'btn-success'
-                    : 'btn-light'}"
-                title="Set as correct answer"
-                ><i class="bi bi-check-lg" /></button>
-        {/if}
-        <button
-            on:click|preventDefault={() => {
-                if (confirm("Are you sure you want to delete this answer?")) {
-                    handleAnswerRemove(answer.id);
-                }
-            }}
-            type="button" class="btn btn-sm btn-light"
-            title="Delete answer"><i class="bi bi-trash" /></button>
+                type="button" class="btn btn-sm btn-light"
+                title="Delete answer"><i class="bi bi-trash" /></button>
+        </div>
     </div>
 {/each}
 
