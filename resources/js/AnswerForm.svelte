@@ -60,13 +60,25 @@
         {@html savingStatus}
     </div>
 
-    <div class="mb-3">
-        <label for="answerHint{answer.id}t" class="form-label">Answer hint (optional)</label>
-        <input id="answerHint{answer.id}" type="hidden" bind:value={answer.hint} />
-        <trix-editor id="editor-answerHint{answer.id}" class="bg-light trix-content" bind:this={editorHint} input="answerHint{answer.id}" />
-        {@html savingStatus}
-        <div id="answerHint{answer.id}" class="form-text">
-            A hint that will be shown once the user has answered the question.
+    <div class="accordion my-2 " id="accordionAnswerHint">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button py-2 px-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnswerHint{answer.id}" aria-expanded="false" aria-controls="#collapseAnswerHint{answer.id}">
+                    Answer hint (optional)
+                </button>
+            </h2>
+            <div id="collapseAnswerHint{answer.id}" class="accordion-collapse collapse {answer.hint ? 'show' : ''}">
+                <div class="accordion-body">
+                    <div class="mb-3">
+                        <input id="answerHint{answer.id}" type="hidden" bind:value={answer.hint} />
+                        <trix-editor id="editor-answerHint{answer.id}" class="bg-light trix-content" bind:this={editorHint} input="answerHint{answer.id}" />
+                        {@html savingStatus}
+                        <div id="answerHint{answer.id}" class="form-text">
+                            A hint that will be shown once the user has answered the question.
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </form>
