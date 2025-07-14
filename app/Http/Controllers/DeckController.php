@@ -61,7 +61,8 @@ class DeckController extends Controller
     {
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
 
-        $questions = $deck->questions()->orderBy('id', 'asc')->get();
+        // Load the questions contained in the deck, ordered by the pivot id (=time of addition to the deck)
+        $questions = $deck->questions()->get();
 
         $nextQuestion = $questions->first();
 

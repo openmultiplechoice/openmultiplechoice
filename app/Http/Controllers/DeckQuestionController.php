@@ -23,8 +23,17 @@ class DeckQuestionController extends Controller
             abort(404);
         }
 
-        $prevQuestionId = $deck->questions()->where('questions.id', '<', $question->id)->max('questions.id');
-        $nextQuestionId = $deck->questions()->where('questions.id', '>', $question->id)->min('questions.id');
+        // Get the ordered questions from the relationship (ordered by pivot id)
+        $orderedQuestions = $deck->questions()->select('questions.id')->get();
+
+        // Find the current question's index in the ordered collection
+        $currentIndex = $orderedQuestions->search(function($item) use ($question) {
+            return $item->id === $question->id;
+        });
+
+        // Determine previous and next questions based on the ordered collection
+        $prevQuestionId = $orderedQuestions[$currentIndex - 1]->id ?? null;
+        $nextQuestionId = $orderedQuestions[$currentIndex + 1]->id ?? null;
 
         $urlPrev = null;
         if ($prevQuestionId) {
