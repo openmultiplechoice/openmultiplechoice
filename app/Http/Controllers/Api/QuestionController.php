@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 use App\Models\Answer;
-use App\Models\AnswerChoice;
 use App\Models\Question;
 
 class QuestionController extends Controller
@@ -48,25 +47,36 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        $question->fill($request->all());
+        // Store the original correct_answer_id before filling the model with new data
+        $originalCorrectAnswerId = $question->correct_answer_id;
 
-        if ($request->answers) {
-            $answerIds = array_map(function ($a) {
-                return $a['id'];
-            }, $request->answers);
+        try {
+            DB::transaction(function () use ($request, $question, $originalCorrectAnswerId) {
+                $question->fill($request->all());
 
-            $answers = Answer::findMany($answerIds);
-            $question->answers()->saveMany($answers);
-        }
+                if ($request->answers) {
+                    $answerIds = array_map(function ($a) {
+                        return $a['id'];
+                    }, $request->answers);
 
-        $question->save();
+                    $answers = Answer::findMany($answerIds);
+                    $question->answers()->saveMany($answers);
+                }
 
-        // Update all answer choices for this question as the correct
-        // answer could have been changed
-        $answerChoices = AnswerChoice::where('question_id', '=', $question->id)->get();
-        foreach ($answerChoices as $answerChoice) {
-            $answerChoice->is_correct = $answerChoice->answer_id == $question->correct_answer_id;
-            $answerChoice->save();
+                $question->save();
+
+                // Only update answer choices if the correct_answer_id has changed
+                if ($originalCorrectAnswerId !== $question->correct_answer_id) {
+                    // Update all answer choices for this question as the correct answer has been changed
+                    DB::statement(
+                        'UPDATE answer_choices SET is_correct = CASE WHEN answer_id = ? THEN TRUE ELSE FALSE END WHERE question_id = ?',
+                        [$question->correct_answer_id, $question->id]
+                    );
+                }
+            });
+        } catch (\Throwable $t) {
+            Log::error('Failed to update question: ' . $t->getMessage());
+            abort(500, 'Failed to update question');
         }
 
         return response()->json($question);
