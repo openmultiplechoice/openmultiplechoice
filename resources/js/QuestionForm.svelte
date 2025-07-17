@@ -2,6 +2,8 @@
     import _ from 'lodash';
     import debounce from "lodash/debounce";
     import DOMPurify from "dompurify";
+    import { onMount, tick } from "svelte";
+    import hotkeys from "hotkeys-js";
 
     import AnswerForm from "./AnswerForm.svelte";
 
@@ -18,8 +20,15 @@
     let editorComment;
     let editorHint;
     let selectedCase;
+    let lastHotkeyTime = 0;
+
+    let showQuestionHint;
+    let showQuestionComment;
+    let currentQuestionId;
 
     let savingStatus = "";
+
+    const HOTKEY_DEBOUNCED_DELAY = 1000;
 
     $: correctAnswerId = question.correct_answer_id;
     $: if (editorQuestion) {
@@ -37,6 +46,48 @@
     } else {
         selectedCase = "";
     }
+
+    // Update accordion states only when a new question is loaded (question ID changes)
+    $: if (question.id !== currentQuestionId) {
+        currentQuestionId = question.id;
+        showQuestionHint = !!question.hint;
+        showQuestionComment = !!question.comment;
+    }
+
+    onMount(() => {
+        hotkeys.filter = function() {
+            // Return true to allow the hotkey to trigger even in form elements
+            return true;
+        };
+
+        hotkeys('alt+A', function(event) {
+            event.preventDefault();
+            const now = Date.now();
+
+            if (now - lastHotkeyTime > HOTKEY_DEBOUNCED_DELAY) {
+                handleAnswerAdd();
+                lastHotkeyTime = now;
+            }
+        })
+
+        const hintAccordion = document.getElementById('collapseQuestionHint');
+        if (hintAccordion) {
+            hintAccordion.addEventListener('shown.bs.collapse', () => {
+                if (editorHint) {
+                    editorHint.focus();
+                }
+            });
+        }
+
+        const commentAccordion = document.getElementById('collapseQuestionComment');
+        if (commentAccordion) {
+            commentAccordion.addEventListener('shown.bs.collapse', () => {
+                if (editorComment) {
+                    editorComment.focus();
+                }
+            });
+        }
+    });
 
     function configureEditorEventListener(editor) {
         editor.addEventListener("trix-change", function () {
@@ -126,6 +177,13 @@
             .post("/api/questions/" + question.id + "/answers", {})
             .then(function (response) {
                 question.answers = [...question.answers, response.data];
+
+                tick().then(() => {
+                    const newAnswerInput = document.getElementById("editor-answer" + response.data.id);
+                    if (newAnswerInput) {
+                        newAnswerInput.focus();
+                    }
+                });
             })
             .catch(function (error) {
                 alert(error);
@@ -261,32 +319,66 @@
             </div>
         {/if}
 
-        <div class="mt-3 mb-3">
+        <div class="mt-3 mb-2">
             <label for="questionText" class="form-label">Question text</label>
             <input id="questionText" type="hidden" bind:value={question.text} />
             <trix-editor id="editor-questionText" class="bg-light trix-content" bind:this={editorQuestion} input="questionText" />
             {@html savingStatus}
         </div>
 
-        <div class="mt-3 mb-3">
-            <label for="questionHint" class="form-label">Question hint (optional)</label>
-            <input id="questionHint" type="hidden" bind:value={question.hint} />
-            <trix-editor id="editor-questionHint" class="bg-light trix-content" bind:this={editorHint} input="questionHint" />
-            {@html savingStatus}
-            <div id="questionHint" class="form-text">
-                A hint that can be shown to the user if they are stuck.
+        <div class="accordion my-2 " id="accordionQuestionHint">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button text-black bg-white py-2 px-3 {showQuestionHint ? '' : 'collapsed'}"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseQuestionHint"
+                            aria-expanded="false"
+                            aria-controls="collapseQuestionHint">
+                        Question hint (optional)
+                    </button>
+                </h2>
+                <div id="collapseQuestionHint" class="accordion-collapse collapse {showQuestionHint ? 'show' : ''}">
+                    <div class="accordion-body">
+                        <div class="mt-3 mb-3">
+                            <input id="questionHint" type="hidden" bind:value={question.hint} />
+                            <trix-editor id="editor-questionHint" class="bg-light trix-content" bind:this={editorHint} input="questionHint" />
+                            {@html savingStatus}
+                            <div id="questionHint" class="form-text">
+                                A hint that can be shown to the user if they are stuck.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="mt-3 mb-3">
-            <label for="questionComment" class="form-label">Question comment (optional)</label>
-            <input id="questionComment" type="hidden" bind:value={question.comment} />
-            <trix-editor id="editor-questionComment" class="bg-light trix-content" bind:this={editorComment} input="questionComment" />
-            {@html savingStatus}
-            <div id="questionHint" class="form-text">
-                A comment that will be shown once the user has answered the question.
-                It can be used to explain the correct answer or provide additional
-                information, for example sources.
+        <div class="accordion my-2" id="accordionQuestionComment">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button text-black bg-white py-2 px-3 {showQuestionComment ? '' : 'collapsed'}"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseQuestionComment"
+                            aria-expanded="false"
+                            aria-controls="collapseQuestionComment">
+                        Question comment (optional)
+                    </button>
+                </h2>
+                <div id="collapseQuestionComment" class="accordion-collapse collapse {showQuestionComment ? 'show' : ''}">
+                    <div class="accordion-body">
+                        <div class="mt-3 mb-3">
+                            <input id="questionComment" type="hidden" bind:value={question.comment} />
+                            <trix-editor id="editor-questionComment" class="bg-light trix-content" bind:this={editorComment} input="questionComment" />
+                            {@html savingStatus}
+                            <div id="questionHint" class="form-text">
+                                A comment that will be shown once the user has answered the question.
+                                It can be used to explain the correct answer or provide additional
+                                information, for example sources.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -384,14 +476,22 @@
 {/each}
 
 {#if question.type === "mc" || question.answers.length === 0}
-    <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary"
-        >Add answer</button>
+    <div class="sticky-bottom bg-white mt-3" style="z-index: 10;">
+        <div class="row py-3">
+            <div class="col">
+                <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary"
+                        title="Add a new answer (Shortcut: Alt+A)">
+                    Add answer
+                </button>
+            </div>
+        </div>
+    </div>
 {/if}
 
 {#if showConfigEditor}
     <div class="row">
         <div class="col">
-            <div class="mt-5 mb-5 border-dark" style="border-bottom: dotted; border-width: 1px;">
+            <div class="mb-3 border-dark" style="border-bottom: dotted; border-width: 1px;">
             </div>
         </div>
     </div>

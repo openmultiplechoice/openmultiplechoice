@@ -101,7 +101,7 @@
 
 {#if question}
     {#if showEditor}
-        <div class="my-5 pt-1 pb-3 border-dark" style="border-top: dotted; border-bottom: dotted; border-width: 1px;">
+        <div class="my-4 pt-1 pb-1 border-dark" style="border-top: dotted; border-bottom: dotted; border-width: 1px;">
             <QuestionForm bind:question {toggleEditor} />
         </div>
     {:else}
