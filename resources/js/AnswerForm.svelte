@@ -1,5 +1,6 @@
 <script>
     import debounce from "lodash/debounce";
+    import { onMount } from "svelte";
 
     export let answer;
     export let correctAnswerId = null;
@@ -15,6 +16,17 @@
     $: if (editorHint) {
         configureEditorEventListener(editorHint);
     }
+
+    onMount(() => {
+        const answerHintAccordion = document.getElementById('collapseAnswerHint' + answer.id);
+        if (answerHintAccordion) {
+            answerHintAccordion.addEventListener('shown.bs.collapse', () => {
+                if (editorHint) {
+                    editorHint.focus();
+                }
+            });
+        }
+    })
 
     function configureEditorEventListener(editor) {
         editor.addEventListener("trix-change", function () {
