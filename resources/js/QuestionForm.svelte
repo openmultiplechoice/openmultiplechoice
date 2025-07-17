@@ -2,6 +2,8 @@
     import _ from 'lodash';
     import debounce from "lodash/debounce";
     import DOMPurify from "dompurify";
+    import { onMount, tick } from "svelte";
+    import hotkeys from "hotkeys-js";
 
     import AnswerForm from "./AnswerForm.svelte";
 
@@ -18,8 +20,11 @@
     let editorComment;
     let editorHint;
     let selectedCase;
+    let lastHotkeyTime = 0;
 
     let savingStatus = "";
+
+    const HOTKEY_DEBOUNCED_DELAY = 1000;
 
     $: correctAnswerId = question.correct_answer_id;
     $: if (editorQuestion) {
@@ -37,6 +42,41 @@
     } else {
         selectedCase = "";
     }
+
+    onMount(() => {
+        hotkeys.filter = function() {
+            // Return true to allow the hotkey to trigger even in form elements
+            return true;
+        };
+
+        hotkeys('alt+A', function(event) {
+            event.preventDefault();
+            const now = Date.now();
+
+            if (now - lastHotkeyTime > HOTKEY_DEBOUNCED_DELAY) {
+                handleAnswerAdd();
+                lastHotkeyTime = now;
+            }
+        })
+
+        const hintAccordion = document.getElementById('collapseQuestionHint');
+        if (hintAccordion) {
+            hintAccordion.addEventListener('shown.bs.collapse', () => {
+                if (editorHint) {
+                    editorHint.focus();
+                }
+            });
+        }
+
+        const commentAccordion = document.getElementById('collapseQuestionComment');
+        if (commentAccordion) {
+            commentAccordion.addEventListener('shown.bs.collapse', () => {
+                if (editorComment) {
+                    editorComment.focus();
+                }
+            });
+        }
+    });
 
     function configureEditorEventListener(editor) {
         editor.addEventListener("trix-change", function () {
@@ -126,6 +166,13 @@
             .post("/api/questions/" + question.id + "/answers", {})
             .then(function (response) {
                 question.answers = [...question.answers, response.data];
+
+                tick().then(() => {
+                    const newAnswerInput = document.getElementById("editor-answer" + response.data.id);
+                    if (newAnswerInput) {
+                        newAnswerInput.focus();
+                    }
+                });
             })
             .catch(function (error) {
                 alert(error);
@@ -406,14 +453,22 @@
 {/each}
 
 {#if question.type === "mc" || question.answers.length === 0}
-    <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary"
-        >Add answer</button>
+    <div class="sticky-bottom bg-white mt-3" style="z-index: 10;">
+        <div class="row py-3">
+            <div class="col">
+                <button on:click={handleAnswerAdd} class="btn btn-sm btn-primary"
+                        title="Add a new answer (Shortcut: Alt+A)">
+                    Add answer
+                </button>
+            </div>
+        </div>
+    </div>
 {/if}
 
 {#if showConfigEditor}
     <div class="row">
         <div class="col">
-            <div class="mt-5 mb-5 border-dark" style="border-bottom: dotted; border-width: 1px;">
+            <div class="mb-3 border-dark" style="border-bottom: dotted; border-width: 1px;">
             </div>
         </div>
     </div>
