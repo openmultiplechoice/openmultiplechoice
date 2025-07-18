@@ -1,7 +1,9 @@
 <script>
     import debounce from "lodash/debounce";
+    import { onMount } from "svelte";
 
     export let answer;
+    export let correctAnswerId = null;
 
     let editorAnswer;
     let editorHint;
@@ -15,6 +17,17 @@
         configureEditorEventListener(editorHint);
     }
 
+    onMount(() => {
+        const answerHintAccordion = document.getElementById('collapseAnswerHint' + answer.id);
+        if (answerHintAccordion) {
+            answerHintAccordion.addEventListener('shown.bs.collapse', () => {
+                if (editorHint) {
+                    editorHint.focus();
+                }
+            });
+        }
+    })
+
     function configureEditorEventListener(editor) {
         editor.addEventListener("trix-change", function () {
                 answer.text = document.getElementById("answerText" + answer.id).value;
@@ -22,18 +35,6 @@
                 savingStatus = '<p class="text-end">Saving ...</p>';
                 handleChange();
             });
-
-        editor.toolbarElement.style.display = "none";
-
-        editor.addEventListener("trix-focus", function(event) {
-            event.target.toolbarElement.style.display = "block";
-        });
-        editor.addEventListener("trix-blur", function(event) {
-            // Don't hide the toolbar if we've unfocused to focus on the link dialog
-            if (!event.target.toolbarElement.contains(document.activeElement)) {
-                event.target.toolbarElement.style.display = "none";
-            }
-        });
     };
 
     var debounced;
@@ -63,7 +64,7 @@
     }
 </script>
 
-<form action="#" class="mt-3 mb-1 p-3 bg-light-subtle rounded">
+<form action="#" class="mt-3 mb-1 p-3 bg-light-subtle rounded" style:border={"2px dotted " + (correctAnswerId===answer.id ? "green" : "transparent")}>
     <div class="mb-3">
         <label for="answerText{answer.id}" class="form-label">Answer text</label>
         <input id="answerText{answer.id}" type="hidden" bind:value={answer.text} />
@@ -71,13 +72,25 @@
         {@html savingStatus}
     </div>
 
-    <div class="mb-3">
-        <label for="answerHint{answer.id}t" class="form-label">Answer hint (optional)</label>
-        <input id="answerHint{answer.id}" type="hidden" bind:value={answer.hint} />
-        <trix-editor id="editor-answerHint{answer.id}" class="bg-light trix-content" bind:this={editorHint} input="answerHint{answer.id}" />
-        {@html savingStatus}
-        <div id="answerHint{answer.id}" class="form-text">
-            A hint that will be shown once the user has answered the question.
+    <div class="accordion my-2 " id="accordionAnswerHint">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button py-2 px-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnswerHint{answer.id}" aria-expanded="false" aria-controls="#collapseAnswerHint{answer.id}">
+                    Answer hint (optional)
+                </button>
+            </h2>
+            <div id="collapseAnswerHint{answer.id}" class="accordion-collapse collapse {answer.hint ? 'show' : ''}">
+                <div class="accordion-body">
+                    <div class="mb-3">
+                        <input id="answerHint{answer.id}" type="hidden" bind:value={answer.hint} />
+                        <trix-editor id="editor-answerHint{answer.id}" class="bg-light trix-content" bind:this={editorHint} input="answerHint{answer.id}" />
+                        {@html savingStatus}
+                        <div id="answerHint{answer.id}" class="form-text">
+                            A hint that will be shown once the user has answered the question.
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </form>
