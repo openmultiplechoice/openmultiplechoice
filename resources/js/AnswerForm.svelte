@@ -8,6 +8,8 @@
     let editorAnswer;
     let editorHint;
 
+    let answerHintAccordionShown;
+
     let savingStatus = "";
 
     $: if (editorAnswer) {
@@ -26,6 +28,8 @@
                 }
             });
         }
+
+        answerHintAccordionShown = answer.hint;
     })
 
     function configureEditorEventListener(editor) {
@@ -72,14 +76,19 @@
         {@html savingStatus}
     </div>
 
-    <div class="accordion my-2 " id="accordionAnswerHint">
+    <div class="accordion my-2 " id="accordionAnswerHint{answer.id}">
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button class="accordion-button text-black bg-white py-2 px-3 {answer.hint ? '' : 'collapsed'}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnswerHint{answer.id}" aria-expanded="false" aria-controls="#collapseAnswerHint{answer.id}">
+                <button class="accordion-button text-black bg-white py-2 px-3 {answerHintAccordionShown ? '' : 'collapsed'}"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseAnswerHint{answer.id}"
+                        aria-expanded="false"
+                        aria-controls="#collapseAnswerHint{answer.id}">
                     Answer hint (optional)
                 </button>
             </h2>
-            <div id="collapseAnswerHint{answer.id}" class="accordion-collapse collapse {answer.hint ? 'show' : ''}">
+            <div id="collapseAnswerHint{answer.id}" class="accordion-collapse collapse {answerHintAccordionShown ? 'show' : ''}">
                 <div class="accordion-body">
                     <div class="mb-3">
                         <input id="answerHint{answer.id}" type="hidden" bind:value={answer.hint} />

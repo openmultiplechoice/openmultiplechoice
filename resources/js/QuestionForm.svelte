@@ -22,6 +22,9 @@
     let selectedCase;
     let lastHotkeyTime = 0;
 
+    let questionHintAccordionShown;
+    let questionCommentAccordionShown;
+
     let savingStatus = "";
 
     const HOTKEY_DEBOUNCED_DELAY = 1000;
@@ -76,6 +79,9 @@
                 }
             });
         }
+
+        questionHintAccordionShown = question.hint;
+        questionCommentAccordionShown = question.comment;
     });
 
     function configureEditorEventListener(editor) {
@@ -318,11 +324,16 @@
         <div class="accordion my-2 " id="accordionQuestionHint">
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button text-black bg-white py-2 px-3 {question.hint ? '' : 'collapsed'}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuestionHint" aria-expanded="false" aria-controls="collapseQuestionHint">
+                    <button class="accordion-button text-black bg-white py-2 px-3 {questionHintAccordionShown ? '' : 'collapsed'}"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseQuestionHint"
+                            aria-expanded="false"
+                            aria-controls="collapseQuestionHint">
                         Question hint (optional)
                     </button>
                 </h2>
-                <div id="collapseQuestionHint" class="accordion-collapse collapse {question.hint ? 'show' : ''}">
+                <div id="collapseQuestionHint" class="accordion-collapse collapse {questionHintAccordionShown ? 'show' : ''}">
                     <div class="accordion-body">
                         <div class="mt-3 mb-3">
                             <input id="questionHint" type="hidden" bind:value={question.hint} />
@@ -340,11 +351,16 @@
         <div class="accordion my-2" id="accordionQuestionComment">
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button text-black bg-white py-2 px-3 {question.comment ? '' : 'collapsed'}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuestionComment" aria-expanded="false" aria-controls="collapseQuestionComment">
+                    <button class="accordion-button text-black bg-white py-2 px-3 {questionCommentAccordionShown ? '' : 'collapsed'}"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseQuestionComment"
+                            aria-expanded="false"
+                            aria-controls="collapseQuestionComment">
                         Question comment (optional)
                     </button>
                 </h2>
-                <div id="collapseQuestionComment" class="accordion-collapse collapse {question.comment ? 'show' : ''}">
+                <div id="collapseQuestionComment" class="accordion-collapse collapse {questionCommentAccordionShown ? 'show' : ''}">
                     <div class="accordion-body">
                         <div class="mt-3 mb-3">
                             <input id="questionComment" type="hidden" bind:value={question.comment} />
