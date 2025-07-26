@@ -1,8 +1,9 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
     import CaseForm from "./CaseForm.svelte";
     import QuestionForm from "./QuestionForm.svelte";
     import DeckFormIndex from "./DeckFormIndex.svelte";
+    import hotkeys from "hotkeys-js";
 
     export let id;
     export let name;
@@ -11,6 +12,9 @@
         cases: [],
         questions: []
     };
+    let lastHotkeyTime = 0;
+
+    const HOTKEY_DEBOUNCED_DELAY = 1000;
 
     $: currentQuestion = data
         ? data.questions.find((q) => q.id === data.current_question_id)
@@ -21,6 +25,21 @@
         : null;
 
     onMount(() => {
+        hotkeys.filter = function() {
+            // Return true to allow the hotkey to trigger even in form elements
+            return true;
+        };
+
+        hotkeys('alt+Q', function(event) {
+            event.preventDefault();
+            const now = Date.now();
+
+            if (now - lastHotkeyTime > HOTKEY_DEBOUNCED_DELAY) {
+                addNewQuestion('mc');
+                lastHotkeyTime = now;
+            }
+        })
+
         axios
             .get("/api/decks/" + id)
             .then(function (response) {
@@ -59,10 +78,19 @@
                 newQuestion.id = response.data.id;
                 data.questions = [...data.questions, newQuestion];
                 data.current_question_id = newQuestion.id;
+
+                tick().then(() => {
+                    const newQuestionInput = document.getElementById("editor-questionText");
+                    if (newQuestionInput) {
+                        newQuestionInput.focus();
+                    }
+                });
             })
             .catch(function (error) {
                 alert(error);
             });
+
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function addNewCase() {
@@ -76,10 +104,19 @@
                 data.cases = [...data.cases, response.data];
                 data.current_case_id = response.data.id;
                 data.current_question_id = null;
+
+                tick().then(() => {
+                    const newCaseInput = document.getElementById("editor-case" + response.data.id);
+                    if (newCaseInput) {
+                        newCaseInput.focus();
+                    }
+                });
             })
             .catch(function (error) {
                 alert(error);
             });
+
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function handleQuestionRemove(questionId) {
@@ -125,17 +162,20 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col d-grid d-sm-block gap-2">
-        <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("mc"); }}>Add MC question</button>
-        <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("card"); }}>Add card question</button>
-        <button type="button" class="btn btn-sm btn-light" on:click={addNewCase}><i class="bi bi-clipboard2-pulse"></i> Add case</button>
+<div class="sticky-top bg-white mb-3" style="z-index: 20;">
+    <div class="row">
+        <div class="col d-grid d-sm-block gap-2 py-3">
+            <button type="button" class="btn btn-sm btn-primary" title="Add a new MC question (Shortcut: Alt+Q)"
+                    on:click={() => { addNewQuestion("mc"); }}>Add MC question</button>
+            <button type="button" class="btn btn-sm btn-primary" on:click={() => { addNewQuestion("card"); }}>Add card question</button>
+            <button type="button" class="btn btn-sm btn-light" on:click={addNewCase}><i class="bi bi-clipboard2-pulse"></i> Add case</button>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col">
-        <div class="mt-3 mb-3 border-dark" style="border-bottom: dotted; border-width: 1px;">
+    <div class="row">
+        <div class="col">
+            <div class="border-dark" style="border-bottom: dotted; border-width: 1px;">
+            </div>
         </div>
     </div>
 </div>
