@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md">
-            <div class="alert alert-warning d-flex align-items-center">
+            <div class="alert alert-light d-flex align-items-center">
                 <i class="bi bi-info-circle me-2"></i>
                 The following questions need review or are marked invalid. Contributions are welcome!
             </div>
@@ -39,7 +39,7 @@
                 </div>
             @empty
                 <div class="alert alert-light">
-                    <p>No questions to review currently.</p>
+                    No questions to review currently.
                 </div>
             @endforelse
         </div>
