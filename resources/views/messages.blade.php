@@ -9,7 +9,7 @@
         <h4>Your comments</h4>
         @forelse($messages as $message)
             <div class="border-start border-2 mb-3">
-                <div class="d-flex gap-1 mb-2">
+                <div class="d-flex gap-1 mb-2 message-content py-1 rounded-end-3">
                     <div class="d-flex flex-column gap-1" style="min-width: 2rem">
                         <button class="btn btn-link p-0 text-muted text-decoration-none opacity-25 disabled">
                             <i class="bi bi-hand-thumbs-up"></i>
