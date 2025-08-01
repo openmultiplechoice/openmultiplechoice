@@ -1,10 +1,6 @@
 {
-  "_Messages-!~{00p}~.js": {
-    "file": "assets/Messages-B0AsJTB0.css",
-    "src": "_Messages-!~{00p}~.js"
-  },
-  "_Messages-BxKJjRDj.js": {
-    "file": "assets/Messages-BxKJjRDj.js",
+  "_Messages-x6ewrd1-.js": {
+    "file": "assets/Messages-x6ewrd1-.js",
     "name": "Messages",
     "imports": [
       "_index-CTA786D7.js",
@@ -13,9 +9,6 @@
       "_UserSettingsStore-vIMzuXmW.js",
       "_formatDistance-U_v5DbzH.js",
       "_parseISO-DDcmzaBF.js"
-    ],
-    "css": [
-      "assets/Messages-B0AsJTB0.css"
     ]
   },
   "_NewSessionHelper-Ba9jtPTo.js": {
@@ -177,12 +170,12 @@
     ]
   },
   "resources/js/Messages.js": {
-    "file": "assets/Messages-DOkR_fxQ.js",
+    "file": "assets/Messages-Ba7SzroU.js",
     "name": "Messages",
     "src": "resources/js/Messages.js",
     "isEntry": true,
     "imports": [
-      "_Messages-BxKJjRDj.js",
+      "_Messages-x6ewrd1-.js",
       "_index-CTA786D7.js",
       "_each-KlFnVOXz.js",
       "_purify.es-CzHI0FGf.js",
@@ -223,7 +216,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-D5dpFLGk.js",
+    "file": "assets/SessionView-CU25Utj6.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -231,7 +224,7 @@
       "_index-CTA786D7.js",
       "_purify.es-CzHI0FGf.js",
       "_each-KlFnVOXz.js",
-      "_Messages-BxKJjRDj.js",
+      "_Messages-x6ewrd1-.js",
       "_auto-C0VlNTRY.js",
       "_SessionProgressBar-CX5CzH7b.js",
       "_QuestionForm-C_NMvz6G.js",
@@ -267,7 +260,7 @@
     ]
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-g1UJ-XiU.css",
+    "file": "assets/app-Cj2GPw5_.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   }

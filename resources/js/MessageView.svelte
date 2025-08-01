@@ -298,13 +298,3 @@
         {/if}
     </div>
 {/if}
-
-<style>
-    .message-content:hover:not(.bg-light) {
-        background-color: rgba(0, 0, 0, 0.02);
-    }
-
-    .message-content {
-        transition: background-color 0.2s ease-in-out;
-    }
-</style>
