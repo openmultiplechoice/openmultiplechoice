@@ -66,7 +66,7 @@
                 <div class="form-text">
                     Access can be set to
                     <ul>
-                        <li><i>private</i> (only you can see this deck),</li>
+                        <li><i>private</i> (only you can see and edit this deck),</li>
                         <li><i>public-ro</i> (anyone can see this deck, but only you can edit it) or</li>
                         <li><i>public-rw</i> (anyone can see and edit this deck).</li>
                     </ul>
