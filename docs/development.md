@@ -7,7 +7,7 @@
 * A PostgreSQL (preferred) or MariaDB database
 
 If you want to use a virtual machine for the development environment,
-Homestead can be used:
+Homestead is an option:
 
 * [Vagrant](https://www.vagrantup.com/) with VirtualBox or Parallels as provider
 * [Homestead](https://laravel.com/docs/homestead)
@@ -66,10 +66,27 @@ php artisan serve
 
 Your local installation should now be reachable.
 
+Info on how to create a first user can be found in
+[`docs/tinker.md`](./tinker.md#add-user).
+
+Optionally, add demo decks and users:
+
+```
+php artisan db:seed --class=DemoSeeder
+php artisan db:seed --class=DemoUserSeeder
+```
+
+`DemoUserSeeder` does create two demo users:
+
+* `demo@example.com` with password `demo` and
+* `demoadmin@example.com` with password `demoadmin`.
+
 Instructions on how to build and run the frontend code can be found
 under "Development workflow" [here](#development-workflow).
 
 ### Homestead
+
+<details>
 
 After [installation](https://laravel.com/docs/8.x/homestead#installing-homestead),
 a `folders` mount and `sites` entry for OMC must be added to the generated
@@ -146,7 +163,7 @@ php artisan storage:link
 
 That's it! All other values can remain set to their defaults.
 
-Laravel's [Artisan](https://laravel.com/docs/8.x/artisan) is used to
+Laravel's [Artisan](https://laravel.com/docs/12.x/artisan) is used to
 
 1. initalize the database and
 1. add demo data.
@@ -163,6 +180,8 @@ OMC should now be running and reachable in your browser at http://omc.test
 
 * `demo@example.com` with password `demo` and
 * `demoadmin@example.com` with password `demoadmin`.
+
+</details>
 
 ## Testing scheduled jobs
 
@@ -209,7 +228,7 @@ to rebuild the bundle files and commit the changes.
 
 ### Development workflow
 
-During development, `npm run dev` can be used to make webpack watch the
+During development, `npm run dev` can be used to make Vite watch the
 sources and trigger a rebuild whenever you made a change. This way you can
 jump back and forth between your editor and the browser and instantly see
 the result of your changes.
@@ -237,7 +256,7 @@ composer update
 
 If `composer install` leads to an error like the example below, the issue could
 be a more recent php version on the machine where the update was done (for example,
-php8.3 on the developer machine and php8.1 on the target server).
+php8.4 on the developer machine and php8.3 on the target server).
 
 ```
 $ composer install
@@ -253,10 +272,10 @@ Your lock file does not contain a compatible set of packages. Please run compose
 ```
 
 In this case, make sure to use a compatible php version for the update. For
-example, on a macOS system with a brew php8.1. installation:
+example, on a macOS system with a brew php8.3. installation:
 
 ```
-/opt/homebrew/opt/php@8.1/bin/php /opt/homebrew/bin/composer update
+/opt/homebrew/opt/php@8.3/bin/php /opt/homebrew/bin/composer update
 ```
 
 To upgrade packages to the latest version, find all outdated packages, update
