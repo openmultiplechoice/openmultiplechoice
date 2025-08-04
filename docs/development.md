@@ -50,6 +50,14 @@ Install the required PHP packages:
 composer install
 ```
 
+Create the default favicon file, storage links and initialize the database:
+
+```
+touch public/favicon.ico
+php artisan storage:link
+php artisan migrate:fresh
+```
+
 Run the PHP development server via `artisan`:
 
 ```
@@ -129,9 +137,10 @@ use `php artisan key:generate` to create an app key.
 APP_KEY=base64:xKQESFCyonhA6fjZVzW+DDho7s17W2SdJCxa7u+teuw=
 ```
 
-Finally, create the storage links:
+Finally, create the default favicon file and storage links:
 
 ```
+touch public/favicon.ico
 php artisan storage:link
 ```
 
