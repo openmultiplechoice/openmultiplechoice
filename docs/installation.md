@@ -1,5 +1,8 @@
 # Installation
 
+Note: for a local development setup, follow the docs at
+[`docs/development.md`](./development.md) instead.
+
 This guide outlines an installation on Ubuntu LTS but is mostly OS-agnostic.
 Regardless of your operating system, it should give you an idea about the
 required steps to install OMC.
