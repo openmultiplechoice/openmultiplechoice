@@ -14,6 +14,7 @@
 /public/hot
 /public/storage
 /public/images
+/public/favicon.ico
 /storage/*.key
 /vendor
 .env*

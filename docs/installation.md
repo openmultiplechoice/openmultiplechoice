@@ -1,5 +1,8 @@
 # Installation
 
+Note: for a local development setup, follow the docs at
+[`docs/development.md`](./development.md) instead.
+
 This guide outlines an installation on Ubuntu LTS but is mostly OS-agnostic.
 Regardless of your operating system, it should give you an idea about the
 required steps to install OMC.
@@ -155,6 +158,8 @@ sudo -u www-data php artisan migrate
 
 After a reload of the webserver, OMC should be reachable under your server name.
 
+# Post-Installation
+
 ## Create the first OMC user
 
 Info on how to create a first user can be found in [`docs/tinker.md`](./tinker.md#add-user).
@@ -185,3 +190,11 @@ post_max_size = 8M
 
 Caddy's `request_body` `max_size` and Nginx's `client_max_body_size` have
 to be set accordingly.
+
+## Favicon
+
+Create an empty default favicon file or put your own favicon in place:
+
+```
+touch public/favicon.ico
+```
