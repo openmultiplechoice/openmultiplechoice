@@ -55,7 +55,7 @@ class UserManagementController extends Controller
 
         $user->sendEmailVerificationNotification();
 
-        return redirect()->route('users.edit', [
+        return redirect()->action([UserManagementController::class, 'edit'], [
             'user' => $user->id,
         ])->with('msg-success', 'User created, password and verification link sent');
     }
@@ -73,7 +73,7 @@ class UserManagementController extends Controller
         $user->fill($request->all());
         $user->save();
 
-        return redirect()->route('users.edit', [
+        return redirect()->action([UserManagementController::class, 'edit'], [
             'user' => $user->id,
         ])->with('msg-success', 'User edited');
     }
@@ -84,7 +84,7 @@ class UserManagementController extends Controller
 
         Password::sendResetLink(['id' => $user->id]);
 
-        return redirect()->route('users.edit', [
+        return redirect()->action([UserManagementController::class, 'edit'], [
             'user' => $user->id,
         ])->with('msg-success', 'Password reset link sent to user');
     }
