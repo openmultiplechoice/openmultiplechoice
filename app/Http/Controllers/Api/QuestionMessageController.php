@@ -28,17 +28,17 @@ class QuestionMessageController extends Controller
             }])
             ->get();
 
-        // Load author info for messages which are
-        // not anonymous and for messages of the
-        // current user
+        // Load author info only for messages that are
+        //      1. not deleted AND
+        //      2. not anonymous OR authored by the current user
         $messages->filter(function ($m) {
-            return !$m->is_anonymous || $m->author_id == Auth::id();
+            return !$m->is_deleted && (!$m->is_anonymous || $m->author_id == Auth::id());
         })->load('author:id,name,public_name');
 
         $messages->each(function ($m) {
-            // - For non-anyonymous messages (author relation loaded),
+            // - For non-anonymous messages (author relation loaded),
             //   set the author name to public_name, if set
-            // - For anonymous messages, set author_id and legacy_author_name
+            // - For anonymous / deleted messages, set author_id and legacy_author_name
             //   to null to make sure we don't leak the author's ID
             if ($m->relationLoaded('author')) {
                 if ($m->author->public_name) {
