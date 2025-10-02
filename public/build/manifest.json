@@ -1,6 +1,6 @@
 {
-  "_Messages-x6ewrd1-.js": {
-    "file": "assets/Messages-x6ewrd1-.js",
+  "_Messages-BE3eHZjA.js": {
+    "file": "assets/Messages-BE3eHZjA.js",
     "name": "Messages",
     "imports": [
       "_index-CTA786D7.js",
@@ -170,12 +170,12 @@
     ]
   },
   "resources/js/Messages.js": {
-    "file": "assets/Messages-Ba7SzroU.js",
+    "file": "assets/Messages-C0JVH4Wi.js",
     "name": "Messages",
     "src": "resources/js/Messages.js",
     "isEntry": true,
     "imports": [
-      "_Messages-x6ewrd1-.js",
+      "_Messages-BE3eHZjA.js",
       "_index-CTA786D7.js",
       "_each-KlFnVOXz.js",
       "_purify.es-CzHI0FGf.js",
@@ -216,7 +216,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-GCyW20Pt.js",
+    "file": "assets/SessionView-CO3uCH2u.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -224,7 +224,7 @@
       "_index-CTA786D7.js",
       "_purify.es-CzHI0FGf.js",
       "_each-KlFnVOXz.js",
-      "_Messages-x6ewrd1-.js",
+      "_Messages-BE3eHZjA.js",
       "_auto-C0VlNTRY.js",
       "_SessionProgressBar-CX5CzH7b.js",
       "_QuestionForm-D8WSlEvi.js",

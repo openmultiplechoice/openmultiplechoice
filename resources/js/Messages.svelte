@@ -49,7 +49,7 @@
                             return;
                         }
                         messages = response.data;
-                        if (messages.length === 0) {
+                        if (messages.filter(m => !m.is_deleted).length === 0) {
                             nestedMessages = [];
                             loadingStatus = Status.EMPTY;
                             return;
