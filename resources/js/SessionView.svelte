@@ -241,6 +241,19 @@
             });
     }
 
+    $effect(() => {
+        if (currentQuestion && currentQuestion.correct_answer_id) {
+            untrack(() => updateCurrentQuestionAnswerChoice());
+            currentQuestionContext = untrack(() => updateCurrentQuestionContext());
+        }
+    });
+
+    function updateCurrentQuestionAnswerChoice() {
+        if (currentQuestion) {
+            updateQuestionAnswerChoice(currentQuestion);
+        }
+    }
+
     function updateQuestionAnswerChoice(question) {
         if (question.type === "card") {
             // Questions of type 'card' don't need to be updated, since

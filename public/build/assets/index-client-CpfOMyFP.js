@@ -1,1 +1,0 @@
-import{at as t,au as u,w as e}from"./if-GZgNzgdl.js";function c(n){throw new Error("https://svelte.dev/e/lifecycle_outside_component")}function f(n){t===null&&c(),u(()=>{const o=e(n);if(typeof o=="function")return o})}function r(n){t===null&&c(),f(()=>()=>e(n))}export{r as a,f as o};
