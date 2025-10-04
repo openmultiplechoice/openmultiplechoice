@@ -1,25 +1,13 @@
-import SessionQuestionView from './SessionQuestionView.svelte';
+import QuestionView from './QuestionView.svelte';
+import { mount } from "svelte";
 
 const questionViewEl = document.getElementById('QuestionView');
 
-const question = JSON.parse(questionViewEl.dataset.question);
+const questionData = JSON.parse(questionViewEl.dataset.question);
 
-const f = new SessionQuestionView({
+const f = mount(QuestionView, {
     target: questionViewEl,
     props: {
-        question: question,
-        questionContext: {
-            isAnswered: true,
-            answerContext: question.answers.reduce((acc, obj) => {
-                acc[obj.id] = {
-                    isCorrectAnswer: obj.id === question.correct_answer_id,
-                };
-                return acc;
-            }, {}),
-        },
-        // Set answerChoice to an "invalid" value. We don't
-        // have an answer, here we merely want to show the
-        // question
-        answerChoice: -1,
+        questionData: questionData,
     }
 });

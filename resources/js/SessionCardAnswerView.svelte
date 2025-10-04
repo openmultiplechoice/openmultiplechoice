@@ -1,17 +1,19 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import DOMPurify from 'dompurify';
 
-    export let answer;
-    export let hasAnswer;
-    export let submitAnswer;
+    let { answer = $bindable(), hasAnswer, submitAnswer } = $props();
 
-    var showAnswer = false;
+    var showAnswer = $state(false);
 
-    $: if (hasAnswer) {
-        showAnswer = true;
-    } else {
-        showAnswer = false;
-    };
+    run(() => {
+        if (hasAnswer) {
+            showAnswer = true;
+        } else {
+            showAnswer = false;
+        }
+    });;
 
     function toggleShowAnswer() {
         showAnswer = !showAnswer;
@@ -26,17 +28,17 @@
     {#if !hasAnswer}
         <div class="row">
             <div class="col-md-6 mb-1">
-                <button type="button" class="btn btn-danger btn-sm w-100" on:click|preventDefault={() => submitAnswer()}>&cross; Ask me again</button>
+                <button type="button" class="btn btn-danger btn-sm w-100" onclick={preventDefault(() => submitAnswer())}>&cross; Ask me again</button>
             </div>
             <div class="col-md-6 mb-1">
-                <button type="button" class="btn btn-success btn-sm w-100" on:click|preventDefault={() => submitAnswer(answer.id)}>&check; OK</button>
+                <button type="button" class="btn btn-success btn-sm w-100" onclick={preventDefault(() => submitAnswer(answer.id))}>&check; OK</button>
             </div>
         </div>
     {/if}
 {:else}
     <div class="row">
         <div class="col-md">
-            <button type="button" class="btn btn-warning btn-sm w-100" on:click|preventDefault={toggleShowAnswer} >Show answer</button>
+            <button type="button" class="btn btn-warning btn-sm w-100" onclick={preventDefault(toggleShowAnswer)} >Show answer</button>
         </div>
     </div>
 {/if}

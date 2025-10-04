@@ -1,26 +1,29 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import debounce from "lodash/debounce";
     import MessageView from "./MessageView.svelte";
-
-    export let questionId;
-    export let questionContext;
-
-    var showEditor = false;
-    var messages = [];
-    var nestedMessages = [];
-    var loadingStatus;
 
     const Status = {
         LOADING: "loading",
         EMPTY: "empty"
     };
 
-    $: questionId,
-        (() => {
-            nestedMessages = [];
-            showEditor = false;
-            loadMessages();
-        })();
+    let { questionId = $bindable(), questionContext } = $props();
+
+    var showEditor = $state(false);
+    var messages = $state([]);
+    var nestedMessages = $state([]);
+    var loadingStatus = $state(Status.LOADING);
+
+    run(() => {
+        questionId,
+            (() => {
+                nestedMessages = [];
+                showEditor = false;
+                loadMessages();
+            })();
+    });
 
     var debounced;
 
@@ -71,12 +74,11 @@
     // message object tree according to the parent relationship of the
     // messages
     function generateMessageTree(flatMessages) {
-        var messages = structuredClone(flatMessages);
         var childs = {};
         var root = [];
 
         // Assemble a list of childs for each message
-        messages.forEach((m) => {
+        flatMessages.forEach((m) => {
             if (!m.parent_message_id && !m.legacy_parent_message_id) {
                 // A top-level message, add to tree and continue
                 root.push(m);
@@ -94,7 +96,7 @@
                 // to use parent_message_id, i.e. the ID of the parent
                 // message in the current data and not the imported
                 // legacy ID
-                const parentMessage = messages.find((otherm) => otherm.legacy_message_id === m.legacy_parent_message_id);
+                const parentMessage = flatMessages.find((otherm) => otherm.legacy_message_id === m.legacy_parent_message_id);
                 if (parentMessage) {
                     parentID = parentMessage.id;
                 } else {
@@ -193,8 +195,8 @@
 
 {#if questionContext.isAnswered}
     <div class="mt-4 mb-3 px-2 py-2 border rounded-3 shadow-sm bg-white">
-        {#each nestedMessages as message (message.id)}
-            <MessageView bind:message bind:questionId indent={0} {addMessage} {updateMessage} />
+        {#each nestedMessages as message, i (message.id)}
+            <MessageView bind:message={nestedMessages[i]} bind:questionId indent={0} {addMessage} {updateMessage} />
         {:else}
             <div class="mb-3 d-flex justify-content-center">
                 {#if loadingStatus === Status.LOADING}
@@ -219,16 +221,16 @@
                         <label class="form-check-label small" for="anonymous">Anonymous</label>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-link btn-sm text-muted text-decoration-none p-0" on:click={toggleEditor}>Cancel</button>
-                        <button class="btn btn-primary btn-sm py-0" on:click={handleSubmit}>Save</button>
+                        <button class="btn btn-link btn-sm text-muted text-decoration-none p-0" onclick={toggleEditor}>Cancel</button>
+                        <button class="btn btn-primary btn-sm py-0" onclick={handleSubmit}>Save</button>
                     </div>
                 </div>
             </div>
         {:else}
             <button
-                on:click|preventDefault={toggleEditor}
+                onclick={preventDefault(toggleEditor)}
                 class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-chat-square-text" /> Add comment
+                    <i class="bi bi-chat-square-text"></i> Add comment
             </button>
         {/if}
     </div>
