@@ -1,4 +1,6 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import { onMount } from "svelte";
 
     import NewSessionDecksView from "./NewSessionDecksView.svelte";
@@ -6,23 +8,25 @@
 
     import { UserSettings } from "./UserSettingsStore.js";
 
-    let modules = [];
-    let subjects = [];
+    let modules = $state([]);
+    let subjects = $state([]);
 
-    let selectedModules = [];
+    let selectedModules = $state([]);
 
-    let selectedDecks = new Set();
+    let selectedDecks = $state(new Set());
 
-    $: $UserSettings.last_subject_id,
-        (() => {
-            selectedModules = modules.filter((m) =>
-                $UserSettings.last_subject_id
-                    ? m.subject
-                        ? m.subject.id === $UserSettings.last_subject_id
-                        : false
-                    : true
-            );
-        })();
+    run(() => {
+        $UserSettings.last_subject_id,
+            (() => {
+                selectedModules = modules.filter((m) =>
+                    $UserSettings.last_subject_id
+                        ? m.subject
+                            ? m.subject.id === $UserSettings.last_subject_id
+                            : false
+                        : true
+                );
+            })();
+    });
 
     onMount(() => {
         axios
@@ -135,13 +139,13 @@
                 class="btn-close text-reset"
                 data-bs-target="#offcanvasModuleSelection"
                 data-bs-dismiss="offcanvas"
-                aria-label="Close" />
+                aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
             <ul class="list-group w-100">
                 {#each subjects as subject}
                     <button
-                        on:click|preventDefault={() => selectSubject(subject.id)}
+                        onclick={preventDefault(() => selectSubject(subject.id))}
                         class="list-group-item list-group-item-action {$UserSettings.last_subject_id ===
                         subject.id
                             ? 'list-group-item-dark'
@@ -150,7 +154,7 @@
                         <ul class="list-group m-2 me-0">
                             {#each selectedModules as module}
                                 <button
-                                    on:click|preventDefault={() => selectModule(module.id)}
+                                    onclick={preventDefault(() => selectModule(module.id))}
                                     data-bs-target="#offcanvasModuleSelection"
                                     data-bs-dismiss="offcanvas"
                                     class="list-group-item list-group-item-action {$UserSettings.last_module_id ===

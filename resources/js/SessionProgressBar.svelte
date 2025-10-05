@@ -1,7 +1,7 @@
 <script>
-    export let progressPercentage;
+    let { progressPercentage = $bindable() } = $props();
 
-    $: title = JSON.stringify(progressPercentage, null, 2);
+    let title = $derived(JSON.stringify(progressPercentage, null, 2));
 </script>
 
 <div class="progress" style="height: 20px;" title="{title}">

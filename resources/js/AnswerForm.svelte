@@ -1,22 +1,27 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import debounce from "lodash/debounce";
     import { onMount } from "svelte";
 
-    export let answer;
+    let { answer = $bindable() } = $props();
 
-    let editorAnswer;
-    let editorHint;
+    let editorAnswer = $state();
+    let editorHint = $state();
 
-    let showAnswerHint;
+    let showAnswerHint = $state();
+    let savingStatus = $state("");
 
-    let savingStatus = "";
-
-    $: if (editorAnswer) {
-        configureEditorEventListener(editorAnswer);
-    }
-    $: if (editorHint) {
-        configureEditorEventListener(editorHint);
-    }
+    run(() => {
+        if (editorAnswer) {
+            configureEditorEventListener(editorAnswer);
+        }
+    });
+    run(() => {
+        if (editorHint) {
+            configureEditorEventListener(editorHint);
+        }
+    });
 
     onMount(() => {
         const answerHintAccordion = document.getElementById('collapseAnswerHint' + answer.id);
@@ -71,7 +76,7 @@
     <div class="mb-3">
         <label for="answerText{answer.id}" class="form-label">Answer text</label>
         <input id="answerText{answer.id}" type="hidden" bind:value={answer.text} />
-        <trix-editor id="editor-answer{answer.id}" class="bg-light trix-content" bind:this={editorAnswer} input="answerText{answer.id}" />
+        <trix-editor id="editor-answer{answer.id}" class="bg-light trix-content" bind:this={editorAnswer} input="answerText{answer.id}"></trix-editor>
         {@html savingStatus}
     </div>
 

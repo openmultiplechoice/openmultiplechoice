@@ -1,22 +1,26 @@
 <script>
+    import { preventDefault } from 'svelte/legacy';
+
     import DOMPurify from "dompurify";
     import { format, parseISO, formatDistance } from "date-fns";
     import { UserSettings } from "./UserSettingsStore.js";
 
-    export let message;
-    export let indent;
-    export let addMessage;
-    export let updateMessage;
-    export let questionId;
+    let {
+        message = $bindable(),
+        indent,
+        addMessage,
+        updateMessage,
+        questionId = $bindable(),
+    } = $props();
 
-    $: userThumb = message.thumbs.find((entry) => entry.user_id !== undefined) ?? null
+    let userThumb = $derived(message.thumbs.find((entry) => entry.user_id !== undefined) ?? null)
 
-    $: hasHighRating = (message.thumbs_up_count - message.thumbs_down_count) > 4;
-    $: hasLowRating = (message.thumbs_up_count - message.thumbs_down_count) < -2;
+    let hasHighRating = $derived((message.thumbs_up_count - message.thumbs_down_count) > 4);
+    let hasLowRating = $derived((message.thumbs_up_count - message.thumbs_down_count) < -2);
 
-    var showEditor = false;
-    var showEditorReply = false;
-    var showLowRated = false;
+    var showEditor = $state(false);
+    var showEditorReply = $state(false);
+    var showLowRated = $state(false);
 
     function toggleEditor() {
         showEditor = !showEditor;
@@ -159,7 +163,7 @@
     <div class="border-start border-2" class:ms-2={indent > 0} class:mb-3={!indent}>
         {#if hasLowRating && !showLowRated}
             <div class="p-2">
-                <button class="btn btn-link btn-sm text-muted p-0" on:click={toggleLowRated}>
+                <button class="btn btn-link btn-sm text-muted p-0" onclick={toggleLowRated}>
                     <i class="bi bi-eye-slash me-1"></i>Comment hidden due to low rating. Click to show.
                 </button>
             </div>
@@ -172,13 +176,13 @@
         {:else}
             <div class="d-flex gap-1 mb-2 message-content {hasHighRating ? 'bg-light rounded-end-3 shadow-sm py-2 ps-1 pe-2 ms-1' : 'py-1 rounded-end-3'}">
                 <div class="d-flex flex-column gap-1" style="min-width: 2rem">
-                    <button class="btn btn-link p-0 text-muted text-decoration-none" class:disabled={message.is_deleted} on:click={() => handleThumb("up")}>
+                    <button class="btn btn-link p-0 text-muted text-decoration-none" class:disabled={message.is_deleted} onclick={() => handleThumb("up")}>
                         <i class="bi" class:bi-hand-thumbs-up-fill={userThumb?.type === "up"} class:bi-hand-thumbs-up={!(userThumb?.type === "up")}></i>
                     </button>
                     <span class="text-center text-muted small">
                         {message.thumbs_up_count - message.thumbs_down_count}
                     </span>
-                    <button class="btn btn-link p-0 text-muted text-decoration-none" class:disabled={message.is_deleted} on:click={() => handleThumb("down")}>
+                    <button class="btn btn-link p-0 text-muted text-decoration-none" class:disabled={message.is_deleted} onclick={() => handleThumb("down")}>
                         <i class="bi" class:bi-hand-thumbs-down-fill={userThumb?.type === "down"} class:bi-hand-thumbs-down={!(userThumb?.type === "down")}></i>
                     </button>
                 </div>
@@ -220,8 +224,8 @@
                                         <label class="form-check-label small" for="anonymous">Anonymous</label>
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <button class="btn btn-link btn-sm text-muted text-decoration-none p-0" on:click={toggleEditor}>Cancel</button>
-                                        <button class="btn btn-primary btn-sm py-0" on:click={handleSubmit}>Save</button>
+                                        <button class="btn btn-link btn-sm text-muted text-decoration-none p-0" onclick={toggleEditor}>Cancel</button>
+                                        <button class="btn btn-primary btn-sm py-0" onclick={handleSubmit}>Save</button>
                                     </div>
                                 </div>
                             </div>
@@ -230,7 +234,7 @@
                 </div>
                 {#if !showEditor}
                     <div class="d-flex align-items-end gap-2 pe-1">
-                        <button class="btn btn-link p-0 text-muted me-1" title="Reply" on:click={toggleEditorReply} class:disabled={showEditorReply}>
+                        <button class="btn btn-link p-0 text-muted me-1" title="Reply" onclick={toggleEditorReply} class:disabled={showEditorReply}>
                             <i class="bi bi-reply"></i>
                         </button>
                         {#if $UserSettings.id === message.author_id}
@@ -240,12 +244,12 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <button class="dropdown-item" on:click={toggleEditor}>
+                                        <button class="dropdown-item" onclick={toggleEditor}>
                                             <i class="bi bi-pencil me-2"></i>Edit
                                         </button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item" on:click={handleDelete}>
+                                        <button class="dropdown-item" onclick={handleDelete}>
                                             <i class="bi bi-trash me-2"></i>Delete
                                         </button>
                                     </li>
@@ -277,8 +281,8 @@
                             <label class="form-check-label small" for="replyAnonymous">Anonymous</label>
                         </div>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-link btn-sm text-muted text-decoration-none p-0" on:click={toggleEditorReply}>Cancel</button>
-                            <button class="btn btn-primary btn-sm py-0" on:click={handleReply}>Reply</button>
+                            <button class="btn btn-link btn-sm text-muted text-decoration-none p-0" onclick={toggleEditorReply}>Cancel</button>
+                            <button class="btn btn-primary btn-sm py-0" onclick={handleReply}>Reply</button>
                         </div>
                     </div>
                 </div>

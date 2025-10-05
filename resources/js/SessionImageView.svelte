@@ -1,18 +1,22 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import debounce from "lodash/debounce";
     import hotkeys from "hotkeys-js";
     import { onMount } from "svelte";
 
-    export let images = [];
+    let { images = [] } = $props();
 
-    var fullscreen = false;
-    var fullscreenImage;
+    var fullscreen = $state(false);
+    var fullscreenImage = $state();
 
-    $: if (fullscreen) {
-        hotkeys.setScope("images");
-    } else {
-        hotkeys.setScope("questions");
-    }
+    run(() => {
+        if (fullscreen) {
+            hotkeys.setScope("images");
+        } else {
+            hotkeys.setScope("questions");
+        }
+    });
 
     onMount(() => {
         hotkeys("esc", "images", function (event, handler) {
@@ -48,9 +52,9 @@
             {#each images as image (image.id)}
                 <div class="col">
                     <div class="card" style="max-width: 18rem; cursor: pointer;">
-                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
                         <img
-                            on:click={() => fullscreenToggle(image.id)}
+                            onclick={() => fullscreenToggle(image.id)}
                             src="/{image.path}"
                             class="card-img-top"
                             alt="" />
@@ -60,13 +64,13 @@
         </div>
     </div>
 {:else}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div on:click={fullscreenToggle} class="img-fullscreen">
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <div onclick={fullscreenToggle} class="img-fullscreen">
         <p class="bg-white text-end">
             <button
-                on:click|preventDefault={() => (fullscreen = !fullscreen)}
+                onclick={preventDefault(() => (fullscreen = !fullscreen))}
                 type="button"
-                class="btn-close" />
+                class="btn-close"></button>
         </p>
         <div class="text-center">
             <img

@@ -1,9 +1,11 @@
 <script>
+    import { run, preventDefault } from 'svelte/legacy';
+
     import debounce from "lodash/debounce";
 
     import { Confetti } from "svelte-confetti"
 
-    import { onMount, tick } from "svelte";
+    import { onMount, tick, untrack } from "svelte";
 
     import MagicGifView from "./MagicGIFView.svelte";
     import Messages from "./Messages.svelte";
@@ -16,98 +18,111 @@
     import { sessionProgressPercentage } from "./StatsHelper.js";
     import { UserSettings } from "./UserSettingsStore.js";
 
-    export let id;
+    let { id } = $props();
 
-    var currentQuestionContext;
-    var data;
-    var helpUsed = false;
-    var magicGIFPath = '';
-    var confetti = 0;
+    var currentQuestionContext = $state();
+    var data = $state();
+    var helpUsed = $state(false);
+    var magicGIFPath = $state('');
+    var confetti = $state(0);
 
     const appConfig = document.getElementById("appconfig").dataset;
 
-    $: examMode = !sessionComplete ? $UserSettings.session_exam_mode : false;
-    $: settingsShowSidebar = $UserSettings.session_show_sidebar;
-    $: settingsExamMode = $UserSettings.session_exam_mode;
-    $: settingsShuffleAnswers = $UserSettings.session_shuffle_answers;
-    $: settingsMultipleAnswerTries = $UserSettings.session_multiple_answer_tries;
-    $: settingsShowAnswerStats = $UserSettings.session_show_answer_stats;
-    $: settingsShowProgressBar = $UserSettings.session_show_progress_bar;
+    let examMode = $derived(!sessionComplete ? $UserSettings.session_exam_mode : false);
+    let settingsShowSidebar = $derived($UserSettings.session_show_sidebar);
+    let settingsExamMode = $derived($UserSettings.session_exam_mode);
+    let settingsShuffleAnswers = $derived($UserSettings.session_shuffle_answers);
+    let settingsMultipleAnswerTries = $derived($UserSettings.session_multiple_answer_tries);
+    let settingsShowAnswerStats = $derived($UserSettings.session_show_answer_stats);
+    let settingsShowProgressBar = $derived($UserSettings.session_show_progress_bar);
 
-    $: settingsShowSidebar,
-        (()=> {
-            axios
-                .put("/api/users/me/settings", {
-                    session_show_sidebar: settingsShowSidebar
-                })
-                .then(function (response) {})
-                .catch(function (error) {
-                    alert(error);
-                });
-        })();
+    run(() => {
+        settingsShowSidebar,
+            (()=> {
+                axios
+                    .put("/api/users/me/settings", {
+                        session_show_sidebar: settingsShowSidebar
+                    })
+                    .then(function (response) {})
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            })();
+    });
 
-    $: settingsExamMode,
-        (()=> {
-            axios
-                .put("/api/users/me/settings", {
-                    session_exam_mode: settingsExamMode
-                })
-                .then(function (response) {})
-                .catch(function (error) {
-                    alert(error);
-                });
-        })();
+    run(() => {
+        settingsExamMode,
+            (()=> {
+                axios
+                    .put("/api/users/me/settings", {
+                        session_exam_mode: settingsExamMode
+                    })
+                    .then(function (response) {})
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            })();
+    });
 
-    $: settingsShuffleAnswers,
-        (()=> {
-            axios
-                .put("/api/users/me/settings", {
-                    session_shuffle_answers: settingsShuffleAnswers
-                })
-                .then(function (response) {})
-                .catch(function (error) {
-                    alert(error);
-                });
-        })();
+    run(() => {
+        settingsShuffleAnswers,
+            (()=> {
+                axios
+                    .put("/api/users/me/settings", {
+                        session_shuffle_answers: settingsShuffleAnswers
+                    })
+                    .then(function (response) {})
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            })();
+    });
 
     // editorconfig-checker-disable
-    $: validQuestions = data
+    let validQuestions = $derived(data
         ? data.deck.questions.filter((q) => !q.is_invalid)
-        : null;
-    $: answerChoice = data
+        : null);
+    let answerChoice = $derived(data
         ? data.session.answer_choices.find(
               (e) => e.question_id === currentQuestionId
           )
-        : null;
-    $: answerChoices = data
+        : null);
+    let answerChoices = $derived(data
         ? data.session.answer_choices.filter(
             e => validQuestions.some(({ id }) => id === e.question_id)
           )
-        : null;
-    $: currentQuestion = data
+        : null);
+    let currentQuestion = $derived(data
         ? data.deck.questions.find(
               (q) => q.id === data.session.current_question_id
           )
-        : null;
-    $: sessionComplete = data
+        : null);
+    let sessionComplete = $derived(data
         ? validQuestions.length === answerChoices.length
-        : false;
-    $: if (sessionComplete) {
-        examMode = false;
-    }
+        : false);
+
+    run(() => {
+        if (sessionComplete) {
+            examMode = false;
+        }
+    });
     // editorconfig-checker-enable
-    $: currentQuestionId = data ? data.session.current_question_id : null;
+    let currentQuestionId = $derived(data ? data.session.current_question_id : null);
 
     // Whenever the current question gets changed, we want to update
     // the session to remember the current question.
-    $: currentQuestionId, updateSession();
-
-    $: currentQuestionAnswered = data ? !!answerChoice : false;
-
-    $: if (currentQuestionId) {
-        // Current question changed, update the question context
-        currentQuestionContext = updateCurrentQuestionContext();
-    }
+    run(() => {
+        currentQuestionId, updateSession();
+    });
+    let currentQuestionAnswered = $derived(data ? !!answerChoice : false);
+    run(() => {
+        if (currentQuestionId) {
+            // Current question changed, update the question context;
+            // `untrack` is used to avoid a circular dependency
+            // https://svelte.dev/docs/svelte/svelte#untrack
+            currentQuestionContext = untrack(() => updateCurrentQuestionContext());
+        }
+    });
 
     // The question context is a helper object that holds the
     // current state of the question:
@@ -141,61 +156,63 @@
     // Whenever the number of questions or the given answers change,
     // recalculate the progress of the user in percent
     // editorconfig-checker-disable
-    $: progressPercentage = data
+    let progressPercentage = $derived(data
         ? sessionProgressPercentage(
               validQuestions.length,
               answerChoices
           )
-        : null;
+        : null);
 
-    $: numberQuestions = data ? data.deck.questions.length : 0;
-    $: indexCurrentQuestion = data
+    let numberQuestions = $derived(data ? data.deck.questions.length : 0);
+    let indexCurrentQuestion = $derived(data
         ? data.deck.questions.findIndex(
               (q) => q.id == data.session.current_question_id
           ) + 1
-        : null;
+        : null);
     // editorconfig-checker-enable
 
-    var previousProgressPercentageCorrect = -1;
+    var previousProgressPercentageCorrect = $state(-1);
 
     // When the user reaches 60%, we want to show a success message
     // (TODO), but it should be shown only once per session, hence
     // we have to also track the previous value
-    $: progressPercentage,
-        (() => {
-            if (!progressPercentage) {
-                return;
-            }
-            var progressPercentageCorrect = progressPercentage.correct;
-            if (progressPercentageCorrect < 60) {
-                previousProgressPercentageCorrect = progressPercentageCorrect;
-                return;
-            }
-            if (previousProgressPercentageCorrect === -1) {
-                previousProgressPercentageCorrect = progressPercentageCorrect;
-                return;
-            }
-            if (previousProgressPercentageCorrect < 60) {
-                previousProgressPercentageCorrect = progressPercentageCorrect;
+    run(() => {
+        progressPercentage,
+            (() => {
+                if (!progressPercentage) {
+                    return;
+                }
+                var progressPercentageCorrect = progressPercentage.correct;
+                if (progressPercentageCorrect < 60) {
+                    previousProgressPercentageCorrect = progressPercentageCorrect;
+                    return;
+                }
+                if (previousProgressPercentageCorrect === -1) {
+                    previousProgressPercentageCorrect = progressPercentageCorrect;
+                    return;
+                }
+                if (previousProgressPercentageCorrect < 60) {
+                    previousProgressPercentageCorrect = progressPercentageCorrect;
 
-                axios
-                    .get('/api/magic-gif')
-                    .then(function (response) {
-                        magicGIFPath = 'magic-gifs/' + response.data.id;
-                    })
-                    .catch(function (error) {
-                        // Ignore errors
-                    });
-            }
-            if (appConfig.magic === "1" && // If magic is enabled..
-                progressPercentageCorrect === 100 && // If this session is complete.. (all questions answered correctly)
-                previousProgressPercentageCorrect < 100 && // ..and if it wasn't complete before (not a reopend complete session)
-                numberQuestions >= 10 && // If the deck has 10 or more question (don't make it too easy)
-                data.session.parent_session_id === null // If this is not a child session (i.e. not a repetition of questions of a previous session)
-            ) {
-                confetti = 1;
-            }
-        })();
+                    axios
+                        .get('/api/magic-gif')
+                        .then(function (response) {
+                            magicGIFPath = 'magic-gifs/' + response.data.id;
+                        })
+                        .catch(function (error) {
+                            // Ignore errors
+                        });
+                }
+                if (appConfig.magic === "1" && // If magic is enabled..
+                    progressPercentageCorrect === 100 && // If this session is complete.. (all questions answered correctly)
+                    previousProgressPercentageCorrect < 100 && // ..and if it wasn't complete before (not a reopend complete session)
+                    numberQuestions >= 10 && // If the deck has 10 or more question (don't make it too easy)
+                    data.session.parent_session_id === null // If this is not a child session (i.e. not a repetition of questions of a previous session)
+                ) {
+                    confetti = 1;
+                }
+            })();
+    });
 
     onMount(() => {
         axios
@@ -222,6 +239,19 @@
             .catch(function (error) {
                 alert(error);
             });
+    }
+
+    $effect(() => {
+        if (currentQuestion && currentQuestion.correct_answer_id) {
+            untrack(() => updateCurrentQuestionAnswerChoice());
+            currentQuestionContext = untrack(() => updateCurrentQuestionContext());
+        }
+    });
+
+    function updateCurrentQuestionAnswerChoice() {
+        if (currentQuestion) {
+            updateQuestionAnswerChoice(currentQuestion);
+        }
     }
 
     function updateQuestionAnswerChoice(question) {
@@ -405,30 +435,30 @@
                     class:bg-light={!settingsShowSidebar}
                     class:bg-dark-subtle={settingsShowSidebar}
                     title="Toggle sidebar"
-                    on:click|preventDefault={() => {
+                    onclick={preventDefault(() => {
                         $UserSettings.session_show_sidebar = !$UserSettings.session_show_sidebar;
-                    }}>
-                    <i class="bi bi-layout-sidebar" />
+                    })}>
+                    <i class="bi bi-layout-sidebar"></i>
                 </button>
                 <button
                     class="btn btn-sm"
                     class:bg-light={!settingsShuffleAnswers}
                     class:bg-dark-subtle={settingsShuffleAnswers}
                     title="Toggle answer shuffling"
-                    on:click|preventDefault={() => {
+                    onclick={preventDefault(() => {
                         $UserSettings.session_shuffle_answers = !$UserSettings.session_shuffle_answers;
-                    }}>
-                    <i class="bi bi-shuffle" />
+                    })}>
+                    <i class="bi bi-shuffle"></i>
                 </button>
                 <button
                     class="btn btn-sm"
                     class:bg-light={!settingsExamMode}
                     class:bg-dark-subtle={settingsExamMode}
                     title="Toggle exam mode"
-                    on:click|preventDefault={() => {
+                    onclick={preventDefault(() => {
                         $UserSettings.session_exam_mode = !$UserSettings.session_exam_mode;
-                    }}>
-                    <i class="bi bi-exclamation-square" />
+                    })}>
+                    <i class="bi bi-exclamation-square"></i>
                 </button>
 
                 <span class="ms-1 float-end fw-bold font-monospace badge"

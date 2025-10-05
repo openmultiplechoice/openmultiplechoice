@@ -1,7 +1,13 @@
 <script>
-    export let magicGIFPath = '';
+    /**
+     * @typedef {Object} Props
+     * @property {string} [magicGIFPath]
+     */
 
-    var fullscreen = true;
+    /** @type {Props} */
+    let { magicGIFPath = '' } = $props();
+
+    var fullscreen = $state(true);
 
     function fullscreenToggle() {
         fullscreen = !fullscreen;
@@ -9,8 +15,8 @@
 </script>
 
 {#if magicGIFPath && fullscreen}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div on:click={fullscreenToggle} class="img-fullscreen d-flex justify-content-center align-items-center">
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <div onclick={fullscreenToggle} class="img-fullscreen d-flex justify-content-center align-items-center">
         <img class="img-fluid" src="/{magicGIFPath}" alt="Magic GIF" />
     </div>
 {/if}

@@ -1,10 +1,10 @@
 <script>
+    import { preventDefault } from 'svelte/legacy';
+
     import hotkeys from 'hotkeys-js';
     import { onMount } from 'svelte';
 
-    export let data;
-    export let currentQuestionId;
-    export let currentQuestionContext;
+    let { data = $bindable(), currentQuestionId, currentQuestionContext } = $props();
 
     onMount(() => {
         hotkeys('left', 'questions', function (event, handler) {
@@ -40,18 +40,18 @@
 </script>
 
 <div class="row mb-3 pt-1 pb-1 sticky-top bg-white">
-    {#if data.session.current_question_id && data.session.current_question_id != data.deck.questions[0].id }
+    {#if data.session.current_question_id && data.session.current_question_id != data.deck.questions[0].id}
         <div class="col-6">
-            <button on:click|preventDefault={handleBack} class="btn btn-sm btn-light w-100">
+            <button onclick={preventDefault(handleBack)} class="btn btn-sm btn-light w-100">
                 <span class="fw-bold">&leftarrow;</span> Previous</button>
         </div>
     {:else}
         <div class="col-6">
         </div>
     {/if}
-    {#if data.session.current_question_id != data.deck.questions[data.deck.questions.length-1].id }
+    {#if data.session.current_question_id != data.deck.questions[data.deck.questions.length-1].id}
         <div class="col-6">
-            <button on:click|preventDefault={handleNext}
+            <button onclick={preventDefault(handleNext)}
             class="btn btn-sm w-100"
             class:btn-warning={currentQuestionContext.isAnswered}
             class:btn-light={!currentQuestionContext.isAnswered}>
