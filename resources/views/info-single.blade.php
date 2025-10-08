@@ -21,7 +21,9 @@
                 {!! Auth::user()->is_admin ? '<a href="/info/'. $info->id .'/edit" class="text-reset text-decoration-none"><i class="bi bi-pencil"></i></a>' : '' !!}
             </small>
         </p>
-        <p>{!! Purify::clean($info->text) !!}</p>
+        <div class="alert alert-light shadow-sm">
+            {!! Purify::clean($info->text) !!}
+        </div>
     </div>
 </div>
 
