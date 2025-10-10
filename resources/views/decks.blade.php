@@ -44,7 +44,7 @@
         @include('deck-col-element')
     @empty
         <div class="col-md">
-            <p>No decks yet</p>
+            <p class="alert alert-light">No decks yet</p>
         </div>
     @endforelse
 </div>

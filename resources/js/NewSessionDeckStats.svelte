@@ -124,11 +124,15 @@
 </script>
 
 {#if decks && numQuestionsInModule === numUnansweredQuestions}
-    <div class="row">
-        <div class="col-md">
-            <p>Number of questions (duplicates included): <span class="badge text-bg-light font-monospace"><i class="bi bi-collection"></i> {numQuestionsInModule}</span></p>
+    {#if numQuestionsInModule > 0}
+        <div class="row">
+            <div class="col-md">
+                <div class="alert alert-light mb-3 py-2">
+                    Number of questions: <span class="badge text-black font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {numQuestionsInModule}</span>
+                </div>
+            </div>
         </div>
-    </div>
+    {/if}
 {:else if decks}
     <div class="row mb-5">
         <div class="col-md-5">

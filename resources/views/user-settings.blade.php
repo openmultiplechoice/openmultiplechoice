@@ -6,7 +6,10 @@
 
 <div class="row">
     <div class="col">
-        <p>Here you can manage your personal settings.</p>
+        <div class="alert alert-light d-flex align-items-center">
+            <i class="bi bi-info-circle me-2"></i>
+            Your account settings.
+        </div>
 
         <div id="UserSettingsView"></div>
         @vite(['resources/js/UserSettingsView.js'])

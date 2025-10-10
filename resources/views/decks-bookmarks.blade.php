@@ -15,7 +15,7 @@
             @include('deck-col-element')
         @empty
             <div class="col-md">
-                <p>No bookmarked decks yet</p>
+                <p class="alert alert-light">No bookmarked decks yet</p>
             </div>
         @endforelse
     </div>
