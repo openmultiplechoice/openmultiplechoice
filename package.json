@@ -25,7 +25,7 @@
         "sass-loader": "^16.0.5",
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
-        "svelte": "^5.39.8",
+        "svelte": "^5.39.11",
         "svelte-confetti": "^2.3.2",
         "svelte-loader": "^3.2.4",
         "trix": "^2.1.15",
