@@ -93,41 +93,37 @@
     {/if}
 
     <div class="col-2">
-        <div class="row text-end d-flex align-items-center">
-            <div class="col-md">
-                {#if questionIsAnswered && !examMode && settingsShowAnswerStats && answer.answer_percentage != null}
-                    <span
-                        class:text-dark={!answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer}
-                        class="badge" title="Percentage of users who chose this answer">{answer.answer_percentage}%</span>
-                {/if}
-            </div>
-            <div class="col-md">
-                {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
-                    <div class="d-flex justify-content-end align-items-center">
-                        <button
-                            onclick={preventDefault(() => (markedAs = markedAs === 'incorrect' ? '' : 'incorrect'))}
-                            type="button"
-                            class="btn btn-sm p-0">
-                            <span class="text-secondary">&cross;</span>
-                        </button>
-                        <div class="vr mx-1"></div>
-                        <button
-                            onclick={preventDefault(() => (markedAs = markedAs === 'correct' ? '' : 'correct'))}
-                            type="button"
-                            class="btn btn-sm p-0">
-                            <span class="text-secondary">&check;</span>
-                        </button>
-                    </div>
-                {:else if !examMode && answerContext.isCorrectAnswer && answerContext.isSubmittedAnswer}
-                    <span class="text-light fw-bold fs-4">&check;</span>
-                {:else if !examMode && answerContext.isCorrectAnswer && !answerContext.isSubmittedAnswer && questionIsAnswered}
-                    <span class="text-light fw-bold fs-4">&#8672;</span>
-                {:else if !examMode && answerContext.isSubmittedAnswer}
-                    <span class="text-light fw-bold fs-4">&cross;</span>
-                {:else if examMode && answerContext.isSubmittedAnswer}
-                    <span class="text-secondary fw-bold fs-4">&check;</span>
-                {/if}
-            </div>
+        <div class="d-flex align-items-center justify-content-end">
+            {#if questionIsAnswered && !examMode && settingsShowAnswerStats && answer.answer_percentage != null}
+                <span
+                    class:text-dark={!answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer}
+                    class="badge" title="Percentage of users who chose this answer">{answer.answer_percentage}%</span>
+            {/if}
+            {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
+                <div class="d-flex justify-content-end align-items-center">
+                    <button
+                        onclick={preventDefault(() => (markedAs = markedAs === 'incorrect' ? '' : 'incorrect'))}
+                        type="button"
+                        class="btn btn-sm p-0">
+                        <span class="text-secondary">&cross;</span>
+                    </button>
+                    <div class="vr mx-1"></div>
+                    <button
+                        onclick={preventDefault(() => (markedAs = markedAs === 'correct' ? '' : 'correct'))}
+                        type="button"
+                        class="btn btn-sm p-0">
+                        <span class="text-secondary">&check;</span>
+                    </button>
+                </div>
+            {:else if !examMode && answerContext.isCorrectAnswer && answerContext.isSubmittedAnswer}
+                <span class="text-light fw-bold fs-4">&check;</span>
+            {:else if !examMode && answerContext.isCorrectAnswer && !answerContext.isSubmittedAnswer && questionIsAnswered}
+                <span class="text-light fw-bold fs-4">&#8672;</span>
+            {:else if !examMode && answerContext.isSubmittedAnswer}
+                <span class="text-light fw-bold fs-4">&cross;</span>
+            {:else if examMode && answerContext.isSubmittedAnswer}
+                <span class="text-secondary fw-bold fs-4">&check;</span>
+            {/if}
         </div>
     </div>
 </div>
