@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-3">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ config('app.url') }}">{{ config('app.name') }}</a>
 

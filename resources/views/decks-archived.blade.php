@@ -15,7 +15,7 @@
         @include('deck-col-element')
     @empty
         <div class="col-md">
-            <p>No archived decks</p>
+            <p class="alert alert-light">No archived decks yet</p>
         </div>
     @endforelse
 

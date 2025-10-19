@@ -39,7 +39,7 @@
                 </div>
             @empty
                 <div class="alert alert-light">
-                    No questions to review currently.
+                    No questions to review currently
                 </div>
             @endforelse
         </div>

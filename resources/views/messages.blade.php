@@ -54,7 +54,7 @@
                 </div>
             </div>
         @empty
-            <p>No comments yet</p>
+            <p class="alert alert-light">No comments yet</p>
         @endforelse
 
         <div class="sticky-bottom bg-white mt-3 pt-3">

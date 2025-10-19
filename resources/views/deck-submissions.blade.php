@@ -7,11 +7,16 @@
 <div class="row">
     <div class="col-md">
         <h4>Submissions</h4>
-        Decks submitted for the <i>main decks</i> category.
+        @if (sizeof($submissions) > 0)
+            <div class="alert alert-light d-flex align-items-center">
+                <i class="bi bi-info-circle me-2"></i>
+                Decks submitted for the main decks category.
+            </div>
+        @endif
     </div>
 </div>
 
-<div class="row pt-4">
+<div class="row">
     @forelse ($submissions as $submission)
         <div class="col-md-6 mb-3">
             <div class="card">
@@ -74,7 +79,9 @@
             </div>
         </div>
     @empty
-        <p>No submissions yet</p>
+        <div class="col-md">
+            <p class="alert alert-light">No submissions yet</p>
+        </div>
     @endforelse
 </div>
 

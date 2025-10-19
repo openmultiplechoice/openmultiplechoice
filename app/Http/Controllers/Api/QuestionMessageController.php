@@ -13,9 +13,6 @@ class QuestionMessageController extends Controller
 {
     public function index(Question $question)
     {
-        // TODO: is it possible to load the `author_id`
-        // (to later load author info) only for messages
-        // which are not anonymous?
         $messages = $question->messages()
             ->with('thumbs', function ($query) {
                 $query->select('id', 'thumbable_id', 'type', 'user_id')
