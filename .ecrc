@@ -5,6 +5,7 @@
         "public/build/assets/.*\\.css$",
         "public/build/assets/.*\\.woff[2]$",
         "public/build/assets/.*\\.js$",
-        "public/build/.*\\.json$"
+        "public/build/.*\\.json$",
+        "resources/font-files/inter.css"
     ]
 }

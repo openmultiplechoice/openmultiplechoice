@@ -61,4 +61,5 @@ OpenMultipleChoice is free to use under the terms of AGPL v3:
 
 ## Acknowledgments
 
+* UI font: [Inter](https://rsms.me/inter/)
 * Logo font: [Luckiest Guy](https://fonts.google.com/specimen/Luckiest+Guy)
