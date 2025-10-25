@@ -1,3 +1,5 @@
+@use '../font-files/inter';
+
 @import '~bootstrap/scss/bootstrap';
 // Explicity import .css file to avoid the following regression:
 // https://github.com/twbs/icons/issues/1381
@@ -5,11 +7,12 @@
 
 @import '~trix/dist/trix.css';
 
-@import url('https://rsms.me/inter/inter.css');
-
-html, body { font-family: 'Inter', sans-serif !important; }
+html, body {
+    font-family: Inter, sans-serif !important;
+    font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+}
 @supports (font-variation-settings: normal) {
-    html, body { font-family: 'Inter var', sans-serif !important; }
+    html, body { font-family: InterVariable, sans-serif !important; }
 }
 
 textarea {
