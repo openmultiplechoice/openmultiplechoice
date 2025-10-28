@@ -121,7 +121,22 @@ class SessionController extends Controller
     {
         abort_if($session->user_id != Auth::id(), 404);
 
-        $deck = Deck::with('questions', 'cases', 'questions.images', 'questions.answers', 'questions.case')->find($session->deck_id);
+        $user = Auth::user();
+
+        // Load the deck with its questions, answers, images, and cases.
+        // For each question, also load the count of personal / bookmarked
+        // decks of the current user that include that question.
+        $deck = Deck::with('cases', 'questions.images', 'questions.answers', 'questions.case')
+            ->with(['questions' => function ($query) use ($user) {
+                $query->withCount(['decks as add_to_deck_included_count' => function ($q) use ($user) {
+                    $q->personalDecksBy($user)
+                    ->orWhere(function ($q2) use ($user) {
+                        $q2->bookmarkedAndWritableBy($user);
+                    });
+                }]);
+            }])
+            ->find($session->deck_id);
+
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 400);
 
         $session = $session->load('answerChoices');

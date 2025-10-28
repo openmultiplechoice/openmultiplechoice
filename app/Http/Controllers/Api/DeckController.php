@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -91,17 +92,11 @@ class DeckController extends Controller
 
     public function indexWithQuestionIds(Request $request)
     {
-        $user_id = Auth::id();
+        $user = Auth::user();
 
-        $decks = Deck::where([
-                ['user_id', '=', $user_id],
-                ['access', '!=', 'public-rw-listed'],
-                ['is_ephemeral', '=', false],
-                ['is_archived', '=', false],
-            ])
-            ->orWhereHas('bookmarks', function ($query) {
-                $query->where('user_id', '=', Auth::id())
-                    ->where('access', '=', 'public-rw');
+        $decks = Deck::personalDecksBy($user)
+            ->orWhere(function (Builder $query) use ($user) {
+                $query->bookmarkedAndWritableBy($user);
             })
             ->with('questions:id')->get();
 

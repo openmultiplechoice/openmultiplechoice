@@ -3,7 +3,7 @@
 
     import { onMount } from "svelte";
 
-    let { questionId } = $props();
+    let { questionId, questionAddToDeckIncludedCount = $bindable() } = $props();
 
     let decksAdded = $state(undefined);
     let decksOther = $state(undefined);
@@ -46,6 +46,7 @@
                         ];
                     }
                 });
+                questionAddToDeckIncludedCount = decksAdded.length;
             })
             .catch(function (error) {
                 console.log(error);
@@ -62,6 +63,7 @@
                 const deck = decksOther.find((d) => d.id === deckId);
                 decksAdded = [...decksAdded, deck];
                 decksOther = decksOther.filter((d) => d.id !== deckId);
+                questionAddToDeckIncludedCount++;
             })
             .catch(function (error) {
                 alert(error);
@@ -77,6 +79,7 @@
                 const deck = decksAdded.find((d) => d.id === deckId);
                 decksOther = [...decksOther, deck];
                 decksAdded = decksAdded.filter((d) => d.id !== deckId);
+                questionAddToDeckIncludedCount--;
             })
             .catch(function (error) {
                 alert(error);
@@ -118,12 +121,20 @@
 </script>
 
 <button
-    class="btn btn-outline-secondary btn-sm"
+    class="btn btn-sm"
+    class:btn-outline-secondary={questionAddToDeckIncludedCount === 0}
+    class:bg-info-subtle={questionAddToDeckIncludedCount > 0}
+    class:border-secondary={questionAddToDeckIncludedCount > 0}
     type="button"
     data-bs-toggle="offcanvas"
     data-bs-target="#offcanvasAddToDeck"
-    aria-controls="offcanvasAddToDeck"
-    ><i class="bi bi-collection"></i> Add to deck</button>
+    aria-controls="offcanvasAddToDeck">
+        <i class="bi bi-collection"></i>
+        Add to deck
+        {#if questionAddToDeckIncludedCount > 0}
+            <span class="badge text-bg-light">{questionAddToDeckIncludedCount}</span>
+        {/if}
+    </button>
 
 <div
     class="offcanvas offcanvas-end"

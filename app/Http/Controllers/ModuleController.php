@@ -65,7 +65,7 @@ class ModuleController extends Controller
 
         $decks = $module->decks
             ->filter(function ($deck) {
-                return $deck->isPublic() || $deck->isOwnedByUser(Auth::user());
+                return $deck->isPublic() || $deck->isOwnedBy(Auth::user());
             })
             ->sortBy('name')
             ->map(function ($deck) {

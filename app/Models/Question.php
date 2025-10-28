@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -50,5 +51,17 @@ class Question extends Model
         static::deleting(function ($question) {
             $question->images()->delete();
         });
+    }
+
+    public function loadAddToDeckCount(User $user): void
+    {
+        $this->add_to_deck_included_count = $this->decks()
+            ->where(function (Builder $query) use ($user) {
+                $query->personalDecksBy($user)
+                ->orWhere(function ($query) use ($user) {
+                    $query->bookmarkedAndWritableBy($user);
+                });
+            })
+            ->count();
     }
 }
