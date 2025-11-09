@@ -1,1 +1,0 @@
-import{w as s}from"./props-CMFmzDA8.js";function n(){const e=s({});return axios.get("/api/users/me/settings").then(function(t){e.set(t.data)}).catch(function(t){alert(t),console.log(t)}),e}const a=n();export{a as U};
