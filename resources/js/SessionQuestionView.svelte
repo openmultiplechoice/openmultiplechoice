@@ -234,7 +234,9 @@
                         </ul>
                     </div>
                     {#key question.id}
-                        <AddToDeckDialog questionId={question.id} />
+                        <AddToDeckDialog
+                            questionId={question.id}
+                            bind:questionAddToDeckIncludedCount={question.add_to_deck_included_count} />
                     {/key}
                 </div>
             </div>

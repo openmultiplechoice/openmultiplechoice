@@ -44,6 +44,9 @@ class DeckQuestionController extends Controller
             $urlNext = '/decks/'. $deck->id .'/questions/'. $nextQuestionId;
         }
 
+        // Get count of personal / bookmarked decks of the current user that include this question
+        $question->loadAddToDeckCount(Auth::user());
+
         return view('deck-question', [
             'deck' => $deck,
             'question' => $question,

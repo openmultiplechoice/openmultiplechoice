@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Question;
-use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
@@ -12,6 +13,9 @@ class QuestionController extends Controller
         $question->load('answers', 'images', 'case');
 
         $decks = $question->decks()->where('access', '=', 'public-rw-listed')->get();
+
+        // Get count of personal / bookmarked decks of the current user that include this question
+        $question->loadAddToDeckCount(Auth::user());
 
         return view('question', [
             'question' => $question,
