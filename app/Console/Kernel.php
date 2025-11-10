@@ -65,8 +65,9 @@ class Kernel extends ConsoleKernel
 
             Cache::put('stats/decks/new', $newDecks);
 
-            // Get the 6 most popular (public) decks of the last x days. x is increased until 6 decks are found.
-            foreach ([2, 4, 8, 16, 32, 64] as $subDays) {
+            // Get the 6 most popular (public) decks of the last x days. x is increased until 6 decks
+            // with at least 2 sessions are found or 256 days is reached.
+            foreach ([2, 4, 8, 16, 32, 64, 128, 256] as $subDays) {
                 $popularDecksTimespan = $subDays;
                 $popularDecks = Deck::where('access', '=', 'public-rw-listed')
                     ->whereHas('sessions', function ($query) use ($subDays) {
@@ -79,7 +80,7 @@ class Kernel extends ConsoleKernel
                     ->orderBy('sessions_count', 'desc')
                     ->take(6)
                     ->get();
-                if ($popularDecks->count() == 6) {
+                if ($popularDecks->count() == 6 && $popularDecks->min('sessions_count') > 1) {
                     break;
                 }
             }
