@@ -1,0 +1,1 @@
+import{A as t,aj as S,v as b,aa as h,S as k}from"./render-wL-MPAMJ.js";function u(r,a){return r===a||r?.[k]===a}function c(r={},a,f,A){return t(()=>{var i,s;return S(()=>{i=s,s=[],b(()=>{r!==f(...s)&&(a(r,...s),i&&u(f(...i),r)&&a(null,...i))})}),()=>{h(()=>{s&&u(f(...s),r)&&a(null,...s)})}}),r}export{c as b};

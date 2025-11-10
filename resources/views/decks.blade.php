@@ -28,7 +28,13 @@
                     </div>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-sm btn-primary">Create deck</button>
+            <div class="d-flex justify-content-between align-items-center">
+                <button type="submit" class="btn btn-sm btn-primary">Create deck</button>
+                @if (config('app.users_enable_export_import') || Auth::user()->is_admin || Auth::user()->is_moderator)
+                    <div id="DeckImport"></div>
+                    @vite(['resources/js/DeckImport.js'])
+                @endif
+            </div>
         </form>
     </div>
 </div>

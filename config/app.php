@@ -82,6 +82,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Export/Import decks for users
+    |--------------------------------------------------------------------------
+    |
+    | Whether to enable the export and import of decks in the frontend for
+    | unprivileged users. Will always be enabled for admins and moderators.
+    |
+    */
+
+    'users_enable_export_import' => env('APP_USERS_ENABLE_EXPORT_IMPORT', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
