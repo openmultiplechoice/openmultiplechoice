@@ -60,6 +60,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::resource('decks', DeckController::class);
     Route::resource('decks.cases', DeckCaseController::class);
     Route::resource('decks.questions', DeckQuestionController::class);
+    Route::post('decks/{deck}/questionwithanswers', [DeckQuestionController::class, 'storeWithAnswers']);
     Route::resource('decks.bookmark', DeckBookmarkController::class);
 
     Route::get('cases/showbylegacyid', [CaseController::class, 'showByLegacyId']);

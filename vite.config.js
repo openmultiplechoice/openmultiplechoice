@@ -18,6 +18,8 @@ export default defineConfig({
             'resources/js/QuestionView.js',
             'resources/js/SessionView.js',
             'resources/js/UserSettingsView.js',
+            'resources/js/DeckExport.js',
+            'resources/js/DeckImport.js',
 
             'node_modules/bootstrap/dist/js/bootstrap.esm.js',
             'node_modules/trix/dist/trix.esm.js',
