@@ -140,21 +140,28 @@
                         }
                     }
 
-                    // Create the question
+                    // Prepare answers with correct_answer_index
+                    const answers = question.answers?.map(a => ({
+                        text: a.text,
+                        hint: a.hint || null,
+                        is_correct: a.id === question.correct_answer_id
+                    })) || [];
+
                     const questionRequestData = {
                         text: question.text,
                         hint: question.hint || null,
                         comment: question.comment || null,
                         type: question.type,
-                        correct_answer_id: null,
                         is_invalid: question.is_invalid,
                         needs_review: question.needs_review,
                         case_id: mappedCaseId || null,
-                        answers: []
+                        answers: answers,
                     };
 
-                    const questionResponse = await retryAxios(() =>
-                        axios.post(`/api/decks/${newDeck.id}/questions`, questionRequestData));
+                    const questionResponse = await retryAxios(() => axios.post(
+                        `/api/decks/${newDeck.id}/questions`,
+                        questionRequestData
+                    ));
                     const newQuestion = questionResponse.data;
 
                     // Import associated images
@@ -166,29 +173,11 @@
                             await retryAxios(() => axios.post(
                                 `/api/questions/${newQuestion.id}/images`,
                                 formData,
-                                { headers: { 'Content-Type': 'multipart/form-data' }}
+                                { headers: { "Content-Type": "multipart/form-data" } }
                             ));
                         }
                     }
 
-                    // Import associated answers
-                    if (question.answers && question.answers.length > 0) {
-                        for (const answer of question.answers) {
-                            const answerRequestData = {
-                                text: answer.text,
-                                hint: answer.hint || null
-                            };
-
-                            const answerResponse = await retryAxios(() =>
-                                axios.post(`/api/questions/${newQuestion.id}/answers`, answerRequestData));
-                            const newAnswer = answerResponse.data;
-
-                            if (answer.id === question.correct_answer_id) {
-                                await retryAxios(() =>
-                                    axios.put(`/api/questions/${newQuestion.id}`, { correct_answer_id: newAnswer.id }));
-                            }
-                        }
-                    }
                     importedItems++;
                 }
             }

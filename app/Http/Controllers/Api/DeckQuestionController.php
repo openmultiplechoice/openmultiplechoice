@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
 use App\Models\Question;
+use App\Models\Answer;
 
 class DeckQuestionController extends Controller
 {
@@ -27,27 +29,70 @@ class DeckQuestionController extends Controller
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
         abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
 
-        if ($request->id) {
-            $question = Question::findOrFail($request->id)->get();
-        } else {
-            $question = new Question();
+        $validated = $request->validate([
+            'text' => 'nullable|string|max:6000',
+            'hint' => 'nullable|string|max:2000',
+            'comment' => 'nullable|string|max:2000',
+            'type' => 'required|string|in:mc,card',
+            'is_invalid' => 'nullable|boolean',
+            'needs_review' => 'nullable|boolean',
+            'case_id' => 'nullable|integer',
+            'legacy_question_id' => 'nullable|integer',
+            'answers' => 'nullable|array',
+            'answers.*.text' => 'nullable|string|max:2000',
+            'answers.*.hint' => 'nullable|string|max:2000',
+            'answers.*.is_correct' => 'boolean',
+        ]);
+
+        if (isset($validated['answers'])) {
+            // Make sure the question has at most one correct answer
+            $correctAnswers = collect($validated['answers'])->filter(fn($a) => $a['is_correct'] ?? false);
+            if ($correctAnswers->count() > 1) {
+                return response()->json(['message' => 'Only one answer can be marked as correct'], 422);
+            }
         }
 
-        $question->type = $request->type;
-        $question->text = $request->text;
-        $question->hint = $request->hint;
-        $question->comment = $request->comment;
-        $question->case_id = $request->case_id;
-        $question->correct_answer_id = $request->correct_answer_id;
-        $question->is_invalid = $request->is_invalid;
-        $question->needs_review = $request->needs_review;
-        $question->legacy_question_id = $request->legacy_question_id;
-        $question->answers()->saveMany($request->answers);
-        $question->save();
+        $question = new Question();
 
-        $deck->questions()->attach($question);
+        try {
+            $question = DB::transaction(function () use ($validated, $deck, $question) {
+                $question->fill($validated);
+                $question->legacy_question_id = $validated['legacy_question_id'] ?? null;
 
-        return response()->json($question);
+                $question->save();
+
+                if (isset($validated['answers'])) {
+                    $answers = [];
+                    foreach ($validated['answers'] as $answer) {
+                        $newAnswer = new Answer();
+
+                        $newAnswer->fill($answer);
+                        $newAnswer->question_id = $question->id;
+
+                        $newAnswer->save();
+
+                        $answers[] = $newAnswer;
+
+                        if (isset($answer['is_correct']) && $answer['is_correct']) {
+                            $question->correct_answer_id = $newAnswer->id;
+                            $question->save();
+                        }
+                    }
+
+                }
+
+                $deck->questions()->syncWithoutDetaching($question);
+
+                // Include answers in the returned question
+                $question->answers = $answers ?? [];
+                return $question;
+            });
+
+            return response()->json($question);
+        } catch (\Exception $e) {
+            Log::error('Failed to store question: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to save question. Please try again.'], 500);
+        }
     }
 
     public function destroy(Deck $deck, Question $question)
