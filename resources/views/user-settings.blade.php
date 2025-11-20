@@ -30,6 +30,16 @@
 
             <button class="btn btn-sm btn-primary" type="submit">Save</button>
         </form>
+        <h4 class="mt-3">Security</h4>
+        <h6>Invalidate remembered devices</h6>
+        <form action="/me/settings/invalidate-devices" method="post">
+            @csrf
+            <button class="btn btn-sm btn-danger" type="submit">Invalidate devices</button>
+            <div class="form-text">
+                This forgets all devices that have been remembered with the "<i>Remain logged in</i>" option during log-in.
+                These devices will have to be logged in manually again.
+            </div>
+        </form>
     </div>
 </div>
 
