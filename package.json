@@ -29,7 +29,7 @@
         "svelte-confetti": "^2.3.2",
         "svelte-loader": "^3.2.4",
         "trix": "^2.1.15",
-        "vite": "^7.1.9",
+        "vite": "^7.2.4",
         "vue-template-compiler": "^2.7.16"
     }
 }
