@@ -1,0 +1,1 @@
+import{at as t,x as f,w as e}from"./if-DDvdYaUT.js";function c(n){throw new Error("https://svelte.dev/e/lifecycle_outside_component")}function u(n){t===null&&c(),f(()=>{const o=e(n);if(typeof o=="function")return o})}function r(n){t===null&&c(),u(()=>()=>e(n))}export{r as a,u as o};
