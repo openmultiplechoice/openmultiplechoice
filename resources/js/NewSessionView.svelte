@@ -174,6 +174,7 @@
         {#if $UserSettings.last_module_id}
             <NewSessionDecksView
                 moduleId={$UserSettings.last_module_id}
+                deckKind={$UserSettings.last_new_session_deck_kind}
                 bind:selectedDecks
                 selectDeck={selectDeck} />
         {:else}

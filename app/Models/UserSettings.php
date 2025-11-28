@@ -12,6 +12,7 @@ class UserSettings extends Model
     protected $fillable = [
         'last_subject_id',
         'last_module_id',
+        'last_new_session_deck_kind',
         'session_show_sidebar',
         'session_show_progress_bar',
         'session_exam_mode',
