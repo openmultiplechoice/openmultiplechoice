@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class Question extends Model
 {
@@ -53,15 +54,37 @@ class Question extends Model
         });
     }
 
-    public function loadAddToDeckCount(User $user): void
+    public static function getAddToDeckCountForUser(Collection|array $questionIds, User $user): array
     {
-        $this->add_to_deck_included_count = $this->decks()
-            ->where(function (Builder $query) use ($user) {
-                $query->personalDecksBy($user)
-                ->orWhere(function ($query) use ($user) {
-                    $query->bookmarkedAndWritableBy($user);
-                });
-            })
-            ->count();
+        $questionIds = collect($questionIds);
+
+        $personalDeckCounts = DB::table('deck_question')
+            ->select('question_id', DB::raw('COUNT(DISTINCT deck_id) as count'))
+            ->join('decks', 'deck_question.deck_id', '=', 'decks.id')
+            ->whereIn('deck_question.question_id', $questionIds)
+            ->where('decks.user_id', $user->id)
+            ->where('decks.access', '!=', 'public-rw-listed')
+            ->where('decks.is_ephemeral', false)
+            ->where('decks.is_archived', false)
+            ->groupBy('question_id')
+            ->pluck('count', 'question_id');
+
+        $bookmarkedDeckCounts = DB::table('deck_question')
+            ->select('question_id', DB::raw('COUNT(DISTINCT deck_question.deck_id) as count'))
+            ->join('decks', 'deck_question.deck_id', '=', 'decks.id')
+            ->join('deck_bookmark', 'decks.id', '=', 'deck_bookmark.deck_id')
+            ->whereIn('deck_question.question_id', $questionIds)
+            ->where('deck_bookmark.user_id', $user->id)
+            ->where('decks.access', 'public-rw')
+            ->where('decks.user_id', '!=', $user->id)
+            ->groupBy('question_id')
+            ->pluck('count', 'question_id');
+
+        $counts = [];
+        foreach ($questionIds as $questionId) {
+            $counts[$questionId] = ($personalDeckCounts[$questionId] ?? 0) + ($bookmarkedDeckCounts[$questionId] ?? 0);
+        }
+
+        return $counts;
     }
 }
