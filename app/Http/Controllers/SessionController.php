@@ -13,6 +13,7 @@ class SessionController extends Controller
 {
     public function create(Request $request)
     {
+        $user = Auth::user();
         if ($request->has('module')) {
             // If a specific module is requested (`?module=...` parameter in
             // URL), it should take precedence over the last selected module;
@@ -24,9 +25,17 @@ class SessionController extends Controller
 
             $module = Module::findOrFail($validated['module']);
 
-            Auth::user()->settings->last_subject_id = $module->subject_id;
-            Auth::user()->settings->last_module_id = $module->id;
-            Auth::user()->settings->save();
+            $user->settings->last_subject_id = $module->subject_id;
+            $user->settings->last_module_id = $module->id;
+            $user->settings->save();
+        }
+        if ($request->has('kind')) {
+            $validated = $request->validate([
+                'kind' => 'nullable|string|in:public-rw-listed,public,user,bookmarked',
+            ]);
+
+            $user->settings->last_new_session_deck_kind = $validated['kind'];
+            $user->settings->save();
         }
         return view('sessions');
     }
