@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
@@ -124,31 +125,48 @@ class SessionController extends Controller
         $user = Auth::user();
 
         // Load the deck with its questions, answers, images, and cases.
-        // For each question, also load the count of personal / bookmarked
-        // decks of the current user that include that question.
         $deck = Deck::with('cases', 'questions.images', 'questions.answers', 'questions.case')
-            ->with(['questions' => function ($query) use ($user) {
-                $query->withCount(['decks as add_to_deck_included_count' => function ($q) use ($user) {
-                    $q->personalDecksBy($user)
-                    ->orWhere(function ($q2) use ($user) {
-                        $q2->bookmarkedAndWritableBy($user);
-                    });
-                }]);
-            }])
             ->find($session->deck_id);
 
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 400);
 
-        $session = $session->load('answerChoices');
-
-        // If all questions have been removed from the
-        // underlying deck, error out.
-        // TODO(schu): is there a better HTTP error code?
-        // TODO(schu): give the user a clue what's wrong
+        // If all questions have been removed from the underlying deck, error out.
         abort_if($deck->questions->isEmpty(), 410);
 
-        // If the sessions's current question has
-        // been deleted, set it to the first question
+        $questionIds = $deck->questions->pluck('id');
+
+        $personalDeckCounts = DB::table('deck_question')
+            ->select('question_id', DB::raw('COUNT(DISTINCT deck_id) as count'))
+            ->join('decks', 'deck_question.deck_id', '=', 'decks.id')
+            ->whereIn('deck_question.question_id', $questionIds)
+            ->where('decks.user_id', $user->id)
+            ->where('decks.access', '!=', 'public-rw-listed')
+            ->where('decks.is_ephemeral', false)
+            ->where('decks.is_archived', false)
+            ->groupBy('question_id')
+            ->pluck('count', 'question_id');
+
+        $bookmarkedDeckCounts = DB::table('deck_question')
+            ->select('question_id', DB::raw('COUNT(DISTINCT deck_question.deck_id) as count'))
+            ->join('decks', 'deck_question.deck_id', '=', 'decks.id')
+            ->join('deck_bookmark', 'decks.id', '=', 'deck_bookmark.deck_id')
+            ->whereIn('deck_question.question_id', $questionIds)
+            ->where('deck_bookmark.user_id', $user->id)
+            ->where('decks.access', 'public-rw')
+            ->where('decks.user_id', '!=', $user->id)  // Exclude own decks
+            ->groupBy('question_id')
+            ->pluck('count', 'question_id');
+
+        // Merge counts and attach to questions
+        foreach ($deck->questions as $question) {
+            $personalCount = $personalDeckCounts[$question->id] ?? 0;
+            $bookmarkedCount = $bookmarkedDeckCounts[$question->id] ?? 0;
+            $question->add_to_deck_included_count = $personalCount + $bookmarkedCount;
+        }
+
+        $session = $session->load('answerChoices');
+
+        // If the session's current question has been deleted, set it to the first question
         if (!in_array($session->current_question_id, array_column($deck->questions->toArray(), 'id'))) {
             $session->current_question_id = $deck->questions()->first()->id;
             $session->save();
