@@ -24,7 +24,7 @@
         <IndexSessionSingleView bind:session={sessions[i]} />
     {:else}
         <div class="alert alert-light text-center" role="alert">
-            No sessions yet <i class="bi bi-rocket"></i>
+            <i class="bi bi-rocket"></i> No sessions yet
         </div>
     {/each}
 {:else}
