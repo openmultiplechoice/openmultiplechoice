@@ -1,6 +1,6 @@
 {
-  "_Messages-BEqxCqHN.js": {
-    "file": "assets/Messages-BEqxCqHN.js",
+  "_Messages-DHaf_Yl4.js": {
+    "file": "assets/Messages-DHaf_Yl4.js",
     "name": "Messages",
     "imports": [
       "_render-DmmYWkZq.js",
@@ -489,12 +489,12 @@
     ]
   },
   "resources/js/Messages.js": {
-    "file": "assets/Messages-D7NNM47S.js",
+    "file": "assets/Messages-Dxkj8ID1.js",
     "name": "Messages",
     "src": "resources/js/Messages.js",
     "isEntry": true,
     "imports": [
-      "_Messages-BEqxCqHN.js",
+      "_Messages-DHaf_Yl4.js",
       "_render-DmmYWkZq.js",
       "_if-qgMZekRM.js",
       "_event-modifiers-B-z6qf1-.js",
@@ -563,7 +563,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-BcdEM3NP.js",
+    "file": "assets/SessionView-BGJ48-yI.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -578,7 +578,7 @@
       "_legacy-client-oIJ-7bi0.js",
       "_purify.es-CmVf96vk.js",
       "_style-BtOSwUPa.js",
-      "_Messages-BEqxCqHN.js",
+      "_Messages-DHaf_Yl4.js",
       "_this-BZVWBAzr.js",
       "_auto-sRkgK8jz.js",
       "_SessionProgressBar-D__Om4z0.js",
