@@ -12,14 +12,22 @@ class QuestionController extends Controller
     {
         $question->load('answers', 'images', 'case');
 
-        $decks = $question->decks()->where('access', '=', 'public-rw-listed')->get();
+        $decks = $question->decks()->where([
+                ['access', '!=', 'private'],
+                ['is_archived', '=', false],
+                ['is_ephemeral', '=', false],
+            ])->get();
+
+        $mainDecks = $decks->filter(fn($d) => $d->access === "public-rw-listed");
+        $userDecks = $decks->filter(fn($d) => $d->access !== "public-rw-listed");
 
         // Get count of personal / bookmarked decks of the current user that include this question
         $question->loadAddToDeckCount(Auth::user());
 
         return view('question', [
             'question' => $question,
-            'decks' => $decks,
+            'mainDecks' => $mainDecks,
+            'userDecks' => $userDecks,
         ]);
     }
 
