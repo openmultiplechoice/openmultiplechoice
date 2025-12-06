@@ -1,0 +1,1 @@
+import{A as t,aj as S,v as b,ac as c,S as h}from"./render-CKlhfUir.js";function u(r,i){return r===i||r?.[h]===i}function T(r={},i,f,k){return t(()=>{var a,s;return S(()=>{a=s,s=[],b(()=>{r!==f(...s)&&(i(r,...s),a&&u(f(...a),r)&&i(null,...a))})}),()=>{c(()=>{s&&u(f(...s),r)&&i(null,...s)})}}),r}export{T as b};
