@@ -234,7 +234,7 @@
     </div>
 {:else}
     <div class="alert alert-light text-center" role="alert">
-        No stats available yet <i class="bi bi-heartbreak-fill"></i>
+        <i class="bi bi-cone-striped"></i> No stats available yet
     </div>
 {/if}
 

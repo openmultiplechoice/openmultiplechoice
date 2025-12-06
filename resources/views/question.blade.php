@@ -4,23 +4,38 @@
 
 @section('content')
 
-@if (count($decks) > 0)
+@php
+    $numDecks = count($mainDecks) + count($userDecks)
+@endphp
+
+@if ($numDecks > 0)
 <div class="row mb-3">
     <div class="col">
         <div class="accordion" id="accordionDecks">
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeckList">
-                        <i class="bi bi-info-circle me-2"></i>Included in {{ count($decks) }} public deck{{ count($decks) > 1 ? 's' : '' }}
+                        <i class="bi bi-info-circle me-2"></i>Included in {{ $numDecks }} public deck{{ $numDecks > 1 ? 's' : '' }}
                     </button>
                 </h2>
                 <div id="collapseDeckList" class="accordion-collapse collapse" data-bs-parent="#accordionDecks">
                     <div class="accordion-body">
-                        <ul>
-                            @foreach ($decks as $deck)
-                                <li><a href="/decks/{{ $deck->id }}/questions/{{ $question->id }}">{{ $deck->name }}</a></li>
-                            @endforeach
-                        </ul>
+                        @if (count($mainDecks) > 0)
+                            <p>Main decks:</p>
+                            <ul>
+                                @foreach ($mainDecks as $deck)
+                                    <li><a href="/decks/{{ $deck->id }}/questions/{{ $question->id }}">{{ Str::limit($deck->name, 50, '...') }}</a></li>
+                                @endforeach
+                            </ul>
+                        @endif
+                        @if (count($userDecks) > 0)
+                            <p>User decks:</p>
+                            <ul>
+                                @foreach ($userDecks as $deck)
+                                    <li><a href="/decks/{{ $deck->id }}/questions/{{ $question->id }}">{{ Str::limit($deck->name, 50, '...') }}</a></li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
                 </div>
             </div>

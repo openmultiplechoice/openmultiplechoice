@@ -244,12 +244,12 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <button class="dropdown-item" onclick={toggleEditor}>
+                                        <button class="dropdown-item btn btn-sm" onclick={toggleEditor}>
                                             <i class="bi bi-pencil me-2"></i>Edit
                                         </button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item" onclick={handleDelete}>
+                                        <button class="dropdown-item btn btn-sm" onclick={handleDelete}>
                                             <i class="bi bi-trash me-2"></i>Delete
                                         </button>
                                     </li>
