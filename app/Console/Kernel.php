@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\AnswerChoice;
 use App\Models\Deck;
@@ -20,42 +22,52 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function () {
-            // Get an array of all answer choices of the last 7 days,
-            // grouped by the full hour
-            $answerChoicesByHour = AnswerChoice::where('created_at', '>=', Carbon::now()->subDays(7))
-                ->with('session:id,user_id')
+            $sevenDaysAgo = Carbon::now()->subDays(7)->startOfHour();
+
+            $driver = DB::connection()->getDriverName();
+
+            // Database-agnostic hour truncation expression
+            $hourExpression = match ($driver) {
+                'pgsql' => "DATE_TRUNC('hour', answer_choices.created_at)",
+                'mysql', 'mariadb' => "DATE_FORMAT(answer_choices.created_at, '%Y-%m-%d %H:00:00')",
+                'sqlite' => "strftime('%Y-%m-%d %H:00:00', answer_choices.created_at)",
+                default => "DATE_FORMAT(answer_choices.created_at, '%Y-%m-%d %H:00:00')",
+            };
+
+            // Count answers per hour using database aggregation
+            $answersByHour = DB::table('answer_choices')
+                ->select(DB::raw("{$hourExpression} as hour"), DB::raw('COUNT(*) as count'))
+                ->where('created_at', '>=', $sevenDaysAgo)
+                ->groupBy(DB::raw($hourExpression))
                 ->get()
-                ->groupBy(function ($a) {
-                    return Carbon::parse($a->created_at)->minute(0)->second(0);
-                })->all();
+                ->pluck('count', 'hour');
 
-            // Get a range of all hours from 7 days ago until now, e.g.
-            // 2023-11-13 08:00:00
-            // 2023-11-13 09:00:00
-            // ...
-            $range = Carbon::parse(Carbon::now()->startOfHour()->subDays(7))->hoursUntil(Carbon::now());
+            // Count unique users per hour using JOIN and COUNT DISTINCT
+            $usersByHour = DB::table('answer_choices')
+                ->select(DB::raw("{$hourExpression} as hour"), DB::raw('COUNT(DISTINCT sessions.user_id) as count'))
+                ->join('sessions', 'answer_choices.session_id', '=', 'sessions.id')
+                ->where('answer_choices.created_at', '>=', $sevenDaysAgo)
+                ->groupBy(DB::raw($hourExpression))
+                ->get()
+                ->pluck('count', 'hour');
 
-            // For each hour, count the number of answers and users
-            $answersByHour = [];
-            $usersByHour = [];
+            // Fill in missing hours with zeros
+            $range = Carbon::parse($sevenDaysAgo)->hoursUntil(Carbon::now());
+            $answersByHourFilled = [];
+            $usersByHourFilled = [];
+
             foreach ($range as $hour) {
                 $hourString = $hour->format('Y-m-d H:i:s');
                 $hourStringISO8601 = $hour->format('Y-m-d\TH:i:s\Z');
-                $answersByHour[$hourStringISO8601] = isset($answerChoicesByHour[$hourString]) ? count($answerChoicesByHour[$hourString]) : 0;
-                $usersByHour[$hourStringISO8601] = isset($answerChoicesByHour[$hourString]) ?
-                    count(array_unique(
-                        $answerChoicesByHour[$hourString]
-                            ->map(function ($ac) { return $ac->session->user_id; })
-                            ->toArray()
-                    )) : 0;
+                $answersByHourFilled[$hourStringISO8601] = $answersByHour[$hourString] ?? 0;
+                $usersByHourFilled[$hourStringISO8601] = $usersByHour[$hourString] ?? 0;
             }
 
-            Cache::put('stats/answers/byhour', $answersByHour);
-            Cache::put('stats/users/byhour', $usersByHour);
+            Cache::put('stats/answers/byhour', $answersByHourFilled);
+            Cache::put('stats/users/byhour', $usersByHourFilled);
         })->name('updateActivityStats')->everyTwoMinutes()->withoutOverlapping();
 
         $schedule->call(function () {
-            // Get the 6 newest decks
             $newDecks = Deck::where('access', '=', 'public-rw-listed')
                 ->select('id', 'name')
                 ->orderBy('id', 'desc')
@@ -65,21 +77,27 @@ class Kernel extends ConsoleKernel
 
             Cache::put('stats/decks/new', $newDecks);
 
-            // Get the 6 most popular (public) decks of the last x days. x is increased until 6 decks
-            // with at least 2 sessions are found or 256 days is reached.
+            // Get the 6 most popular (public) decks of the last X days. X is increased
+            // until 6 decks with at least 2 sessions are found or 256 days is reached.
+            // Use JOIN instead of whereHas/withCount to avoid correlated subqueries.
             foreach ([2, 4, 8, 16, 32, 64, 128, 256] as $subDays) {
                 $popularDecksTimespan = $subDays;
-                $popularDecks = Deck::where('access', '=', 'public-rw-listed')
-                    ->whereHas('sessions', function ($query) use ($subDays) {
-                        $query->where('created_at', '>=', Carbon::now()->subDays($subDays));
-                    })
-                    ->withCount(['sessions' => function ($query) use ($subDays) {
-                        $query->where('created_at', '>=', Carbon::now()->subDays($subDays));
-                    }])
-                    ->with('questions:id')
-                    ->orderBy('sessions_count', 'desc')
-                    ->take(6)
+                $cutoffDate = Carbon::now()->subDays($subDays);
+
+                $popularDecks = Deck::select('decks.id', 'decks.name', 'decks.access',
+                                    DB::raw('COUNT(sessions.id) as sessions_count'))
+                    ->join('sessions', 'decks.id', '=', 'sessions.deck_id')
+                    ->where('decks.access', '=', 'public-rw-listed')
+                    ->where('sessions.created_at', '>=', $cutoffDate)
+                    ->groupBy('decks.id', 'decks.name', 'decks.access')
+                    ->having(DB::raw('COUNT(sessions.id)'), '>', 1)
+                    ->orderByDesc(DB::raw('COUNT(sessions.id)'))
+                    ->limit(6)
                     ->get();
+
+                // Eager load questions after grouping (can't use with() in GROUP BY query)
+                $popularDecks->load('questions:id');
+
                 if ($popularDecks->count() == 6 && $popularDecks->min('sessions_count') > 1) {
                     break;
                 }
@@ -87,19 +105,21 @@ class Kernel extends ConsoleKernel
             Cache::put('stats/decks/popular_timespan', $popularDecksTimespan);
             Cache::put('stats/decks/popular', $popularDecks);
 
-            // Get the 6 most recently used decks that are publicly available
-            $lastUsedDecks = Deck::has('sessions')
-                ->whereIn('access', ['public-rw-listed', 'public-rw', 'public-ro'])
-                ->with('sessions:id,deck_id,created_at', 'questions:id')
-                ->orderBy(
-                    Deck::select('created_at')
-                        ->from('sessions')
-                        ->whereColumn('sessions.deck_id', 'decks.id')
-                        ->orderByDesc('created_at')
-                        ->limit(1),
-                    'desc'
-                )
+            // Get the 6 most recently used decks that are publicly available.
+            // Use subquery JOIN instead of correlated subquery in ORDER BY to
+            // reduce the execution time.
+            $latestSessionsSubquery = DB::table('sessions')
+                ->select('deck_id', DB::raw('MAX(sessions.created_at) as last_session_at'))
+                ->groupBy('deck_id');
+
+            $lastUsedDecks = Deck::select('decks.*', 'latest_sessions.last_session_at')
+                ->joinSub($latestSessionsSubquery, 'latest_sessions', function ($join) {
+                    $join->on('decks.id', '=', 'latest_sessions.deck_id');
+                })
+                ->whereIn('decks.access', ['public-rw-listed', 'public-rw', 'public-ro'])
+                ->orderByDesc('latest_sessions.last_session_at')
                 ->limit(6)
+                ->with('questions:id')
                 ->get();
 
             Cache::put('stats/decks/last_used', $lastUsedDecks);
