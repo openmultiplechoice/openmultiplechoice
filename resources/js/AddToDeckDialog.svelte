@@ -1,19 +1,27 @@
 <script>
+    import DOMPurify from "dompurify";
     import { run, preventDefault } from 'svelte/legacy';
 
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
+
+    import { UserSettings } from "./UserSettingsStore.js";
 
     let { questionId, questionAddToDeckIncludedCount = $bindable() } = $props();
 
+    let decks = $state([]);
     let decksAdded = $state(undefined);
     let decksOther = $state(undefined);
     let deckName = $state('');
     let filterElement = $state();
     let filterText = $state('');
+    let modules = $state([]);
+    let subjects = $state([]);
+    let settingsAddToDeckLastModuleId = $derived($UserSettings.add_to_deck_last_module_id);
 
     onMount(() => {
         const c = document.getElementById('offcanvasAddToDeck');
         c.addEventListener('show.bs.offcanvas', event => {
+            fetchModules();
             fetchDecks();
         })
         c.addEventListener('shown.bs.offcanvas', event => {
@@ -26,32 +34,77 @@
         })
     });
 
+    $effect(() => {
+        // Whenever `settingsAddToDeckLastModuleId` changes
+        // and is not undefined, run `updateDecks()` (but don't
+        // track the state in `updateDecks`)
+        if (settingsAddToDeckLastModuleId !== undefined) {
+            untrack(() => updateDecks());
+        }
+    });
+
     function fetchDecks() {
         axios
-            .get("/api/decks/withquestionids")
+            .get("/api/decks/with_question_ids")
             .then(function (response) {
-                var decks = response.data;
-                decksAdded = [];
-                decksOther = [];
-                decks.forEach((deck) => {
-                    if (deck.questions.some((q) => q.id === questionId)) {
-                        decksAdded = [
-                            ...decksAdded,
-                            { id: deck.id, name: deck.name },
-                        ];
-                    } else {
-                        decksOther = [
-                            ...decksOther,
-                            { id: deck.id, name: deck.name },
-                        ];
-                    }
-                });
-                questionAddToDeckIncludedCount = decksAdded.length;
+                decks = response.data;
+                updateDecks();
             })
             .catch(function (error) {
                 console.log(error);
                 alert(error);
             });
+    }
+
+    function fetchModules() {
+        axios
+            .get("/api/modules")
+            .then(function (response) {
+                modules = response.data;
+                const bySubject = new Map();
+                for (const m of modules) {
+                    if (!bySubject.has(m.subject.id)) {
+                        bySubject.set(m.subject.id, { name: m.subject.name, modules: [] });
+                    }
+                    bySubject.get(m.subject.id).modules.push(m);
+                }
+                subjects = [...bySubject.values()];
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert(error);
+            });
+    }
+
+    function updateDecks() {
+        decksAdded = [];
+        decksOther = [];
+
+        if (decks.length === 0) {
+            return;
+        }
+
+        const decksFiltered = decks.filter((deck) => {
+            // Always list decks that include the question already,
+            // even if not part of the current module
+            if (deck.questions.some((q) => q.id === questionId)) return true;
+
+            if (settingsAddToDeckLastModuleId) {
+                return deck.module_id === settingsAddToDeckLastModuleId;
+            } else {
+                return true;
+            }
+        });
+
+        decksFiltered.forEach((deck) => {
+            if (deck.questions.some((q) => q.id === questionId)) {
+                decksAdded = [...decksAdded, deck];
+            } else {
+                decksOther = [...decksOther, deck];
+            }
+        });
+
+        questionAddToDeckIncludedCount = decksAdded.length;
     }
 
     function addQuestionToDeck(deckId) {
@@ -60,10 +113,9 @@
                 question_id: questionId,
             })
             .then(function (reponse) {
-                const deck = decksOther.find((d) => d.id === deckId);
-                decksAdded = [...decksAdded, deck];
-                decksOther = decksOther.filter((d) => d.id !== deckId);
-                questionAddToDeckIncludedCount++;
+                const deck = decks.find((d) => d.id === deckId);
+                deck.questions.push({ id: questionId });
+                updateDecks();
             })
             .catch(function (error) {
                 alert(error);
@@ -76,10 +128,9 @@
                 question_id: questionId,
             })
             .then(function (reponse) {
-                const deck = decksAdded.find((d) => d.id === deckId);
-                decksOther = [...decksOther, deck];
-                decksAdded = decksAdded.filter((d) => d.id !== deckId);
-                questionAddToDeckIncludedCount--;
+                const deck = decks.find((d) => d.id === deckId);
+                deck.questions = deck.questions.filter((q) => q.id !== questionId);
+                updateDecks();
             })
             .catch(function (error) {
                 alert(error);
@@ -94,15 +145,30 @@
         axios
             .post("/api/decks", {
                 name: deckName,
+                module_id: settingsAddToDeckLastModuleId,
             })
             .then(function (response) {
                 const deck = response.data;
-                decksOther = [...decksOther, deck];
+                deck.questions = [];
+                decks.push(deck);
                 addQuestionToDeck(deck.id);
                 deckName = '';
             })
             .catch(function (error) {
                 alert(error);
+            });
+    }
+
+    function handleChangeLastModuleId() {
+        $UserSettings.add_to_deck_last_module_id = settingsAddToDeckLastModuleId;
+
+        axios
+            .put("/api/users/me/settings", {
+                add_to_deck_last_module_id: settingsAddToDeckLastModuleId,
+            })
+            .catch(function (error) {
+                alert(error);
+                console.log(error);
             });
     }
 
@@ -149,16 +215,41 @@
             data-bs-dismiss="offcanvas"
             aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body pb-0">
+    <div class="offcanvas-body py-0">
+        <div class="row sticky-top bg-body">
+            <div class="col">
+                <div class="input-group mt-1 mb-3">
+                    <span class="input-group-text"
+                        class:bg-warning-subtle={!!settingsAddToDeckLastModuleId}>
+                        <i class="bi bi-filter"></i>
+                    </span>
+                    <div class="form-floating">
+                        <select id="module-selection" class="form-select"
+                            bind:value={settingsAddToDeckLastModuleId}
+                            onchange={handleChangeLastModuleId}>
+                            <option value={null}>Show all decks</option>
+                            {#each subjects as s}
+                                <optgroup label={s.name}>
+                                    {#each s.modules as m}
+                                        <option value={m.id}>
+                                            {_.truncate(DOMPurify.sanitize(m.name, {ALLOWED_TAGS: []}), {'length': 30})}
+                                        </option>
+                                    {/each}
+                                </optgroup>
+                            {/each}
+                        </select>
+                        <label for="module-selection">Filter by module</label>
+                    </div>
+                </div>
+            </div>
+        </div>
         {#if decksAdded}
-            {#if decksAdded.length + decksOther.length > 10}
-                <input
-                    bind:this={filterElement}
-                    bind:value={filterText}
-                    type="text"
-                    class="form-control mb-3"
-                    placeholder="Filter decks ..."/>
-            {/if}
+            <input
+                bind:this={filterElement}
+                bind:value={filterText}
+                type="text"
+                class="form-control mt-1 mb-3"
+                placeholder="Filter deck names ..."/>
             {#each filteredDecksAdded as deck}
                 <div class="row mb-1">
                     <div class="col-9 text-truncate">

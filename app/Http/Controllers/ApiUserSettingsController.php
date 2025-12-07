@@ -21,6 +21,8 @@ class ApiUserSettingsController extends Controller
             'is_admin' => $user->is_admin,
             'is_moderator' => $user->is_moderator,
 
+            'add_to_deck_last_module_id' => $user->settings->add_to_deck_last_module_id,
+
             'last_subject_id' => $user->settings->last_subject_id,
             'last_module_id' => $user->settings->last_module_id,
             'last_new_session_deck_kind' => $user->settings->last_new_session_deck_kind,
@@ -41,6 +43,7 @@ class ApiUserSettingsController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
+            'add_to_deck_last_module_id' => 'sometimes|nullable|integer|min:0',
             'last_subject_id' => 'sometimes|integer|min:0',
             'last_module_id' => 'sometimes|integer|min:0',
             'last_new_session_deck_kind' => 'sometimes|string|in:public-rw-listed,public,user,bookmarked',

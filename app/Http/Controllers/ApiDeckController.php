@@ -115,7 +115,7 @@ class ApiDeckController extends Controller
         $candidateDeckIds = $personalDeckIds->union($bookmarkedWritableDeckIds);
 
         $decks = Deck::query()
-            ->select('decks.id', 'decks.name')
+            ->select('decks.id', 'decks.name', 'decks.module_id')
             ->whereIn('decks.id', $candidateDeckIds)
             ->with('questions:id')
             ->get();
