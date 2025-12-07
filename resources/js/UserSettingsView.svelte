@@ -49,11 +49,17 @@
     </div>
     <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.session_exam_mode}>
-        <label class="form-check-label" for="flexSwitchCheckDefault">Use "exam mode": answers and comments remain hidden until all questions are answered</label>
+        <label class="form-check-label" for="flexSwitchCheckDefault">Keep answers and comments hidden until all questions are answered (<i>"exam mode"</i>)</label>
     </div>
     <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.session_multiple_answer_tries}>
         <label class="form-check-label" for="flexSwitchCheckDefault">Allow selecting multiple answers: the correct answer remains hidden until it is selected</label>
+    </div>
+
+    <h4 class="mt-3">Add to deck</h4>
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" bind:checked={settings.add_to_deck_current_module_only}>
+        <label class="form-check-label" for="flexSwitchCheckDefault">List only decks of <a href="/sessions/create">your current module</a> or with the question added</label>
     </div>
 {:else}
     <p>Loading ...</p>
