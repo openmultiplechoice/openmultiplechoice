@@ -45,7 +45,10 @@ class DeckQuestionController extends Controller
         }
 
         // Get count of personal / bookmarked decks of the current user that include this question
-        $question->loadAddToDeckCount(Auth::user());
+        $question->add_to_deck_included_count = Question::getAddToDeckCountForUser(
+            [$question->id],
+            Auth::user()
+        )[$question->id] ?? 0;
 
         return view('deck-question', [
             'deck' => $deck,
