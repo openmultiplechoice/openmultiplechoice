@@ -6,9 +6,9 @@
 
 Status: alpha
 
-OpenMultipleChoice is an **open source web application for multiple choice
+OpenMultipleChoice is an open source web application for multiple choice
 question ([MCQ](https://en.wikipedia.org/wiki/Multiple_choice)) and flashcard
-decks**. Built for medical students, OMC is for anyone who learns from decks of
+decks. Built for medical students, OMC is for anyone who learns from decks of
 MCQs and flashcards.
 
 ![](docs/images/omc-screenshot.png)
