@@ -4,10 +4,11 @@
     import NewSessionDeckStats from "./NewSessionDeckStats.svelte";
     import NewSessionDeckView from "./NewSessionDeckView.svelte";
 
-    let { moduleId = $bindable(), selectDeck, selectedDecks = $bindable() } = $props();
+    import { UserSettings } from "./UserSettingsStore.js";
+
+    let { moduleId = $bindable(), deckKind = $bindable(), selectDeck, selectedDecks = $bindable() } = $props();
 
     let decks = $state(undefined);
-    let deckKind = $state(getURLParam("kind") ?? "public-rw-listed");
     let pageNum = $state(getURLParam("page") ?? 1);
     let pageData = $state();
 
@@ -65,13 +66,30 @@
         pageNum = num;
         fetchDecks();
     }
+
+    function selectDeckKind() {
+        if ($UserSettings.last_new_session_deck_kind === deckKind) return; // nothing to do
+        var data = {
+            last_new_session_deck_kind: deckKind,
+        };
+        axios
+            .put("/api/users/me/settings", data)
+            .then(function () {
+                $UserSettings.last_new_session_deck_kind = deckKind;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+
+        fetchDecks();
+    }
 </script>
 
 <div class="row mb-3">
     <div class="col">
         <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-archive"></i></span>
-            <select id="kind" class="form-select" bind:value={deckKind} onchange={fetchDecks}>
+            <span class="input-group-text" class:bg-info-subtle={deckKind !== 'public-rw-listed'}><i class="bi bi-archive"></i></span>
+            <select id="kind" class="form-select" bind:value={deckKind} onchange={selectDeckKind}>
                 <option value="public-rw-listed" selected={deckKind === 'public-rw-listed'}>Main decks</option>
                 <option value="user" selected={deckKind === 'user'}>Your decks</option>
                 <option value="public" selected={deckKind === 'public'}>User decks</option>
