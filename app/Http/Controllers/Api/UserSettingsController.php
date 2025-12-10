@@ -21,6 +21,8 @@ class UserSettingsController extends Controller
             'is_admin' => $user->is_admin,
             'is_moderator' => $user->is_moderator,
 
+            'add_to_deck_current_module_only' => $user->settings->add_to_deck_current_module_only,
+
             'last_subject_id' => $user->settings->last_subject_id,
             'last_module_id' => $user->settings->last_module_id,
             'last_new_session_deck_kind' => $user->settings->last_new_session_deck_kind,

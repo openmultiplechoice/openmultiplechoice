@@ -54,7 +54,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
     Route::get('modules/byname', [ModuleController::class, 'showByName']);
     Route::resource('modules', ModuleController::class);
 
-    Route::get('decks/withquestionids', [DeckController::class, 'indexWithQuestionIds']);
+    Route::get('decks/with_question_ids', [DeckController::class, 'indexWithQuestionIds']);
     Route::post('decks/{deck}/addquestion', [DeckController::class, 'addQuestionById']);
     Route::post('decks/{deck}/removequestion', [DeckController::class, 'removeQuestionById']);
     Route::resource('decks', DeckController::class);

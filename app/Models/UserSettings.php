@@ -10,6 +10,7 @@ class UserSettings extends Model
     use HasFactory;
 
     protected $fillable = [
+        'add_to_deck_current_module_only',
         'last_subject_id',
         'last_module_id',
         'last_new_session_deck_kind',

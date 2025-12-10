@@ -1,10 +1,16 @@
 <script>
     import { run, preventDefault } from 'svelte/legacy';
 
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
+
+    import { UserSettings } from "./UserSettingsStore.js";
 
     let { questionId, questionAddToDeckIncludedCount = $bindable() } = $props();
 
+    let settingsAddToDeckCurrentModuleOnly = $derived($UserSettings.add_to_deck_current_module_only);
+    let settingsLastModuleId = $derived($UserSettings.last_module_id);
+
+    let decks = $state([]);
     let decksAdded = $state(undefined);
     let decksOther = $state(undefined);
     let deckName = $state('');
@@ -26,32 +32,67 @@
         })
     });
 
+    $effect(() => {
+        axios
+            .put("/api/users/me/settings", {
+                add_to_deck_current_module_only: settingsAddToDeckCurrentModuleOnly
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    });
+
+    $effect(() => {
+        // Whenever `settingsAddToDeckCurrentModuleOnly` changes
+        // and is not undefined, run `updateDecks()` (but don't
+        // track the state in `updateDecks`)
+        if (settingsAddToDeckCurrentModuleOnly !== undefined) {
+            untrack(() => updateDecks());
+        }
+    });
+
     function fetchDecks() {
         axios
-            .get("/api/decks/withquestionids")
+            .get("/api/decks/with_question_ids")
             .then(function (response) {
-                var decks = response.data;
-                decksAdded = [];
-                decksOther = [];
-                decks.forEach((deck) => {
-                    if (deck.questions.some((q) => q.id === questionId)) {
-                        decksAdded = [
-                            ...decksAdded,
-                            { id: deck.id, name: deck.name },
-                        ];
-                    } else {
-                        decksOther = [
-                            ...decksOther,
-                            { id: deck.id, name: deck.name },
-                        ];
-                    }
-                });
-                questionAddToDeckIncludedCount = decksAdded.length;
+                decks = response.data;
+                updateDecks();
             })
             .catch(function (error) {
                 console.log(error);
                 alert(error);
             });
+    }
+
+    function updateDecks() {
+        decksAdded = [];
+        decksOther = [];
+
+        if (decks.length === 0) {
+            return;
+        }
+
+        const decksFiltered = decks.filter((deck) => {
+            // Always list decks that include the question already,
+            // even if not part of the current module
+            if (deck.questions.some((q) => q.id === questionId)) return true;
+
+            if (settingsAddToDeckCurrentModuleOnly) {
+                return deck.module_id === settingsLastModuleId;
+            } else {
+                return true;
+            }
+        });
+
+        decksFiltered.forEach((deck) => {
+            if (deck.questions.some((q) => q.id === questionId)) {
+                decksAdded = [...decksAdded, deck];
+            } else {
+                decksOther = [...decksOther, deck];
+            }
+        });
+
+        questionAddToDeckIncludedCount = decksAdded.length;
     }
 
     function addQuestionToDeck(deckId) {
@@ -60,10 +101,9 @@
                 question_id: questionId,
             })
             .then(function (reponse) {
-                const deck = decksOther.find((d) => d.id === deckId);
-                decksAdded = [...decksAdded, deck];
-                decksOther = decksOther.filter((d) => d.id !== deckId);
-                questionAddToDeckIncludedCount++;
+                const deck = decks.find((d) => d.id === deckId);
+                deck.questions.push({ id: questionId });
+                updateDecks();
             })
             .catch(function (error) {
                 alert(error);
@@ -76,10 +116,9 @@
                 question_id: questionId,
             })
             .then(function (reponse) {
-                const deck = decksAdded.find((d) => d.id === deckId);
-                decksOther = [...decksOther, deck];
-                decksAdded = decksAdded.filter((d) => d.id !== deckId);
-                questionAddToDeckIncludedCount--;
+                const deck = decks.find((d) => d.id === deckId);
+                deck.questions = deck.questions.filter((q) => q.id !== questionId);
+                updateDecks();
             })
             .catch(function (error) {
                 alert(error);
@@ -97,7 +136,8 @@
             })
             .then(function (response) {
                 const deck = response.data;
-                decksOther = [...decksOther, deck];
+                deck.questions = [];
+                decks.push(deck);
                 addQuestionToDeck(deck.id);
                 deckName = '';
             })
@@ -149,14 +189,24 @@
             data-bs-dismiss="offcanvas"
             aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body pb-0">
+    <div class="offcanvas-body py-0">
+        <div class="row sticky-top bg-white">
+            <div class="col">
+                <div class="alert alert-light">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" bind:checked={settingsAddToDeckCurrentModuleOnly}>
+                        <label class="form-check-label" for="flexSwitchCheckDefault">List only decks of current module or with question added</label>
+                    </div>
+                </div>
+            </div>
+        </div>
         {#if decksAdded}
             {#if decksAdded.length + decksOther.length > 10}
                 <input
                     bind:this={filterElement}
                     bind:value={filterText}
                     type="text"
-                    class="form-control mb-3"
+                    class="form-control mt-1 mb-3"
                     placeholder="Filter decks ..."/>
             {/if}
             {#each filteredDecksAdded as deck}
@@ -201,7 +251,7 @@
             </div>
         {/if}
         <hr />
-        <div class="row sticky-bottom bg-white mt-3">
+        <div class="row sticky-bottom bg-white pt-3">
             <div class="col">
                 <p>Create new deck:</p>
                 <div class="mb-2">
