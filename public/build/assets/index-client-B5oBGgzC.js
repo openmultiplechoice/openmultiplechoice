@@ -1,1 +1,0 @@
-import{aj as e,w as f,r as t}from"./render-wDF33Nt9.js";function c(n){throw new Error("https://svelte.dev/e/lifecycle_outside_component")}function r(n){e===null&&c(),f(()=>{const o=t(n);if(typeof o=="function")return o})}function i(n){e===null&&c(),r(()=>()=>t(n))}export{i as a,r as o};
