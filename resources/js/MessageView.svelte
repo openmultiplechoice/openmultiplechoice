@@ -1,9 +1,8 @@
 <script>
-    import { preventDefault } from 'svelte/legacy';
-
     import DOMPurify from "dompurify";
     import { format, parseISO, formatDistance } from "date-fns";
     import { UserSettings } from "./UserSettingsStore.js";
+    import MessageView from "./MessageView.svelte";
 
     let {
         message = $bindable(),
@@ -11,6 +10,7 @@
         addMessage,
         updateMessage,
         questionId = $bindable(),
+        setEditing,
     } = $props();
 
     let userThumb = $derived(message.thumbs.find((entry) => entry.user_id !== undefined) ?? null)
@@ -21,6 +21,7 @@
     var showEditor = $state(false);
     var showEditorReply = $state(false);
     var showLowRated = $state(false);
+    let wasEditing = $state(false);
 
     function toggleEditor() {
         showEditor = !showEditor;
@@ -157,6 +158,15 @@
             !child.is_deleted || hasChildren(child)
         );
     }
+
+    $effect(() => {
+        const currentlyEditing = showEditor || showEditorReply;
+        if (currentlyEditing !== wasEditing) {
+            setEditing(currentlyEditing);
+            wasEditing = currentlyEditing;
+        }
+    });
+
 </script>
 
 {#if !message.is_deleted || hasChildren(message)}
@@ -291,12 +301,13 @@
 
         {#if message.childs}
             {#each message.childs as child}
-                <svelte:self
+                <MessageView
                     message={child}
                     indent={indent + 1}
                     {addMessage}
                     {updateMessage}
                     {questionId}
+                    {setEditing}
                 />
             {/each}
         {/if}

@@ -5,7 +5,9 @@
 
     import { Confetti } from "svelte-confetti"
 
-    import { onMount, tick, untrack } from "svelte";
+    import { onDestroy, onMount, tick, untrack } from "svelte";
+
+    import hotkeys from "hotkeys-js";
 
     import MagicGifView from "./MagicGIFView.svelte";
     import Messages from "./Messages.svelte";
@@ -25,6 +27,7 @@
     var helpUsed = $state(false);
     var magicGIFPath = $state('');
     var confetti = $state(0);
+    let isEditing = $state(false);
 
     const appConfig = document.getElementById("appconfig").dataset;
 
@@ -223,6 +226,19 @@
             .catch(function (error) {
                 alert(error);
             });
+
+        hotkeys('left', 'questions', function (event, handler) {
+            handleBack();
+        });
+        hotkeys('right', 'questions', function (event, handler) {
+            handleNext();
+        });
+        hotkeys.setScope('questions');
+    });
+
+    onDestroy(() => {
+        hotkeys.unbind('left', 'questions');
+        hotkeys.unbind('right', 'questions');
     });
 
     function updateCurrentQuestionData() {
@@ -424,6 +440,29 @@
                 alert(error);
             });
     }
+
+    function handleBack() {
+        var currentQuestionIdx = data.deck.questions.findIndex(q => q.id === currentQuestionId);
+        var next = data.deck.questions[currentQuestionIdx-1];
+        if (!next) {
+            return;
+        }
+        data.session.current_question_id = next.id;
+    }
+
+    function handleNext() {
+        var currentQuestionIdx = data.deck.questions.findIndex(q => q.id === currentQuestionId);
+        var next = data.deck.questions[currentQuestionIdx+1];
+        if (!next) {
+            return;
+        }
+        data.session.current_question_id = next.id;
+    }
+
+    // Watch for editor state changes and update hotkey scope
+    $effect(() => {
+        hotkeys.setScope(isEditing ? 'editing' : 'questions');
+    });
 </script>
 
 {#if data}
@@ -498,7 +537,9 @@
             <SessionQuestionNav
                 bind:data
                 bind:currentQuestionId={data.session.current_question_id}
-                bind:currentQuestionContext />
+                bind:currentQuestionContext
+                {handleBack}
+                {handleNext} />
             {#if currentQuestion}
                 <SessionQuestionView
                     deckId={data.deck.id}
@@ -509,13 +550,15 @@
                     bind:examMode={examMode}
                     bind:settingsShuffleAnswers
                     bind:settingsShowAnswerStats
+                    bind:isEditing
                     {submitAnswer}
                     {deleteAnswer}
                     {updateCurrentQuestionData} />
                 {#if !examMode}
                     <Messages
                         bind:questionId={currentQuestion.id}
-                        bind:questionContext={currentQuestionContext} />
+                        bind:questionContext={currentQuestionContext}
+                        bind:isEditing />
                 {/if}
             {/if}
         </div>

@@ -9,12 +9,13 @@
         EMPTY: "empty"
     };
 
-    let { questionId = $bindable(), questionContext } = $props();
+    let { questionId = $bindable(), questionContext, isEditing = $bindable() } = $props();
 
     var showEditor = $state(false);
     var messages = $state([]);
     var nestedMessages = $state([]);
     var loadingStatus = $state(Status.LOADING);
+    let editingCount = $state(0);
 
     run(() => {
         questionId,
@@ -190,13 +191,28 @@
 
     function toggleEditor() {
         showEditor = !showEditor;
+        setEditing(showEditor);
     }
+
+    function setEditing(editing) {
+        editingCount += editing ? 1 : -1;
+    }
+
+    $effect(() => {
+        isEditing = editingCount > 0;
+    });
+
 </script>
 
 {#if questionContext.isAnswered}
     <div class="mt-4 mb-3 px-2 py-2 border rounded-3 shadow-sm bg-white">
         {#each nestedMessages as message, i (message.id)}
-            <MessageView bind:message={nestedMessages[i]} bind:questionId indent={0} {addMessage} {updateMessage} />
+            <MessageView
+                bind:message={nestedMessages[i]}
+                bind:questionId indent={0}
+                {addMessage}
+                {updateMessage}
+                {setEditing} />
         {:else}
             <div class="mb-3 d-flex justify-content-center">
                 {#if loadingStatus === Status.LOADING}
