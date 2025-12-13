@@ -22,7 +22,8 @@
         examMode = $bindable(),
         updateCurrentQuestionData,
         settingsShuffleAnswers = $bindable(),
-        settingsShowAnswerStats = $bindable()
+        settingsShowAnswerStats = $bindable(),
+        isEditing = $bindable(),
     } = $props();
 
     var showEditor = $state(false);
@@ -64,6 +65,10 @@
                 question.answers = _.shuffle(question.answers);
             }
         })();
+    });
+
+    $effect(() => {
+        isEditing = showEditor;
     });
 
     // Toogle none -> red -> yellow -> green -> none

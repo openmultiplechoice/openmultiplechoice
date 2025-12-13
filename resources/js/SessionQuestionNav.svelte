@@ -1,42 +1,14 @@
 <script>
     import { preventDefault } from 'svelte/legacy';
 
-    import hotkeys from 'hotkeys-js';
-    import { onMount } from 'svelte';
+    let {
+        data = $bindable(),
+        currentQuestionId,
+        currentQuestionContext,
+        handleBack,
+        handleNext,
+    } = $props();
 
-    let { data = $bindable(), currentQuestionId, currentQuestionContext } = $props();
-
-    onMount(() => {
-        hotkeys('left', 'questions', function (event, handler) {
-            handleBack();
-        });
-        hotkeys('right', 'questions', function (event, handler) {
-            handleNext();
-        });
-        hotkeys.setScope('questions');
-    });
-
-    function questionIndex(id) {
-        return data.deck.questions.findIndex(element => element.id === id);
-    }
-
-    function handleBack() {
-        var currentQuestionIdx = questionIndex(currentQuestionId);
-        var next = data.deck.questions[currentQuestionIdx-1];
-        if (!next) {
-            return;
-        }
-        data.session.current_question_id = next.id;
-    }
-
-    function handleNext() {
-        var currentQuestionIdx = questionIndex(currentQuestionId);
-        var next = data.deck.questions[currentQuestionIdx+1];
-        if (!next) {
-            return;
-        }
-        data.session.current_question_id = next.id;
-    }
 </script>
 
 <div class="row mb-3 pt-1 pb-1 sticky-top bg-white">
