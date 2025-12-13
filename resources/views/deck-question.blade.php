@@ -30,15 +30,18 @@
 
 <div class="row">
     <div class="col-lg-3 d-none d-lg-block">
-        <div class="list-group text-small">
-            <a href="{{ url('decks', $deck->id) }}"
-                class="list-group-item list-group-item-action"
-                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>Overview</small></a>
-            @foreach ($questions as $q)
-                <a href="{{ url('decks/'. $deck->id .'/questions/'. $q->id) }}"
-                    class="list-group-item list-group-item-action @if ($q->id == $question->id) list-group-item-dark @else list-group-item-light @endif"
-                    style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>@if ($q->text) {{ htmlspecialchars(strip_tags($q->text)) }} @else Question Nr. {{ $loop->index + 1 }} @endif</small></a>
-            @endforeach
+        <div class="overflow-scroll" style="max-height: 75vh;">
+            <div class="list-group text-small">
+                <a href="{{ url('decks', $deck->id) }}"
+                    class="list-group-item list-group-item-action"
+                    style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>Overview</small></a>
+                @foreach ($questions as $q)
+                    <a href="{{ url('decks/'. $deck->id .'/questions/'. $q->id) }}"
+                        id="questionLink{{ $q->id }}"
+                        class="list-group-item list-group-item-action @if ($q->id == $question->id) list-group-item-dark @else list-group-item-light @endif"
+                        style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><small>@if ($q->text) {{ htmlspecialchars(strip_tags($q->text)) }} @else Question Nr. {{ $loop->index + 1 }} @endif</small></a>
+                @endforeach
+            </div>
         </div>
     </div>
     <div class="col-lg-9 col-xl-8 col-xxl-6 col-md-12">
@@ -70,5 +73,15 @@
         @vite(['resources/js/Messages.js'])
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let currentQuestion = document.getElementById('questionLink{{ $question->id }}');
+        if (currentQuestion) {
+            // Use scrollToCenter from utils.js to scroll the current question into view
+            scrollToCenter(currentQuestion, 'instant');
+        }
+    });
+</script>
 
 @endsection
