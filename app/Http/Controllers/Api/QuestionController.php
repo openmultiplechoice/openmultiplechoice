@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -32,6 +33,13 @@ class QuestionController extends Controller
     public function show($id)
     {
         $question = Question::with('answers', 'images', 'case')->find($id);
+
+        // Get count of personal / bookmarked decks of the current user that include this question
+        $question->add_to_deck_included_count = Question::getAddToDeckCountForUser(
+            [$question->id],
+            Auth::user()
+        )[$question->id] ?? 0;
+
         return response()->json($question);
     }
 
