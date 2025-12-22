@@ -35,7 +35,7 @@
     });
 </script>
 
-<div class="overflow-scroll" style="max-height: 75vh;">
+<div class="overflow-scroll sticky-top pt-1" style="max-height: 80vh;">
     <ul class="list-group">
         {#each data.deck.questions as question, index}
             <!-- svelte-ignore a11y_click_events_have_key_events -->
