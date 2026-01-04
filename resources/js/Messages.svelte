@@ -2,6 +2,8 @@
     import { run, preventDefault } from 'svelte/legacy';
 
     import debounce from "lodash/debounce";
+    import hotkeys from "hotkeys-js";
+
     import MessageView from "./MessageView.svelte";
 
     const Status = {
@@ -190,6 +192,11 @@
 
     function toggleEditor() {
         showEditor = !showEditor;
+        if (showEditor) {
+            hotkeys.setScope('editor');
+        } else {
+            hotkeys.setScope('questions');
+        }
     }
 </script>
 
