@@ -1,9 +1,10 @@
 <script>
-    import { preventDefault } from 'svelte/legacy';
-
     import DOMPurify from "dompurify";
     import { format, parseISO, formatDistance } from "date-fns";
+    import hotkeys from "hotkeys-js";
+
     import { UserSettings } from "./UserSettingsStore.js";
+    import MessageView from "./MessageView.svelte";
 
     let {
         message = $bindable(),
@@ -24,10 +25,20 @@
 
     function toggleEditor() {
         showEditor = !showEditor;
+        if (showEditor) {
+            hotkeys.setScope('editor');
+        } else {
+            hotkeys.setScope('questions');
+        }
     }
 
     function toggleEditorReply() {
         showEditorReply = !showEditorReply;
+        if (showEditorReply) {
+            hotkeys.setScope('editor');
+        } else {
+            hotkeys.setScope('questions');
+        }
     }
 
     function toggleLowRated() {
@@ -291,7 +302,7 @@
 
         {#if message.childs}
             {#each message.childs as child}
-                <svelte:self
+                <MessageView
                     message={child}
                     indent={indent + 1}
                     {addMessage}

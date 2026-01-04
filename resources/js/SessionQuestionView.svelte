@@ -3,6 +3,7 @@
 
     import DOMPurify from "dompurify";
     import _ from 'lodash';
+    import hotkeys from "hotkeys-js";
 
     import SessionAnswerView from "./SessionAnswerView.svelte";
     import SessionCardAnswerView from "./SessionCardAnswerView.svelte";
@@ -88,6 +89,7 @@
     function toggleEditor() {
         const doShow = !showEditor;
         if (doShow) {
+            hotkeys.setScope('editor');
             if (updateCurrentQuestionData) {
                 // First, update the question data to the latest
                 // to avoid overwriting changes made by other users,
@@ -99,6 +101,7 @@
                 showEditor = doShow;
             }
         } else {
+            hotkeys.setScope('questions');
             // Close the editor
             showEditor = doShow;
         }
