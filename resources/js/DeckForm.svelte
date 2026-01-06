@@ -23,6 +23,8 @@
         ? data.cases.find((c) => c.id === data.current_case_id)
         : null);
 
+    let stickyTopOffset = $state(0);
+
     onMount(() => {
         hotkeys.filter = function() {
             // Return true to allow the hotkey to trigger even in form elements
@@ -161,7 +163,7 @@
     </div>
 </div>
 
-<div class="sticky-top bg-white mb-3" style="z-index: 20;">
+<div class="sticky-top bg-white" style="z-index: 20;" bind:clientHeight={stickyTopOffset}>
     <div class="row">
         <div class="col d-grid d-sm-block gap-2 py-3">
             <button type="button" class="btn btn-sm btn-primary" title="Add a new MC question (Shortcut: Alt+Q)"
@@ -181,7 +183,9 @@
 
 <div class="row">
     <div class="col-md-4">
-        <DeckFormIndex bind:data />
+        <DeckFormIndex
+            bind:data
+            stickyTopOffset={stickyTopOffset} />
     </div>
     <div class="col-md-8">
         {#if currentQuestion}

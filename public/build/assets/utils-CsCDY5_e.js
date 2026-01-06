@@ -1,0 +1,1 @@
+function s(t,c="smooth"){if(!t)return;const o=t.closest(".overflow-scroll");if(!o)return;const n=t.getBoundingClientRect(),e=o.getBoundingClientRect(),r=o.scrollTop+n.top-e.top-(o.clientHeight-t.offsetHeight)/2;o.scrollTo({top:Math.max(0,r),behavior:c})}export{s};

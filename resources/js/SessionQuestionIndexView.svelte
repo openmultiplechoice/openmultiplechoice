@@ -1,26 +1,16 @@
 <script>
-    import { run } from 'svelte/legacy';
-
     import DOMPurify from "dompurify";
+    import { scrollToCenter } from "./lib/utils.js";
 
     let { data = $bindable(), examMode } = $props();
 
     let currentQuestionId = $derived(data.session.current_question_id);
 
-    run(() => {
-        currentQuestionId,
-            (() => {
-                var e = document.getElementById(
-                    "question" + currentQuestionId
-                );
-                if (e) {
-                    e.scrollIntoView({
-                        behavior: "smooth",
-                        block: "nearest",
-                        inline: "center",
-                    });
-                }
-            })();
+    // Scroll to current question when it changes
+    $effect(() => {
+        if (!currentQuestionId) return;
+        let e = document.getElementById("questionLink" + currentQuestionId);
+        scrollToCenter(e);
     });
 
     let answerChoiceIndicator = $derived(function (question) {
@@ -45,7 +35,7 @@
     });
 </script>
 
-<div class="overflow-scroll" style="max-height: 85vh;">
+<div class="overflow-scroll sticky-top pt-1" style="max-height: 80vh;">
     <ul class="list-group">
         {#each data.deck.questions as question, index}
             <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -56,7 +46,7 @@
                 data.session.current_question_id
                     ? 'list-group-item-dark'
                     : 'list-group-item-light'}"
-                id="question{question.id}">
+                id="questionLink{question.id}">
                 <small>
                     {@html answerChoiceIndicator(question)}
                     {#if question.text}
