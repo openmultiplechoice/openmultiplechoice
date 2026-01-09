@@ -43,12 +43,11 @@
       "_hotkeys-js-Bzouew-W.js"
     ]
   },
-  "_SessionProgressBar-D8CE7ggD.js": {
-    "file": "assets/SessionProgressBar-D8CE7ggD.js",
+  "_SessionProgressBar-T7jvZJwZ.js": {
+    "file": "assets/SessionProgressBar-T7jvZJwZ.js",
     "name": "SessionProgressBar",
     "imports": [
       "_render-COO8opCt.js",
-      "_attributes-DYipTw7O.js",
       "_style-BtOSwUPa.js"
     ]
   },
@@ -453,7 +452,7 @@
     ]
   },
   "resources/js/IndexSessionView.js": {
-    "file": "assets/IndexSessionView-DtQnuNfh.js",
+    "file": "assets/IndexSessionView-BAPScyQR.js",
     "name": "IndexSessionView",
     "src": "resources/js/IndexSessionView.js",
     "isEntry": true,
@@ -464,7 +463,7 @@
       "_event-modifiers-BGh6mCkd.js",
       "_attributes-DYipTw7O.js",
       "_class-BfJg_ovI.js",
-      "_SessionProgressBar-D8CE7ggD.js",
+      "_SessionProgressBar-T7jvZJwZ.js",
       "_StatsHelper-B91isISU.js",
       "_formatDistance-C_vtkNGs.js",
       "_parseISO-NWqeT_ov.js",
@@ -568,7 +567,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-3np3p2U_.js",
+    "file": "assets/SessionView-M1oahEuR.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -586,7 +585,7 @@
       "_Messages-BsjfJ_Ya.js",
       "_this-DYJjSBKP.js",
       "_auto-sRkgK8jz.js",
-      "_SessionProgressBar-D8CE7ggD.js",
+      "_SessionProgressBar-T7jvZJwZ.js",
       "_html-DHpoEShY.js",
       "_utils-CsCDY5_e.js",
       "_SessionQuestionView-DObiluwU.js",

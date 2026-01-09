@@ -1,10 +1,8 @@
 <script>
     let { progressPercentage = $bindable() } = $props();
-
-    let title = $derived(JSON.stringify(progressPercentage, null, 2));
 </script>
 
-<div class="progress" style="height: 20px;" title="{title}">
+<div class="progress" style="height: 20px;">
     <div
         class="progress-bar bg-success fw-bold"
         role="progressbar"
