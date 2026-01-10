@@ -4,8 +4,6 @@
 
 ![](https://github.com/openmultiplechoice/openmultiplechoice/actions/workflows/ci.yml/badge.svg?branch=master)
 
-Status: alpha
-
 OpenMultipleChoice is an open source web application for multiple choice
 question ([MCQ](https://en.wikipedia.org/wiki/Multiple_choice)) and flashcard
 decks. Built for medical students, OMC is for anyone who learns from decks of
@@ -53,7 +51,7 @@ mail@openmultiplechoice.de
 
 ## License
 
-Copyright (C) 2020 The OpenMultipleChoice project and [contributors](https://github.com/openmultiplechoice/openmultiplechoice/graphs/contributors).
+Copyright (C) The OpenMultipleChoice project and [contributors](https://github.com/openmultiplechoice/openmultiplechoice/graphs/contributors).
 
 OpenMultipleChoice is free to use under the terms of AGPL v3:
 
