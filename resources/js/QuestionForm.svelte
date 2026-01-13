@@ -409,12 +409,16 @@
         <div class="mb-3 p-3 bg-light rounded">
             <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="checkInvalidQuestion" bind:checked={question.is_invalid} onclick={preventDefault(toggleQuestionValid)}>
-                <label class="form-check-label" for="checkInvalidQuestion"><i class="bi bi-cone-striped"></i> <strong>Invalid question</strong> - Is the answer unknown or disputed? Invalid questions remain in deck but are not counted into results.</label>
+                <label class="form-check-label" for="checkInvalidQuestion">
+                    <small><i class="bi bi-cone-striped"></i> <strong>Invalid question</strong> - Is the answer unknown or disputed? Invalid questions remain in deck but are not counted into results.</small>
+                </label>
             </div>
 
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="checkNeedsReview" bind:checked={question.needs_review} onclick={preventDefault(toggleQuestionNeedsReview)}>
-                <label class="form-check-label" for="checkNeedsReview"><i class="bi bi-eraser-fill"></i> <strong>Needs review</strong> - Does this question need to be reviewed and improved? Questions marked for review remain in deck and are counted into results.</label>
+                <label class="form-check-label" for="checkNeedsReview">
+                    <small><i class="bi bi-eraser-fill"></i> <strong>Needs review</strong> - Does the question need review? Questions marked for review remain in deck and are counted into results.</small>
+                </label>
             </div>
         </div>
     {/key}
