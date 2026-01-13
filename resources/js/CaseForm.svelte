@@ -21,18 +21,6 @@
                 savingStatus = '<p class="text-end">Saving ...</p>';
                 handleChange();
             });
-
-        editor.toolbarElement.style.display = "none";
-
-        editor.addEventListener("trix-focus", function(event) {
-            event.target.toolbarElement.style.display = "block";
-        });
-        editor.addEventListener("trix-blur", function(event) {
-            // Don't hide the toolbar if we've unfocused to focus on the link dialog
-            if (!event.target.toolbarElement.contains(document.activeElement)) {
-                event.target.toolbarElement.style.display = "none";
-            }
-        });
     };
 
     var debounced;
