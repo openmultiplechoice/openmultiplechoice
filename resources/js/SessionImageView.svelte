@@ -66,7 +66,7 @@
 {:else}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div onclick={fullscreenToggle} class="img-fullscreen">
-        <p class="bg-white text-end">
+        <p class="bg-body text-end">
             <button
                 onclick={preventDefault(() => (fullscreen = !fullscreen))}
                 type="button"
@@ -89,6 +89,6 @@
         width: 100%;
         height: 100%;
         z-index: 2000;
-        background-color: rgba(255, 255, 255, 0.95);
+        background-color: color-mix(in srgb, var(--bs-body-bg) 95%, transparent);
     }
 </style>

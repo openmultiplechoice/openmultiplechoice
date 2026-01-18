@@ -37,7 +37,7 @@
             <h4><a class="text-reset text-decoration-none" href="{{ url('info') }}">Info</a></h4>
             @foreach ($pinnedInfo as $entry)
                 <div class="alert alert-light card-highlight" role="alert">
-                    <h6 class="alert-heading"><a class="link-dark alert-link stretched-link text-decoration-none" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
+                    <h6 class="alert-heading"><a class="link-body-emphasis alert-link stretched-link text-decoration-none" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
                     <p>
                         <small>
                             <span class="font-monospace">

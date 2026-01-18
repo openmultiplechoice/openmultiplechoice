@@ -1,5 +1,14 @@
+@php
+    $themeMode = Auth::check() ? (Auth::user()->settings?->theme_mode ?? 'auto') : 'auto';
+    $themeMode = in_array($themeMode, ['auto', 'light', 'dark'], true) ? $themeMode : 'auto';
+    $initialBsTheme = in_array($themeMode, ['light', 'dark'], true) ? $themeMode : null;
+@endphp
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    data-omc-theme-mode="{{ $themeMode }}"
+    @if ($initialBsTheme) data-bs-theme="{{ $initialBsTheme }}" @endif
+>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8">
@@ -11,10 +20,13 @@
     @vite(['node_modules/bootstrap/dist/js/bootstrap.esm.js'])
     @vite(['node_modules/trix/dist/trix.esm.js'])
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
+    @auth
+        @vite(['resources/js/ThemeModeButton.js'])
+    @endauth
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-3">
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm mb-3">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ config('app.url') }}">{{ config('app.name') }}</a>
 
@@ -80,6 +92,15 @@
                     </li>
                 @endif
             </ul>
+
+            <div class="ms-auto d-flex align-items-center gap-3">
+                @auth
+                    <div
+                        id="ThemeModeButton"
+                        data-theme-mode="{{ $themeMode }}"
+                    ></div>
+                @endauth
+            </div>
         </div>
     </div>
 </nav>

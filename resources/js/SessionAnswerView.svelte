@@ -51,13 +51,13 @@
 <div
     id="answer{answer.id}"
     style="min-height: 3.6rem; box-shadow: 4px 4px rgba(0,0,0,.2);"
-    class="row border border-3 rounded m-1 py-2 d-flex align-items-center {answerStatusIndicator}"
+    class="row rounded m-1 py-2 d-flex align-items-center {answerStatusIndicator}"
     class:bg-secondary-subtle={
         examMode ||
         (!questionIsAnswered && !answerContext.isSelectedAnswer && !answerContext.isSubmittedAnswer) ||
         (questionIsAnswered && !answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer)
     }
-    class:text-dark={
+    class:text-body={
         examMode ||
         (!questionIsAnswered && !answerContext.isSelectedAnswer && !answerContext.isSubmittedAnswer) ||
         (questionIsAnswered && !answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer)
@@ -96,7 +96,7 @@
         <div class="d-flex align-items-center justify-content-end">
             {#if questionIsAnswered && !examMode && settingsShowAnswerStats && answer.answer_percentage != null}
                 <span
-                    class:text-dark={!answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer}
+                    class:text-body={!answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer}
                     class="badge" title="Percentage of users who chose this answer">{answer.answer_percentage}%</span>
             {/if}
             {#if !questionIsAnswered && !answerContext.isSelectedAnswer}

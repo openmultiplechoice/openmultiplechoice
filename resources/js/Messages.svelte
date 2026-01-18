@@ -216,7 +216,7 @@
 </script>
 
 {#if questionContext.isAnswered}
-    <div class="mt-4 mb-3 px-2 py-2 border rounded-3 shadow-sm bg-white">
+    <div class="mt-4 mb-3 px-2 py-2 border rounded-3 shadow-sm bg-body">
         {#each nestedMessages as message, i (message.id)}
             <MessageView bind:message={nestedMessages[i]} bind:questionId indent={0} {addMessage} {updateMessage} />
         {:else}

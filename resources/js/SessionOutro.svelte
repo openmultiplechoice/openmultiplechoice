@@ -81,7 +81,7 @@
         <canvas bind:this={canvas}></canvas>
     </div>
     <div class="col-md">
-        <p class="mt-3 text-dark">
+        <p class="mt-3 text-body">
             <span class="fs-4 font-monospace">{progressPercentage.correct}%</span> correct
         </p>
 

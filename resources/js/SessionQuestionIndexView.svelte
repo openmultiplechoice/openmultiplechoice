@@ -18,10 +18,10 @@
             (e) => e.question_id === question.id
         );
         if (!answerChoice) {
-            return '<span class="text-dark fw-bold">&rightarrow;</span>';
+            return '<span class="text-body fw-bold">&rightarrow;</span>';
         }
         if (examMode) {
-            return '<span class="text-dark fw-bold">&check;</span>';
+            return '<span class="text-body fw-bold">&check;</span>';
         }
         if (answerChoice.is_correct) {
             if (answerChoice.help_used) {
