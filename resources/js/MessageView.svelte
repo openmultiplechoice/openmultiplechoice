@@ -172,17 +172,17 @@
 
 {#if !message.is_deleted || hasChildren(message)}
     <div class="border-start border-2" class:ms-2={indent > 0} class:mb-3={!indent}>
-        {#if hasLowRating && !showLowRated}
-            <div class="p-2">
-                <button class="btn btn-link btn-sm text-muted p-0" onclick={toggleLowRated}>
-                    <i class="bi bi-eye-slash me-1"></i>Comment hidden due to low rating. Click to show.
-                </button>
-            </div>
-        {:else if message.is_deleted}
+        {#if message.is_deleted}
             <div class="p-2">
                 <span class="text-muted small">
                     <i class="bi bi-trash me-1"></i>This comment has been deleted.
                 </span>
+            </div>
+        {:else if hasLowRating && !showLowRated}
+            <div class="p-2">
+                <button class="btn btn-link btn-sm text-muted p-0" onclick={toggleLowRated}>
+                    <i class="bi bi-eye-slash me-1"></i>Comment hidden due to low rating. Click to show.
+                </button>
             </div>
         {:else}
             <div class="d-flex gap-1 mb-2 message-content {hasHighRating ? 'bg-light rounded-end-3 shadow-sm py-2 ps-1 pe-2 ms-1' : 'py-1 rounded-end-3'}">
