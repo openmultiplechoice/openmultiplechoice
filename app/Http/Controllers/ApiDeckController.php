@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Deck;
 use App\Models\Question;
 
-class DeckController extends Controller
+class ApiDeckController extends Controller
 {
     private const PAGE_SIZE = 50;
 

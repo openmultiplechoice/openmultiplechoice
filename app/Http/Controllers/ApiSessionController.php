@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +10,7 @@ use App\Models\Module;
 use App\Models\Session;
 use App\Models\Question;
 
-class SessionController extends Controller
+class ApiSessionController extends Controller
 {
     public function index(Request $request)
     {

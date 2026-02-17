@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Subject;
 
-class SubjectController extends Controller
+class ApiSubjectController extends Controller
 {
     public function index()
     {

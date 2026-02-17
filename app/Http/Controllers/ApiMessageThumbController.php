@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\Controller;
 
 use App\Models\Message;
 use App\Models\Thumb;
 
-class MessageThumbController extends Controller
+class ApiMessageThumbController extends Controller
 {
     /**
      * Store a new thumb for the specified message.

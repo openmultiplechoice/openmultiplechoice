@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\UserSettings;
 
-class UserSettingsController extends Controller
+class ApiUserSettingsController extends Controller
 {
     public function show()
     {

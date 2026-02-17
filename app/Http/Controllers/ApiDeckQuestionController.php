@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +11,7 @@ use App\Models\Deck;
 use App\Models\Question;
 use App\Models\Answer;
 
-class DeckQuestionController extends Controller
+class ApiDeckQuestionController extends Controller
 {
     public function index(Deck $deck)
     {

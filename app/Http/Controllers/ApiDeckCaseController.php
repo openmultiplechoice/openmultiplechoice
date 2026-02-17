@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Deck;
 use App\Models\QuestionCase;
 
-class DeckCaseController extends Controller
+class ApiDeckCaseController extends Controller
 {
     public function destroy(Deck $deck, QuestionCase $case)
     {

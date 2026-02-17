@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\QuestionCase;
 
-class CaseController extends Controller
+class ApiCaseController extends Controller
 {
     public function store(Request $request)
     {

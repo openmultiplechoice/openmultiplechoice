@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Models\User;
 
-class UserController extends Controller
+class ApiUserController extends Controller
 {
     public function store(Request $request)
     {

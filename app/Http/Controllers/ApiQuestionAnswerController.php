@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use App\Models\Answer;
 use App\Models\Question;
 
-class QuestionAnswerController extends Controller
+class ApiQuestionAnswerController extends Controller
 {
     public function store(Request $request, Question $question)
     {

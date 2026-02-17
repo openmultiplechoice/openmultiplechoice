@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Message;
 use App\Models\Question;
 
-class QuestionMessageController extends Controller
+class ApiQuestionMessageController extends Controller
 {
     public function index(Question $question)
     {

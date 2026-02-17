@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\AnswerChoice;
 use App\Models\Session;
 
-class AnswerChoiceController extends Controller
+class ApiAnswerChoiceController extends Controller
 {
     public function store(Request $request, Session $session)
     {
