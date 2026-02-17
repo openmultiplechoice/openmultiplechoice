@@ -11,9 +11,6 @@ use App\Models\MagicGif;
 
 class MagicGifController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         if (!$request->user()->is_admin && !$request->user()->is_moderator) {
@@ -23,9 +20,6 @@ class MagicGifController extends Controller
         return view('magic-gifs', ['gifs' => $gifs]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         if (!$request->user()->is_admin && !$request->user()->is_moderator) {
@@ -48,20 +42,9 @@ class MagicGifController extends Controller
         return back()->with('msg-success', 'GIF added. There will be magic!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Request $request, string $id)
     {
         $gif = MagicGif::findOrFail($id);
         return response()->file(Storage::path($gif->path));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

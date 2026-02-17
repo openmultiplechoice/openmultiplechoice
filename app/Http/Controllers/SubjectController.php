@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $subjects = Subject::orderBy('name')->get();
@@ -19,12 +14,6 @@ class SubjectController extends Controller
         return view('subjects', ['subjects' => $subjects]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if (!$request->user()->is_admin && !$request->user()->is_moderator) {
@@ -40,12 +29,6 @@ class SubjectController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
     public function show(Subject $subject)
     {
         $modules = $subject->modules->sortBy('name');
@@ -56,13 +39,6 @@ class SubjectController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Subject $subject)
     {
         if (!$request->user()->is_admin && !$request->user()->is_moderator) {
