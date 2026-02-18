@@ -26,13 +26,15 @@ class ModuleController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        abort_if(!$request->subject_id, 400);
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+            'subject_id' => 'required|integer|exists:subjects,id',
+        ]);
 
-        $subject = Subject::find($request->subject_id);
-        abort_if(!$subject, 400);
+        $subject = Subject::findOrFail($validated['subject_id']);
 
         $module = new Module();
-        $module->fill($request->all());
+        $module->fill($validated);
         $module->save();
 
         $subject->modules()->save($module);
@@ -71,12 +73,14 @@ class ModuleController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        abort_if(!$request->subject_id, 400);
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+            'subject_id' => 'required|integer|exists:subjects,id',
+        ]);
 
-        $subject = Subject::find($request->subject_id);
-        abort_if(!$subject, 400);
+        $subject = Subject::findOrFail($validated['subject_id']);
 
-        $module->fill($request->all());
+        $module->fill($validated);
         $module->save();
 
         $subject->modules()->save($module);

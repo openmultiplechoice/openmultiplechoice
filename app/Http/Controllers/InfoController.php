@@ -30,9 +30,14 @@ class InfoController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        $validated = $request->validate([
+            'title' => 'required|string|max:200',
+            'text' => 'required|string',
+            'is_pinned' => 'nullable|boolean',
+        ]);
+
         $newEntry = new Info();
-        $newEntry->fill($request->all());
-        $newEntry->is_pinned = !!$request->input('is_pinned', false);
+        $newEntry->fill($validated);
         $newEntry->save();
 
         return redirect()->route('show.info', [
@@ -60,9 +65,13 @@ class InfoController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $info->update($request->all());
-        $info->is_pinned = !!$request->input('is_pinned', false);
-        $info->save();
+        $validated = $request->validate([
+            'title' => 'sometimes|required|string|max:200',
+            'text' => 'sometimes|required|string',
+            'is_pinned' => 'nullable|boolean',
+        ]);
+
+        $info->update($validated);
 
         return redirect()->route('show.info', [
             'info' => $info->id,

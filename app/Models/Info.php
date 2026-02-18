@@ -9,7 +9,7 @@ class Info extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'text'];
+    protected $fillable = ['title', 'text', 'is_pinned'];
 
     protected $table = 'info';
 }

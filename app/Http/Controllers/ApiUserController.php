@@ -13,8 +13,18 @@ class ApiUserController extends Controller
     {
         abort_unless(Auth::user()->is_admin, 403);
 
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:users,name',
+            'email' => 'required|email|max:255|unique:users,email',
+            'public_name' => 'nullable|string|max:255|unique:users,public_name',
+            'is_admin' => 'nullable|boolean',
+            'is_moderator' => 'nullable|boolean',
+            'is_enabled' => 'nullable|boolean',
+            'legacy_user_id' => 'nullable|integer',
+        ]);
+
         $user = new User();
-        $user->fill($request->all());
+        $user->fill($validated);
         $user->save();
 
         return response()->json($user);

@@ -14,9 +14,15 @@ class ApiMessageController extends Controller
     {
         abort_unless(Auth::user()->is_admin, 403);
 
-        $message = new Message();
+        $validated = $request->validate([
+            'text' => 'nullable|string',
+            'question_id' => 'required|integer|exists:questions,id',
+            'is_anonymous' => 'nullable|boolean',
+            'parent_message_id' => 'nullable|integer|exists:messages,id',
+        ]);
 
-        $message->fill($request->all());
+        $message = new Message();
+        $message->fill($validated);
         $message->save();
 
         return response()->json($message);
@@ -27,7 +33,12 @@ class ApiMessageController extends Controller
         abort_if($message->author_id != Auth::id(), 403, 'You are not allowed to update this message.');
         abort_if($message->is_deleted, 400, 'You cannot edit a deleted message.');
 
-        $message->fill($request->all());
+        $validated = $request->validate([
+            'text' => 'sometimes|nullable|string',
+            'is_anonymous' => 'sometimes|boolean',
+        ]);
+
+        $message->fill($validated);
         if ($message->author_id != Auth::id() && !$request->user()->is_admin) {
             abort(403, 'Unauthorized');
         }

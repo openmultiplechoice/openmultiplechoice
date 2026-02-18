@@ -58,8 +58,14 @@ class ApiQuestionMessageController extends Controller
 
     public function store(Request $request, Question $question)
     {
+        $validated = $request->validate([
+            'text' => 'required|string',
+            'is_anonymous' => 'nullable|boolean',
+            'parent_message_id' => 'nullable|integer|exists:messages,id',
+        ]);
+
         $message = new Message();
-        $message->fill($request->all());
+        $message->fill($validated);
         $message->question_id = $question->id;
         $message->author_id = Auth::id();
 

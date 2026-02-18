@@ -20,7 +20,8 @@
                 <trix-editor input="text"></trix-editor>
             </div>
             <div class="mb-2">
-                <input type="checkbox" class="form-check-input" id="is_pinned" name="is_pinned" @isset($info) {{ $info->is_pinned ? 'checked' : '' }} @endisset>
+                <input type="hidden" name="is_pinned" value="0">
+                <input type="checkbox" class="form-check-input" id="is_pinned" name="is_pinned" value="1" {{ isset($info) && $info->is_pinned ? 'checked' : '' }}>
                 <label for="is_pinned" class="form-label">Pin it <i class="bi bi-pin-angle"></i></label>
             </div>
             <button class="btn btn-sm btn-primary" type="submit">Save</button>

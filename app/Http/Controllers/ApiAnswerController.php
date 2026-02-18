@@ -11,10 +11,15 @@ class ApiAnswerController extends Controller
 {
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'text' => 'nullable|string|max:4000',
+            'hint' => 'nullable|string|max:2000',
+            'question_id' => 'required|integer|exists:questions,id',
+        ]);
+
         $answer = new Answer();
-
-        $answer->fill($request->all());
-
+        $answer->fill($validated);
+        $answer->question_id = $validated['question_id'];
         $answer->save();
 
         return response()->json($answer);
@@ -22,7 +27,12 @@ class ApiAnswerController extends Controller
 
     public function update(Request $request, Answer $answer)
     {
-        $answer->fill($request->all());
+        $validated = $request->validate([
+            'text' => 'sometimes|nullable|string|max:4000',
+            'hint' => 'sometimes|nullable|string|max:2000',
+        ]);
+
+        $answer->fill($validated);
         $answer->save();
 
         return response()->json($answer);

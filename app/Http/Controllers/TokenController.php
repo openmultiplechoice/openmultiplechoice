@@ -21,7 +21,12 @@ class TokenController extends Controller
         if (!$request->user()->is_admin) {
             return redirect()->route('index');
         }
-        $token = $request->user()->createToken($request->name);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $token = $request->user()->createToken($validated['name']);
         $request->session()->flash('msg-success', 'Your token: '.$token->plainTextToken);
         return redirect()->route('index.tokens');
     }

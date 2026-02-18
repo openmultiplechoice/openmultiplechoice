@@ -114,32 +114,39 @@ class ApiDeckController extends Controller
 
     public function store(Request $request)
     {
-        abort_if($request->access == "public-rw-listed" && !Auth::user()->is_admin, 403);
+        $validated = $request->validate([
+            'name' => 'nullable|string|max:500',
+            'exam_at' => 'nullable|date',
+            'module_id' => 'nullable|integer|exists:modules,id',
+            'access' => 'nullable|string|in:private,public-ro,public-rw,public-rw-listed',
+            'question_ids' => 'nullable|array',
+            'question_ids.*' => 'integer|exists:questions,id',
+        ]);
+
+        abort_if(($validated['access'] ?? null) == "public-rw-listed" && !Auth::user()->is_admin, 403);
 
         $deck = new Deck();
 
         $user = Auth::user();
 
-        if ($request->name) {
-            $deck->name = $request->name;
+        if (!empty($validated['name'])) {
+            $deck->name = $validated['name'];
         } else {
             $now = date('Y-m-d H:i:s');
             $deck->name = 'New deck created at '. $now;
         }
 
-        $deck->exam_at = $request->exam_at;
-        $deck->module_id = $request->module_id;
+        $deck->exam_at = $validated['exam_at'] ?? null;
+        $deck->module_id = $validated['module_id'] ?? null;
         $deck->user_id = $user->id;
 
-        $deck->access = $request->input('access', 'private');
+        $deck->access = $validated['access'] ?? 'private';
 
         $deck->save();
 
-        // If `$request->question_ids` is set, we create
-        // a "super deck" that contains all questions
-        if ($request->question_ids) {
-            // Attach the questions to the new super deck
-            $deck->questions()->attach($request->question_ids);
+        // If question_ids is set, we create a "super deck" that contains all questions
+        if (!empty($validated['question_ids'])) {
+            $deck->questions()->attach($validated['question_ids']);
         }
 
         return response()->json($deck);
@@ -147,27 +154,36 @@ class ApiDeckController extends Controller
 
     public function update(Request $request, Deck $deck)
     {
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:500',
+            'description' => 'sometimes|nullable|string|max:5000',
+            'exam_at' => 'sometimes|nullable|date',
+            'module_id' => 'sometimes|nullable|integer|exists:modules,id',
+            'access' => 'sometimes|nullable|string|in:private,public-ro,public-rw,public-rw-listed',
+            'is_archived' => 'sometimes|boolean',
+        ]);
+
         // Decks with access "private" or "public-ro" can only
         // be updated by their owner or an admin
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
         abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
 
         // You should not be able to change the access level to "public-rw-listed" here
-        abort_if($deck->access != "public-rw-listed" && $request->access == "public-rw-listed", 403);
+        abort_if($deck->access != "public-rw-listed" && ($validated['access'] ?? null) == "public-rw-listed", 403);
 
         // Only admins and moderators should be able to edit "public-rw-listed" decks
         abort_if($deck->access == "public-rw-listed" && !Auth::user()->is_admin && !Auth::user()->is_moderator, 403);
 
         // You should not be able to archive the deck if it was submitted or listed
         $is_submitted_or_listed = ($deck->submission()->exists() || $deck->access == 'public-rw-listed');
-        if ($request->is_archived and $is_submitted_or_listed) {
+        if (($validated['is_archived'] ?? false) and $is_submitted_or_listed) {
             return response()->json([
                 'error' => 'This deck cannot be archived because it was already submitted or listed.',
             ], 400);
         }
 
-        $deck->update($request->all());
-        $deck->access = $request->input('access', 'private');
+        $deck->update($validated);
+        $deck->access = $validated['access'] ?? $deck->access;
 
         $deck->save();
 
@@ -181,7 +197,11 @@ class ApiDeckController extends Controller
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
         abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
 
-        $question = Question::findOrFail($request->question_id);
+        $validated = $request->validate([
+            'question_id' => 'required|integer|exists:questions,id',
+        ]);
+
+        $question = Question::findOrFail($validated['question_id']);
         $deck->questions()->syncWithoutDetaching($question->id);
 
         if ($question->case_id) {
@@ -198,8 +218,11 @@ class ApiDeckController extends Controller
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
         abort_if($deck->access == "public-ro" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 403);
 
-        $question_id = $request->question_id;
-        $deck->questions()->detach($question_id);
+        $validated = $request->validate([
+            'question_id' => 'required|integer|exists:questions,id',
+        ]);
+
+        $deck->questions()->detach($validated['question_id']);
 
         return response()->noContent();
     }

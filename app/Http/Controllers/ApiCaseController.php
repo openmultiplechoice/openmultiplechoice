@@ -11,14 +11,20 @@ class ApiCaseController extends Controller
 {
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'text' => 'nullable|string|max:4000',
+            'legacy_case_id' => 'nullable|integer',
+            'deck_id' => 'nullable|integer|exists:decks,id',
+        ]);
+
         $case = new QuestionCase();
-        $case->text = $request->text;
-        $case->legacy_case_id = $request->legacy_case_id;
+        $case->text = $validated['text'] ?? null;
+        $case->legacy_case_id = $validated['legacy_case_id'] ?? null;
 
         $case->save();
 
-        if ($request->deck_id) {
-            $case->decks()->attach($request->deck_id);
+        if (!empty($validated['deck_id'])) {
+            $case->decks()->attach($validated['deck_id']);
         }
 
         return response()->json($case);
@@ -36,7 +42,11 @@ class ApiCaseController extends Controller
 
     public function update(Request $request, QuestionCase $case)
     {
-        $case->text = $request->text;
+        $validated = $request->validate([
+            'text' => 'nullable|string|max:4000',
+        ]);
+
+        $case->text = $validated['text'] ?? null;
 
         $case->save();
 

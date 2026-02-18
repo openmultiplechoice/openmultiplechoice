@@ -42,7 +42,11 @@ class SessionController extends Controller
 
     public function store(Request $request)
     {
-        $deck = Deck::findOrFail($request->deck_id);
+        $validated = $request->validate([
+            'deck_id' => 'required|integer|exists:decks,id',
+        ]);
+
+        $deck = Deck::findOrFail($validated['deck_id']);
 
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
 

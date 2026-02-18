@@ -19,12 +19,18 @@ class ApiQuestionController extends Controller
 
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'text' => 'nullable|string|max:6000',
+            'answers' => 'nullable|array',
+            'answers.*' => 'integer|exists:answers,id',
+        ]);
+
         $question = new Question();
-        $question->text = $request->text;
+        $question->text = $validated['text'] ?? null;
 
         $question->save();
 
-        $answers = Answer::find($request->answers);
+        $answers = Answer::find($validated['answers'] ?? []);
         $question->answers()->saveMany($answers);
 
         return response()->json($question);
@@ -55,17 +61,30 @@ class ApiQuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
+        $validated = $request->validate([
+            'text' => 'sometimes|nullable|string|max:6000',
+            'hint' => 'sometimes|nullable|string|max:2000',
+            'comment' => 'sometimes|nullable|string|max:2000',
+            'type' => 'sometimes|nullable|string|in:mc,card',
+            'correct_answer_id' => 'sometimes|nullable|integer|exists:answers,id',
+            'is_invalid' => 'sometimes|boolean',
+            'needs_review' => 'sometimes|boolean',
+            'case_id' => 'sometimes|nullable|integer|exists:cases,id',
+            'answers' => 'sometimes|nullable|array',
+            'answers.*.id' => 'required|integer|exists:answers,id',
+        ]);
+
         // Store the original correct_answer_id before filling the model with new data
         $originalCorrectAnswerId = $question->correct_answer_id;
 
         try {
-            DB::transaction(function () use ($request, $question, $originalCorrectAnswerId) {
-                $question->fill($request->all());
+            DB::transaction(function () use ($validated, $question, $originalCorrectAnswerId) {
+                $question->fill($validated);
 
-                if ($request->answers) {
+                if (!empty($validated['answers'])) {
                     $answerIds = array_map(function ($a) {
                         return $a['id'];
-                    }, $request->answers);
+                    }, $validated['answers']);
 
                     $answers = Answer::findMany($answerIds);
                     $question->answers()->saveMany($answers);

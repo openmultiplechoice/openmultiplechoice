@@ -13,6 +13,10 @@ class ApiQuestionImageController extends Controller
 {
     public function store(Request $request, Question $question)
     {
+        $request->validate([
+            'image' => 'required|image|max:10240',
+        ]);
+
         $image = new Image();
         $image->path = Storage::putFile('images', $request->file('image'));
         $question->images()->save($image);

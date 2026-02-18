@@ -20,8 +20,12 @@ class SubjectController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+        ]);
+
         $subject = new Subject();
-        $subject->fill($request->all());
+        $subject->fill($validated);
         $subject->save();
 
         return redirect()->route('show.subject', [
@@ -45,7 +49,11 @@ class SubjectController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $subject->fill($request->all());
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:500',
+        ]);
+
+        $subject->fill($validated);
         $subject->save();
 
         return redirect()->route('show.subject', [

@@ -11,14 +11,20 @@ class ApiQuestionAnswerController extends Controller
 {
     public function store(Request $request, Question $question)
     {
-        if ($request->id) {
-            $answer = Answer::findOrFail($request->id)->get();
+        $validated = $request->validate([
+            'id' => 'nullable|integer|exists:answers,id',
+            'text' => 'nullable|string|max:4000',
+            'hint' => 'nullable|string|max:2000',
+        ]);
+
+        if (!empty($validated['id'])) {
+            $answer = Answer::findOrFail($validated['id']);
         } else {
             $answer = new Answer();
         }
 
-        $answer->text = $request->text;
-        $answer->hint = $request->hint;
+        $answer->text = $validated['text'] ?? null;
+        $answer->hint = $validated['hint'] ?? null;
 
         $question->answers()->save($answer);
 
