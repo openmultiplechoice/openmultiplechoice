@@ -1,6 +1,4 @@
 <script>
-    import { run, preventDefault } from 'svelte/legacy';
-
     import DOMPurify from "dompurify";
     import _ from 'lodash';
     import hotkeys from "hotkeys-js";
@@ -26,50 +24,65 @@
         settingsShowAnswerStats = $bindable()
     } = $props();
 
-    var showEditor = $state(false);
-    var showHint = $state(questionContext.isAnswered);
+    const badgeLetters = "ABCDEFGHIJKLMN";
 
-    run(() => {
-        question,
-            (() => {
-                showHint = questionContext.isAnswered;
-                helpUsed = questionContext.isAnswered;
-            })();
-    });
-    // For all list elements in the question text, add an event handler
-    // to toggle the background color. This is helpful for multiple
-    // choice questions where users have to choose under a variety of
-    // answer options.
-    run(() => {
-        question, (() => {
-            var listItems = document.querySelectorAll("#questionText li");
-            [].map.call(listItems, function(item) {
-                item.addEventListener('click', toggleListItemColor, false);
-            });
-        })();
-    });
-    run(() => {
-        question, (() => {
-            // Give each answer a label starting from `A`. Since we want answers
-            // to always get the same label, we do this here before we shuffle
-            // the answers (if shuffling is enabled).
-            question.answers.forEach((answer, index) => {
-                answer.badgeText = "ABCDEFGHIJKLMN".charAt(index);
-            });
-            // Only shuffle if answer shuffling is enabled and if the question
-            // is not already answered, otherwise the answers would be shuffled
-            // a second time after the answer was submitted.
-            if (question && question.type === 'mc' && settingsShuffleAnswers
-                && !questionContext.isAnswered
-                && !Object.values(questionContext.answerContext).some(ac => ac.isSelectedAnswer)) {
-                question.answers = _.shuffle(question.answers);
-            }
-        })();
+    let showEditor = $state(false);
+    let showHint = $derived(questionContext.isAnswered);
+    let shuffledAnswers = $state([]);
+    let shuffledForQuestionId = $state(null);
+    let lastQuestionId = $state(null);
+
+    const answersWithBadges = $derived.by(() => {
+        if (!question?.answers) {
+            return [];
+        }
+
+        return question.answers.map((answer, index) => ({
+            ...answer,
+            badgeText: badgeLetters.charAt(index)
+        }));
     });
 
-    // Toogle none -> red -> yellow -> green -> none
-    function toggleListItemColor(event) {
-        const li = event.target;
+    const displayAnswers = $derived.by(() => {
+        if (!question) {
+            return [];
+        }
+
+        if (question.type === 'mc' && settingsShuffleAnswers && shuffledForQuestionId === question.id) {
+            return shuffledAnswers;
+        }
+
+        return answersWithBadges;
+    });
+
+    $effect(() => {
+        const currentQuestionId = question?.id ?? null;
+        if (currentQuestionId !== null && currentQuestionId !== lastQuestionId) {
+            lastQuestionId = currentQuestionId;
+            helpUsed = false;
+        }
+    });
+
+    $effect(() => {
+        if (!question || question.type !== 'mc' || !settingsShuffleAnswers) {
+            return;
+        }
+
+        if (shuffledForQuestionId !== question.id) {
+            shuffledAnswers = _.shuffle(answersWithBadges);
+            shuffledForQuestionId = question.id;
+        }
+    });
+
+    function onQuestionTextClick(event) {
+        const li = event.target.closest('li');
+        if (li && event.currentTarget.contains(li)) {
+            toggleListItemColor(li);
+        }
+    }
+
+    // Toggle none -> red -> yellow -> green -> none
+    function toggleListItemColor(li) {
         if (!li.classList.contains('bg-danger-subtle') &&
             !li.classList.contains('bg-warning-subtle') &&
             !li.classList.contains('bg-success-subtle')) {
@@ -104,6 +117,13 @@
             hotkeys.setScope('questions');
             // Close the editor
             showEditor = doShow;
+
+            // If the editor is closed and the question type is mc
+            // reset the shuffled answers to include changed answer texts
+            if (settingsShuffleAnswers && question?.type === 'mc') {
+                shuffledAnswers = [];
+                shuffledForQuestionId = null;
+            }
         }
     }
 </script>
@@ -145,7 +165,7 @@
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
                 {#if question.text}
                     <div class="col-lg">
-                        <p id="questionText" class="trix-content">{@html DOMPurify.sanitize(question.text)}</p>
+                        <p id="questionText" class="trix-content" onclick={onQuestionTextClick}>{@html DOMPurify.sanitize(question.text)}</p>
                     </div>
                 {/if}
                 {#if question.images && question.images.length > 0}
@@ -160,24 +180,24 @@
                     </div>
                 {:else}
                     <button
-                        onclick={preventDefault(() => {
+                        onclick={() => {
                             showHint = true;
                             helpUsed = true;
-                        })}
+                        }}
                         type="button"
                         class="btn btn-outline-secondary btn-sm mb-3"
                         ><i class="bi bi-question-circle"></i> Show hint</button>
                 {/if}
             {/if}
             {#if question.type === "mc"}
-                {#each question.answers as answer, index (answer.id)}
+                {#each displayAnswers as answer, index (answer.id)}
                     <SessionAnswerView
-                        bind:answer={question.answers[index]}
-                        bind:answerContext={questionContext.answerContext[answer.id]}
-                        bind:examMode={examMode}
-                        bind:settingsShowAnswerStats={settingsShowAnswerStats}
+                        answer={answer}
+                        answerContext={questionContext.answerContext[answer.id]}
+                        examMode={examMode}
+                        settingsShowAnswerStats={settingsShowAnswerStats}
                         {submitAnswer}
-                        bind:questionIsAnswered={questionContext.isAnswered}
+                        questionIsAnswered={questionContext.isAnswered}
                         answerNumber={index+1} />
                 {/each}
             {:else}
@@ -209,7 +229,7 @@
                             {#if questionContext.isAnswered && answerChoice !== -1}
                                 <li>
                                     <button type="button" class="dropdown-item btn btn-sm"
-                                        onclick={preventDefault(deleteAnswer)}>
+                                        onclick={deleteAnswer}>
                                         <i class="bi bi-arrow-counterclockwise"></i> Reset answer
                                     </button>
                                 </li>
@@ -222,7 +242,7 @@
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <button type="button" class="dropdown-item btn btn-sm"
-                                    onclick={preventDefault(toggleEditor)}>
+                                    onclick={toggleEditor}>
                                     <i class="bi bi-pencil"></i> Edit question
                                 </button>
                             </li>
@@ -247,7 +267,7 @@
             {#if !questionContext.isAnswered && !examMode && !(question.type === 'card')}
                 <div class="mt-3">
                     <button
-                        onclick={preventDefault(() => submitAnswer())}
+                        onclick={() => {submitAnswer(null)}}
                         type="button"
                         class="btn btn-outline-secondary btn-sm">&rightarrow; Show answer</button>
                 </div>

@@ -1,6 +1,4 @@
 <script>
-    import { run, preventDefault } from 'svelte/legacy';
-
     import DOMPurify from "dompurify";
     import hotkeys from "hotkeys-js";
 
@@ -16,34 +14,45 @@
 
     var answerStatusIndicator = $state();
     var markedAs = $state();
-    var badgeText = answer.badgeText;
 
-    run(() => {
-        hotkeys.unbind(`${badgeText}, ${answerNumber}`, 'questions')
-        hotkeys(`${badgeText}, ${answerNumber}`, 'questions', function () {
+    $effect(() => {
+        if (!answer || !answer.badgeText) {
+            return;
+        }
+
+        const shortcut = `${answer.badgeText}, ${answerNumber}`;
+
+        hotkeys.unbind(shortcut, "questions");
+        hotkeys(shortcut, "questions", () => {
             submitAnswer(answer.id);
         });
+
+        return () => {
+            hotkeys.unbind(shortcut, "questions");
+        };
     });
 
-    run(() => {
-        if (answer) {
-            answerStatusIndicator = "";
+    $effect(() => {
+        if (!answer) {
+            return;
+        }
 
-            if (!examMode) {
-                if (questionIsAnswered) {
-                    markedAs = "";
-                    if (answerContext.isCorrectAnswer) {
-                        answerStatusIndicator = "border-success";
-                    } else if (answerContext.isSubmittedAnswer) {
-                        answerStatusIndicator = "border-danger";
-                    }
-                } else if (answerContext.isSelectedAnswer) {
-                    markedAs = "";
+        answerStatusIndicator = "";
+
+        if (!examMode) {
+            if (questionIsAnswered) {
+                markedAs = "";
+                if (answerContext.isCorrectAnswer) {
+                    answerStatusIndicator = "border-success";
+                } else if (answerContext.isSubmittedAnswer) {
                     answerStatusIndicator = "border-danger";
                 }
-            } else {
+            } else if (answerContext.isSelectedAnswer) {
                 markedAs = "";
+                answerStatusIndicator = "border-danger";
             }
+        } else {
+            markedAs = "";
         }
     });
 </script>
@@ -71,11 +80,11 @@
         <div
             onclick={() => submitAnswer(answer.id)}
             class="col-1 border-start-3 cursor-pointer">
-            <p class="badge text-bg-light my-0">{badgeText}</p>
+            <p class="badge text-bg-light my-0">{answer.badgeText}</p>
         </div>
     {:else}
         <div class="col-1 border-start-3">
-            <p class="badge text-bg-light my-0">{badgeText}</p>
+            <p class="badge text-bg-light my-0">{answer.badgeText}</p>
         </div>
     {/if}
 
@@ -102,14 +111,20 @@
             {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
                 <div class="d-flex justify-content-end align-items-center">
                     <button
-                        onclick={preventDefault(() => (markedAs = markedAs === 'incorrect' ? '' : 'incorrect'))}
+                        onclick={(event) => {
+                            event.preventDefault();
+                            markedAs = markedAs === 'incorrect' ? '' : 'incorrect';
+                        }}
                         type="button"
                         class="btn btn-sm p-0">
                         <span class="text-secondary">&cross;</span>
                     </button>
                     <div class="vr mx-1"></div>
                     <button
-                        onclick={preventDefault(() => (markedAs = markedAs === 'correct' ? '' : 'correct'))}
+                        onclick={(event) => {
+                            event.preventDefault();
+                            markedAs = markedAs === 'correct' ? '' : 'correct';
+                        }}
                         type="button"
                         class="btn btn-sm p-0">
                         <span class="text-secondary">&check;</span>

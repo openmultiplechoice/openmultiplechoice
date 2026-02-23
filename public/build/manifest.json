@@ -51,8 +51,8 @@
       "_style-BtOSwUPa.js"
     ]
   },
-  "_SessionQuestionView-Cj1I9Fye.js": {
-    "file": "assets/SessionQuestionView-Cj1I9Fye.js",
+  "_SessionQuestionView-CR-jRUqW.js": {
+    "file": "assets/SessionQuestionView-CR-jRUqW.js",
     "name": "SessionQuestionView",
     "imports": [
       "_render-A2vHlHFc.js",
@@ -62,10 +62,10 @@
       "_html-D_7_osXO.js",
       "_attributes-BsW_rUSb.js",
       "_props-6zeU4q7i.js",
-      "_legacy-client-BQ40Zj-S.js",
       "_hotkeys-js-Bzouew-W.js",
       "_lodash-BBVXAwvF.js",
       "_class-BfJg_ovI.js",
+      "_legacy-client-BQ40Zj-S.js",
       "_index-client-CvvtOJ7D.js",
       "_input-CU7pjbMP.js",
       "_this-B17HhuhU.js"
@@ -541,13 +541,13 @@
     ]
   },
   "resources/js/QuestionView.js": {
-    "file": "assets/QuestionView-DOKlrDSD.js",
+    "file": "assets/QuestionView-DlgOJkGT.js",
     "name": "QuestionView",
     "src": "resources/js/QuestionView.js",
     "isEntry": true,
     "imports": [
       "_render-A2vHlHFc.js",
-      "_SessionQuestionView-Cj1I9Fye.js",
+      "_SessionQuestionView-CR-jRUqW.js",
       "_if-Clrp5PSS.js",
       "_QuestionForm-B3W-DAak.js",
       "_index-client-CvvtOJ7D.js",
@@ -567,7 +567,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-B0XtQbg-.js",
+    "file": "assets/SessionView-Dv3cwziN.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -588,7 +588,7 @@
       "_SessionProgressBar-CWLL69n-.js",
       "_html-D_7_osXO.js",
       "_utils-CsCDY5_e.js",
-      "_SessionQuestionView-Cj1I9Fye.js",
+      "_SessionQuestionView-CR-jRUqW.js",
       "_StatsHelper-B91isISU.js",
       "_UserSettingsStore-B-8WR4NH.js",
       "__commonjsHelpers-CE1G-McA.js",
