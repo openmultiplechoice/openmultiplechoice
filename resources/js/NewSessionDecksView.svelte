@@ -85,7 +85,7 @@
     }
 </script>
 
-<div class="row mb-3">
+<div class="row mb-3 py-2 bg-white sticky-top">
     <div class="col">
         <div class="input-group">
             <span class="input-group-text" class:bg-info-subtle={deckKind !== 'public-rw-listed'}><i class="bi bi-archive"></i></span>
