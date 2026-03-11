@@ -29,7 +29,11 @@ class DeckSubmissionController extends Controller
      */
     public function store(Request $request)
     {
-        $deck = Deck::with('submission')->findOrFail($request->deck_id);
+        $validated = $request->validate([
+            'deck_id' => 'required|integer|exists:decks,id',
+        ]);
+
+        $deck = Deck::with('submission')->findOrFail($validated['deck_id']);
         if (!$request->user()->is_admin && !$request->user()->id == $deck->user_id) {
             abort(403, 'Unauthorized');
         }
@@ -41,7 +45,7 @@ class DeckSubmissionController extends Controller
         $submission = new DeckSubmission();
 
         // Get deck_id from hidden input field, user_id from Auth
-        $submission->deck_id = $request->deck_id;
+        $submission->deck_id = $validated['deck_id'];
         $submission->user_id = Auth::id();
 
         $submission->save();

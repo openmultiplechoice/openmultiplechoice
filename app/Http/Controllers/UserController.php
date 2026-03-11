@@ -10,9 +10,13 @@ class UserController extends Controller
 {
     public function update(Request $request, User $user)
     {
+        $validated = $request->validate([
+            'public_name' => 'nullable|string|max:255|unique:users,public_name,' . Auth::id(),
+        ]);
+
         $user = Auth::user();
 
-        $user->public_name = $request->public_name;
+        $user->public_name = $validated['public_name'] ?? null;
         try {
             $user->save();
         } catch (\Illuminate\Database\UniqueConstraintViolationException $e) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\AnswerChoice;
 use App\Models\Session;
 
-class AnswerChoiceController extends Controller
+class ApiAnswerChoiceController extends Controller
 {
     public function store(Request $request, Session $session)
     {
@@ -18,17 +18,24 @@ class AnswerChoiceController extends Controller
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
+        $validated = $request->validate([
+            'question_id' => 'required|integer|exists:questions,id',
+            'answer_id' => 'nullable|integer|exists:answers,id',
+            'help_used' => 'required|boolean',
+            'is_correct' => 'required|boolean',
+        ]);
+
         try {
-            $answerChoice = DB::transaction(function () use ($request, $session) {
+            $answerChoice = DB::transaction(function () use ($validated, $session) {
                 return AnswerChoice::updateOrCreate(
                     [
                         'session_id' => $session->id,
-                        'question_id' => $request->question_id,
+                        'question_id' => $validated['question_id'],
                     ],
                     [
-                        'answer_id' => $request->answer_id,
-                        'help_used' => $request->help_used,
-                        'is_correct' => $request->is_correct,
+                        'answer_id' => $validated['answer_id'],
+                        'help_used' => $validated['help_used'],
+                        'is_correct' => $validated['is_correct'],
                     ]
                 );
             }, 3);

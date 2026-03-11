@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\Controller;
 
 use App\Models\Message;
 use App\Models\Thumb;
 
-class MessageThumbController extends Controller
+class ApiMessageThumbController extends Controller
 {
     /**
      * Store a new thumb for the specified message.
@@ -22,8 +21,12 @@ class MessageThumbController extends Controller
         abort_if($message->is_deleted, 400, 'You cannot vote on a deleted message.');
         abort_if($message->thumbs()->where('user_id', Auth::id())->exists(), 400, 'You have already voted on this message.');
 
+        $validated = $request->validate([
+            'type' => 'required|string|in:up,down',
+        ]);
+
         $thumb = new Thumb();
-        $thumb->type = $request->type;
+        $thumb->type = $validated['type'];
 
         $thumb->user_id = Auth::id();
 
@@ -43,7 +46,11 @@ class MessageThumbController extends Controller
         abort_if($message->is_deleted, 400, 'You cannot vote on a deleted message.');
         abort_if($thumb->user_id != Auth::id(), 403, 'You are not allowed to update this thumb.');
 
-        $thumb->type = $request->type;
+        $validated = $request->validate([
+            'type' => 'required|string|in:up,down',
+        ]);
+
+        $thumb->type = $validated['type'];
         $thumb->save();
 
         return response()->json($thumb, 200);

@@ -35,5 +35,7 @@ sudo -u www-data php artisan migrate
 
 sudo -u www-data php artisan config:cache
 
+sudo -u www-data php artisan route:cache
+
 sudo -u www-data php artisan view:cache
 ```

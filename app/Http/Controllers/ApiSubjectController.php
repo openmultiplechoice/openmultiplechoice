@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Subject;
 
-class SubjectController extends Controller
+class ApiSubjectController extends Controller
 {
     public function index()
     {
@@ -21,9 +21,13 @@ class SubjectController extends Controller
     {
         abort_if(!$request->user()->is_admin && !$request->user()->is_moderator, 403);
 
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+        ]);
+
         $subject = new Subject();
 
-        $subject->name = $request->name;
+        $subject->name = $validated['name'];
 
         $subject->save();
 

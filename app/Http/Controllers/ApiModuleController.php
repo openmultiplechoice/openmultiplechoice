@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Module;
 
-class ModuleController extends Controller
+class ApiModuleController extends Controller
 {
     public function index()
     {
@@ -19,10 +19,15 @@ class ModuleController extends Controller
     {
         abort_if(!$request->user()->is_admin && !$request->user()->is_moderator, 403);
 
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+            'subject_id' => 'required|integer|exists:subjects,id',
+        ]);
+
         $module = new Module();
 
-        $module->name = $request->name;
-        $module->subject_id = $request->subject_id;
+        $module->name = $validated['name'];
+        $module->subject_id = $validated['subject_id'];
 
         $module->save();
 

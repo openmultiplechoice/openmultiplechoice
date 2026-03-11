@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\UserSettings;
 
-class UserSettingsController extends Controller
+class ApiUserSettingsController extends Controller
 {
     public function show()
     {
@@ -38,9 +38,21 @@ class UserSettingsController extends Controller
 
     public function update(Request $request)
     {
+        $validated = $request->validate([
+            'last_subject_id' => 'sometimes|integer|min:0',
+            'last_module_id' => 'sometimes|integer|min:0',
+            'last_new_session_deck_kind' => 'sometimes|string|in:public-rw-listed,public,user,bookmarked',
+            'session_show_sidebar' => 'sometimes|boolean',
+            'session_show_progress_bar' => 'sometimes|boolean',
+            'session_exam_mode' => 'sometimes|boolean',
+            'session_shuffle_answers' => 'sometimes|boolean',
+            'session_multiple_answer_tries' => 'sometimes|boolean',
+            'session_show_answer_stats' => 'sometimes|boolean',
+        ]);
+
         $user = Auth::user();
 
-        $userSettings = UserSettings::updateOrCreate(['user_id' => $user->id], $request->all());
+        $userSettings = UserSettings::updateOrCreate(['user_id' => $user->id], $validated);
 
         return response()->json($userSettings);
     }

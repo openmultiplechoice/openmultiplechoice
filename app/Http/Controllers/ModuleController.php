@@ -11,11 +11,6 @@ use App\Models\Subject;
 
 class ModuleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $subjects = Subject::orderBy('name')->get();
@@ -25,25 +20,21 @@ class ModuleController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if (!$request->user()->is_admin && !$request->user()->is_moderator) {
             abort(403, 'Unauthorized');
         }
 
-        abort_if(!$request->subject_id, 400);
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+            'subject_id' => 'required|integer|exists:subjects,id',
+        ]);
 
-        $subject = Subject::find($request->subject_id);
-        abort_if(!$subject, 400);
+        $subject = Subject::findOrFail($validated['subject_id']);
 
         $module = new Module();
-        $module->fill($request->all());
+        $module->fill($validated);
         $module->save();
 
         $subject->modules()->save($module);
@@ -53,12 +44,6 @@ class ModuleController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Module  $module
-     * @return \Illuminate\Http\Response
-     */
     public function show(Module $module)
     {
         $subjects = Subject::orderBy('name')->get();
@@ -82,25 +67,20 @@ class ModuleController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Module  $module
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Module $module)
     {
         if (!$request->user()->is_admin && !$request->user()->is_moderator) {
             abort(403, 'Unauthorized');
         }
 
-        abort_if(!$request->subject_id, 400);
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+            'subject_id' => 'required|integer|exists:subjects,id',
+        ]);
 
-        $subject = Subject::find($request->subject_id);
-        abort_if(!$subject, 400);
+        $subject = Subject::findOrFail($validated['subject_id']);
 
-        $module->fill($request->all());
+        $module->fill($validated);
         $module->save();
 
         $subject->modules()->save($module);

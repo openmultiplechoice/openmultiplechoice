@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +10,7 @@ use App\Models\Module;
 use App\Models\Session;
 use App\Models\Question;
 
-class SessionController extends Controller
+class ApiSessionController extends Controller
 {
     public function index(Request $request)
     {
@@ -32,7 +32,11 @@ class SessionController extends Controller
 
     public function store(Request $request)
     {
-        $deck = Deck::findOrFail($request->deck_id);
+        $validated = $request->validate([
+            'deck_id' => 'required|integer|exists:decks,id',
+        ]);
+
+        $deck = Deck::findOrFail($validated['deck_id']);
 
         abort_if($deck->access == "private" && $deck->user_id != Auth::id() && !Auth::user()->is_admin, 404);
 
@@ -84,15 +88,22 @@ class SessionController extends Controller
 
     public function newFromQuestionIds(Request $request)
     {
-        $questions = Question::findMany($request->question_ids);
+        $validated = $request->validate([
+            'question_ids' => 'required|array|min:1',
+            'question_ids.*' => 'integer|exists:questions,id',
+            'deck_name' => 'nullable|string|max:500',
+            'module_id' => 'nullable|integer|exists:modules,id',
+        ]);
+
+        $questions = Question::findMany($validated['question_ids']);
         if (!$questions) {
             abort(400, 'No question IDs given');
         }
 
-        $deckName = $request->deck_name ?? 'Repeat '. count($questions) .' incorrect questions';
+        $deckName = $validated['deck_name'] ?? 'Repeat '. count($questions) .' incorrect questions';
 
-        if ($request->module_id) {
-            $module = Module::findOrFail($request->module_id);
+        if (!empty($validated['module_id'])) {
+            $module = Module::findOrFail($validated['module_id']);
             $deckName = $deckName .' of module "'. $module->name .'"';
         }
 
@@ -157,7 +168,12 @@ class SessionController extends Controller
     {
         abort_if($session->user_id != Auth::id(), 404);
 
-        $session->update($request->all());
+        $validated = $request->validate([
+            'current_question_id' => 'sometimes|nullable|integer|exists:questions,id',
+            'name' => 'sometimes|required|string|max:500',
+        ]);
+
+        $session->update($validated);
 
         return response()->json($session);
     }

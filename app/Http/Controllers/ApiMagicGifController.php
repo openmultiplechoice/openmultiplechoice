@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use App\Models\MagicGif;
 
-class MagicGifController extends Controller
+class ApiMagicGifController extends Controller
 {
     /**
      * Return a random gif.

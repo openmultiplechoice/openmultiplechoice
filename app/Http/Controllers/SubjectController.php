@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $subjects = Subject::orderBy('name')->get();
@@ -19,20 +14,18 @@ class SubjectController extends Controller
         return view('subjects', ['subjects' => $subjects]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if (!$request->user()->is_admin && !$request->user()->is_moderator) {
             abort(403, 'Unauthorized');
         }
 
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+        ]);
+
         $subject = new Subject();
-        $subject->fill($request->all());
+        $subject->fill($validated);
         $subject->save();
 
         return redirect()->route('show.subject', [
@@ -40,12 +33,6 @@ class SubjectController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
     public function show(Subject $subject)
     {
         $modules = $subject->modules->sortBy('name');
@@ -56,20 +43,17 @@ class SubjectController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Subject $subject)
     {
         if (!$request->user()->is_admin && !$request->user()->is_moderator) {
             abort(403, 'Unauthorized');
         }
 
-        $subject->fill($request->all());
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:500',
+        ]);
+
+        $subject->fill($validated);
         $subject->save();
 
         return redirect()->route('show.subject', [
