@@ -51,12 +51,8 @@
       "_style-CxBx0B9H.js"
     ]
   },
-  "_SessionQuestionView-HyzNZMWh.css": {
-    "file": "assets/SessionQuestionView-HyzNZMWh.css",
-    "src": "_SessionQuestionView-HyzNZMWh.css"
-  },
-  "_SessionQuestionView-d6lrHhi8.js": {
-    "file": "assets/SessionQuestionView-d6lrHhi8.js",
+  "_SessionQuestionView-DWilHrD9.js": {
+    "file": "assets/SessionQuestionView-DWilHrD9.js",
     "name": "SessionQuestionView",
     "imports": [
       "_render-E7Pnc9l2.js",
@@ -77,6 +73,10 @@
     "css": [
       "assets/SessionQuestionView-HyzNZMWh.css"
     ]
+  },
+  "_SessionQuestionView-HyzNZMWh.css": {
+    "file": "assets/SessionQuestionView-HyzNZMWh.css",
+    "src": "_SessionQuestionView-HyzNZMWh.css"
   },
   "_StatsHelper-B91isISU.js": {
     "file": "assets/StatsHelper-B91isISU.js",
@@ -541,13 +541,13 @@
     ]
   },
   "resources/js/QuestionView.js": {
-    "file": "assets/QuestionView-t99IkhKg.js",
+    "file": "assets/QuestionView-BLcUZDlT.js",
     "name": "QuestionView",
     "src": "resources/js/QuestionView.js",
     "isEntry": true,
     "imports": [
       "_render-E7Pnc9l2.js",
-      "_SessionQuestionView-d6lrHhi8.js",
+      "_SessionQuestionView-DWilHrD9.js",
       "_if-DswK5GqZ.js",
       "_QuestionForm-CSoR8B0O.js",
       "_index-client-DgGY76UN.js",
@@ -567,7 +567,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-YNTCIL8-.js",
+    "file": "assets/SessionView-B0V3uYEu.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -588,7 +588,7 @@
       "_SessionProgressBar-BwaSgjvG.js",
       "_html-BkQ05GwH.js",
       "_utils-CsCDY5_e.js",
-      "_SessionQuestionView-d6lrHhi8.js",
+      "_SessionQuestionView-DWilHrD9.js",
       "_StatsHelper-B91isISU.js",
       "_UserSettingsStore-CdBnnLdl.js",
       "__commonjsHelpers-Cpj98o6Y.js",
