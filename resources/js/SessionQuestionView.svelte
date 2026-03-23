@@ -36,18 +36,6 @@
                 helpUsed = questionContext.isAnswered;
             })();
     });
-    // For all list elements in the question text, add an event handler
-    // to toggle the background color. This is helpful for multiple
-    // choice questions where users have to choose under a variety of
-    // answer options.
-    run(() => {
-        question, (() => {
-            var listItems = document.querySelectorAll("#questionText li");
-            [].map.call(listItems, function(item) {
-                item.addEventListener('click', toggleListItemColor, false);
-            });
-        })();
-    });
     run(() => {
         question, (() => {
             // Give each answer a label starting from `A`. Since we want answers
@@ -67,22 +55,27 @@
         })();
     });
 
-    // Toogle none -> red -> yellow -> green -> none
+    // Toggle none -> red -> yellow -> green -> none
     function toggleListItemColor(event) {
-        const li = event.target;
+        const target = event.target;
+        const li = target instanceof Element ? target.closest('#questionText li') : null;
+        if (!li) {
+            return;
+        }
+
         if (!li.classList.contains('bg-danger-subtle') &&
             !li.classList.contains('bg-warning-subtle') &&
             !li.classList.contains('bg-success-subtle')) {
 
-            li.classList.add('bg-success-subtle');
-        } else if (li.classList.contains('bg-success-subtle')) {
-            li.classList.remove('bg-success-subtle');
             li.classList.add('bg-danger-subtle');
         } else if (li.classList.contains('bg-danger-subtle')) {
             li.classList.remove('bg-danger-subtle');
             li.classList.add('bg-warning-subtle');
         } else if (li.classList.contains('bg-warning-subtle')) {
             li.classList.remove('bg-warning-subtle');
+            li.classList.add('bg-success-subtle');
+        } else if (li.classList.contains('bg-success-subtle')) {
+            li.classList.remove('bg-success-subtle');
         }
     }
 
@@ -145,7 +138,7 @@
             <div class="row border-start border-3 border-dark m-1 mb-3 pt-2">
                 {#if question.text}
                     <div class="col-lg">
-                        <p id="questionText" class="trix-content">{@html DOMPurify.sanitize(question.text)}</p>
+                        <p id="questionText" class="trix-content" onclick={toggleListItemColor}>{@html DOMPurify.sanitize(question.text)}</p>
                     </div>
                 {/if}
                 {#if question.images && question.images.length > 0}
