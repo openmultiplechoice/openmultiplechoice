@@ -26,7 +26,7 @@
     // For large decks the import will invoke a lot of requests and eventually hit the rate limits or other server
     // errors. This function will retry the request with a backoff strategy and will respect the retry-after header
     // if available (set if the user hits the Laravel rate limit).
-    async function retryAxios(requestFn, maxRetries = 4, initialDelay = 5000, backoffFactor = 2, retryStatusCodes = [429, 500, 502, 503, 504]) {
+    async function retryAxios(requestFn, maxRetries = 4, initialDelay = 5000, backoffFactor = 2, retryStatusCodes = [429, 500, 502, 503, 504], minimumDelay = 1000) {
         let lastError;
         let currentDelay = initialDelay;
 
@@ -45,11 +45,16 @@
                     throw error;
                 }
 
-                // Get retry delay from response headers if available (for rate limiting)
+                // Get retry delay from response headers if available (for rate limiting),
+                // add 1s of extra delay to avoid timing issues
                 let retryDelay = currentDelay;
                 if (error.response.headers['retry-after']) {
-                    retryDelay = parseInt(error.response.headers['retry-after']) * 1000;
+                    retryDelay = parseInt(error.response.headers['retry-after']) * 1000 + 1000;
                 }
+
+                // Prevent immediate retries by always waiting for at least minimumDelay,
+                // to avoid retry bursts
+                retryDelay = Math.max(retryDelay, minimumDelay);
 
                 console.log(`Request failed with status ${error.response.status}. Retrying in ${retryDelay}ms...`);
                 await new Promise(resolve => setTimeout(resolve, retryDelay));
