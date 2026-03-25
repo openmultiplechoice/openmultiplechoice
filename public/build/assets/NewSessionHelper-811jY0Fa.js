@@ -1,0 +1,1 @@
+function e(e){var t={deck_id:e};axios.post(`/api/sessions`,t).then(function(e){window.location.href=`/sessions/`+e.data.id}).catch(function(e){alert(e)})}export{e as t};

@@ -1,0 +1,1 @@
+import{T as e}from"./client-CIsKR49I.js";import{t}from"./Messages-D0D-6KVc.js";var n=document.getElementById(`MessagesView`);e(t,{target:n,props:{questionId:n.dataset.questionId,questionContext:{isAnswered:!0}}});
