@@ -90,7 +90,8 @@ return [
     |
     */
 
-    'users_enable_export_import' => env('APP_USERS_ENABLE_EXPORT_IMPORT', false),
+    'users_enable_deck_export' => env('APP_USERS_ENABLE_DECK_EXPORT', false),
+    'users_enable_deck_import' => env('APP_USERS_ENABLE_DECK_IMPORT', false),
 
     /*
     |--------------------------------------------------------------------------

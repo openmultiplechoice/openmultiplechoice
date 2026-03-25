@@ -36,7 +36,7 @@
             @if (Auth::user()->is_admin || $deck->user_id == Auth::id() || $deck->access == "public-rw" || $deck->access == "public-rw-listed")
                 <span class="float-end d-flex gap-1">
                     <a href="/decks/{{ $deck->id }}/questions/edit" class="btn btn-sm btn-outline-secondary flex-grow-1"><i class="bi bi-collection"></i> Edit questions</a>
-                    @if (config('app.users_enable_export_import') || Auth::user()->is_admin || Auth::user()->is_moderator)
+                    @if (config('app.users_enable_deck_export') || Auth::user()->is_admin || Auth::user()->is_moderator)
                         <div class="btn-group">
                             <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                 <i class="bi bi-download"></i> Export
