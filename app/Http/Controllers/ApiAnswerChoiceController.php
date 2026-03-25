@@ -33,7 +33,7 @@ class ApiAnswerChoiceController extends Controller
                         'question_id' => $validated['question_id'],
                     ],
                     [
-                        'answer_id' => $validated['answer_id'],
+                        'answer_id' => $validated['answer_id'] ?? null,
                         'help_used' => $validated['help_used'],
                         'is_correct' => $validated['is_correct'],
                     ]
