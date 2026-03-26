@@ -22,6 +22,8 @@
     var showEditor = $state(false);
     var showEditorReply = $state(false);
     var showLowRated = $state(false);
+    let isExpanded = $state(hasHighRating); // Auto-expand messages with high rating on initial rendering
+    let scrollHeight = $state(0);
 
     function toggleEditor() {
         showEditor = !showEditor;
@@ -220,11 +222,19 @@
                     </div>
                     <div class="mt-1">
                         {#if !showEditor}
-                            <div class="trix-content pe-4">
-                                {#if message.text}
-                                    {@html DOMPurify.sanitize(message.text)}
-                                {/if}
+                            <div class:collapsed={!isExpanded && scrollHeight > 240}>
+                                <div class="trix-content pe-4"
+                                    bind:clientHeight={scrollHeight}>
+                                    {#if message.text}
+                                        {@html DOMPurify.sanitize(message.text)}
+                                    {/if}
+                                </div>
                             </div>
+                            {#if scrollHeight > 240}
+                                <button class="btn btn-link btn-sm p-0 mt-1 text-decoration-none" onclick={() => isExpanded = !isExpanded}>
+                                    {isExpanded ? 'Show less' : 'Show more'}
+                                </button>
+                            {/if}
                         {:else}
                             <div class="pe-2">
                                 <input id="message" type="hidden" name="message" value={message.text} />
@@ -313,3 +323,10 @@
         {/if}
     </div>
 {/if}
+
+<style>
+    .collapsed {
+        max-height: 240px;
+        overflow: hidden;
+    }
+</style>
