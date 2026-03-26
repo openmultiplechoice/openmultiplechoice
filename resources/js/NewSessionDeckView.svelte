@@ -32,15 +32,17 @@
             filteredAnswerChoices
         );
 
+        progressIndicator = '<a href="/sessions/' + latestSession.id + '">';
         if (percentage.correct >= 60) {
-            progressIndicator = '<span class="badge text-bg-success" title="Correct answers in percent">' +
+            progressIndicator += '<span class="badge text-bg-success" title="Correct answers in percent">' +
                 percentage.correct +
                 " %</span>";
         } else {
-            progressIndicator = '<span class="badge text-bg-danger" title="Correct answers in percent">' +
+            progressIndicator += '<span class="badge text-bg-danger" title="Correct answers in percent">' +
                 percentage.correct +
                 " %</span>";
         }
+        progressIndicator += '</a>';
     });
 
     function toggleBookmark() {
