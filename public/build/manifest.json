@@ -22,8 +22,8 @@
     "file": "assets/NewSessionHelper-811jY0Fa.js",
     "name": "NewSessionHelper"
   },
-  "_QuestionForm-BuQwKQAV.js": {
-    "file": "assets/QuestionForm-BuQwKQAV.js",
+  "_QuestionForm-B-soVaVJ.js": {
+    "file": "assets/QuestionForm-B-soVaVJ.js",
     "name": "QuestionForm",
     "imports": [
       "_chunk-BmiCtRTb.js",
@@ -39,23 +39,23 @@
       "_client-CIsKR49I.js"
     ]
   },
-  "_SessionQuestionView-CL2Zhj8r.css": {
-    "file": "assets/SessionQuestionView-CL2Zhj8r.css",
-    "src": "_SessionQuestionView-CL2Zhj8r.css"
-  },
-  "_SessionQuestionView-eRwfbtdM.js": {
-    "file": "assets/SessionQuestionView-eRwfbtdM.js",
+  "_SessionQuestionView-BnIbg7TX.js": {
+    "file": "assets/SessionQuestionView-BnIbg7TX.js",
     "name": "SessionQuestionView",
     "imports": [
       "_chunk-BmiCtRTb.js",
       "_hotkeys-js-CynuTzmj.js",
       "_lodash-DnJCGI-P.js",
       "_client-CIsKR49I.js",
-      "_QuestionForm-BuQwKQAV.js"
+      "_QuestionForm-B-soVaVJ.js"
     ],
     "css": [
       "assets/SessionQuestionView-CL2Zhj8r.css"
     ]
+  },
+  "_SessionQuestionView-CL2Zhj8r.css": {
+    "file": "assets/SessionQuestionView-CL2Zhj8r.css",
+    "src": "_SessionQuestionView-CL2Zhj8r.css"
   },
   "_StatsHelper-OM55A7os.js": {
     "file": "assets/StatsHelper-OM55A7os.js",
@@ -310,7 +310,7 @@
     ]
   },
   "resources/js/DeckForm.js": {
-    "file": "assets/DeckForm-CCu18oJV.js",
+    "file": "assets/DeckForm-DAf5FM5n.js",
     "name": "DeckForm",
     "src": "resources/js/DeckForm.js",
     "isEntry": true,
@@ -318,7 +318,7 @@
       "_chunk-BmiCtRTb.js",
       "_hotkeys-js-CynuTzmj.js",
       "_client-CIsKR49I.js",
-      "_QuestionForm-BuQwKQAV.js",
+      "_QuestionForm-B-soVaVJ.js",
       "_utils-DtYfWXEz.js"
     ]
   },
@@ -387,17 +387,17 @@
     ]
   },
   "resources/js/QuestionView.js": {
-    "file": "assets/QuestionView-BzvjQ9bb.js",
+    "file": "assets/QuestionView-DzH66fxQ.js",
     "name": "QuestionView",
     "src": "resources/js/QuestionView.js",
     "isEntry": true,
     "imports": [
       "_client-CIsKR49I.js",
-      "_SessionQuestionView-eRwfbtdM.js"
+      "_SessionQuestionView-BnIbg7TX.js"
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-D8m_ow36.js",
+    "file": "assets/SessionView-gygZuK9m.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -407,7 +407,7 @@
       "_hotkeys-js-CynuTzmj.js",
       "_client-CIsKR49I.js",
       "_UserSettingsStore-B1aNSqZA.js",
-      "_SessionQuestionView-eRwfbtdM.js",
+      "_SessionQuestionView-BnIbg7TX.js",
       "_Messages-Cw2wY3s6.js",
       "_SessionProgressBar-DTtCB-8E.js",
       "_StatsHelper-OM55A7os.js",
