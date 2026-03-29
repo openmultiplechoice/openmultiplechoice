@@ -165,8 +165,8 @@
 
     function hasChildren(message) {
         // Make sure the message has children and at least one of them in any level is not deleted
-        if (!Array.isArray(message.childs)) return false;
-        return message.childs.some(child =>
+        if (!Array.isArray(message.children)) return false;
+        return message.children.some(child =>
             !child.is_deleted || hasChildren(child)
         );
     }
@@ -310,8 +310,8 @@
             </div>
         {/if}
 
-        {#if message.childs}
-            {#each message.childs as child}
+        {#if message.children}
+            {#each message.children as child}
                 <MessageView
                     message={child}
                     indent={indent + 1}
