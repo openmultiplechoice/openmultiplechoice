@@ -21,10 +21,21 @@
             </div>
             <div class="mb-2">
                 <input type="hidden" name="is_pinned" value="0">
-                <input type="checkbox" class="form-check-input" id="is_pinned" name="is_pinned" value="1" {{ isset($info) && $info->is_pinned ? 'checked' : '' }}>
-                <label for="is_pinned" class="form-label">Pin it <i class="bi bi-pin-angle"></i></label>
+                <input type="checkbox" class="form-check-input @error('is_pinned') is-invalid @enderror" id="is_pinned" name="is_pinned" value="1" {{ old('is_pinned', isset($info) && $info->is_pinned ? 1 : 0) ? 'checked' : '' }}>
+                <label for="is_pinned" class="form-label">Show as pinned message on Home page</label>
+                @error('is_pinned')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
-            <button class="btn btn-sm btn-primary" type="submit">Save</button>
+            <div class="mb-2">
+                <input type="hidden" name="is_alert" value="0">
+                <input type="checkbox" class="form-check-input @error('is_alert') is-invalid @enderror" id="is_alert" name="is_alert" value="1" {{ old('is_alert', isset($info) && $info->is_alert ? 1 : 0) ? 'checked' : '' }}>
+                <label for="is_alert" class="form-label mb-0">Show as alert message on Home page</label>
+                @error('is_alert')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <button class="btn btn-sm btn-primary mt-2" type="submit">Save</button>
         </form>
     </div>
 </div>

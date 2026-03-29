@@ -31,6 +31,7 @@
                             @endif
                         </span>
                         {!! $entry->is_pinned ? '<i class="bi bi-pin-angle"></i>' : '' !!}
+                        {!! $entry->is_alert ? '<i class="bi bi-exclamation-triangle text-warning"></i>' : '' !!}
                     </small>
                 </p>
                 <p>{!! Purify::clean(Str::limit($entry->text, 200, ' (...)')) !!}</p>
