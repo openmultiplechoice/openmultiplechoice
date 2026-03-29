@@ -76,10 +76,10 @@
     // message object tree according to the parent relationship of the
     // messages
     function generateMessageTree(flatMessages) {
-        var childs = {};
+        var children = {};
         var root = [];
 
-        // Assemble a list of childs for each message
+        // Assemble a list of children for each message
         flatMessages.forEach((m) => {
             if (!m.parent_message_id && !m.legacy_parent_message_id) {
                 // A top-level message, add to tree and continue
@@ -88,7 +88,7 @@
             }
 
             // This message has a parent, i.e. it is a child of a
-            // previous message. Add it to the list of childs for
+            // previous message. Add it to the list of children for
             // said message
 
             var parentID = m.parent_message_id;
@@ -109,14 +109,14 @@
                 }
             }
 
-            if (!childs[parentID]) {
-                childs[parentID] = [];
+            if (!children[parentID]) {
+                children[parentID] = [];
             }
-            childs[parentID].push(m);
+            children[parentID].push(m);
         });
 
         // Sort child arrays by thumbs count
-        Object.values(childs).forEach(childArray => {
+        Object.values(children).forEach(childArray => {
             childArray.sort((a, b) =>
                 (b.thumbs_up_count - b.thumbs_down_count) - (a.thumbs_up_count - a.thumbs_down_count)
             );
@@ -127,21 +127,21 @@
             (b.thumbs_up_count - b.thumbs_down_count) - (a.thumbs_up_count - a.thumbs_down_count)
         );
 
-        // Now that we have a list of childs for each message,
+        // Now that we have a list of children for each message,
         // add them to their respective parent message objects
 
-        function addChilds(m) {
+        function addChildren(m) {
             var parentID = m.id;
-            if (childs[parentID]) {
-                m.childs = childs[parentID];
-                m.childs.forEach((m) => {
-                    addChilds(m);
+            if (children[parentID]) {
+                m.children = children[parentID];
+                m.children.forEach((m) => {
+                    addChildren(m);
                 });
             }
         }
 
         root.forEach((m) => {
-            addChilds(m);
+            addChildren(m);
         });
 
         return root;
@@ -164,10 +164,10 @@
     function updateMessageInTree(messageList, updatedMessage) {
         return messageList.map(message => {
             if (message.id === updatedMessage.id) {
-                return { ...updatedMessage, childs: message.childs };
+                return { ...updatedMessage, children: message.children };
             }
-            if (message.childs) {
-                return { ...message, childs: updateMessageInTree(message.childs, updatedMessage) };
+            if (message.children) {
+                return { ...message, children: updateMessageInTree(message.children, updatedMessage) };
             }
             return message;
         });
