@@ -123,9 +123,11 @@
         });
 
         // Sort root messages by thumbs count
-        root.sort((a, b) =>
-            (b.thumbs_up_count - b.thumbs_down_count) - (a.thumbs_up_count - a.thumbs_down_count)
-        );
+        root.sort((a, b) => {
+            const scoreA = calculateTotalScore(a, children);
+            const scoreB = calculateTotalScore(b, children);
+            return scoreB - scoreA;
+        });
 
         // Now that we have a list of children for each message,
         // add them to their respective parent message objects
@@ -197,6 +199,19 @@
         } else {
             hotkeys.setScope('questions');
         }
+    }
+
+    function calculateTotalScore(message, children, countOnlyUpvotes = false) {
+        let score = countOnlyUpvotes ? message.thumbs_up_count : message.thumbs_up_count - message.thumbs_down_count;
+
+        const messageChildren = children[message.id];
+        if (messageChildren) {
+            messageChildren.forEach(child => {
+                score += calculateTotalScore(child, children, true);
+            });
+        }
+
+        return score;
     }
 </script>
 
