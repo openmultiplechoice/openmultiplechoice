@@ -13,11 +13,17 @@
             @csrf
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input id="title" type="text" name="title" class="form-control" value="{{ $info->title ?? '' }}">
+                <input id="title" type="text" name="title" class="form-control @error('title') is-invalid @enderror" value="{{ old('title', $info->title ?? '') }}">
+                @error('title')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             <div class="mb-3">
-                <input id="text" type="hidden" name="text" value="{{ $info->text ?? '' }}">
-                <trix-editor input="text"></trix-editor>
+                <input id="text" type="hidden" name="text" value="{{ old('text', $info->text ?? '') }}">
+                <trix-editor input="text" class="form-control @error('text') is-invalid @enderror"></trix-editor>
+                @error('text')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             <div class="mb-2">
                 <input type="hidden" name="is_pinned" value="0">
