@@ -47,7 +47,9 @@ use App\Models\User;
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/', function () {
-        $info = Info::where('is_pinned', '=', true)->orderByDesc('id')->get();
+        $info = Info::where('is_pinned', '=', true)
+            ->orWhere('is_alert', '=', true)
+            ->orderByDesc('id')->get();
 
         if (Auth::user()->is_admin) {
             $submissions = DeckSubmission::all();

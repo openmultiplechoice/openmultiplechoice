@@ -4,10 +4,17 @@
 
 @section('content')
 
-<div class="row">
-    <div class="col-md">
+<div class="row align-items-center mb-2">
+    <div class="col">
         <h1 class="h4"><a class="text-reset text-decoration-none" href="/"><i class="bi bi-arrow-left me-2"></i> Info</a></h1>
     </div>
+    @if(Auth::user()->is_admin)
+        <div class="col-auto">
+            <a href="{{ url('info/create') }}" class="btn btn-sm btn-primary">
+                Create new info
+            </a>
+        </div>
+    @endif
 </div>
 
 <div class="row">
@@ -24,6 +31,7 @@
                             @endif
                         </span>
                         {!! $entry->is_pinned ? '<i class="bi bi-pin-angle"></i>' : '' !!}
+                        {!! $entry->is_alert ? '<i class="bi bi-exclamation-triangle text-warning"></i>' : '' !!}
                     </small>
                 </p>
                 <p>{!! Purify::clean(Str::limit($entry->text, 200, ' (...)')) !!}</p>

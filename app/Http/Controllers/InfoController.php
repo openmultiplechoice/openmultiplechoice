@@ -34,6 +34,7 @@ class InfoController extends Controller
             'title' => 'required|string|max:200',
             'text' => 'required|string',
             'is_pinned' => 'nullable|boolean',
+            'is_alert' => 'nullable|boolean',
         ]);
 
         $newEntry = new Info();
@@ -69,6 +70,7 @@ class InfoController extends Controller
             'title' => 'sometimes|required|string|max:200',
             'text' => 'sometimes|required|string',
             'is_pinned' => 'nullable|boolean',
+            'is_alert' => 'nullable|boolean',
         ]);
 
         $info->update($validated);
