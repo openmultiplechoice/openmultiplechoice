@@ -551,8 +551,8 @@
             </div>
             <div class="col-auto">
                 <span id="questionTypeHelp" class="form-text">
-                    Can be either multiple choice (MC) or card (CARD). <strong>Card Questions
-                    can have only one or no answer.</strong>
+                    Can be either multiple choice (MC) or card (CARD). Card Questions
+                    can have only one or no answer.
                 </span>
             </div>
         </div>

@@ -128,7 +128,7 @@
         <div class="row">
             <div class="col-md">
                 <div class="alert alert-light mb-3 py-2">
-                    Number of questions: <span class="badge text-black font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {numQuestionsInModule}</span>
+                    <span class="badge text-black font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {numQuestionsInModule}</span>
                 </div>
             </div>
         </div>

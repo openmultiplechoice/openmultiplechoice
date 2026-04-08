@@ -163,6 +163,14 @@
     </div>
 </div>
 
+<div class="row d-block d-lg-none">
+    <div class="col">
+        <div class="alert alert-warning py-2 mb-0">
+            <i class="bi bi-exclamation-triangle"></i> The deck editor is not optimized for small screen widths!
+        </div>
+    </div>
+</div>
+
 <div class="sticky-top bg-white" style="z-index: 20;" bind:clientHeight={stickyTopOffset}>
     <div class="row">
         <div class="col d-grid d-sm-block gap-2 py-3">

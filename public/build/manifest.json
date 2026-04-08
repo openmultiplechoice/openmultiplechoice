@@ -3,16 +3,16 @@
     "file": "assets/Messages-BOxywP3T.css",
     "src": "_Messages-BOxywP3T.css"
   },
-  "_Messages-Cw2wY3s6.js": {
-    "file": "assets/Messages-Cw2wY3s6.js",
+  "_Messages-CsU7AaUk.js": {
+    "file": "assets/Messages-CsU7AaUk.js",
     "name": "Messages",
     "imports": [
       "_chunk-BmiCtRTb.js",
       "_parseISO-D82H4D5I.js",
       "_formatDistance-Cij2kmp3.js",
-      "_hotkeys-js-CynuTzmj.js",
-      "_client-CIsKR49I.js",
-      "_UserSettingsStore-B1aNSqZA.js"
+      "_hotkeys-js-BKfLBj2M.js",
+      "_client-_bLNixBc.js",
+      "_UserSettingsStore-C3WFG5dp.js"
     ],
     "css": [
       "assets/Messages-BOxywP3T.css"
@@ -22,36 +22,36 @@
     "file": "assets/NewSessionHelper-811jY0Fa.js",
     "name": "NewSessionHelper"
   },
-  "_QuestionForm-BuQwKQAV.js": {
-    "file": "assets/QuestionForm-BuQwKQAV.js",
+  "_QuestionForm-DwmWR61t.js": {
+    "file": "assets/QuestionForm-DwmWR61t.js",
     "name": "QuestionForm",
     "imports": [
       "_chunk-BmiCtRTb.js",
-      "_hotkeys-js-CynuTzmj.js",
-      "_lodash-DnJCGI-P.js",
-      "_client-CIsKR49I.js"
+      "_hotkeys-js-BKfLBj2M.js",
+      "_lodash-BwFHAd7_.js",
+      "_client-_bLNixBc.js"
     ]
   },
-  "_SessionProgressBar-DTtCB-8E.js": {
-    "file": "assets/SessionProgressBar-DTtCB-8E.js",
+  "_SessionProgressBar-CGDqQCii.js": {
+    "file": "assets/SessionProgressBar-CGDqQCii.js",
     "name": "SessionProgressBar",
     "imports": [
-      "_client-CIsKR49I.js"
+      "_client-_bLNixBc.js"
     ]
   },
   "_SessionQuestionView-CL2Zhj8r.css": {
     "file": "assets/SessionQuestionView-CL2Zhj8r.css",
     "src": "_SessionQuestionView-CL2Zhj8r.css"
   },
-  "_SessionQuestionView-eRwfbtdM.js": {
-    "file": "assets/SessionQuestionView-eRwfbtdM.js",
+  "_SessionQuestionView-ZLbiVN8S.js": {
+    "file": "assets/SessionQuestionView-ZLbiVN8S.js",
     "name": "SessionQuestionView",
     "imports": [
       "_chunk-BmiCtRTb.js",
-      "_hotkeys-js-CynuTzmj.js",
-      "_lodash-DnJCGI-P.js",
-      "_client-CIsKR49I.js",
-      "_QuestionForm-BuQwKQAV.js"
+      "_hotkeys-js-BKfLBj2M.js",
+      "_lodash-BwFHAd7_.js",
+      "_client-_bLNixBc.js",
+      "_QuestionForm-DwmWR61t.js"
     ],
     "css": [
       "assets/SessionQuestionView-CL2Zhj8r.css"
@@ -61,11 +61,11 @@
     "file": "assets/StatsHelper-OM55A7os.js",
     "name": "StatsHelper"
   },
-  "_UserSettingsStore-B1aNSqZA.js": {
-    "file": "assets/UserSettingsStore-B1aNSqZA.js",
+  "_UserSettingsStore-C3WFG5dp.js": {
+    "file": "assets/UserSettingsStore-C3WFG5dp.js",
     "name": "UserSettingsStore",
     "imports": [
-      "_client-CIsKR49I.js"
+      "_client-_bLNixBc.js"
     ]
   },
   "_auto-X525ckSr.js": {
@@ -76,8 +76,8 @@
     "file": "assets/chunk-BmiCtRTb.js",
     "name": "chunk"
   },
-  "_client-CIsKR49I.js": {
-    "file": "assets/client-CIsKR49I.js",
+  "_client-_bLNixBc.js": {
+    "file": "assets/client-_bLNixBc.js",
     "name": "client"
   },
   "_formatDistance-Cij2kmp3.js": {
@@ -87,15 +87,15 @@
       "_parseISO-D82H4D5I.js"
     ]
   },
-  "_hotkeys-js-CynuTzmj.js": {
-    "file": "assets/hotkeys-js-CynuTzmj.js",
+  "_hotkeys-js-BKfLBj2M.js": {
+    "file": "assets/hotkeys-js-BKfLBj2M.js",
     "name": "hotkeys-js",
     "imports": [
       "_chunk-BmiCtRTb.js"
     ]
   },
-  "_lodash-DnJCGI-P.js": {
-    "file": "assets/lodash-DnJCGI-P.js",
+  "_lodash-BwFHAd7_.js": {
+    "file": "assets/lodash-BwFHAd7_.js",
     "name": "lodash",
     "imports": [
       "_chunk-BmiCtRTb.js"
@@ -141,7 +141,7 @@
     "src": "node_modules/sql.js/dist/sql-wasm.wasm"
   },
   "node_modules/trix/dist/trix.esm.js": {
-    "file": "assets/trix.esm-DycdRU7D.js",
+    "file": "assets/trix.esm-CsVd1VEp.js",
     "name": "trix.esm",
     "src": "node_modules/trix/dist/trix.esm.js",
     "isEntry": true
@@ -299,51 +299,51 @@
     "src": "resources/font-files/InterVariable.woff2"
   },
   "resources/js/DeckExport.js": {
-    "file": "assets/DeckExport-D_dUHjQz.js",
+    "file": "assets/DeckExport-D6FbbevH.js",
     "name": "DeckExport",
     "src": "resources/js/DeckExport.js",
     "isEntry": true,
     "imports": [
       "_chunk-BmiCtRTb.js",
       "_sql-wasm-DtLlKuWw.js",
-      "_client-CIsKR49I.js"
+      "_client-_bLNixBc.js"
     ]
   },
   "resources/js/DeckForm.js": {
-    "file": "assets/DeckForm-D4PPzhSI.js",
+    "file": "assets/DeckForm-Di7P9oiQ.js",
     "name": "DeckForm",
     "src": "resources/js/DeckForm.js",
     "isEntry": true,
     "imports": [
       "_chunk-BmiCtRTb.js",
-      "_hotkeys-js-CynuTzmj.js",
-      "_client-CIsKR49I.js",
-      "_QuestionForm-BuQwKQAV.js",
+      "_hotkeys-js-BKfLBj2M.js",
+      "_client-_bLNixBc.js",
+      "_QuestionForm-DwmWR61t.js",
       "_utils-DtYfWXEz.js"
     ]
   },
   "resources/js/DeckImport.js": {
-    "file": "assets/DeckImport-DMAPasrR.js",
+    "file": "assets/DeckImport-DHI1uQ0M.js",
     "name": "DeckImport",
     "src": "resources/js/DeckImport.js",
     "isEntry": true,
     "imports": [
       "_chunk-BmiCtRTb.js",
-      "_lodash-DnJCGI-P.js",
+      "_lodash-BwFHAd7_.js",
       "_sql-wasm-DtLlKuWw.js",
-      "_client-CIsKR49I.js"
+      "_client-_bLNixBc.js"
     ]
   },
   "resources/js/IndexSessionView.js": {
-    "file": "assets/IndexSessionView-C_4U2DDl.js",
+    "file": "assets/IndexSessionView-CanESPsG.js",
     "name": "IndexSessionView",
     "src": "resources/js/IndexSessionView.js",
     "isEntry": true,
     "imports": [
       "_parseISO-D82H4D5I.js",
       "_formatDistance-Cij2kmp3.js",
-      "_client-CIsKR49I.js",
-      "_SessionProgressBar-DTtCB-8E.js",
+      "_client-_bLNixBc.js",
+      "_SessionProgressBar-CGDqQCii.js",
       "_StatsHelper-OM55A7os.js"
     ],
     "css": [
@@ -351,65 +351,65 @@
     ]
   },
   "resources/js/IndexStatsView.js": {
-    "file": "assets/IndexStatsView-COcxyH8U.js",
+    "file": "assets/IndexStatsView-CMiCK-fS.js",
     "name": "IndexStatsView",
     "src": "resources/js/IndexStatsView.js",
     "isEntry": true,
     "imports": [
       "_auto-X525ckSr.js",
       "_parseISO-D82H4D5I.js",
-      "_client-CIsKR49I.js",
+      "_client-_bLNixBc.js",
       "_NewSessionHelper-811jY0Fa.js"
     ]
   },
   "resources/js/Messages.js": {
-    "file": "assets/Messages-CzEFkde5.js",
+    "file": "assets/Messages-Df1dbdyw.js",
     "name": "Messages",
     "src": "resources/js/Messages.js",
     "isEntry": true,
     "imports": [
-      "_client-CIsKR49I.js",
-      "_Messages-Cw2wY3s6.js"
+      "_client-_bLNixBc.js",
+      "_Messages-CsU7AaUk.js"
     ]
   },
   "resources/js/NewSessionView.js": {
-    "file": "assets/NewSessionView-KsKSWp6j.js",
+    "file": "assets/NewSessionView-39p-jjrY.js",
     "name": "NewSessionView",
     "src": "resources/js/NewSessionView.js",
     "isEntry": true,
     "imports": [
       "_auto-X525ckSr.js",
       "_parseISO-D82H4D5I.js",
-      "_client-CIsKR49I.js",
-      "_UserSettingsStore-B1aNSqZA.js",
+      "_client-_bLNixBc.js",
+      "_UserSettingsStore-C3WFG5dp.js",
       "_NewSessionHelper-811jY0Fa.js",
       "_StatsHelper-OM55A7os.js"
     ]
   },
   "resources/js/QuestionView.js": {
-    "file": "assets/QuestionView-BzvjQ9bb.js",
+    "file": "assets/QuestionView-BGRImnD_.js",
     "name": "QuestionView",
     "src": "resources/js/QuestionView.js",
     "isEntry": true,
     "imports": [
-      "_client-CIsKR49I.js",
-      "_SessionQuestionView-eRwfbtdM.js"
+      "_client-_bLNixBc.js",
+      "_SessionQuestionView-ZLbiVN8S.js"
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-D8m_ow36.js",
+    "file": "assets/SessionView-BixhH4Fu.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
     "imports": [
       "_chunk-BmiCtRTb.js",
       "_auto-X525ckSr.js",
-      "_hotkeys-js-CynuTzmj.js",
-      "_client-CIsKR49I.js",
-      "_UserSettingsStore-B1aNSqZA.js",
-      "_SessionQuestionView-eRwfbtdM.js",
-      "_Messages-Cw2wY3s6.js",
-      "_SessionProgressBar-DTtCB-8E.js",
+      "_hotkeys-js-BKfLBj2M.js",
+      "_client-_bLNixBc.js",
+      "_UserSettingsStore-C3WFG5dp.js",
+      "_SessionQuestionView-ZLbiVN8S.js",
+      "_Messages-CsU7AaUk.js",
+      "_SessionProgressBar-CGDqQCii.js",
       "_StatsHelper-OM55A7os.js",
       "_utils-DtYfWXEz.js"
     ],
@@ -418,22 +418,22 @@
     ]
   },
   "resources/js/UserSettingsView.js": {
-    "file": "assets/UserSettingsView-BQcBU-fu.js",
+    "file": "assets/UserSettingsView-DDE53sN0.js",
     "name": "UserSettingsView",
     "src": "resources/js/UserSettingsView.js",
     "isEntry": true,
     "imports": [
-      "_client-CIsKR49I.js"
+      "_client-_bLNixBc.js"
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-vByPCt73.js",
+    "file": "assets/app-DY-NVpXQ.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
       "_chunk-BmiCtRTb.js",
-      "_lodash-DnJCGI-P.js",
+      "_lodash-BwFHAd7_.js",
       "_utils-DtYfWXEz.js"
     ]
   },
