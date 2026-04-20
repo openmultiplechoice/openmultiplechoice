@@ -5,7 +5,7 @@
     import SessionProgressBar from "./SessionProgressBar.svelte";
     import { sessionProgressPercentage } from "./StatsHelper.js";
 
-    let { session } = $props();
+    let { session, progressBarStyle } = $props();
 
     let sessionAtPretty = $derived(formatDistance(parseISO(session.created_at), new Date()));
 
@@ -36,7 +36,8 @@
 
 <div class="mt-1 mb-2 p-2 rounded-2 border shadow-sm session-hover">
     <SessionProgressBar
-        bind:progressPercentage />
+        bind:progressPercentage
+        variant={progressBarStyle} />
     <div class="row mt-1">
         <div class="col-md-5 text-truncate" title="{session.name}">
             <strong>{session.name}</strong>

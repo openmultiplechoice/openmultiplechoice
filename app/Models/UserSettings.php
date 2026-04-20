@@ -19,6 +19,7 @@ class UserSettings extends Model
         'session_shuffle_answers',
         'session_multiple_answer_tries',
         'session_show_answer_stats',
+        'index_session_progress_style',
     ];
 
     public function user()
