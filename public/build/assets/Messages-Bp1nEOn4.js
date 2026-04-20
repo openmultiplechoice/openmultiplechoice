@@ -1,0 +1,1 @@
+import{T as e}from"./client-GN_w2Adm.js";import{t}from"./Messages-CpiDAtI5.js";var n=document.getElementById(`MessagesView`);e(t,{target:n,props:{questionId:n.dataset.questionId,questionContext:{isAnswered:!0}}});

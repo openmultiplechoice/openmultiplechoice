@@ -226,9 +226,9 @@
                         <span class="visually-hidden">Loading messages ...</span>
                     </div>
                 {:else if loadingStatus === Status.EMPTY}
-                    <div class="text-muted">
-                        No comments yet. Be the first to leave a comment!
-                    </div>
+                    <p class="text-muted">
+                        <small>No comments yet. Be the first to leave a comment!</small>
+                    </p>
                 {/if}
             </div>
         {/each}
