@@ -75,7 +75,7 @@ class Kernel extends ConsoleKernel
                 ->with('questions:id')
                 ->get();
 
-            Cache::put('stats/decks/new', $newDecks);
+            Cache::put('stats/decks/new', $newDecks->toArray());
 
             // Get the 6 most popular (public) decks of the last X days. X is increased
             // until 6 decks with at least 2 sessions are found or 256 days is reached.
@@ -103,7 +103,7 @@ class Kernel extends ConsoleKernel
                 }
             }
             Cache::put('stats/decks/popular_timespan', $popularDecksTimespan);
-            Cache::put('stats/decks/popular', $popularDecks);
+            Cache::put('stats/decks/popular', $popularDecks->toArray());
 
             // Get the 6 most recently used decks that are publicly available.
             // Use subquery JOIN instead of correlated subquery in ORDER BY to
@@ -122,7 +122,7 @@ class Kernel extends ConsoleKernel
                 ->with('questions:id')
                 ->get();
 
-            Cache::put('stats/decks/last_used', $lastUsedDecks);
+            Cache::put('stats/decks/last_used', $lastUsedDecks->toArray());
         })->name('updateDeckStats')->everyTwoMinutes()->withoutOverlapping();
 
         $schedule->call(function () {
