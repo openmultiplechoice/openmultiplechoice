@@ -77,16 +77,18 @@
             <i class="bi bi-rocket"></i> No sessions yet
         </div>
     {/each}
-    <div class="d-flex justify-content-end mb-2">
-        <button
-            class="btn btn-sm btn-outline-secondary fw-bold px-4 py-0 w-auto text-dark"
-            style="background: {nextProgressStylePreview.background};"
-            onclick={cycleProgressStyle}
-            title="Switch progress style"
-            type="button">
-            <i class="bi bi-arrow-repeat"></i>
-        </button>
-    </div>
+    {#if sessions.length > 0}
+        <div class="d-flex justify-content-end mb-2">
+            <button
+                class="btn btn-sm btn-outline-secondary fw-bold px-4 py-0 w-auto text-dark"
+                style="background: {nextProgressStylePreview.background};"
+                onclick={cycleProgressStyle}
+                title="Switch progress style"
+                type="button">
+                <i class="bi bi-arrow-repeat"></i>
+            </button>
+        </div>
+    {/if}
 {:else}
     <div class="d-flex justify-content-center">
         <div class="spinner-border text-secondary" role="status">
