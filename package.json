@@ -18,7 +18,7 @@
         "dompurify": "^3.3.3",
         "hotkeys-js": "^4.0.2",
         "https-browserify": "^1.0.0",
-        "laravel-vite-plugin": "^3.0.0",
+        "laravel-vite-plugin": "^3.1.0",
         "lodash": "^4.17.23",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.98.0",
