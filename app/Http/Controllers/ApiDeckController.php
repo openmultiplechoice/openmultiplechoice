@@ -51,14 +51,24 @@ class ApiDeckController extends Controller
                 abort(400, 'Invalid value for "kind" parameter');
             }
 
+            $userId = Auth::id();
+
+            // Deck cards need the user's total session count to display it
+            // and the latest session's answers for the progress badge
             $decks = $decksQuery
                 ->with('module', 'module.subject', 'questions:id,is_invalid', 'questions.images:id,question_id')
-                ->with(['sessions' => function ($query) {
-                    $query->where('user_id', '=', Auth::id())->with('answerChoices');
+                ->withCount(['sessions' => function ($query) use ($userId) {
+                    $query->where('user_id', '=', $userId);
                 }])
-                ->with(['bookmarks' => function ($query) {
+                ->with(['sessions' => function ($query) use ($userId) {
+                    $query->where('user_id', '=', $userId)
+                        ->latest('id')
+                        ->limit(1)
+                        ->with('answerChoices');
+                }])
+                ->with(['bookmarks' => function ($query) use ($userId) {
                     $query->select('id', 'user_id')
-                        ->where('user_id', '=', Auth::id());
+                        ->where('user_id', '=', $userId);
                 }])
                 ->orderBy('exam_at', 'desc')
                 ->orderBy('id', 'desc')

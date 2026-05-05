@@ -1,111 +1,64 @@
 <script>
-    import { run, preventDefault } from 'svelte/legacy';
-
-    import Chart from 'chart.js/auto';
+    import { untrack } from 'svelte';
 
     let { decks, moduleId } = $props();
 
-    let validQuestionsInModule = $state([]);
+    let questionIds = $state([]);
     let validAnswerChoices = $state([]);
+    let statsRequestId = 0;
 
-    let chartAnsweredQuestions = $state();
-    let canvasAnsweredQuestions = $state();
-
-    run(() => {
-        decks, (() => {
-            if (!decks) {
-                // No decks loaded yet
-                return;
-            }
-
-            const questionsInModule = decks.map(d => d.questions).flat();
-
-            validQuestionsInModule = questionsInModule.filter(q => !q.is_invalid);
-
-            const answerChoices = [];
-            for (const deck of decks) {
-                // For each deck, get the latest session from the list of sessions
-
-                const sessions = deck.sessions.sort((a, b) => b.id - a.id /* sort by ID desc */);
-                if (sessions.length === 0) {
-                    continue;
-                }
-
-                const latestSession = sessions[0];
-
-                // Take all answer choices from the latest session
-                answerChoices.push(...latestSession.answer_choices);
-            }
-
-            // Filter out answer choices for questions that are not in the module
-            // or not valid
-            validAnswerChoices = answerChoices.filter(
-                e => validQuestionsInModule.some(({ id }) => id === e.question_id)
-            );
-        })();
+    $effect(() => {
+        // Whenever `decks` updates (for example when the user
+        // changes the deck kind from main to user decks), we
+        // have to re-fetch the answers for the list of current
+        // `questionIds` to show the correct stats for the given
+        // set of questions
+        const d = decks;
+        if (!d) {
+            // No decks loaded yet
+            return;
+        }
+        untrack(() => fetchAnswers(d));
     });
 
-    let numQuestionsInModule = $derived(validQuestionsInModule.length);
+    function fetchAnswers(decks) {
+        const requestId = ++statsRequestId;
+
+        const questionsInModule = decks.map(d => d.questions).flat();
+        const validQuestions = questionsInModule.filter(q => !q.is_invalid);
+
+        questionIds = [...new Set(validQuestions.map(q => q.id))];
+
+        axios.post('/api/answerchoices/latest_by_question_id', { question_ids: questionIds })
+            .then(response => {
+                // Ignore this response, as a newer request has been made since this one
+                if (requestId !== statsRequestId) {
+                    return;
+                }
+                validAnswerChoices = response.data.answer_choices;
+            })
+            .catch(error => {
+                if (requestId !== statsRequestId) {
+                    return;
+                }
+                console.error("Failed to fetch latest answers", error);
+                validAnswerChoices = [];
+            })
+            .finally(() => {
+                if (requestId !== statsRequestId) {
+                    return;
+                }
+            });
+    }
+
+    let numQuestionsInModule = $derived(questionIds.length);
+
     let numAnsweredQuestions = $derived(validAnswerChoices.length);
     let numUnansweredQuestions = $derived(numQuestionsInModule - numAnsweredQuestions);
     let numCorrectAnsweredQuestions = $derived(validAnswerChoices.filter(a => a.is_correct && !a.help_used).length);
     let numCorrectWithHelpAnsweredQuestions = $derived(validAnswerChoices.filter(a => a.is_correct && a.help_used).length);
     let numIncorrectAnsweredQuestions = $derived(validAnswerChoices.filter(a => !a.is_correct).length)
     let incorrectAnsweredQuestionsIds = $derived(validAnswerChoices.filter(a => !a.is_correct).map(ac => ac.question_id));
-
-    run(() => {
-        if (canvasAnsweredQuestions) {
-            (() => {
-                const config = {
-                    type: 'doughnut',
-                    data: {
-                        labels: [
-                            'Correct',
-                            'Correct with help',
-                            'Incorrect',
-                            'Unanswered'
-                        ],
-                        datasets: [
-                            {
-                                label: 'n',
-                                data: [
-                                    numCorrectAnsweredQuestions,
-                                    numCorrectWithHelpAnsweredQuestions,
-                                    numIncorrectAnsweredQuestions,
-                                    numUnansweredQuestions
-                                ],
-                                backgroundColor: [
-                                    '#198754',
-                                    '#ffc107',
-                                    '#dc3545',
-                                    '#bbbbbb'
-                                ],
-                                hoverOffet: 4
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        hover: {
-                            mode: null
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        }
-                    }
-                };
-
-                if (chartAnsweredQuestions) {
-                    chartAnsweredQuestions.destroy();
-                }
-                var ctx = canvasAnsweredQuestions.getContext('2d');
-                chartAnsweredQuestions = new Chart(ctx, config);
-            })();
-        }
-    });;
 
     function createSession(questionIds) {
         const data = {

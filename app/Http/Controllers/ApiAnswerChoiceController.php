@@ -12,6 +12,38 @@ use App\Models\Session;
 
 class ApiAnswerChoiceController extends Controller
 {
+    public function indexByQuestionId(Request $request)
+    {
+        $validated = $request->validate([
+            'question_ids' => 'present|array',
+            'question_ids.*' => 'integer',
+        ]);
+
+        $questionIds = $validated['question_ids'];
+
+        if (empty($questionIds)) {
+            return response()->json(['answer_choices' => []]);
+        }
+
+        $latestAnswerIdsSubquery = DB::table('answer_choices')
+            ->join('sessions', 'sessions.id', '=', 'answer_choices.session_id')
+            ->where('sessions.user_id', Auth::id())
+            ->whereIn('answer_choices.question_id', $questionIds)
+            ->selectRaw('MAX(answer_choices.id) as max_id')
+            ->groupBy('answer_choices.question_id');
+
+        $latestAnswers = DB::table('answer_choices')
+            ->joinSub($latestAnswerIdsSubquery, 'latest', function ($join) {
+                $join->on('answer_choices.id', '=', 'latest.max_id');
+            })
+            ->select('answer_choices.question_id', 'answer_choices.is_correct', 'answer_choices.help_used')
+            ->get();
+
+        return response()->json([
+            'answer_choices' => $latestAnswers,
+        ]);
+    }
+
     public function store(Request $request, Session $session)
     {
         if (Auth::id() != $session->user_id) {

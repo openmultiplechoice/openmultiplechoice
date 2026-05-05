@@ -92,8 +92,8 @@
                 </span>
             {/if}
             <span class="badge body-secondary text-body-emphasis font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {deck.questions.length}</span>
-            {#if deck.sessions}
-                <span class="badge body-secondary text-body-emphasis font-monospace" title="Number of sessions"><i class="bi bi-rocket"></i> {deck.sessions.length}</span>
+            {#if deck.sessions_count !== undefined}
+                <span class="badge body-secondary text-body-emphasis font-monospace" title="Number of sessions"><i class="bi bi-rocket"></i> {deck.sessions_count}</span>
             {/if}
             {#if progressIndicator}
                 {@html progressIndicator}

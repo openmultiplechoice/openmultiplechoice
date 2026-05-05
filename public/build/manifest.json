@@ -384,12 +384,11 @@
     ]
   },
   "resources/js/NewSessionView.js": {
-    "file": "assets/NewSessionView-DL4qUfOJ.js",
+    "file": "assets/NewSessionView-CsCEhvEb.js",
     "name": "NewSessionView",
     "src": "resources/js/NewSessionView.js",
     "isEntry": true,
     "imports": [
-      "_auto-C7x-HSxA.js",
       "_parseISO-CAY4WM6I.js",
       "_client-BBkYLWPM.js",
       "_UserSettingsStore-ChX07Y6P.js",
