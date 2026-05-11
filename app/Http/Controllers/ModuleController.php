@@ -29,6 +29,7 @@ class ModuleController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:500',
             'subject_id' => 'required|integer|exists:subjects,id',
+            'description' => 'nullable|string',
         ]);
 
         $subject = Subject::findOrFail($validated['subject_id']);
@@ -76,6 +77,7 @@ class ModuleController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:500',
             'subject_id' => 'required|integer|exists:subjects,id',
+            'description' => 'nullable|string',
         ]);
 
         $subject = Subject::findOrFail($validated['subject_id']);

@@ -9,7 +9,11 @@ class Module extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'subject_id',
+        'description',
+    ];
 
     public function decks()
     {

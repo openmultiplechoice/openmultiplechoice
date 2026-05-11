@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 use App\Models\Module;
 
@@ -12,6 +11,7 @@ class ApiModuleController extends Controller
     public function index()
     {
         $modules = Module::with('subject')->get();
+
         return response()->json($modules);
     }
 
@@ -22,14 +22,10 @@ class ApiModuleController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:500',
             'subject_id' => 'required|integer|exists:subjects,id',
+            'description' => 'nullable|string',
         ]);
 
-        $module = new Module();
-
-        $module->name = $validated['name'];
-        $module->subject_id = $validated['subject_id'];
-
-        $module->save();
+        $module = Module::create($validated);
 
         return response()->json($module);
     }
@@ -38,6 +34,7 @@ class ApiModuleController extends Controller
     {
         abort_if(!$request->name, 400);
         $module = Module::where('name', '=', $request->name)->firstOrFail();
+
         return response()->json($module);
     }
 }

@@ -1,7 +1,7 @@
 <script>
-    import { run, preventDefault } from 'svelte/legacy';
-
     import { onMount } from "svelte";
+    import DOMPurify from "dompurify";
+    import _ from 'lodash';
 
     import NewSessionDecksView from "./NewSessionDecksView.svelte";
     import NewSessionSuperDeckView from "./NewSessionSuperDeckView.svelte";
@@ -11,22 +11,20 @@
     let modules = $state([]);
     let subjects = $state([]);
 
-    let selectedModules = $state([]);
+    let selectedModules = $derived(
+        modules.filter((m) =>
+            $UserSettings.last_subject_id
+                ? m.subject
+                    ? m.subject.id === $UserSettings.last_subject_id
+                    : false
+                : true
+        )
+    );
+    let selectedModule = $derived(
+        modules.find((m) => m.id === $UserSettings.last_module_id) ?? null
+    );
 
     let selectedDecks = $state(new Set());
-
-    run(() => {
-        $UserSettings.last_subject_id,
-            (() => {
-                selectedModules = modules.filter((m) =>
-                    $UserSettings.last_subject_id
-                        ? m.subject
-                            ? m.subject.id === $UserSettings.last_subject_id
-                            : false
-                        : true
-                );
-            })();
-    });
 
     onMount(() => {
         axios
@@ -117,6 +115,7 @@
         }
         selectedDecks = new Set([...selectedDecks]);
     }
+
 </script>
 
 <div class="row">
@@ -145,7 +144,8 @@
             <ul class="list-group w-100">
                 {#each subjects as subject}
                     <button
-                        onclick={preventDefault(() => selectSubject(subject.id))}
+                        type="button"
+                        onclick={() => selectSubject(subject.id)}
                         class="list-group-item list-group-item-action {$UserSettings.last_subject_id ===
                         subject.id
                             ? 'list-group-item-dark'
@@ -154,7 +154,8 @@
                         <ul class="list-group m-2 me-0">
                             {#each selectedModules as module}
                                 <button
-                                    onclick={preventDefault(() => selectModule(module.id))}
+                                    type="button"
+                                    onclick={() => selectModule(module.id)}
                                     data-bs-target="#offcanvasModuleSelection"
                                     data-bs-dismiss="offcanvas"
                                     class="list-group-item list-group-item-action {$UserSettings.last_module_id ===
@@ -172,6 +173,37 @@
     <div class="col-12 col-lg-8">
         <NewSessionSuperDeckView bind:selectedDecks />
         {#if $UserSettings.last_module_id}
+            {#if selectedModule?.description}
+                {#key selectedModule.id}
+                    <div class="accordion mb-1">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button
+                                    class="accordion-button collapsed gap-2 ps-3"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#moduleDescriptionCollapse">
+                                    <span>
+                                        <span class="d-block small fw-semibold text-body-secondary">Module description</span>
+                                        <span class="d-block fw-normal">
+                                            {@html _.truncate(DOMPurify.sanitize(selectedModule.description, {ALLOWED_TAGS: []}), {'length': 100})}
+                                        </span>
+                                    </span>
+                                </button>
+                            </h2>
+                            <div
+                                id="moduleDescriptionCollapse"
+                                class="accordion-collapse collapse">
+                                <div class="accordion-body bg-body-tertiary">
+                                    <div class="trix-content text-break">
+                                        {@html DOMPurify.sanitize(selectedModule.description)}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {/key}
+            {/if}
             <NewSessionDecksView
                 moduleId={$UserSettings.last_module_id}
                 deckKind={$UserSettings.last_new_session_deck_kind}

@@ -33,6 +33,7 @@ class ApiModulesTest extends TestCase
             ->postJson('/api/modules', [
                 'name' => 'New module',
                 'subject_id' => $this->subject->id,
+                'description' => 'Exam hints',
             ])
             ->assertStatus(200);
 
