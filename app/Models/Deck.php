@@ -90,17 +90,4 @@ class Deck extends Model
             ->where('is_ephemeral', false)
             ->where('is_archived', false);
     }
-
-    /**
-     * Scope a query to only include decks that are bookmarked by the user
-     * with public read-write access.
-     */
-    #[Scope]
-    protected function bookmarkedAndWritableBy(Builder $query, User $user): void
-    {
-        $query->whereHas('bookmarks', function ($query) use ($user) {
-            $query->where('user_id', '=', $user->id)
-                ->where('access', '=', 'public-rw');
-        });
-    }
 }

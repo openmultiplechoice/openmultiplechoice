@@ -7,6 +7,7 @@ use Tests\TestCase;
 
 use App\Models\Deck;
 use App\Models\Module;
+use App\Models\Question;
 use App\Models\User;
 
 class ApiDecksTest extends TestCase
@@ -111,5 +112,78 @@ class ApiDecksTest extends TestCase
         $this->actingAs($this->userB)
             ->getJson('/api/decks/' . $this->deckByAPrivate->id)
             ->assertStatus(404);
+    }
+
+    public function testIndexWithQuestionIdsReturnsAddToDeckCandidates(): void
+    {
+        $ownedQuestion = Question::factory()->create();
+        $bookmarkedQuestion = Question::factory()->create();
+
+        $ownedDeck = Deck::factory()->create([
+            'access' => 'private',
+            'user_id' => $this->userB->id,
+        ]);
+        $ownedDeck->questions()->attach($ownedQuestion->id);
+
+        $listedOwnedDeck = Deck::factory()->create([
+            'access' => 'public-rw-listed',
+            'user_id' => $this->userB->id,
+        ]);
+        $listedOwnedDeck->questions()->attach(Question::factory()->create()->id);
+
+        $archivedOwnedDeck = Deck::factory()->create([
+            'access' => 'private',
+            'is_archived' => true,
+            'user_id' => $this->userB->id,
+        ]);
+        $archivedOwnedDeck->questions()->attach(Question::factory()->create()->id);
+
+        $ephemeralOwnedDeck = Deck::factory()->create([
+            'access' => 'private',
+            'is_ephemeral' => true,
+            'user_id' => $this->userB->id,
+        ]);
+        $ephemeralOwnedDeck->questions()->attach(Question::factory()->create()->id);
+
+        $bookmarkedWritableDeck = Deck::factory()->create([
+            'access' => 'public-rw',
+            'user_id' => $this->userA->id,
+        ]);
+        $bookmarkedWritableDeck->questions()->attach($bookmarkedQuestion->id);
+        $bookmarkedWritableDeck->bookmarks()->attach($this->userB->id);
+
+        $bookmarkedReadOnlyDeck = Deck::factory()->create([
+            'access' => 'public-ro',
+            'user_id' => $this->userA->id,
+        ]);
+        $bookmarkedReadOnlyDeck->questions()->attach(Question::factory()->create()->id);
+        $bookmarkedReadOnlyDeck->bookmarks()->attach($this->userB->id);
+
+        $unbookmarkedWritableDeck = Deck::factory()->create([
+            'access' => 'public-rw',
+            'user_id' => $this->userA->id,
+        ]);
+        $unbookmarkedWritableDeck->questions()->attach(Question::factory()->create()->id);
+
+        $response = $this->actingAs($this->userB)
+            ->getJson('/api/decks/withquestionids')
+            ->assertOk()
+            ->assertJsonCount(2);
+
+        $decks = collect($response->json());
+
+        $this->assertEqualsCanonicalizing(
+            [$ownedDeck->id, $bookmarkedWritableDeck->id],
+            $decks->pluck('id')->all()
+        );
+
+        $this->assertEquals(
+            [$ownedQuestion->id],
+            collect($decks->firstWhere('id', $ownedDeck->id)['questions'])->pluck('id')->all()
+        );
+        $this->assertEquals(
+            [$bookmarkedQuestion->id],
+            collect($decks->firstWhere('id', $bookmarkedWritableDeck->id)['questions'])->pluck('id')->all()
+        );
     }
 }
