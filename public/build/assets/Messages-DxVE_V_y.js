@@ -1,1 +1,0 @@
-import{T as e}from"./client-DjjKk_Un.js";import{t}from"./Messages-DNibOXDo.js";var n=document.getElementById(`MessagesView`);e(t,{target:n,props:{questionId:n.dataset.questionId,questionContext:{isAnswered:!0}}});
