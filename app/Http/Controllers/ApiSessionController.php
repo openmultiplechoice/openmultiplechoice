@@ -33,7 +33,7 @@ class ApiSessionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'deck_id' => 'required|integer|exists:decks,id',
+            'deck_id' => 'required|integer',
         ]);
 
         $deck = Deck::findOrFail($validated['deck_id']);
@@ -90,15 +90,12 @@ class ApiSessionController extends Controller
     {
         $validated = $request->validate([
             'question_ids' => 'required|array|min:1',
-            'question_ids.*' => 'integer|exists:questions,id',
+            'question_ids.*' => 'integer',
             'deck_name' => 'nullable|string|max:500',
             'module_id' => 'nullable|integer|exists:modules,id',
         ]);
 
         $questions = Question::findMany($validated['question_ids']);
-        if (!$questions) {
-            abort(400, 'No question IDs given');
-        }
 
         $deckName = $validated['deck_name'] ?? 'Repeat '. count($questions) .' incorrect questions';
 
@@ -169,7 +166,7 @@ class ApiSessionController extends Controller
         abort_if($session->user_id != Auth::id(), 404);
 
         $validated = $request->validate([
-            'current_question_id' => 'sometimes|nullable|integer|exists:questions,id',
+            'current_question_id' => 'sometimes|nullable|integer',
             'name' => 'sometimes|required|string|max:500',
         ]);
 

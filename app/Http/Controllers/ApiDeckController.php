@@ -120,7 +120,7 @@ class ApiDeckController extends Controller
             'module_id' => 'nullable|integer|exists:modules,id',
             'access' => 'nullable|string|in:private,public-ro,public-rw,public-rw-listed',
             'question_ids' => 'nullable|array',
-            'question_ids.*' => 'integer|exists:questions,id',
+            'question_ids.*' => 'integer',
         ]);
 
         abort_if(($validated['access'] ?? null) == "public-rw-listed" && !Auth::user()->is_admin, 403);
