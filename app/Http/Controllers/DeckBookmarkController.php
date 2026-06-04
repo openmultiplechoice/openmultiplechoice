@@ -13,7 +13,14 @@ class DeckBookmarkController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $bookmarkedDecks = $user->bookmarkedDecks()->paginate(self::PAGE_SIZE);
+        $bookmarkedDecks = $user->bookmarkedDecks()
+            ->select('decks.id', 'decks.name', 'decks.created_at', 'decks.exam_at')
+            ->withCount('questions')
+            ->paginate(self::PAGE_SIZE);
+
+        $bookmarkedDecks->getCollection()->each(function ($deck) {
+            $deck->is_bookmarked = true;
+        });
 
         return view('decks-bookmarks', ['bookmarked_decks' => $bookmarkedDecks]);
     }

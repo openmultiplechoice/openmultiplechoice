@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
 use App\Models\Subject;
@@ -15,24 +14,44 @@ class DeckController extends Controller
 
     public function index(Request $request)
     {
-        $decks = Deck::where([
-                ['user_id', '=', Auth::id()],
+        $userId = Auth::id();
+
+        $decks = Deck::query()
+            ->select('id', 'name', 'created_at', 'exam_at')
+            ->where([
+                ['user_id', '=', $userId],
                 ['access', '!=', 'public-rw-listed'],
                 ['is_ephemeral', '=', false],
                 ['is_archived', '=', false],
-            ])->orderBy('id', 'desc')->paginate(self::PAGE_SIZE);
+            ])
+            ->withCount('questions')
+            ->withExists(['bookmarks as is_bookmarked' => function ($query) use ($userId) {
+                $query->where('users.id', $userId);
+            }])
+            ->orderBy('id', 'desc')
+            ->paginate(self::PAGE_SIZE);
 
         return view('decks', ['decks' => $decks]);
     }
 
     public function indexArchived(Request $request)
     {
-        $decks = Deck::where([
-                ['user_id', '=', Auth::id()],
+        $userId = Auth::id();
+
+        $decks = Deck::query()
+            ->select('id', 'name', 'created_at', 'exam_at')
+            ->where([
+                ['user_id', '=', $userId],
                 ['access', '!=', 'public-rw-listed'],
                 ['is_ephemeral', '=', false],
                 ['is_archived', '=', true],
-            ])->orderBy('id', 'desc')->paginate(self::PAGE_SIZE);
+            ])
+            ->withCount('questions')
+            ->withExists(['bookmarks as is_bookmarked' => function ($query) use ($userId) {
+                $query->where('users.id', $userId);
+            }])
+            ->orderBy('id', 'desc')
+            ->paginate(self::PAGE_SIZE);
 
         return view('decks-archived', ['decks' => $decks]);
     }
