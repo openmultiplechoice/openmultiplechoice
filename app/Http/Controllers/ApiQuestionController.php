@@ -22,7 +22,7 @@ class ApiQuestionController extends Controller
         $validated = $request->validate([
             'text' => 'nullable|string|max:6000',
             'answers' => 'nullable|array',
-            'answers.*' => 'integer|exists:answers,id',
+            'answers.*' => 'integer',
         ]);
 
         $question = new Question();
@@ -71,7 +71,7 @@ class ApiQuestionController extends Controller
             'needs_review' => 'sometimes|boolean',
             'case_id' => 'sometimes|nullable|integer|exists:cases,id',
             'answers' => 'sometimes|nullable|array',
-            'answers.*.id' => 'required|integer|exists:answers,id',
+            'answers.*.id' => 'required|integer',
         ]);
 
         // Store the original correct_answer_id before filling the model with new data

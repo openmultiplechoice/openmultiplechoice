@@ -19,8 +19,8 @@ class ApiAnswerChoiceController extends Controller
         }
 
         $validated = $request->validate([
-            'question_id' => 'required|integer|exists:questions,id',
-            'answer_id' => 'nullable|integer|exists:answers,id',
+            'question_id' => 'required|integer',
+            'answer_id' => 'nullable|integer',
             'help_used' => 'required|boolean',
             'is_correct' => 'required|boolean',
         ]);
