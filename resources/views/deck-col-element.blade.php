@@ -1,14 +1,14 @@
 <div class="col-md-6 mb-3">
     <div class="card">
         <div class="card-header">
-            <span class="badge text-bg-light">
+            <span class="badge text-body">
                 @if ($deck->exam_at)
                     {{ $deck->exam_at->format('d/m/Y') }}
                 @else
                     {{ $deck->created_at->format('d/m/Y') }}
                 @endif
             </span>
-            <span class="badge text-bg-light font-monospace" title="Number of questions">
+            <span class="badge text-body font-monospace" title="Number of questions">
                 <i class="bi bi-collection"></i> {{ sizeof($deck->questions) }}
             </span>
             <form method="post" action="/decks/{{ $deck->id }}/bookmark" style="display: inline-block;">

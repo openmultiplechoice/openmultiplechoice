@@ -39,10 +39,10 @@
     }
 </script>
 
-<div class="row mb-3 pt-1 pb-1 sticky-top bg-white">
+<div class="row mb-3 pt-1 pb-1 sticky-top bg-body">
     {#if data.session.current_question_id && data.session.current_question_id != data.deck.questions[0].id}
         <div class="col-6">
-            <button onclick={preventDefault(handleBack)} class="btn btn-sm btn-light w-100">
+            <button onclick={preventDefault(handleBack)} class="btn btn-sm btn-outline-secondary w-100">
                 <span class="fw-bold">&leftarrow;</span> Previous</button>
         </div>
     {:else}
@@ -54,7 +54,7 @@
             <button onclick={preventDefault(handleNext)}
             class="btn btn-sm w-100"
             class:btn-warning={currentQuestionContext.isAnswered}
-            class:btn-light={!currentQuestionContext.isAnswered}>
+            class:btn-outline-secondary={!currentQuestionContext.isAnswered}>
             Next <span class="fw-bold">&rightarrow;</span>
         </button>
         </div>

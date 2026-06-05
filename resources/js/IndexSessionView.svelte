@@ -80,7 +80,7 @@
     {#if sessions.length > 0}
         <div class="d-flex justify-content-end mb-2">
             <button
-                class="btn btn-sm btn-outline-secondary fw-bold px-4 py-0 w-auto text-dark"
+                class="btn btn-sm btn-outline-secondary fw-bold px-4 py-0 w-auto text-body"
                 style="background: {nextProgressStylePreview.background};"
                 onclick={cycleProgressStyle}
                 title="Switch progress style"

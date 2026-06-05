@@ -20,6 +20,7 @@ class UserSettings extends Model
         'session_multiple_answer_tries',
         'session_show_answer_stats',
         'index_session_progress_style',
+        'theme_mode',
     ];
 
     public function user()

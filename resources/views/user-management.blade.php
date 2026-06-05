@@ -52,7 +52,7 @@
         </tbody>
     </table>
 
-    <div class="sticky-bottom bg-white mt-3 pt-3">
+    <div class="sticky-bottom bg-body mt-3 pt-3">
         {{ $users->links() }}
     </div>
 @endsection

@@ -20,6 +20,7 @@ export default defineConfig({
             'resources/js/UserSettingsView.js',
             'resources/js/DeckExport.js',
             'resources/js/DeckImport.js',
+            'resources/js/ThemeModeButton.js',
 
             'node_modules/bootstrap/dist/js/bootstrap.esm.js',
             'node_modules/trix/dist/trix.esm.js',

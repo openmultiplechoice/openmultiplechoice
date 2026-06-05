@@ -431,9 +431,8 @@
         <div class="col mb-1">
             <p class="text-truncate">
                 <button
-                    class="btn btn-sm d-none d-sm-none d-md-none d-lg-inline"
-                    class:bg-light={!settingsShowSidebar}
-                    class:bg-dark-subtle={settingsShowSidebar}
+                    class="btn btn-sm btn-outline-secondary d-none d-sm-none d-md-none d-lg-inline"
+                    class:active={settingsShowSidebar}
                     title="Toggle sidebar"
                     onclick={preventDefault(() => {
                         $UserSettings.session_show_sidebar = !$UserSettings.session_show_sidebar;
@@ -441,9 +440,8 @@
                     <i class="bi bi-layout-sidebar"></i>
                 </button>
                 <button
-                    class="btn btn-sm"
-                    class:bg-light={!settingsShuffleAnswers}
-                    class:bg-dark-subtle={settingsShuffleAnswers}
+                    class="btn btn-sm btn-outline-secondary"
+                    class:active={settingsShuffleAnswers}
                     title="Toggle answer shuffling"
                     onclick={preventDefault(() => {
                         $UserSettings.session_shuffle_answers = !$UserSettings.session_shuffle_answers;
@@ -451,9 +449,8 @@
                     <i class="bi bi-shuffle"></i>
                 </button>
                 <button
-                    class="btn btn-sm"
-                    class:bg-light={!settingsExamMode}
-                    class:bg-dark-subtle={settingsExamMode}
+                    class="btn btn-sm btn-outline-secondary"
+                    class:active={settingsExamMode}
                     title="Toggle exam mode"
                     onclick={preventDefault(() => {
                         $UserSettings.session_exam_mode = !$UserSettings.session_exam_mode;

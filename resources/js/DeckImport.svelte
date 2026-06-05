@@ -326,7 +326,7 @@
     }
 </script>
 
-<button class="btn btn-sm btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#importOffcanvas">
+<button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#importOffcanvas">
     <i class="bi bi-upload"></i> Import deck
 </button>
 

@@ -47,7 +47,7 @@
                                 {!! Purify::clean($message->text) !!}
                             </div>
                             <div class="d-flex justify-content-end small gap-2">
-                                <a href="{{ url('questions', $message->question->id) }}" target="_blank" class="btn btn-sm btn-link link-dark">Show</a>
+                                <a href="{{ url('questions', $message->question->id) }}" target="_blank" class="btn btn-sm btn-link link-body-emphasis">Show</a>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
             <p class="alert alert-light">No comments yet</p>
         @endforelse
 
-        <div class="sticky-bottom bg-white mt-3 pt-3">
+        <div class="sticky-bottom bg-body mt-3 pt-3">
             {{ $messages->links() }}
         </div>
     </div>

@@ -171,13 +171,13 @@
     </div>
 </div>
 
-<div class="sticky-top bg-white" style="z-index: 20;" bind:clientHeight={stickyTopOffset}>
+<div class="sticky-top bg-body" style="z-index: 20;" bind:clientHeight={stickyTopOffset}>
     <div class="row">
         <div class="col d-grid d-sm-block gap-2 py-3">
             <button type="button" class="btn btn-sm btn-primary" title="Add a new MC question (Shortcut: Alt+Q)"
                     onclick={() => { addNewQuestion("mc"); }}>Add MC question</button>
             <button type="button" class="btn btn-sm btn-primary" onclick={() => { addNewQuestion("card"); }}>Add card question</button>
-            <button type="button" class="btn btn-sm btn-light" onclick={addNewCase}><i class="bi bi-clipboard2-pulse"></i> Add case</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick={addNewCase}><i class="bi bi-clipboard2-pulse"></i> Add case</button>
         </div>
     </div>
 

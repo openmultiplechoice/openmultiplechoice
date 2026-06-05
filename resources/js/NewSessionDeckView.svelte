@@ -77,23 +77,23 @@
     <div class="card">
         <div class="card-header">
             {#if deck.exam_at}
-                <span class="badge text-bg-light">
+                <span class="badge body-secondary text-body-emphasis">
                     {format(
                         parseISO(deck.exam_at),
                         "dd.MM.yyyy"
                     )}
                 </span>
             {:else}
-                <span class="badge text-bg-light">
+                <span class="badge body-secondary text-body-emphasis">
                     {format(
                         parseISO(deck.created_at),
                         "dd.MM.yyyy"
                     )}
                 </span>
             {/if}
-            <span class="badge text-bg-light font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {deck.questions.length}</span>
+            <span class="badge body-secondary text-body-emphasis font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {deck.questions.length}</span>
             {#if deck.sessions}
-                <span class="badge text-bg-light font-monospace" title="Number of sessions"><i class="bi bi-rocket"></i> {deck.sessions.length}</span>
+                <span class="badge body-secondary text-body-emphasis font-monospace" title="Number of sessions"><i class="bi bi-rocket"></i> {deck.sessions.length}</span>
             {/if}
             {#if progressIndicator}
                 {@html progressIndicator}

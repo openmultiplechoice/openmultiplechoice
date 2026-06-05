@@ -21,7 +21,7 @@
     @foreach ($info as $entry)
         <div class="col-lg-4">
             <div class="alert alert-light card-highlight" role="alert">
-                <h6 class="alert-heading"><a class="link-dark alert-link stretched-link text-decoration-none" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
+                <h6 class="alert-heading"><a class="link-body-emphasis alert-link stretched-link text-decoration-none" href="{{ url('info', $entry->id) }}">{{ $entry->title }}</a></h6>
                 <p>
                     <small>
                         <span class="font-monospace">

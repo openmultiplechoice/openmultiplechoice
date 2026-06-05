@@ -17,9 +17,9 @@
             {answeredPercentage > 5 ? answeredPercentage + "%" : ""}
         </div>
         <div
-            class="progress-bar fw-bold"
+            class="progress-bar bg-secondary-subtle text-body fw-bold"
             role="progressbar"
-            style="color: #1b1e21; background-color: #d6d8d9; width: {progressPercentage.unanswered}%">
+            style="width: {progressPercentage.unanswered}%">
             {progressPercentage.unanswered > 5 ? progressPercentage.unanswered + "%" : ""}
         </div>
     {:else if variant === "basic"}
@@ -30,9 +30,9 @@
             {answeredPercentage > 5 ? answeredPercentage + "%" : ""}
         </div>
         <div
-            class="progress-bar fw-bold"
+            class="progress-bar bg-secondary-subtle text-body fw-bold"
             role="progressbar"
-            style="color: #1b1e21; background-color: #d6d8d9; width: {progressPercentage.unanswered}%">
+            style="width: {progressPercentage.unanswered}%">
             {progressPercentage.unanswered > 5 ? progressPercentage.unanswered + "%" : ""}
         </div>
     {:else}
@@ -55,9 +55,9 @@
             {progressPercentage.incorrect > 5 ? progressPercentage.incorrect + "%" : ""}
         </div>
         <div
-            class="progress-bar fw-bold"
+            class="progress-bar bg-secondary-subtle text-body fw-bold"
             role="progressbar"
-            style="color: #1b1e21; background-color: #d6d8d9; width: {progressPercentage.unanswered}%">
+            style="width: {progressPercentage.unanswered}%">
             {progressPercentage.unanswered > 5 ? progressPercentage.unanswered + "%" : ""}
         </div>
     {/if}

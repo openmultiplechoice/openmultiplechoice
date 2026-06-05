@@ -162,7 +162,7 @@
             {#each filteredDecksAdded as deck}
                 <div class="row mb-1">
                     <div class="col-9 text-truncate">
-                        <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
+                        <a href="/decks/{deck.id}" class="link-body-emphasis">{deck.name}</a>
                     </div>
                     <div class="col-3 d-grid gap-4">
                         <button
@@ -178,7 +178,7 @@
             {#each filteredDecksOther as deck}
                 <div class="row mb-1">
                     <div class="col-9 text-truncate">
-                        <a href="/decks/{deck.id}" class="link-dark">{deck.name}</a>
+                        <a href="/decks/{deck.id}" class="link-body-emphasis">{deck.name}</a>
                     </div>
                     <div class="col-3 d-grid gap-4">
                         <button
@@ -201,7 +201,7 @@
             </div>
         {/if}
         <hr />
-        <div class="row sticky-bottom bg-white mt-3">
+        <div class="row sticky-bottom bg-body mt-3">
             <div class="col">
                 <p>Create new deck:</p>
                 <div class="mb-2">

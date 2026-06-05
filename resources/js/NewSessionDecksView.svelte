@@ -85,7 +85,7 @@
     }
 </script>
 
-<div class="row mb-3 py-2 bg-white sticky-top">
+<div class="row mb-3 py-2 bg-body sticky-top">
     <div class="col">
         <div class="input-group">
             <span class="input-group-text" class:bg-info-subtle={deckKind !== 'public-rw-listed'}><i class="bi bi-archive"></i></span>
@@ -122,7 +122,7 @@
 </div>
 
 {#if pageData && pageData.total > 0}
-    <div class="row sticky-bottom bg-white mt-3 pt-3">
+    <div class="row sticky-bottom bg-body mt-3 pt-3">
         <div class="col">
             <p class="small text-muted">
                 Showing <span class="fw-semibold">{pageData.from}</span>

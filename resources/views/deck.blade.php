@@ -71,33 +71,33 @@
     </div>
     <div class="col-md-12 col-lg-9 col-xl-8 col-xxl-6">
         @if (count($questions) > 0)
-            <div class="row mb-3 pt-1 pb-1 bg-white sticky-top">
+            <div class="row mb-3 pt-1 pb-1 bg-body sticky-top">
                 @if ($urlPrev)
                     <div class="col-6">
-                        <a href="{{ url($urlPrev) }}" class="btn btn-sm btn-light w-100"><span class="fw-bold">&leftarrow;</span> Previous</a>
+                        <a href="{{ url($urlPrev) }}" class="btn btn-sm btn-outline-secondary w-100"><span class="fw-bold">&leftarrow;</span> Previous</a>
                     </div>
                 @else
                     <div class="col-6">
-                        <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-light w-100">Overview</a>
+                        <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-outline-secondary w-100">Overview</a>
                     </div>
                 @endif
                 @if ($urlNext)
                     <div class="col-6">
-                        <a href="{{ url($urlNext) }}" class="btn btn-sm btn-light w-100">Next <span class="fw-bold">&rightarrow;</span></a>
+                        <a href="{{ url($urlNext) }}" class="btn btn-sm btn-outline-secondary w-100">Next <span class="fw-bold">&rightarrow;</span></a>
                     </div>
                 @else
                     <div class="col-6">
-                        <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-light w-100">Overview</a>
+                        <a href="{{ url('decks/'. $deck->id) }}" class="btn btn-sm btn-outline-secondary w-100">Overview</a>
                     </div>
                 @endif
             </div>
         @endif
 
         <div class="alert alert-light mb-3 py-2">
-            <span class="badge text-black font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {{ count($questions) }}</span>
-            <span class="badge text-black font-monospace" title="Number of sessions"><i class="bi bi-rocket-takeoff"></i> {{ count($deck->sessions) }}</span>
-            <span class="badge text-black font-monospace" title="Number of bookmarks"><i class="bi bi-bookmark"></i> {{ $deck->bookmarks_count }}</span>
-            <span class="badge text-black font-monospace" title="Access level">{{ $deck->access }}</span>
+            <span class="badge text-body font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {{ count($questions) }}</span>
+            <span class="badge text-body font-monospace" title="Number of sessions"><i class="bi bi-rocket-takeoff"></i> {{ count($deck->sessions) }}</span>
+            <span class="badge text-body font-monospace" title="Number of bookmarks"><i class="bi bi-bookmark"></i> {{ $deck->bookmarks_count }}</span>
+            <span class="badge text-body font-monospace" title="Access level">{{ $deck->access }}</span>
         </div>
 
         @if ($deck->description)

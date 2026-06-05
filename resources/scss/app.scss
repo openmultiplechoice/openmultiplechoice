@@ -7,6 +7,14 @@
 
 @import '~trix/dist/trix.css';
 
+:root {
+    --message-hover-bg: rgba(0, 0, 0, 0.02);
+}
+
+html[data-bs-theme="dark"] {
+    --message-hover-bg: rgba(255, 255, 255, 0.06);
+}
+
 html, body {
     font-family: Inter, sans-serif !important;
     font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
@@ -77,9 +85,39 @@ trix-toolbar .trix-button--icon-heading-1 {
 };
 
 .message-content:hover:not(.bg-light) {
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: var(--message-hover-bg);
 }
 
 .message-content {
     transition: background-color 0.2s ease-in-out;
+}
+
+// Trix editor dark mode support
+// based on https://github.com/basecamp/trix/issues/947#issuecomment-2054076733
+html[data-bs-theme="dark"] {
+    trix-toolbar .trix-button {
+        filter: unquote("invert()");
+    }
+
+    trix-editor {
+        color: white;
+    }
+
+    trix-toolbar .trix-button:disabled {
+        filter: unquote("invert()") grayscale(1) brightness(2);
+    }
+    trix-toolbar .trix-button--icon::before {
+        opacity: 1;
+    }
+    trix-toolbar .trix-button--icon:disabled::before {
+        opacity: 0.5;
+    }
+
+    .trix-dialog .trix-button-group {
+        filter: unquote("invert()");
+    }
+    .trix-input--dialog,
+    .trix-button--dialog {
+        color: black;
+    }
 }

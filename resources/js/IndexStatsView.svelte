@@ -177,7 +177,7 @@
                 {#each statsDecksNew as deck}
                     <div class="alert alert-light mx-1 my-2 p-1 text-truncate small" role="alert">
                         {#if deck.questions.length > 0}
-                            <span class="badge text-dark font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
+                            <span class="badge text-body font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
                         <button onclick={preventDefault(() => createSession(deck.id))}
                             type="button" class="btn btn-sm btn-primary">
@@ -194,10 +194,10 @@
                 {#each statsDecksPopular as deck}
                     <div class="alert alert-light mx-1 my-2 p-1 text-truncate small" role="alert">
                         {#if deck.questions.length > 0}
-                            <span class="badge text-dark font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
+                            <span class="badge text-body font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
                         {#if deck.sessions_count}
-                            <span class="badge text-dark font-monospace" title="Number of sessions"><i class="bi bi-rocket"></i> {@html deck.sessions_count.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
+                            <span class="badge text-body font-monospace" title="Number of sessions"><i class="bi bi-rocket"></i> {@html deck.sessions_count.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
                         <button onclick={preventDefault(() => createSession(deck.id))}
                             type="button" class="btn btn-sm btn-primary">
@@ -217,7 +217,7 @@
                         class:alert-light={deck.access == "public-rw-listed"}
                         role="alert">
                         {#if deck.questions.length > 0}
-                            <span class="badge text-dark font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
+                            <span class="badge text-body font-monospace" title="Number of questions"><i class="bi bi-collection"></i> {@html deck.questions.length.toString().padEnd(3, ' ').replace(/ /g, '&nbsp;')}</span>
                         {/if}
                         <button onclick={preventDefault(() => createSession(deck.id))}
                                 type="button" class="btn btn-sm btn-primary">
@@ -249,6 +249,6 @@
 
 <div class="row">
     <div class="col-md">
-        <span class="badge text-bg-light text-muted">Last updated: {statsLastUpdatedAt ? format(statsLastUpdatedAt, "HH:mm") : "unknown"}</span>
+        <span class="badge bg-body-secondary text-body text-muted">Last updated: {statsLastUpdatedAt ? format(statsLastUpdatedAt, "HH:mm") : "unknown"}</span>
     </div>
 </div>

@@ -130,7 +130,7 @@
             {/if}
             {#if question.case}
                 <div style="box-shadow: 4px 4px rgba(0,0,0,.2);"
-                    class="alert alert-secondary" role="alert">
+                    class="alert alert-secondary border-0" role="alert">
                     <p class="small fw-bold"><i class="bi bi-clipboard2-pulse"></i> CASE</p>
                     <p class="trix-content">{@html DOMPurify.sanitize(question.case.text)}</p>
                 </div>

@@ -322,7 +322,7 @@
                 <p class="trix-content">{@html DOMPurify.sanitize(cases.find(c => c.id === question.case_id).text)}</p>
             </div>
             <div class="text-end m-1">
-                <button type="button" class="btn btn-sm btn-light" title="Remove case"
+                <button type="button" class="btn btn-sm btn-outline-secondary" title="Remove case"
                     onclick={preventDefault(handleRemoveCase)}><i class="bi bi-trash"></i> Remove case</button>
             </div>
         {:else if showCaseSelector && cases && cases.length > 0}
@@ -346,14 +346,14 @@
         <div class="mt-3 mb-2">
             <label for="questionText" class="form-label">Question text</label>
             <input id="questionText{question.id}" type="hidden" bind:value={question.text} />
-            <trix-editor id="editor-questionText" class="bg-light trix-content" bind:this={editorQuestion} input="questionText{question.id}"></trix-editor>
+            <trix-editor id="editor-questionText" class="trix-content" bind:this={editorQuestion} input="questionText{question.id}"></trix-editor>
             {@html savingStatus}
         </div>
 
         <div class="accordion my-2 " id="accordionQuestionHint">
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button text-black bg-white py-2 px-3 {showQuestionHint ? '' : 'collapsed'}"
+                    <button class="accordion-button text-body bg-body py-2 px-3 {showQuestionHint ? '' : 'collapsed'}"
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#collapseQuestionHint"
@@ -366,7 +366,7 @@
                     <div class="accordion-body">
                         <div class="mt-3 mb-3">
                             <input id="questionHint{question.id}" type="hidden" bind:value={question.hint} />
-                            <trix-editor id="editor-questionHint" class="bg-light trix-content" bind:this={editorHint} input="questionHint{question.id}" />
+                            <trix-editor id="editor-questionHint" class="trix-content" bind:this={editorHint} input="questionHint{question.id}" />
                             {@html savingStatus}
                             <div id="questionHint" class="form-text">
                                 A hint that can be shown to the user if they are stuck.
@@ -380,7 +380,7 @@
         <div class="accordion my-2" id="accordionQuestionComment">
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button text-black bg-white py-2 px-3 {showQuestionComment ? '' : 'collapsed'}"
+                    <button class="accordion-button text-body bg-body py-2 px-3 {showQuestionComment ? '' : 'collapsed'}"
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#collapseQuestionComment"
@@ -393,7 +393,7 @@
                     <div class="accordion-body">
                         <div class="mt-3 mb-3">
                             <input id="questionComment{question.id}" type="hidden" bind:value={question.comment} />
-                            <trix-editor id="editor-questionComment" class="bg-light trix-content" bind:this={editorComment} input="questionComment{question.id}" />
+                            <trix-editor id="editor-questionComment" class="trix-content" bind:this={editorComment} input="questionComment{question.id}" />
                             {@html savingStatus}
                             <div id="questionHint" class="form-text">
                                 A comment that will be shown once the user has answered the question.
@@ -406,7 +406,7 @@
             </div>
         </div>
 
-        <div class="mb-3 p-3 bg-light rounded">
+        <div class="mb-3 p-3 bg-body-tertiary rounded">
             <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="checkInvalidQuestion" bind:checked={question.is_invalid} onclick={preventDefault(toggleQuestionValid)}>
                 <label class="form-check-label" for="checkInvalidQuestion">
@@ -458,7 +458,7 @@
                             }
                         })}
                         type="button"
-                        class="btn btn-sm btn-light"><i class="bi bi-trash"></i></button>
+                        class="btn btn-sm btn-outline-secondary"><i class="bi bi-trash"></i></button>
                 </div>
                 <img src="/{image.path}" class="card-img-top" alt="" />
                 {#if image.comment}
@@ -487,7 +487,7 @@
                     class="btn btn-sm {correctAnswerId ===
                     answer.id
                         ? 'btn-success'
-                        : 'btn-light'}"
+                        : 'btn-outline-secondary'}"
                     title="Set as correct answer">
                         <i class="bi bi-check-lg" />
                     </button>
@@ -498,7 +498,7 @@
                         handleAnswerRemove(answer.id);
                     }
                 })}
-                type="button" class="btn btn-sm btn-light"
+                type="button" class="btn btn-sm btn-outline-secondary"
                 title="Delete answer">
                     <i class="bi bi-trash" />
                 </button>
@@ -507,7 +507,7 @@
 {/each}
 
 {#if question.type === "mc" || question.answers.length === 0}
-    <div class="sticky-bottom bg-white mt-3" style="z-index: 10;">
+    <div class="sticky-bottom bg-body mt-3" style="z-index: 10;">
         <div class="row py-3">
             <div class="col">
                 <button onclick={handleAnswerAdd} class="btn btn-sm btn-primary"

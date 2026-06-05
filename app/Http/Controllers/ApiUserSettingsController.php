@@ -32,6 +32,7 @@ class ApiUserSettingsController extends Controller
             'session_multiple_answer_tries' => $user->settings->session_multiple_answer_tries,
             'session_show_answer_stats' => $user->settings->session_show_answer_stats,
             'index_session_progress_style' => $user->settings->index_session_progress_style ?? 'default',
+            'theme_mode' => $user->settings->theme_mode ?? 'auto',
         ];
 
         return response()->json($userSettings);
@@ -50,6 +51,7 @@ class ApiUserSettingsController extends Controller
             'session_multiple_answer_tries' => 'sometimes|boolean',
             'session_show_answer_stats' => 'sometimes|boolean',
             'index_session_progress_style' => 'sometimes|string|in:default,unicorn,basic',
+            'theme_mode' => 'sometimes|string|in:auto,light,dark',
         ]);
 
         $user = Auth::user();
