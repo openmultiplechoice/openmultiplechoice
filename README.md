@@ -1,5 +1,3 @@
-<img align="right" width="40" height="40" src="https://raw.githubusercontent.com/openmultiplechoice/openmultiplechoice/master/logo/omc-white-bg.png#gh-light-mode-only">
-
 # OpenMultipleChoice
 
 ![](https://github.com/openmultiplechoice/openmultiplechoice/actions/workflows/ci.yml/badge.svg?branch=master)
