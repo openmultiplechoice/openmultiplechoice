@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 use App\Models\Deck;
 use App\Models\Question;
@@ -94,11 +92,23 @@ class ApiDeckController extends Controller
     {
         $user = Auth::user();
 
-        $decks = Deck::personalDecksBy($user)
-            ->orWhere(function (Builder $query) use ($user) {
-                $query->bookmarkedAndWritableBy($user);
-            })
-            ->with('questions:id')->get();
+        $personalDeckIds = Deck::query()
+            ->select('id')
+            ->personalDecksBy($user);
+
+        $bookmarkedWritableDeckIds = Deck::query()
+            ->select('decks.id')
+            ->join('deck_bookmark', 'decks.id', '=', 'deck_bookmark.deck_id')
+            ->where('deck_bookmark.user_id', $user->id)
+            ->where('decks.access', 'public-rw');
+
+        $candidateDeckIds = $personalDeckIds->union($bookmarkedWritableDeckIds);
+
+        $decks = Deck::query()
+            ->select('decks.id', 'decks.name')
+            ->whereIn('decks.id', $candidateDeckIds)
+            ->with('questions:id')
+            ->get();
 
         return response()->json($decks);
     }

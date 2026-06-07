@@ -9,11 +9,11 @@
                 @endif
             </span>
             <span class="badge text-body font-monospace" title="Number of questions">
-                <i class="bi bi-collection"></i> {{ sizeof($deck->questions) }}
+                <i class="bi bi-collection"></i> {{ $deck->questions_count }}
             </span>
             <form method="post" action="/decks/{{ $deck->id }}/bookmark" style="display: inline-block;">
                 @csrf
-                @php($is_bookmarked = $deck->bookmarked())
+                @php($is_bookmarked = $deck->is_bookmarked)
                 @if($is_bookmarked)
                     @method('delete')
                 @endif
