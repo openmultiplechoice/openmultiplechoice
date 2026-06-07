@@ -28,7 +28,7 @@ GitHub.
 ## Security
 
 For security issues, please send a private mail to the address below and do not
-open an issue.
+open a public issue.
 
 ```
 security@openmultiplechoice.de
