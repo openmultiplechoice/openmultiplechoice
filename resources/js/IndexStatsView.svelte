@@ -1,5 +1,5 @@
 <script>
-    import { run, preventDefault } from 'svelte/legacy';
+    import { preventDefault } from 'svelte/legacy';
 
     import { onMount, onDestroy } from "svelte";
     import { createSession } from "./NewSessionHelper.js";
@@ -8,7 +8,7 @@
     import { format, parseISO } from "date-fns";
 
     let canvasAnswers = $state();
-    let chart = $state();
+    let chart;
     let statsUpdateInterval;
     let statsLastUpdatedAt = $state();
     let statsAnswersByHour = $state({});
@@ -47,11 +47,23 @@
             });
     }
 
-    run(() => {
-        if (canvasAnswers && statsAnswersByHour && statsUsersByHour) {
+    $effect(() => {
+        // Read the reactive dependencies (state variables)
+        // up front and unconditionally so this effect always
+        // re-subscribes to them. With the `if (... && ...)`
+        // statement below, a run where `canvasAnswers` is not
+        // yet bound would never read the stats state
+        // (`statsAnswersByHour` and `statsUsersByHour`) and
+        // would therefore not track it, so the canvas would
+        // not update.
+        const answersByHour = statsAnswersByHour;
+        const usersByHour = statsUsersByHour;
+        const canvas = canvasAnswers;
+
+        if (canvas && answersByHour && usersByHour) {
             (() => {
-                const labels = Object.keys(statsAnswersByHour);
-                const dataset = Object.values(statsAnswersByHour);
+                const labels = Object.keys(answersByHour);
+                const dataset = Object.values(answersByHour);
 
                 const sum = dataset.reduce((a, b) => a + b, 0);
                 if (sum === 0) {
@@ -79,7 +91,7 @@
                             },
                             {
                                 label: 'Users',
-                                data: Object.values(statsUsersByHour),
+                                data: Object.values(usersByHour),
                                 backgroundColor: 'rgba(54, 162, 235, 0.7)',
                                 borderColor: 'rgba(54, 162, 235, 0.7)',
                                 fill: true,
@@ -154,7 +166,7 @@
                 if (chart) {
                     chart.destroy();
                 }
-                var ctx = canvasAnswers.getContext('2d');
+                var ctx = canvas.getContext('2d');
                 chart = new Chart(ctx, config);
             })();
         }
