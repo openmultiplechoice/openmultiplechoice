@@ -9,20 +9,24 @@
         <form class="mb-4" method="post" enctype="multipart/form-data">
             @csrf
 
-            @error('gif')
-                <div class="alert alert-danger" role="alert">{{ $message }}</div>
-            @enderror
             <div class="mb-3">
                 <label for="gif" class="form-label">GIF</label>
-                <input class="form-control" type="file" id="gif" name="gif">
+                <input class="form-control @error('gif') is-invalid @enderror" type="file" id="gif" name="gif">
+                @error('gif')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
 
-            @error('name')
-                <div class="alert alert-danger" role="alert">{{ $message }}</div>
-            @enderror
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" name="name">
+                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name">
+                @error('name')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
             <button type="submit" class="btn btn-sm btn-primary">Add GIF</button>
         </form>
