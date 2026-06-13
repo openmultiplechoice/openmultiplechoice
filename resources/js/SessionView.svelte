@@ -474,7 +474,7 @@
                     bind:progressPercentage />
             {/if}
             {#if sessionComplete && currentQuestionContext.isAnswered}
-                <SessionOutro bind:progressPercentage sessionId={data.session.id} />
+                <SessionOutro bind:answerChoices bind:sessionStartTime={data.session.created_at} bind:progressPercentage sessionId={data.session.id} />
             {/if}
         </div>
     </div>

@@ -54,10 +54,19 @@
     let numQuestionsInModule = $derived(questionIds.length);
 
     let numAnsweredQuestions = $derived(validAnswerChoices.length);
+    let percentAnsweredQuestions = $derived(Math.round(100 * numAnsweredQuestions/numQuestionsInModule))
+
     let numUnansweredQuestions = $derived(numQuestionsInModule - numAnsweredQuestions);
+
     let numCorrectAnsweredQuestions = $derived(validAnswerChoices.filter(a => a.is_correct && !a.help_used).length);
+    let percentCorrectAnsweredQuestions = $derived(Math.round(100 * numCorrectAnsweredQuestions/numAnsweredQuestions))
+
     let numCorrectWithHelpAnsweredQuestions = $derived(validAnswerChoices.filter(a => a.is_correct && a.help_used).length);
+    let percentCorrectWithHelpAnsweredQuestions = $derived(Math.round(100 * numCorrectWithHelpAnsweredQuestions/numAnsweredQuestions));
+
     let numIncorrectAnsweredQuestions = $derived(validAnswerChoices.filter(a => !a.is_correct).length)
+    let percentIncorrectAnsweredQuestions = $derived(Math.round(100 * numIncorrectAnsweredQuestions/numAnsweredQuestions));
+
     let incorrectAnsweredQuestionsIds = $derived(validAnswerChoices.filter(a => !a.is_correct).map(ac => ac.question_id));
 
     function createSession(questionIds) {
@@ -87,64 +96,74 @@
         </div>
     {/if}
 {:else if decks}
-    <div class="row mb-5">
-        <div class="col-md-5">
-            <canvas bind:this={canvasAnsweredQuestions}></canvas>
+    <div class="row align-items-center lh-1 mb-1 alert">
+            <div class="col-auto"><span class="text-secondary fw-bold fs-4">✓</span></div>
+            <div class="col-auto"><span class="badge text-bg-secondary font-monospace">{numAnsweredQuestions}/{numQuestionsInModule} <span class="ms-4">{String(percentAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
+            <div class="col">
+                <div class="progress" role="progressbar" style="height: 1.25rem">
+                    <div class="progress-bar bg-secondary fw-bold" style="width: {percentAnsweredQuestions}%"></div>
+                </div>
+            </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-lg-7">
+            <div class="alert border rounded-3 vstack gap-2">
+                {#if numCorrectAnsweredQuestions > 0}
+                    <div class="row align-items-center lh-1">
+                        <div class="col-auto"><span class="text-success fw-bold fs-4">✓</span></div>
+                        <div class="col-auto"><span class="badge text-bg-success font-monospace">{numCorrectAnsweredQuestions}/{numAnsweredQuestions} <span class="ms-4">{String(percentCorrectAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
+                        <div class="col">
+                            <div class="progress" role="progressbar" style="height: 1.25rem">
+                                <div class="progress-bar bg-success fw-bold" style="width: {percentCorrectAnsweredQuestions}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+                {#if numCorrectWithHelpAnsweredQuestions > 0}
+                    <div class="row align-items-center lh-1">
+                        <div class="col-auto"><span class="text-warning fw-bold fs-4">✓</span></div>
+                        <div class="col-auto"><span class="badge text-bg-warning font-monospace">{numCorrectWithHelpAnsweredQuestions}/{numAnsweredQuestions}  <span class="ms-4">{String(percentCorrectWithHelpAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
+                        <div class="col">
+                            <div class="progress" role="progressbar" style="height: 1.25rem">
+                                <div class="progress-bar bg-warning fw-bold" style="width: {percentCorrectWithHelpAnsweredQuestions}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+                {#if numIncorrectAnsweredQuestions > 0}
+                    <div class="row align-items-center lh-1">
+                        <div class="col-auto"><span class="text-danger fw-bold fs-4">✗</span></div>
+                        <div class="col-auto"><span class="badge text-bg-danger font-monospace">{numIncorrectAnsweredQuestions}/{numAnsweredQuestions} <span class="ms-4">{String(percentIncorrectAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
+                        <div class="col">
+                            <div class="progress" role="progressbar" style="height: 1.25rem">
+                                <div class="progress-bar bg-danger fw-bold" style="width: {percentIncorrectAnsweredQuestions}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+            </div>
         </div>
-        <div class="col-md-7 mt-3">
-            <table class="table">
-                <thead></thead>
-                <tbody>
-                    <tr>
-                        <td>Questions</td>
-                        <td class="font-monospace text-end">{numQuestionsInModule}</td>
-                    </tr>
-                    <tr>
-                        <td>Answered</td>
-                        <td class="font-monospace text-end">{numAnsweredQuestions}
-                            ({Math.round(100 * numAnsweredQuestions/numQuestionsInModule).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                    </tr>
-                    <tr>
-                        <td>Unanswered</td>
-                        <td class="font-monospace text-end">{numUnansweredQuestions}
-                            ({Math.round(100 * numUnansweredQuestions/numQuestionsInModule).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                    </tr>
-                    <tr>
-                        <td>Correct</td>
-                        <td class="font-monospace text-end">{numCorrectAnsweredQuestions}
-                            ({Math.round(100 * numCorrectAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                    </tr>
-                    <tr>
-                        <td>Correct with help</td>
-                        <td class="font-monospace text-end">{numCorrectWithHelpAnsweredQuestions}
-                            ({Math.round(100 * numCorrectWithHelpAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                    </tr>
-                    <tr>
-                        <td>Incorrect</td>
-                        <td class="font-monospace text-end">{numIncorrectAnsweredQuestions}
-                            ({Math.round(100 * numIncorrectAnsweredQuestions/numAnsweredQuestions).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}%)</td>
-                    </tr>
-                </tbody>
-            </table>
-
+        <div class="col-lg-5">
             {#if numIncorrectAnsweredQuestions > 0}
-                <div class="d-grid gap-2">
-                    {#if numIncorrectAnsweredQuestions >= 40}
-                        <button onclick={preventDefault(() => createSession(incorrectAnsweredQuestionsIds.slice(0, 30)))}
-                            class="btn btn-sm btn-outline-secondary" type="button">
-                                <i class="bi bi-repeat"></i> Repeat 30 incorrect
+                <div class="alert py-0">
+                    <div class="d-grid gap-2">
+                        {#if numIncorrectAnsweredQuestions >= 40}
+                            <button onclick={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 30))}
+                                class="btn btn-sm btn-primary" type="button">
+                                    <i class="bi bi-repeat"></i> Repeat <span class="badge text-bg-light font-monospace">30</span> incorrect
+                            </button>
+                        {/if}
+                        {#if numIncorrectAnsweredQuestions >= 70}
+                            <button onclick={() => createSession(incorrectAnsweredQuestionsIds.slice(0, 60))}
+                                class="btn btn-sm btn-primary" type="button">
+                                    <i class="bi bi-repeat"></i> Repeat <span class="badge text-bg-light font-monospace">60</span> incorrect
+                            </button>
+                        {/if}
+                        <button onclick={() => createSession(incorrectAnsweredQuestionsIds)}
+                            class="btn btn-sm btn-primary" type="button">
+                                <i class="bi bi-repeat"></i> Repeat <span class="badge text-bg-light font-monospace">{numIncorrectAnsweredQuestions}</span> incorrect
                         </button>
-                    {/if}
-                    {#if numIncorrectAnsweredQuestions >= 70}
-                        <button onclick={preventDefault(() => createSession(incorrectAnsweredQuestionsIds.slice(0, 60)))}
-                            class="btn btn-sm btn-outline-secondary" type="button">
-                                <i class="bi bi-repeat"></i> Repeat 60 incorrect
-                        </button>
-                    {/if}
-                    <button onclick={preventDefault(() => createSession(incorrectAnsweredQuestionsIds))}
-                        class="btn btn-sm btn-outline-secondary" type="button">
-                            <i class="bi bi-repeat"></i> Repeat {numIncorrectAnsweredQuestions} incorrect
-                    </button>
+                    </div>
                 </div>
             {/if}
         </div>
