@@ -1,1 +1,0 @@
-import{Z as e}from"./client-Fp1-Pp0h.js";function t(){let t=e({});return axios.get(`/api/users/me/settings`).then(function(e){t.set(e.data)}).catch(function(e){alert(e),console.log(e)}),t}var n=t();export{n as t};

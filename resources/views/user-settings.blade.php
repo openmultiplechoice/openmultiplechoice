@@ -16,15 +16,17 @@
 
         <h4 class="mt-3">User</h4>
         <h6>Public name</h6>
-        @error('public_name')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
         <form action="/me" method="post">
             @method('PUT')
             @csrf
 
             <div class="mb-3">
-                <input type="text" class="form-control" name="public_name" value="{{ $user->public_name }}">
+                <input type="text" class="form-control @error('public_name') is-invalid @enderror" name="public_name" value="{{ $user->public_name }}">
+                @error('public_name')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
                 <div id="emailHelp" class="form-text">You can set an optional <i>public name</i> to be shown instead of your username.</div>
             </div>
 

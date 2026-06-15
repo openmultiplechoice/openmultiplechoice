@@ -1,5 +1,3 @@
-<img align="right" width="40" height="40" src="https://raw.githubusercontent.com/openmultiplechoice/openmultiplechoice/master/logo/omc-white-bg.png#gh-light-mode-only">
-
 # OpenMultipleChoice
 
 ![](https://github.com/openmultiplechoice/openmultiplechoice/actions/workflows/ci.yml/badge.svg?branch=master)
@@ -30,7 +28,7 @@ GitHub.
 ## Security
 
 For security issues, please send a private mail to the address below and do not
-open an issue.
+open a public issue.
 
 ```
 security@openmultiplechoice.de

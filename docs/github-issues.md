@@ -11,4 +11,3 @@ and organize the issues mainly with the following
 | `enhancement` | Issues describing a (proposed) enhancement ||
 | `documentation` | Issues relating to OMC's documentation ||
 | `help wanted` | Issues for which we would love help from contributors | Please talk to us first if you plan to pick up one of those. |
-| `good first issue` | Issues that are considered to be a good place to start contributing to OMC ||
