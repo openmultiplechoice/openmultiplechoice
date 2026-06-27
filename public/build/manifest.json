@@ -3,13 +3,13 @@
     "file": "assets/Messages-BOxywP3T.css",
     "src": "_Messages-BOxywP3T.css"
   },
-  "_Messages-BaoAbpgJ.js": {
-    "file": "assets/Messages-BaoAbpgJ.js",
+  "_Messages-DkhCvBKW.js": {
+    "file": "assets/Messages-DkhCvBKW.js",
     "name": "Messages",
     "imports": [
       "_chunk-QTnfLwEv.js",
-      "_parseISO-CAY4WM6I.js",
-      "_formatDistance-ZCZmTCt7.js",
+      "_parseISO-BMpAabXC.js",
+      "_formatDistance-CR0DEjXv.js",
       "_hotkeys-js-DXfLkIHs.js",
       "_debounce-DeLyjyE-.js",
       "_client-BBkYLWPM.js",
@@ -60,8 +60,8 @@
       "assets/SessionQuestionView-Bs8ChTwW.css"
     ]
   },
-  "_StatsHelper-DYCFcpJb.js": {
-    "file": "assets/StatsHelper-DYCFcpJb.js",
+  "_StatsHelper-D_1mjylR.js": {
+    "file": "assets/StatsHelper-D_1mjylR.js",
     "name": "StatsHelper"
   },
   "_UserSettingsStore-ChX07Y6P.js": {
@@ -70,10 +70,6 @@
     "imports": [
       "_client-BBkYLWPM.js"
     ]
-  },
-  "_auto-C7x-HSxA.js": {
-    "file": "assets/auto-C7x-HSxA.js",
-    "name": "auto"
   },
   "_chunk-QTnfLwEv.js": {
     "file": "assets/chunk-QTnfLwEv.js",
@@ -90,11 +86,11 @@
       "_chunk-QTnfLwEv.js"
     ]
   },
-  "_formatDistance-ZCZmTCt7.js": {
-    "file": "assets/formatDistance-ZCZmTCt7.js",
+  "_formatDistance-CR0DEjXv.js": {
+    "file": "assets/formatDistance-CR0DEjXv.js",
     "name": "formatDistance",
     "imports": [
-      "_parseISO-CAY4WM6I.js"
+      "_parseISO-BMpAabXC.js"
     ]
   },
   "_hotkeys-js-DXfLkIHs.js": {
@@ -108,8 +104,8 @@
       "_chunk-QTnfLwEv.js"
     ]
   },
-  "_parseISO-CAY4WM6I.js": {
-    "file": "assets/parseISO-CAY4WM6I.js",
+  "_parseISO-BMpAabXC.js": {
+    "file": "assets/parseISO-BMpAabXC.js",
     "name": "parseISO"
   },
   "_sql-wasm-w7Jxgc6d.js": {
@@ -343,58 +339,56 @@
     ]
   },
   "resources/js/IndexSessionView.js": {
-    "file": "assets/IndexSessionView-R_i6MtqT.js",
+    "file": "assets/IndexSessionView-CfyGg7IY.js",
     "name": "IndexSessionView",
     "src": "resources/js/IndexSessionView.js",
     "isEntry": true,
     "imports": [
       "_chunk-QTnfLwEv.js",
-      "_parseISO-CAY4WM6I.js",
-      "_formatDistance-ZCZmTCt7.js",
+      "_parseISO-BMpAabXC.js",
+      "_formatDistance-CR0DEjXv.js",
       "_debounce-DeLyjyE-.js",
       "_client-BBkYLWPM.js",
       "_UserSettingsStore-ChX07Y6P.js",
       "_SessionProgressBar-bb4nnBo7.js",
-      "_StatsHelper-DYCFcpJb.js"
+      "_StatsHelper-D_1mjylR.js"
     ],
     "css": [
       "assets/IndexSessionView-DucrtVuO.css"
     ]
   },
   "resources/js/IndexStatsView.js": {
-    "file": "assets/IndexStatsView-DBJUvYjb.js",
+    "file": "assets/IndexStatsView-DRJ8LRVZ.js",
     "name": "IndexStatsView",
     "src": "resources/js/IndexStatsView.js",
     "isEntry": true,
     "imports": [
-      "_auto-C7x-HSxA.js",
-      "_parseISO-CAY4WM6I.js",
+      "_parseISO-BMpAabXC.js",
       "_client-BBkYLWPM.js",
       "_NewSessionHelper-CaiafG_m.js"
     ]
   },
   "resources/js/Messages.js": {
-    "file": "assets/Messages-DRWD2m8f.js",
+    "file": "assets/Messages-Bfch9VeT.js",
     "name": "Messages",
     "src": "resources/js/Messages.js",
     "isEntry": true,
     "imports": [
       "_client-BBkYLWPM.js",
-      "_Messages-BaoAbpgJ.js"
+      "_Messages-DkhCvBKW.js"
     ]
   },
   "resources/js/NewSessionView.js": {
-    "file": "assets/NewSessionView-DL4qUfOJ.js",
+    "file": "assets/NewSessionView-B0t9oyMl.js",
     "name": "NewSessionView",
     "src": "resources/js/NewSessionView.js",
     "isEntry": true,
     "imports": [
-      "_auto-C7x-HSxA.js",
-      "_parseISO-CAY4WM6I.js",
+      "_parseISO-BMpAabXC.js",
       "_client-BBkYLWPM.js",
       "_UserSettingsStore-ChX07Y6P.js",
       "_NewSessionHelper-CaiafG_m.js",
-      "_StatsHelper-DYCFcpJb.js"
+      "_StatsHelper-D_1mjylR.js"
     ]
   },
   "resources/js/QuestionView.js": {
@@ -408,21 +402,22 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-C-9Lybjl.js",
+    "file": "assets/SessionView-B4dkavoV.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
     "imports": [
       "_chunk-QTnfLwEv.js",
-      "_auto-C7x-HSxA.js",
+      "_parseISO-BMpAabXC.js",
+      "_formatDistance-CR0DEjXv.js",
       "_hotkeys-js-DXfLkIHs.js",
       "_debounce-DeLyjyE-.js",
       "_client-BBkYLWPM.js",
       "_UserSettingsStore-ChX07Y6P.js",
       "_SessionQuestionView-DKkSaydm.js",
-      "_Messages-BaoAbpgJ.js",
+      "_Messages-DkhCvBKW.js",
       "_SessionProgressBar-bb4nnBo7.js",
-      "_StatsHelper-DYCFcpJb.js",
+      "_StatsHelper-D_1mjylR.js",
       "_utils-4JCDu-y4.js"
     ],
     "css": [

@@ -1,4 +1,5 @@
 export function sessionProgressPercentage(numQuestions, answerChoices) {
+    const numAnswers = answerChoices.length;
     const numCorrectAnswers = answerChoices.filter(
         (c) => c.is_correct && !c.help_used
     ).length;
@@ -19,6 +20,7 @@ export function sessionProgressPercentage(numQuestions, answerChoices) {
         incorrect: Math.round(100 * (numIncorrectAnswers / numQuestions)),
         unanswered: Math.round(100 * (numUnanswered / numQuestions)),
 
+        numAnswers: numAnswers,
         numCorrectAnswers: numCorrectAnswers,
         numCorrectAnswersWithHelp: numCorrectAnswersWithHelp,
         numIncorrectAnswers: numIncorrectAnswers,

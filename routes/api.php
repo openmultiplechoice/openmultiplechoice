@@ -83,6 +83,8 @@ Route::group(['middleware' => ['api', 'auth:sanctum'], 'as' => 'api.'], function
     Route::resource('sessions.answerchoices', ApiAnswerChoiceController::class);
     Route::post('sessions/{session}/newfromincorrect', [ApiSessionController::class, 'newFromIncorrect']);
 
+    Route::post('answerchoices/latest_by_question_id', [ApiAnswerChoiceController::class, 'indexByQuestionId']);
+
     Route::get('users/me/settings', [ApiUserSettingsController::class, 'show']);
     Route::put('users/me/settings', [ApiUserSettingsController::class, 'update']);
 
