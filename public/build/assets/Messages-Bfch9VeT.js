@@ -1,1 +1,0 @@
-import{T as e}from"./client-BBkYLWPM.js";import{t}from"./Messages-DkhCvBKW.js";var n=document.getElementById(`MessagesView`);e(t,{target:n,props:{questionId:n.dataset.questionId,questionContext:{isAnswered:!0}}});
