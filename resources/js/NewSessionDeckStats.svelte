@@ -83,6 +83,10 @@
                 alert(error);
             });
     }
+
+    function formatCount(count, total) {
+        return String(count).padStart(String(total).length, '\u00A0');
+    }
 </script>
 
 {#if decks && numQuestionsInModule === numUnansweredQuestions}
@@ -98,7 +102,7 @@
 {:else if decks}
     <div class="row align-items-center lh-1 mb-1 alert">
             <div class="col-auto"><span class="text-secondary fw-bold fs-4">✓</span></div>
-            <div class="col-auto"><span class="badge text-bg-secondary font-monospace">{numAnsweredQuestions}/{numQuestionsInModule} <span class="ms-4">{String(percentAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
+            <div class="col-auto"><span class="badge text-bg-secondary font-monospace">{formatCount(numAnsweredQuestions, numQuestionsInModule)}/{numQuestionsInModule} <span class="ms-4">{String(percentAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
             <div class="col">
                 <div class="progress" role="progressbar" style="height: 1.25rem">
                     <div class="progress-bar bg-secondary fw-bold" style="width: {percentAnsweredQuestions}%"></div>
@@ -111,7 +115,7 @@
                 {#if numCorrectAnsweredQuestions > 0}
                     <div class="row align-items-center lh-1">
                         <div class="col-auto"><span class="text-success fw-bold fs-4">✓</span></div>
-                        <div class="col-auto"><span class="badge text-bg-success font-monospace">{numCorrectAnsweredQuestions}/{numAnsweredQuestions} <span class="ms-4">{String(percentCorrectAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
+                        <div class="col-auto"><span class="badge text-bg-success font-monospace">{formatCount(numCorrectAnsweredQuestions, numAnsweredQuestions)}/{numAnsweredQuestions} <span class="ms-4">{String(percentCorrectAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
                         <div class="col">
                             <div class="progress" role="progressbar" style="height: 1.25rem">
                                 <div class="progress-bar bg-success fw-bold" style="width: {percentCorrectAnsweredQuestions}%"></div>
@@ -122,7 +126,7 @@
                 {#if numCorrectWithHelpAnsweredQuestions > 0}
                     <div class="row align-items-center lh-1">
                         <div class="col-auto"><span class="text-warning fw-bold fs-4">✓</span></div>
-                        <div class="col-auto"><span class="badge text-bg-warning font-monospace">{numCorrectWithHelpAnsweredQuestions}/{numAnsweredQuestions}  <span class="ms-4">{String(percentCorrectWithHelpAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
+                        <div class="col-auto"><span class="badge text-bg-warning font-monospace">{formatCount(numCorrectWithHelpAnsweredQuestions, numAnsweredQuestions)}/{numAnsweredQuestions}  <span class="ms-4">{String(percentCorrectWithHelpAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
                         <div class="col">
                             <div class="progress" role="progressbar" style="height: 1.25rem">
                                 <div class="progress-bar bg-warning fw-bold" style="width: {percentCorrectWithHelpAnsweredQuestions}%"></div>
@@ -133,7 +137,7 @@
                 {#if numIncorrectAnsweredQuestions > 0}
                     <div class="row align-items-center lh-1">
                         <div class="col-auto"><span class="text-danger fw-bold fs-4">✗</span></div>
-                        <div class="col-auto"><span class="badge text-bg-danger font-monospace">{numIncorrectAnsweredQuestions}/{numAnsweredQuestions} <span class="ms-4">{String(percentIncorrectAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
+                        <div class="col-auto"><span class="badge text-bg-danger font-monospace">{formatCount(numIncorrectAnsweredQuestions, numAnsweredQuestions)}/{numAnsweredQuestions} <span class="ms-4">{String(percentIncorrectAnsweredQuestions).padStart(3, '\u00A0')}%</span></span></div>
                         <div class="col">
                             <div class="progress" role="progressbar" style="height: 1.25rem">
                                 <div class="progress-bar bg-danger fw-bold" style="width: {percentIncorrectAnsweredQuestions}%"></div>

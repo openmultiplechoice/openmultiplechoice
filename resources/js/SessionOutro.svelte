@@ -33,6 +33,10 @@
                 alert(error);
             });
     }
+
+    function formatCount(count, total) {
+        return String(count).padStart(String(total).length, '\u00A0');
+    }
 </script>
 
 <div class="border rounded-3 shadow-sm bg-body">
@@ -47,7 +51,7 @@
             {#if progressPercentage.correct > 0}
                 <div class="row align-items-center lh-1 mb-1">
                     <div class="col-auto"><span class="text-success fw-bold fs-4">✓</span></div>
-                    <div class="col-auto"><span class="badge text-bg-success font-monospace">{progressPercentage.numCorrectAnswers}/{progressPercentage.numAnswers} <span class="ms-4">{progressPercentage.correct}%</span></span></div>
+                    <div class="col-auto"><span class="badge text-bg-success font-monospace">{formatCount(progressPercentage.numCorrectAnswers, progressPercentage.numAnswers)}/{progressPercentage.numAnswers} <span class="ms-4">{String(progressPercentage.correct).padStart(3, '\u00A0')}%</span></span></div>
                     <div class="col">
                         <div class="progress" role="progressbar" style="height: 1.25rem">
                             <div class="progress-bar bg-success fw-bold" style="width: {progressPercentage.correct}%"></div>
@@ -58,7 +62,7 @@
             {#if progressPercentage.correctWithHelp > 0}
                 <div class="row align-items-center lh-1 mb-1">
                     <div class="col-auto"><span class="text-warning fw-bold fs-4">✓</span></div>
-                    <div class="col-auto"><span class="badge text-bg-warning font-monospace">{progressPercentage.numCorrectAnswersWithHelp}/{progressPercentage.numAnswers}  <span class="ms-4">{progressPercentage.correctWithHelp}%</span></span></div>
+                    <div class="col-auto"><span class="badge text-bg-warning font-monospace">{formatCount(progressPercentage.numCorrectAnswersWithHelp, progressPercentage.numAnswers)}/{progressPercentage.numAnswers}  <span class="ms-4">{String(progressPercentage.correctWithHelp).padStart(3, '\u00A0')}%</span></span></div>
                     <div class="col">
                         <div class="progress" role="progressbar" style="height: 1.25rem">
                             <div class="progress-bar bg-warning fw-bold" style="width: {progressPercentage.correctWithHelp}%"></div>
@@ -69,7 +73,7 @@
             {#if progressPercentage.incorrect > 0}
                 <div class="row align-items-center lh-1 mb-1">
                     <div class="col-auto"><span class="text-danger fw-bold fs-4">✗</span></div>
-                    <div class="col-auto"><span class="badge text-bg-danger font-monospace">{progressPercentage.numIncorrectAnswers}/{progressPercentage.numAnswers} <span class="ms-4">{progressPercentage.incorrect}%</span></span></div>
+                    <div class="col-auto"><span class="badge text-bg-danger font-monospace">{formatCount(progressPercentage.numIncorrectAnswers, progressPercentage.numAnswers)}/{progressPercentage.numAnswers} <span class="ms-4">{String(progressPercentage.incorrect).padStart(3, '\u00A0')}%</span></span></div>
                     <div class="col">
                         <div class="progress" role="progressbar" style="height: 1.25rem">
                             <div class="progress-bar bg-danger fw-bold" style="width: {progressPercentage.incorrect}%"></div>
