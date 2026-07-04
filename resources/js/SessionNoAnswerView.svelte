@@ -12,10 +12,10 @@
     -->
     <div class="row">
         <div class="col-md-6 mb-1">
-            <button type="button" class="btn btn-danger btn-sm w-100" onclick={preventDefault(() => submitAnswer())} >Ask me again</button>
+            <button type="button" class="btn btn-danger btn-sm w-100" onclick={preventDefault(() => submitAnswer())} >&cross; Ask me again</button>
         </div>
         <div class="col-md-6 mb-1">
-            <button type="button" class="btn btn-success btn-sm w-100" onclick={preventDefault(() => submitAnswer(-1))} >I got it!</button>
+            <button type="button" class="btn btn-success btn-sm w-100" onclick={preventDefault(() => submitAnswer(-1))} >&check; OK</button>
         </div>
     </div>
 {/if}
