@@ -187,7 +187,7 @@
                 </button>
             </div>
         {:else}
-            <div class="d-flex gap-1 mb-2 message-content {hasHighRating ? 'bg-light rounded-end-3 shadow-sm py-2 ps-1 pe-2 ms-1' : 'py-1 rounded-end-3'}">
+            <div class="d-flex gap-1 mb-2 message-content {hasHighRating ? 'bg-secondary-subtle rounded-end-3 shadow-sm py-2 ps-1 pe-2 ms-1' : 'py-1 rounded-end-3'}">
                 <div class="d-flex flex-column gap-1" style="min-width: 2rem">
                     <button class="btn btn-link p-0 text-muted text-decoration-none" class:disabled={message.is_deleted} onclick={() => handleThumb("up")}>
                         <i class="bi" class:bi-hand-thumbs-up-fill={userThumb?.type === "up"} class:bi-hand-thumbs-up={!(userThumb?.type === "up")}></i>

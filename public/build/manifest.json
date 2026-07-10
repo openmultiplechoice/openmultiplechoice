@@ -3,8 +3,8 @@
     "file": "assets/Messages-BOxywP3T.css",
     "src": "_Messages-BOxywP3T.css"
   },
-  "_Messages-Bwdn7a_T.js": {
-    "file": "assets/Messages-Bwdn7a_T.js",
+  "_Messages-D3641eNm.js": {
+    "file": "assets/Messages-D3641eNm.js",
     "name": "Messages",
     "imports": [
       "_rolldown-runtime-QTnfLwEv.js",
@@ -369,13 +369,13 @@
     ]
   },
   "resources/js/Messages.js": {
-    "file": "assets/Messages-CoLdJwqV.js",
+    "file": "assets/Messages-x45apKpZ.js",
     "name": "Messages",
     "src": "resources/js/Messages.js",
     "isEntry": true,
     "imports": [
       "_client-CDRsLs0Q.js",
-      "_Messages-Bwdn7a_T.js"
+      "_Messages-D3641eNm.js"
     ]
   },
   "resources/js/NewSessionView.js": {
@@ -402,7 +402,7 @@
     ]
   },
   "resources/js/SessionView.js": {
-    "file": "assets/SessionView-C-FiRmk-.js",
+    "file": "assets/SessionView-B-rYLZ-c.js",
     "name": "SessionView",
     "src": "resources/js/SessionView.js",
     "isEntry": true,
@@ -417,7 +417,7 @@
       "_SessionProgressBar-DJoZAAVa.js",
       "_StatsHelper-D_1mjylR.js",
       "_UserSettingsStore-raQo7S_J.js",
-      "_Messages-Bwdn7a_T.js",
+      "_Messages-D3641eNm.js",
       "_SessionQuestionView-Dgk0ctz4.js"
     ],
     "css": [
