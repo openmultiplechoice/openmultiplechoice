@@ -21,14 +21,14 @@
         <div class="col-md-6 mb-3">
             <div class="card">
                 <div class="card-header">
-                    <span class="badge text-bg-light">
+                    <span class="badge text-body font-monospace">
                         @if ($submission->deck->exam_at)
                             {{ $submission->deck->exam_at->format('d.m.Y') }}
                         @else
                             {{ $submission->deck->created_at->format('d.m.Y') }}
                         @endif
                     </span>
-                    <span class="badge text-bg-light font-monospace" title="Number of questions">
+                    <span class="badge text-body font-monospace" title="Number of questions">
                         <i class="bi bi-collection"></i> {{ sizeof($submission->deck->questions) }}
                     </span>
                 </div>
