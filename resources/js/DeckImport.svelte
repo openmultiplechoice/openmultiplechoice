@@ -374,6 +374,7 @@
                 <div class="progress" role="progressbar" aria-valuenow="{importProgressPercentage}" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar" style="width: {importProgressPercentage}%">{#if importProgressPercentage > 20}{importProgressPercentage}%{/if}</div>
                 </div>
+                <div class="form-text">Note: depending on deck size and API configuration, imports can take several minutes and briefly stop in between.</div>
             {/if}
         </div>
     </div>
