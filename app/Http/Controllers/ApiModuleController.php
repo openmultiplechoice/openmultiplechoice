@@ -30,6 +30,26 @@ class ApiModuleController extends Controller
         return response()->json($module);
     }
 
+    public function show(Module $module)
+    {
+        return response()->json($module->load('subject'));
+    }
+
+    public function update(Request $request, Module $module)
+    {
+        abort_if(!$request->user()->is_admin && !$request->user()->is_moderator, 403);
+
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:500',
+            'subject_id' => 'sometimes|required|integer|exists:subjects,id',
+            'description' => 'sometimes|nullable|string',
+        ]);
+
+        $module->update($validated);
+
+        return response()->json($module);
+    }
+
     public function showByName(Request $request)
     {
         abort_if(!$request->name, 400);
