@@ -24,6 +24,14 @@
                 <label for="name" class="form-label">Name</label>
                 <input id="name" type="text" name="name" class="form-control" value="{{ $module->name ?? '' }}">
             </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input id="description" type="hidden" name="description" value="{{ old('description', $module->description ?? '') }}">
+                <trix-editor input="description" class="form-control @error('description') is-invalid @enderror"></trix-editor>
+                @error('description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
             <button class="btn btn-sm btn-primary" type="submit">Save</button>
         </form>
     </div>
