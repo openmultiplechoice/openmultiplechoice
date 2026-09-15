@@ -88,7 +88,7 @@
 <div class="row mb-1 py-2 bg-body sticky-top">
     <div class="col">
         <div class="input-group">
-            <span class="input-group-text" class:bg-info-subtle={deckKind !== 'public-rw-listed'}><i class="bi bi-archive"></i></span>
+            <span class="input-group-text" class:bg-warning-subtle={deckKind !== 'public-rw-listed'}><i class="bi bi-archive"></i></span>
             <select id="kind" class="form-select" bind:value={deckKind} onchange={selectDeckKind}>
                 <option value="public-rw-listed" selected={deckKind === 'public-rw-listed'}>Main decks</option>
                 <option value="user" selected={deckKind === 'user'}>Your decks</option>

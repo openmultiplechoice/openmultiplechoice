@@ -54,7 +54,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum'], 'as' => 'api.'], function
     Route::get('modules/byname', [ApiModuleController::class, 'showByName']);
     Route::resource('modules', ApiModuleController::class);
 
-    Route::get('decks/withquestionids', [ApiDeckController::class, 'indexWithQuestionIds']);
+    Route::get('decks/with_question_ids', [ApiDeckController::class, 'indexWithQuestionIds']);
     Route::post('decks/{deck}/addquestion', [ApiDeckController::class, 'addQuestionById']);
     Route::post('decks/{deck}/removequestion', [ApiDeckController::class, 'removeQuestionById']);
     Route::resource('decks', ApiDeckController::class);

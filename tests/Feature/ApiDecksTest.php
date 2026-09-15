@@ -166,7 +166,7 @@ class ApiDecksTest extends TestCase
         $unbookmarkedWritableDeck->questions()->attach(Question::factory()->create()->id);
 
         $response = $this->actingAs($this->userB)
-            ->getJson('/api/decks/withquestionids')
+            ->getJson('/api/decks/with_question_ids')
             ->assertOk()
             ->assertJsonCount(2);
 
