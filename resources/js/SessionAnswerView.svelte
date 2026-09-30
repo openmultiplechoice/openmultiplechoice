@@ -66,7 +66,7 @@
     class:text-bg-danger={!examMode && answerContext.isSelectedAnswer && !answerContext.isCorrectAnswer}
     class:bg-incorrect={markedAs === 'incorrect'}
     class:bg-correct={markedAs === 'correct'}>
-    {#if !questionIsAnswered && !answerContext.isSubmittedAnswer}
+    {#if (examMode || !questionIsAnswered) && !answerContext.isSubmittedAnswer}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div
             onclick={() => submitAnswer(answer.id)}
@@ -79,7 +79,7 @@
         </div>
     {/if}
 
-    {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
+    {#if (examMode || !questionIsAnswered) && !answerContext.isSelectedAnswer}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div
             onclick={() => submitAnswer(answer.id)}
