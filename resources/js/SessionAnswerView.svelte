@@ -41,8 +41,6 @@
                     markedAs = "";
                     answerStatusIndicator = "border-danger";
                 }
-            } else {
-                markedAs = "";
             }
         }
     });
@@ -99,7 +97,10 @@
                     class:text-body={!answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer}
                     class="badge" title="Percentage of users who chose this answer">{answer.answer_percentage}%</span>
             {/if}
-            {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
+            {#if examMode && answerContext.isSubmittedAnswer}
+                <span class="text-secondary fw-bold fs-4 me-1">&check;</span>
+            {/if}
+            {#if examMode || (!questionIsAnswered && !answerContext.isSelectedAnswer)}
                 <div class="d-flex justify-content-end align-items-center">
                     <button
                         onclick={preventDefault(() => (markedAs = markedAs === 'incorrect' ? '' : 'incorrect'))}
@@ -121,8 +122,6 @@
                 <span class="text-light fw-bold fs-4">&#8672;</span>
             {:else if !examMode && answerContext.isSubmittedAnswer}
                 <span class="text-light fw-bold fs-4">&cross;</span>
-            {:else if examMode && answerContext.isSubmittedAnswer}
-                <span class="text-secondary fw-bold fs-4">&check;</span>
             {/if}
         </div>
     </div>
