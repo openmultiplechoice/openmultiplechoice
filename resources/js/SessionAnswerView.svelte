@@ -48,6 +48,12 @@
 
 <div
     id="answer{answer.id}"
+    oncontextmenu={(event) => {
+        if (examMode || (!questionIsAnswered && !answerContext.isSelectedAnswer)) {
+            event.preventDefault();
+            markedAs = markedAs === 'incorrect' ? '' : 'incorrect';
+        }
+    }}
     style="min-height: 3.6rem; box-shadow: 4px 4px rgba(0,0,0,.2);"
     class="row rounded m-1 py-2 d-flex align-items-center {answerStatusIndicator}"
     class:bg-secondary-subtle={
