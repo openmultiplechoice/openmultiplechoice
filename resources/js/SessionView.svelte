@@ -25,6 +25,7 @@
     var helpUsed = $state(false);
     var magicGIFPath = $state('');
     var confetti = $state(0);
+    var answerPending = false;
 
     const appConfig = document.getElementById("appconfig").dataset;
 
@@ -309,6 +310,37 @@
         // - '-1': the user clicked "I got it!" for a card question
         //    which doesn't have an answer (a bit of a hack, see below)
 
+        if (examMode && answerPending) {
+            // In exam mode, every invocation of `submitAnswer()` with a new
+            // answer ID triggers a POST request to the server, since users
+            // can change their previously given answer. Make sure to not send
+            // multiple requests simultaneously by checking for pending requests
+            // first.
+            // If we are not in exam mode, only the first invocation leads to
+            // an answer submission, subsequent invocations only update the
+            // question context without new server requests, i.e. no need to
+            // return early if not in exam mode.
+            return;
+        }
+
+        if (examMode && currentQuestionAnswered) {
+            // In exam mode, users can repeatedly submit an answer for
+            // a question.
+
+            // If the selected answer is the previously selected answer
+            // or if we got no answer ID, do nothing:
+            if (!answerId || answerId === answerChoice.answer_id) {
+                return;
+            }
+            // If the selected answer is a different answer, clear the
+            // answer context for all answers of the current question:
+            Object.values(currentQuestionContext.answerContext).forEach(context => {
+                context.isSelectedAnswer = context.isSubmittedAnswer = false;
+            });
+            // ..and continue below to submit the new answer and update
+            // the context accordingly.
+        }
+
         if (answerId && answerId !== -1) {
             // Mark clicked answer as selected for it to reveal
             // its status and render accordingly
@@ -320,18 +352,22 @@
             currentQuestionContext.isAnswered = true;
         }
 
-        if (currentQuestionAnswered && answerId && answerId === currentQuestion.correct_answer_id) {
-            // The user already answered the question and now clicked
-            // the correct answer, reveal all answers
-            currentQuestionContext.isAnswered = true;
-            return;
-        } else if (currentQuestionAnswered) {
-            // The user already answered the question and now clicked
-            // another wrong answer, let them try again
-            return;
+        if (!examMode) {
+            // If we are not in exam mode (where answers can be submitted
+            // repeatedly), we check if an answer was submitted already:
+            if (currentQuestionAnswered && answerId && answerId === currentQuestion.correct_answer_id) {
+                // The user already answered the question and now clicked
+                // the correct answer, reveal all answers
+                currentQuestionContext.isAnswered = true;
+                return;
+            } else if (currentQuestionAnswered) {
+                // The user already answered the question and now clicked
+                // another wrong answer, let them try again
+                return;
+            }
         }
 
-        // No answer was submitted yet, submit given answer
+        // Submit the answer ...
 
         var isCorrect = false;
         if (currentQuestion.type === "card") {
@@ -379,23 +415,31 @@
             currentQuestionContext.answerContext[answerId].isCorrectAnswer = isCorrect;
         }
 
-        var answerChoice = {
+        var newAnswerChoice = {
             question_id: currentQuestionId,
             answer_id: answerId,
             is_correct: isCorrect,
-            help_used: helpUsed,
+            // Exam mode does not show hints, so always save answers as without
+            // help. SessionQuestionView sets helpUsed to true after submission.
+            // Without this override, changing an answer could incorrectly count
+            // it as answered with help.
+            help_used: examMode ? false : helpUsed,
         };
 
-        axios
-            .post("/api/sessions/" + id + "/answerchoices", answerChoice)
+        answerPending = true;
+        return axios
+            .post("/api/sessions/" + id + "/answerchoices", newAnswerChoice)
             .then(function (response) {
                 data.session.answer_choices = [
-                    ...data.session.answer_choices,
+                    ...data.session.answer_choices.filter(e => e.question_id !== response.data.question_id),
                     response.data,
                 ];
             })
             .catch(function (error) {
                 alert(error);
+            })
+            .finally(() => {
+                answerPending = false;
             });
     }
 

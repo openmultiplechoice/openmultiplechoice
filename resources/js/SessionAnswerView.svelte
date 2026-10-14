@@ -41,8 +41,6 @@
                     markedAs = "";
                     answerStatusIndicator = "border-danger";
                 }
-            } else {
-                markedAs = "";
             }
         }
     });
@@ -50,6 +48,12 @@
 
 <div
     id="answer{answer.id}"
+    oncontextmenu={(event) => {
+        if (examMode || (!questionIsAnswered && !answerContext.isSelectedAnswer)) {
+            event.preventDefault();
+            markedAs = markedAs === 'incorrect' ? '' : 'incorrect';
+        }
+    }}
     style="min-height: 3.6rem; box-shadow: 4px 4px rgba(0,0,0,.2);"
     class="row rounded m-1 py-2 d-flex align-items-center {answerStatusIndicator}"
     class:bg-secondary-subtle={
@@ -66,7 +70,7 @@
     class:text-bg-danger={!examMode && answerContext.isSelectedAnswer && !answerContext.isCorrectAnswer}
     class:bg-incorrect={markedAs === 'incorrect'}
     class:bg-correct={markedAs === 'correct'}>
-    {#if !questionIsAnswered && !answerContext.isSubmittedAnswer}
+    {#if (examMode || !questionIsAnswered) && !answerContext.isSubmittedAnswer}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div
             onclick={() => submitAnswer(answer.id)}
@@ -79,7 +83,7 @@
         </div>
     {/if}
 
-    {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
+    {#if (examMode || !questionIsAnswered) && !answerContext.isSelectedAnswer}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div
             onclick={() => submitAnswer(answer.id)}
@@ -99,7 +103,10 @@
                     class:text-body={!answerContext.isSubmittedAnswer && !answerContext.isCorrectAnswer}
                     class="badge" title="Percentage of users who chose this answer">{answer.answer_percentage}%</span>
             {/if}
-            {#if !questionIsAnswered && !answerContext.isSelectedAnswer}
+            {#if examMode && answerContext.isSubmittedAnswer}
+                <span class="text-secondary fw-bold fs-4 me-1">&check;</span>
+            {/if}
+            {#if examMode || (!questionIsAnswered && !answerContext.isSelectedAnswer)}
                 <div class="d-flex justify-content-end align-items-center">
                     <button
                         onclick={preventDefault(() => (markedAs = markedAs === 'incorrect' ? '' : 'incorrect'))}
@@ -121,8 +128,6 @@
                 <span class="text-light fw-bold fs-4">&#8672;</span>
             {:else if !examMode && answerContext.isSubmittedAnswer}
                 <span class="text-light fw-bold fs-4">&cross;</span>
-            {:else if examMode && answerContext.isSubmittedAnswer}
-                <span class="text-secondary fw-bold fs-4">&check;</span>
             {/if}
         </div>
     </div>
