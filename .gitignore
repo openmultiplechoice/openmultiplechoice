@@ -20,6 +20,7 @@
 .env*
 !.env.example
 !.env.testing
+!.env.docker
 .phpunit.result.cache
 .phpunit.cache
 Homestead.json
