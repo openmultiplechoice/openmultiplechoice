@@ -1,0 +1,11 @@
+services:
+  omc:
+    build: .
+    init: true
+    ports:
+      - "8000:8000"
+    volumes:
+      - omc-data:/var/www/html/storage/app
+
+volumes:
+  omc-data:
