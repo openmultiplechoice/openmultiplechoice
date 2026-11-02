@@ -19,6 +19,16 @@ GitHub.
 * Bug reports: [Issues](https://github.com/openmultiplechoice/openmultiplechoice/issues)
 * Discord: https://discord.gg/NdvVNBN5Dh
 
+## Quick demo
+
+Try OMC locally with Docker, demo data included:
+
+```
+docker compose up --build
+```
+
+Then open http://localhost:8000 and log in as `demo@example.com` / `demo` (or `demoadmin@example.com` / `demoadmin` for an admin account).
+
 ## Documentation
 
 * [Installation](docs/installation.md)
