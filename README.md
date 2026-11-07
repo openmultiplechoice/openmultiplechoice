@@ -27,7 +27,12 @@ Try OMC locally with Docker, demo data included:
 docker compose up --build
 ```
 
-Then open http://localhost:8000 and log in as `demo@example.com` / `demo` (or `demoadmin@example.com` / `demoadmin` for an admin account).
+Then open http://localhost:8000 and log in:
+
+| Email address           | Password    |
+| :---------------------- | :---------- |
+| `demo@example.com`      | `demo`      |
+| `demoadmin@example.com` | `demoadmin` |
 
 ## Documentation
 
