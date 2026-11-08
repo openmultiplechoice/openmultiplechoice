@@ -1,0 +1,1 @@
+import{t as e}from"./Messages-nCmArY-a.js";import{k as t}from"./client-BUWqRrkO.js";var n=document.getElementById(`MessagesView`);t(e,{target:n,props:{questionId:n.dataset.questionId,questionContext:{isAnswered:!0}}});
