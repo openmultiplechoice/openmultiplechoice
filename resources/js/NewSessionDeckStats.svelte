@@ -28,6 +28,10 @@
         const validQuestions = questionsInModule.filter(q => !q.is_invalid);
 
         questionIds = [...new Set(validQuestions.map(q => q.id))];
+        // Clear the answers of the previous set of questions,
+        // otherwise we show old stats until the stats for the
+        // new set of questions are computed
+        validAnswerChoices = [];
 
         axios.post('/api/answerchoices/latest_by_question_id', { question_ids: questionIds })
             .then(response => {
@@ -42,7 +46,6 @@
                     return;
                 }
                 console.error("Failed to fetch latest answers", error);
-                validAnswerChoices = [];
             })
             .finally(() => {
                 if (requestId !== statsRequestId) {
